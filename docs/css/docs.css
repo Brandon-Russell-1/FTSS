@@ -1,0 +1,23 @@
+#toc {
+    position:fixed;
+    right: 0;
+    top: 13em;
+}
+
+#toc ul {
+    list-style: none;
+}
+
+#technologies .logos img {
+    transition:opacity 500ms;
+    opacity: .75;
+    padding: 2em;
+    cursor:pointer;
+    max-width: 240px;
+    max-height: 240px;
+}
+
+#technologies .logos img:hover {
+    transition:opacity 500ms;
+    opacity: 1;
+}
