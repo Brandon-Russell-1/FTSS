@@ -1,3 +1,10 @@
+h2 {
+    margin-top: 3em;
+}
+
+#banner {
+    border:none;
+}
 
 .sidenav .active {
     font-weight: 800;
@@ -13,17 +20,17 @@
     list-style: none;
 }
 
-#technologies .logos img {
-    transition:opacity 500ms;
+.logos img {
+    transition: opacity 500ms;
     opacity: .75;
     padding: 2em;
-    cursor:pointer;
+    cursor: pointer;
     max-width: 240px;
     max-height: 240px;
 }
 
-#technologies .logos img:hover {
-    transition:opacity 500ms;
+.logos img:hover {
+    transition: opacity 500ms;
     opacity: 1;
 }
 
