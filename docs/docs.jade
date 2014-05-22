@@ -15,7 +15,7 @@ html(lang="en")
 
         script(src='js/docs.js')
 
-    body
+    body(data-spy="scroll", data-target="#toc")
 
         .navbar.navbar-default.navbar-fixed-top
             .container
@@ -34,24 +34,20 @@ html(lang="en")
                 li
                   a(href='../help/') Email Support
 
-        nav#toc
-
-            ul.nav.sidenav.text-right(data-spy="affix")
-
-                li.active
-                    a(href='#overview') Overview
-
-                li
-                    a(href='#technologies') Technologies
-                li
-                    a(href='#file-structure') File Structure
-                li
-                    a(href='#dev-environment') Dev Environment
-                li
-                    a(href='#git') Using GIT
-
-
         .container
+
+            nav#toc
+                ul.nav.sidenav.text-right
+                    li
+                         a(href='#overview') Overview
+                    li
+                        a(href='#technologies') Technologies
+                    li
+                        a(href='#file-structure') File Structure
+                    li
+                        a(href='#dev-environment') Dev Environment
+                    li
+                        a(href='#git') Using GIT
 
             #banner.page-header
                 .row
@@ -61,9 +57,11 @@ html(lang="en")
 
             #content
 
-                section#overview
+                section
 
-                    h3 Development Overview
+                    h2#overview Development Overview
+
+                    hr
 
                     p.
 
@@ -95,11 +93,11 @@ html(lang="en")
                         re-compiled using Brunch.
 
 
-                hr
+                section
 
-                section#technologies
+                    h2#technologies Technologies Used
 
-                    h3 Technologies Used
+                    hr
 
                     p.
 
