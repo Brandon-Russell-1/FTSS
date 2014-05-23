@@ -1,0 +1,152 @@
+p.
+
+    This section details overall file structure and highlights some import files.  You can click to
+    expand or collapse folders.
+
+.tree.well
+    ul
+        li.muted
+            span
+                i.icon-folder-open
+                | _public
+            | &nbsp;This folder holds the application build and is not synced in GitHub.
+
+        li.text-primary
+            span
+                i.icon-folder-open
+                | app
+            | &nbsp;This is the main app source code (no library code).
+            ul
+                li
+                    span
+                        i.icon-folder-open
+                        | assets
+                    | &nbsp;Stores any static content that should be copied to _public during build.  Right now it only holds our migration page.
+
+                li
+                    span
+                        i.icon-folder-open
+                        | controllers
+                    | &nbsp;Holds global controllers that are shared across the entire app.
+
+                li
+                    span
+                        i.icon-folder-open
+                        | directives
+                    | &nbsp;Stores the JS for our AngularJS directives.
+
+                li
+                    span
+                        i.icon-folder-open
+                        | partials
+                    | &nbsp;The majority of our view or feature-specific view and controller code.  Organized by view/feature.
+
+                    ul
+
+                        li
+                            span
+                                i.icon-file-xml
+                                | __mixins.jade
+                            | &nbsp;A collection of powerful Jade functions that are only run once (at build-time).
+
+                li
+                    span
+                        i.icon-folder-open
+                        | scripts
+                    | &nbsp;Holds JS shared across the entire app but not a directive or controller.
+
+                    ul
+
+                        li
+                            span
+                                i.icon-file-css
+                                | angular-sharepoint.js
+                            | &nbsp;The AngularSharepoint library that performs all the REST interaction between SP and Angular.
+                        li
+                            span
+                                i.icon-file-css
+                                | dodconsent.js
+                            | &nbsp;Handles our mandatory DoD consent message and sets the cookie so SP doesn't freak out.
+                        li
+                            span
+                                i.icon-file-css
+                                | ftss-angular-filters.js
+                            | &nbsp;Custom Angular filters for use with ng-repeat collections.
+
+                        li
+                            span
+                                i.icon-file-css
+                                | ftss-filters.js
+                            | &nbsp;This handles our SP tag filtering; it converts from tags to SP lookups.
+
+                        li
+                            span
+                                i.icon-file-css
+                                | ftss-init.js
+                            | &nbsp;Performs the app JS initialization and establishes the Angular routes.
+
+                        li
+                            span
+                                i.icon-file-css
+                                | ftss-jquery-bindings.js
+                            | &nbsp;We use jquery live bindings because they just make more sense than directives in some cases.
+
+                        li
+                            span
+                                i.icon-file-css
+                                | ftss-models.js
+                            | &nbsp;Defines all our SP models for AngularSharepoint.
+
+                        li
+                            span
+                                i.icon-file-css
+                                | ftss-utils.js
+                            | &nbsp;Various helper functions used throughout the application
+
+                li
+                    span
+                        i.icon-folder-open
+                        | styles
+                    | &nbsp;Holds all the CSS that does not belong to a specific view.
+
+                li
+                    span
+                        i.icon-file-xml
+                        | index.jade
+                    | &nbsp;This converts to index.html and is our main landing page that starts the app.
+
+        li
+            span
+                i.icon-folder-open
+                | bower_components
+            | &nbsp;This holds all the managed library code (managed with Bower).
+
+        li
+            span
+                i.icon-folder-open
+                | docs
+            | &nbsp;This documentation source and compiled code.
+
+        li.muted
+            span
+                i.icon-folder-open
+                | node_modules
+            | &nbsp;These is all the NodeJS apps that are needed by Brunch.io to perform our builds and is not synced on Github.
+
+        li
+            span
+                i.icon-folder-open
+                | scripts
+            | &nbsp;Development environment scripts, we use server.* for development and production.* for production builds.
+
+        li
+            span
+                i.icon-folder-open
+                | test
+            | &nbsp;All AngularJS tests are here (for now)...
+
+        li
+            span
+                i.icon-folder-open
+                | vendor
+            | &nbsp;Any special or custom library code or other JS that must execute before anything else goes here.

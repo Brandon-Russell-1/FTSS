@@ -1,0 +1,42 @@
+p.
+
+    FTSS is a client-side Model View Controller (MVC) web application.  The app is written
+    in JavaScript (JS) using Google's AnguarJS framework.  All backend code travels through an
+    open-source library, angular-sp, to an eis.af.mil SharePoint (SP) 2010 instance.  Security is handled
+    through SP's native interface.  The angular-sp library creates Representation State Transfer (REST)
+    queries that are Microsoft Open Data Protocal (oData) 2.0 compliant.  This library also builds
+    Atomicity, Consistency, Isolation, Durability (ACID) compliant batch transactions as well as
+    transparent caching and JS Object Notation (JSON)/datetime conversions.
+
+p.
+
+    FTSS 3 also makes heavy use of HTML 5 and CSS 3 features that require a modern browser.  To deal
+    with this limtitation, browser detection is incorporated which redirects users of unsupported
+    browsers to an update page with instructions on how to continue.  All HTML is written in JADE, a
+    terse templating language for NodeJS.  The use of Jade mixins at build time allow the creation of
+    very complex HTML and behaviors with little code.  Finally, icomoon.io is used to manage and
+    compile the applications icon library into a single Scalable Vector Graphics (SVG) file.  SVG was
+    chosen for it's flexibility (CSS-rule inheritance and lossless scaling) and because it was not
+    blocked by standard AF policy.  Web fonts are a popular alternative but are blocked in IE on
+    AFNET.
+
+p.
+
+    In the event of catastrophic dataloss requiring the complete replacement of the SP instance,
+    the FTSS.wsp file holds the entire SP solution and base data needed to create a new copy of
+    FTSS.  Once loaded, the source should be updated to point to the new SP instance and code
+    re-compiled using Brunch.
+
+p.
+
+    The links below provide additional background information on FTSS.
+
+p
+    .col-lg-4
+        a(href='resources/ftss-background-paper.pdf', target='_blank')
+            i.icon-file-pdf
+            | &nbsp;FTSS Background Paper
+    .col-lg-4
+        a(href='resources/ftss-scheduling-process.pdf', target='_blank')
+            i.icon-file-pdf
+            | &nbsp;FTSS Scheduling Process
