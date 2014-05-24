@@ -29,6 +29,25 @@ p.
                         | controllers
                     | &nbsp;Holds global controllers that are shared across the entire app.
 
+                    ul
+                        li
+                            span
+                                i.icon-file-css
+                                | ftss-controllers.js
+                            | &nbsp;This is main controller code for all views.  Every view instaniates this controller for data-binding.
+
+                        li
+                            span
+                                i.icon-file-css
+                                | ftss-main-controller.js
+                            | &nbsp;This controller is called during app initialization and builds the parent scope for the whole app.
+
+                        li
+                            span
+                                i.icon-file-css
+                                | ftss-support-controller.js
+                            | &nbsp;Controller used for our view-based Q&A feature.  This controller includes a polling feature to check for updates continuously for a chat-like user experience.
+
                 li
                     span
                         i.icon-folder-open
@@ -42,6 +61,18 @@ p.
                     | &nbsp;The majority of our view or feature-specific view and controller code.  Organized by view/feature.
 
                     ul
+
+                        li
+                            span
+                                i.icon-folder-open
+                                | directives
+                            | &nbsp;This folder contains any directives-specific views.
+
+                        li
+                            span
+                                i.icon-folder-open
+                                | includes
+                            | &nbsp;This folder contains view code that is only used by Jade during build time (from includes).
 
                         li
                             span
