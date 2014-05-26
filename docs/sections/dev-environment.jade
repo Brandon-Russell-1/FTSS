@@ -1,1 +1,79 @@
+include ../images
+
+.col-lg-6
+
+    p.
+
+        This section covers the recommended development environment setup and guides you through everything you need to get
+        up and running with the FTSS development, testing and build process.  This section assumes you have a basic
+        understanding of client-side Model, View, Controller applications.  The production version of FTSS has a very small
+        index.html file that handles legacy IE detection/redirection, loads our JS/CSS and initializes AngularJS.  In the
+        production build there are only three JS files and one CSS file:
+
+    ol
+
+        li app.css - All compressed stylesheets.
+        li vendor.js - All JS compressed libraries.
+        li partials.js - The compiled views (compiled into HTML views frmo Jade).
+        li app.js - All our JS from the app folder compressed into one file.
+
+.col-lg-6.text-center: +img-environment()
+
+.clearfix
+
+br
+
 p.
+
+    We use Brunch.io for building test and production versions of FTSS.  Brunch is a NodeJS app that The Brunch config
+    file relies on a few important
+    config files to operate: config.coffee, a CoffeeScript file, contains all the important instructions
+    that allow Brunch to automate our build processes.  Additionally, package.json defined our Brunch plugins (NPM packages)
+    and bower.json defines all our dependecies for FTSS.  These three files define the build process and are use to keep
+    our dependencies always up-to-date.  Since Brunch does auto updates for dependencies during build (if the version in bower.json
+    permits it), we keep the bower_components directory in our GIT repository as well to track any breaking changes by
+    external developers.  This is also necessary as some libraries have some customizations for FTSS.
+
+br
+
+p.
+
+    Enough backgound info, follow the steps below to get up and running now.  You can also click the videos at the bottom
+    which walk you through the steps below as well as using GitHub.
+
+
+:markdown
+
+    1. Install NodeJS and Node Package Manager (NPM) on your development computer:
+        [howtonode.org](http://howtonode.org/introduction-to-npm).
+
+    2. Create or login to GitHub and install the GitHub app:
+        [help.github.com/articles/set-up-git](https://help.github.com/articles/set-up-git).
+
+    3. Clone the FTSS repository: [github.com/jeff-mccoy/FTSS](https://github.com/jeff-mccoy/FTSS).
+
+    4. Open a terminal or command prompt and change to the cloned repo on your local computer.
+
+    5. Run `npm install` to install all the Brunch.io plugins and dependencies.
+
+    5. Run `scripts/server.bat` or `scripts/server.sh` to build a development version of FTSS that auto-updates.
+
+    6. Open your browser to [localhost:3333](http://localhost:3333) with Cross Site Scripting (XSS) enabled.
+            If you use Google Chrome (the recommended development browser), simply run Chrome from a terminal with the
+            following command: Chrome --args --disable-web-security.
+
+#build-videos
+
+    .col-lg-4
+        a(href='resources/setup-github.mp4'): +img-setup-github()
+        | GitHub setup and usage
+
+    .col-lg-4
+        a(href='resources/building-testing-ftss.mp4'): +img-build-setup()
+        | Building and testing FTSS
+
+    .col-lg-4
+        a(href='resources/update-local-repo-from-master.mp4'): +img-update-local-repo()
+        | Update local repo from master
+
+    .clearfix

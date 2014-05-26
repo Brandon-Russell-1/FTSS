@@ -3,8 +3,9 @@ include images
 doctype html
 
 html(lang="en")
+
     head
-        title FTSS 3 Documentation
+        title FTSS 3 Development Documentation
 
         style: include css/bootstrap.min.css
         style: include css/bootstrap-yeti.min.css
@@ -19,38 +20,33 @@ html(lang="en")
     body(data-spy="scroll", data-target="#toc")
 
         .navbar.navbar-default.navbar-fixed-top
+
             .container
+
             .navbar-header
+
               a.navbar-brand(href='../') FTSS 3
+
               button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-main')
                 span.icon-bar
                 span.icon-bar
                 span.icon-bar
+
             #navbar-main.navbar-collapse.collapse
               ul.nav.navbar-nav
-                li.dropdown
-                  a#themes.dropdown-toggle(data-toggle='dropdown', href='#')
-                    | Sections
-                    span.caret
-                li
-                  a(href='../help/') Email Support
+                li: a(href='mailto:jeffrey.mccoy.2@us.af.mil?subject=FTSS') Email Lead Developer
 
         .container
 
             nav#toc
+
                 ul.nav.sidenav.text-right
-                    li
-                         a(href='#overview') Overview
-                    li
-                        a(href='#technologies') Technologies
-                    li
-                        a(href='#file-structure') File Structure
-                    li
-                        a(href='#data-structure') Data Structure
-                    li
-                        a(href='#dev-environment') Dev Environment
-                    li
-                        a(href='#git') Using GIT
+
+                    li: a(href='#overview') Overview
+                    li: a(href='#technologies') Technologies
+                    li: a(href='#file-structure') File Structure
+                    li: a(href='#data-structure') Data Structure
+                    li: a(href='#dev-environment') Dev Environment
 
             #banner.page-header
                 .row
@@ -102,26 +98,9 @@ html(lang="en")
 
                     include sections/dev-environment
 
-
-                section
-
-                    h2#git GitHub and Source Code Management
-
-                    hr
-
-                    include sections/git
-
                 br
                 br
 
-            footer
-                .row
-                    .col-lg-12
-                        a.pull-right(href='#top') Back to top
+            footer: a.pull-right(href='#top') Back to top
 
-                        p
-                              | Made by&nbsp;
-                              a(href='http://www.linkedin.com/in/jeffsmccoy', rel='nofollow') Jeff McCoy
-                              | . Contact him at&nbsp;
-                              a(href='mailto:jeffrey.mccoy.2@us.af.mil') jeffrey.mccoy.2@us.af.mil
-                              | .
+            br
