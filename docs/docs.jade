@@ -11,12 +11,6 @@ html(lang="en")
         style: include css/bootstrap-yeti.min.css
         style: include css/docs.css
 
-        script: include js/jquery.min.js
-        script: include js/bootstrap3.min.js
-        script: include js/docs.js
-
-        script(src='http://localhost:35729/livereload.js?snipver=1')
-
     body(data-spy="scroll", data-target="#toc")
 
         .navbar.navbar-default.navbar-fixed-top
@@ -99,3 +93,7 @@ html(lang="en")
             footer: a.pull-right(href='#top') Back to top
 
             br
+
+        script: include js/jquery.min.js
+        script: include js/bootstrap3.min.js
+        script: include js/docs.js
