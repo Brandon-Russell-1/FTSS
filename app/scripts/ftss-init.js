@@ -21,7 +21,6 @@ var LOG;
 			'ngRoute',
 			'ngSharePoint',
 			'mgcrea.ngStrap',
-			'monospaced.elastic',
 			'partials',
 			'angularFileUpload',
 			'ngAnimate',
