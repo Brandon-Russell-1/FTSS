@@ -23,18 +23,17 @@ html(lang="en")
 
             .container
 
-            .navbar-header
+                #navbar-main.navbar-collapse.collapse
 
-              a.navbar-brand(href='../') FTSS 3
+                    ul.nav.navbar-nav.col-lg-12
 
-              button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-main')
-                span.icon-bar
-                span.icon-bar
-                span.icon-bar
+                        li: a(href='https://cs3.eis.af.mil/sites/OO-ED-AM-11/FTSS/development') Team Planning Site
 
-            #navbar-main.navbar-collapse.collapse
-              ul.nav.navbar-nav
-                li: a(href='mailto:jeffrey.mccoy.2@us.af.mil?subject=FTSS') Email Lead Developer
+                        li: a(href='https://github.com/jeff-mccoy/FTSS') Source Code (GitHub)
+
+                        li: a(href='https://cs3.eis.af.mil/sites/OO-ED-AM-11/index.html') Production Site
+
+                        li.pull-right: a(href='mailto:jeffrey.mccoy.2@us.af.mil?subject=FTSS') Email Jeff McCoy (Lead Developer)
 
         .container
 
@@ -57,10 +56,6 @@ html(lang="en")
             #content
 
                 section
-
-                    h2#overview Development Overview
-
-                    hr
 
                     include sections/overview
 
