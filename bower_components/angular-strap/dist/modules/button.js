@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.1 - 2014-04-10
+ * @version v2.0.2 - 2014-04-27
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -128,8 +128,7 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function () {
           });
         };
         // view -> model
-	    // Added parent() binding to capture event bubble when wrapped in a <label> tag.  -Jeff Mccoy 28 Apr 2014
-        element.parent().bind(options.toggleEvent, function () {
+        element.bind(options.toggleEvent, function () {
           scope.$apply(function () {
             // console.warn('!click', element.attr('value'), 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue, 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue);
             controller.$setViewValue(value);

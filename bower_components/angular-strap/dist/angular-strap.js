@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.1 - 2014-04-10
+ * @version v2.0.2 - 2014-04-27
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -349,10 +349,9 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal']).provider('$asid
   ];
 }).directive('bsAside', [
   '$window',
-  '$location',
   '$sce',
   '$aside',
-  function ($window, $location, $sce, $aside) {
+  function ($window, $sce, $aside) {
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
     return {
       restrict: 'EAC',
@@ -562,6 +561,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
       useNative: false,
       dateType: 'date',
       dateFormat: 'shortDate',
+      dayFormat: 'dd',
       strictFormat: false,
       autoclose: false,
       minDate: -Infinity,
@@ -791,6 +791,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
           'autoclose',
           'dateType',
           'dateFormat',
+          'dayFormat',
           'strictFormat',
           'startWeek',
           'useNative',
@@ -938,64 +939,67 @@ angular.module('mgcrea.ngStrap.datepicker', [
           };
         var timezoneOffset = startDate.getTimezoneOffset() * 60000;
         var views = [
-	        {
-		        format: 'dd',
-		        split: 5,
-		        steps: { month: 1 },
-		        update: function (date, force) {
-			        if (!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
-				        angular.extend(viewDate, {
-					        year: picker.$date.getFullYear(),
-					        month: picker.$date.getMonth(),
-					        date: picker.$date.getDate()
-				        });
-				        picker.$build();
-			        } else if (date.getDate() !== viewDate.date) {
-				        viewDate.date = picker.$date.getDate();
-				        picker.$updateSelected();
-			        }
-		        },
-		        build: function () {
-			        var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1);
-			        var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getDay() - options.startWeek) * 86400000);
-			        var days = [], day;
-			        for (var i = 0; i < 42; i++) {
-				        // < 7 * 6
-				        day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
-
-				        if (day.getDay() > 0 && day.getDay() < 6) {
-
-					        days.push({
-						                  date: day,
-						                  label: dateFilter(day, this.format),
-						                  selected: picker.$date && this.isSelected(day),
-						                  muted: day.getMonth() !== viewDate.month,
-						                  disabled: this.isDisabled(day)
-					                  });
-				        }
-			        }
-			        scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
-			        scope.labels = weekDaysLabelsHtml;
-			        scope.rows = split(days, this.split);
-			        this.built = true;
-		        },
-		        isSelected: function (date) {
-			        return picker.$date && date.getFullYear() === picker.$date.getFullYear() && date.getMonth() === picker.$date.getMonth() && date.getDate() === picker.$date.getDate();
-		        },
-		        isDisabled: function (date) {
-			        return date.getTime() < options.minDate || date.getTime() > options.maxDate;
-		        },
-		        onKeyDown: function (evt) {
-			        var actualTime = picker.$date.getTime();
-			        if (evt.keyCode === 37)
-				        picker.select(new Date(actualTime - 1 * 86400000), true);
-			        else if (evt.keyCode === 38)
-				        picker.select(new Date(actualTime - 7 * 86400000), true);
-			        else if (evt.keyCode === 39)
-				        picker.select(new Date(actualTime + 1 * 86400000), true);
-			        else if (evt.keyCode === 40)
-				        picker.select(new Date(actualTime + 7 * 86400000), true);
-		        }
+            {
+              format: options.dayFormat,
+              split: 7,
+              steps: { month: 1 },
+              update: function (date, force) {
+                if (!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
+                  angular.extend(viewDate, {
+                    year: picker.$date.getFullYear(),
+                    month: picker.$date.getMonth(),
+                    date: picker.$date.getDate()
+                  });
+                  picker.$build();
+                } else if (date.getDate() !== viewDate.date) {
+                  viewDate.date = picker.$date.getDate();
+                  picker.$updateSelected();
+                }
+              },
+              build: function () {
+                var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1), firstDayOfMonthOffset = firstDayOfMonth.getTimezoneOffset();
+                var firstDate = new Date(+firstDayOfMonth - mod(firstDayOfMonth.getDay() - options.startWeek, 7) * 86400000), firstDateOffset = firstDate.getTimezoneOffset();
+                // Handle daylight time switch
+                if (firstDateOffset !== firstDayOfMonthOffset)
+                  firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60000);
+                var days = [], day;
+                for (var i = 0; i < 42; i++) {
+                  // < 7 * 6
+                  day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
+                  days.push({
+                    date: day,
+                    label: dateFilter(day, this.format),
+                    selected: picker.$date && this.isSelected(day),
+                    muted: day.getMonth() !== viewDate.month,
+                    disabled: this.isDisabled(day)
+                  });
+                }
+                scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
+                scope.showLabels = true;
+                scope.labels = weekDaysLabelsHtml;
+                scope.rows = split(days, this.split);
+                this.built = true;
+              },
+              isSelected: function (date) {
+                return picker.$date && date.getFullYear() === picker.$date.getFullYear() && date.getMonth() === picker.$date.getMonth() && date.getDate() === picker.$date.getDate();
+              },
+              isDisabled: function (date) {
+                return date.getTime() < options.minDate || date.getTime() > options.maxDate;
+              },
+              onKeyDown: function (evt) {
+                var actualTime = picker.$date.getTime();
+                var newDate;
+                if (evt.keyCode === 37)
+                  newDate = new Date(actualTime - 1 * 86400000);
+                else if (evt.keyCode === 38)
+                  newDate = new Date(actualTime - 7 * 86400000);
+                else if (evt.keyCode === 39)
+                  newDate = new Date(actualTime + 1 * 86400000);
+                else if (evt.keyCode === 40)
+                  newDate = new Date(actualTime + 7 * 86400000);
+                if (!this.isDisabled(newDate))
+                  picker.select(newDate, true);
+              }
             },
             {
               name: 'month',
@@ -1031,7 +1035,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
                   });
                 }
                 scope.title = dateFilter(month, 'yyyy');
-                scope.labels = false;
+                scope.showLabels = false;
                 scope.rows = split(months, this.split);
                 this.built = true;
               },
@@ -1044,14 +1048,17 @@ angular.module('mgcrea.ngStrap.datepicker', [
               },
               onKeyDown: function (evt) {
                 var actualMonth = picker.$date.getMonth();
+                var newDate = new Date(picker.$date);
                 if (evt.keyCode === 37)
-                  picker.select(new Date(picker.$date.setMonth(actualMonth - 1)), true);
+                  newDate.setMonth(actualMonth - 1);
                 else if (evt.keyCode === 38)
-                  picker.select(new Date(picker.$date.setMonth(actualMonth - 4)), true);
+                  newDate.setMonth(actualMonth - 4);
                 else if (evt.keyCode === 39)
-                  picker.select(new Date(picker.$date.setMonth(actualMonth + 1)), true);
+                  newDate.setMonth(actualMonth + 1);
                 else if (evt.keyCode === 40)
-                  picker.select(new Date(picker.$date.setMonth(actualMonth + 4)), true);
+                  newDate.setMonth(actualMonth + 4);
+                if (!this.isDisabled(newDate))
+                  picker.select(newDate, true);
               }
             },
             {
@@ -1089,7 +1096,7 @@ angular.module('mgcrea.ngStrap.datepicker', [
                   });
                 }
                 scope.title = years[0].label + '-' + years[years.length - 1].label;
-                scope.labels = false;
+                scope.showLabels = false;
                 scope.rows = split(years, this.split);
                 this.built = true;
               },
@@ -1101,15 +1108,17 @@ angular.module('mgcrea.ngStrap.datepicker', [
                 return lastDate < options.minDate || date.getTime() > options.maxDate;
               },
               onKeyDown: function (evt) {
-                var actualYear = picker.$date.getFullYear();
+                var actualYear = picker.$date.getFullYear(), newDate = new Date(picker.$date);
                 if (evt.keyCode === 37)
-                  picker.select(new Date(picker.$date.setYear(actualYear - 1)), true);
+                  newDate.setYear(actualYear - 1);
                 else if (evt.keyCode === 38)
-                  picker.select(new Date(picker.$date.setYear(actualYear - 4)), true);
+                  newDate.setYear(actualYear - 4);
                 else if (evt.keyCode === 39)
-                  picker.select(new Date(picker.$date.setYear(actualYear + 1)), true);
+                  newDate.setYear(actualYear + 1);
                 else if (evt.keyCode === 40)
-                  picker.select(new Date(picker.$date.setYear(actualYear + 4)), true);
+                  newDate.setYear(actualYear + 4);
+                if (!this.isDisabled(newDate))
+                  picker.select(newDate, true);
               }
             }
           ];
@@ -1332,7 +1341,7 @@ angular.module('mgcrea.ngStrap.helpers.dateParser', []).provider('$dateParser', 
             var matches = regex.exec(value);
             if (!matches)
               return false;
-            var date = baseDate || new Date(0);
+            var date = baseDate || new Date(0, 0, 1);
             for (var i = 0; i < matches.length - 1; i++) {
               setMap[i] && setMap[i].call(date, matches[i + 1]);
             }
@@ -1594,17 +1603,17 @@ angular.module('mgcrea.ngStrap.helpers.parseOptions', []).provider('$parseOption
         };
         $parseOptions.valuesFn = function (scope, controller) {
           return $q.when(valuesFn(scope, controller)).then(function (values) {
-            $parseOptions.$values = values ? parseValues(values) : {};
+            $parseOptions.$values = values ? parseValues(values, scope) : {};
             return $parseOptions.$values;
           });
         };
         // Private functions
-        function parseValues(values) {
+        function parseValues(values, scope) {
           return values.map(function (match, index) {
             var locals = {}, label, value;
             locals[valueName] = match;
-            label = displayFn(locals);
-            value = valueFn(locals) || index;
+            label = displayFn(scope, locals);
+            value = valueFn(scope, locals) || index;
             return {
               label: label,
               value: value
@@ -1983,6 +1992,281 @@ angular.module('mgcrea.ngStrap.navbar', []).provider('$navbar', function () {
   }
 ]);
 
+// Source: select.js
+angular.module('mgcrea.ngStrap.select', [
+  'mgcrea.ngStrap.tooltip',
+  'mgcrea.ngStrap.helpers.parseOptions'
+]).provider('$select', function () {
+  var defaults = this.defaults = {
+      animation: 'am-fade',
+      prefixClass: 'select',
+      placement: 'bottom-left',
+      template: 'select/select.tpl.html',
+      trigger: 'focus',
+      container: false,
+      keyboard: true,
+      html: false,
+      delay: 0,
+      multiple: false,
+      sort: true,
+      caretHtml: '&nbsp;<span class="caret"></span>',
+      placeholder: 'Choose among the following...',
+      maxLength: 3,
+      maxLengthHtml: 'selected'
+    };
+  this.$get = [
+    '$window',
+    '$document',
+    '$rootScope',
+    '$tooltip',
+    function ($window, $document, $rootScope, $tooltip) {
+      var bodyEl = angular.element($window.document.body);
+      var isTouch = 'createTouch' in $window.document;
+      function SelectFactory(element, controller, config) {
+        var $select = {};
+        // Common vars
+        var options = angular.extend({}, defaults, config);
+        $select = $tooltip(element, options);
+        var parentScope = config.scope;
+        var scope = $select.$scope;
+        scope.$matches = [];
+        scope.$activeIndex = 0;
+        scope.$isMultiple = options.multiple;
+        scope.$activate = function (index) {
+          scope.$$postDigest(function () {
+            $select.activate(index);
+          });
+        };
+        scope.$select = function (index, evt) {
+          scope.$$postDigest(function () {
+            $select.select(index);
+          });
+        };
+        scope.$isVisible = function () {
+          return $select.$isVisible();
+        };
+        scope.$isActive = function (index) {
+          return $select.$isActive(index);
+        };
+        // Public methods
+        $select.update = function (matches) {
+          scope.$matches = matches;
+          $select.$updateActiveIndex();
+        };
+        $select.activate = function (index) {
+          if (options.multiple) {
+            scope.$activeIndex.sort();
+            $select.$isActive(index) ? scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1) : scope.$activeIndex.push(index);
+            if (options.sort)
+              scope.$activeIndex.sort();
+          } else {
+            scope.$activeIndex = index;
+          }
+          return scope.$activeIndex;
+        };
+        $select.select = function (index) {
+          var value = scope.$matches[index].value;
+          $select.activate(index);
+          if (options.multiple) {
+            controller.$setViewValue(scope.$activeIndex.map(function (index) {
+              return scope.$matches[index].value;
+            }));
+          } else {
+            controller.$setViewValue(value);
+          }
+          controller.$render();
+          if (parentScope)
+            parentScope.$digest();
+          // Hide if single select
+          if (!options.multiple) {
+            $select.hide();
+          }
+          // Emit event
+          scope.$emit('$select.select', value, index);
+        };
+        // Protected methods
+        $select.$updateActiveIndex = function () {
+          if (controller.$modelValue && scope.$matches.length) {
+            if (options.multiple && angular.isArray(controller.$modelValue)) {
+              scope.$activeIndex = controller.$modelValue.map(function (value) {
+                return $select.$getIndex(value);
+              });
+            } else {
+              scope.$activeIndex = $select.$getIndex(controller.$modelValue);
+            }
+          } else if (scope.$activeIndex >= scope.$matches.length) {
+            scope.$activeIndex = options.multiple ? [] : 0;
+          }
+        };
+        $select.$isVisible = function () {
+          if (!options.minLength || !controller) {
+            return scope.$matches.length;
+          }
+          // minLength support
+          return scope.$matches.length && controller.$viewValue.length >= options.minLength;
+        };
+        $select.$isActive = function (index) {
+          if (options.multiple) {
+            return scope.$activeIndex.indexOf(index) !== -1;
+          } else {
+            return scope.$activeIndex === index;
+          }
+        };
+        $select.$getIndex = function (value) {
+          var l = scope.$matches.length, i = l;
+          if (!l)
+            return;
+          for (i = l; i--;) {
+            if (scope.$matches[i].value === value)
+              break;
+          }
+          if (i < 0)
+            return;
+          return i;
+        };
+        $select.$onMouseDown = function (evt) {
+          // Prevent blur on mousedown on .dropdown-menu
+          evt.preventDefault();
+          evt.stopPropagation();
+          // Emulate click for mobile devices
+          if (isTouch) {
+            var targetEl = angular.element(evt.target);
+            targetEl.triggerHandler('click');
+          }
+        };
+        $select.$onKeyDown = function (evt) {
+          if (!/(9|13|38|40)/.test(evt.keyCode))
+            return;
+          evt.preventDefault();
+          evt.stopPropagation();
+          // Select with enter
+          if (!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
+            return $select.select(scope.$activeIndex);
+          }
+          // Navigate with keyboard
+          if (evt.keyCode === 38 && scope.$activeIndex > 0)
+            scope.$activeIndex--;
+          else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1)
+            scope.$activeIndex++;
+          else if (angular.isUndefined(scope.$activeIndex))
+            scope.$activeIndex = 0;
+          scope.$digest();
+        };
+        // Overrides
+        var _show = $select.show;
+        $select.show = function () {
+          _show();
+          if (options.multiple) {
+            $select.$element.addClass('select-multiple');
+          }
+          setTimeout(function () {
+            $select.$element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
+            if (options.keyboard) {
+              element.on('keydown', $select.$onKeyDown);
+            }
+          });
+        };
+        var _hide = $select.hide;
+        $select.hide = function () {
+          $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
+          if (options.keyboard) {
+            element.off('keydown', $select.$onKeyDown);
+          }
+          _hide(true);
+        };
+        return $select;
+      }
+      SelectFactory.defaults = defaults;
+      return SelectFactory;
+    }
+  ];
+}).directive('bsSelect', [
+  '$window',
+  '$parse',
+  '$q',
+  '$select',
+  '$parseOptions',
+  function ($window, $parse, $q, $select, $parseOptions) {
+    var defaults = $select.defaults;
+    return {
+      restrict: 'EAC',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        // Directive options
+        var options = { scope: scope };
+        angular.forEach([
+          'placement',
+          'container',
+          'delay',
+          'trigger',
+          'keyboard',
+          'html',
+          'animation',
+          'template',
+          'placeholder',
+          'multiple',
+          'maxLength',
+          'maxLengthHtml'
+        ], function (key) {
+          if (angular.isDefined(attr[key]))
+            options[key] = attr[key];
+        });
+        // Add support for select markup
+        if (element[0].nodeName.toLowerCase() === 'select') {
+          var inputEl = element;
+          inputEl.css('display', 'none');
+          element = angular.element('<button type="button" class="btn btn-default"></button>');
+          inputEl.after(element);
+        }
+        // Build proper ngOptions
+        var parsedOptions = $parseOptions(attr.ngOptions);
+        // Initialize select
+        var select = $select(element, controller, options);
+        // Watch ngOptions values before filtering for changes
+        var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
+        scope.$watch(watchedOptions, function (newValue, oldValue) {
+          // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
+          parsedOptions.valuesFn(scope, controller).then(function (values) {
+            select.update(values);
+            controller.$render();
+          });
+        }, true);
+        // Watch model for changes
+        scope.$watch(attr.ngModel, function (newValue, oldValue) {
+          // console.warn('scope.$watch(%s)', attr.ngModel, newValue, oldValue);
+          select.$updateActiveIndex();
+        }, true);
+        // Model rendering in view
+        controller.$render = function () {
+          // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
+          var selected, index;
+          if (options.multiple && angular.isArray(controller.$modelValue)) {
+            selected = controller.$modelValue.map(function (value) {
+              index = select.$getIndex(value);
+              return angular.isDefined(index) ? select.$scope.$matches[index].label : false;
+            }).filter(angular.isDefined);
+            if (selected.length > (options.maxLength || defaults.maxLength)) {
+              selected = selected.length + ' ' + (options.maxLengthHtml || defaults.maxLengthHtml);
+            } else {
+              selected = selected.join(', ');
+            }
+          } else {
+            index = select.$getIndex(controller.$modelValue);
+            selected = angular.isDefined(index) ? select.$scope.$matches[index].label : false;
+          }
+          element.html((selected ? selected : attr.placeholder || defaults.placeholder) + defaults.caretHtml);
+        };
+        // Garbage collection
+        scope.$on('$destroy', function () {
+          select.destroy();
+          options = null;
+          select = null;
+        });
+      }
+    };
+  }
+]);
+
 // Source: popover.js
 angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip']).provider('$popover', function () {
   var defaults = this.defaults = {
@@ -2300,281 +2584,6 @@ angular.module('mgcrea.ngStrap.scrollspy', [
   }
 ]);
 
-// Source: select.js
-angular.module('mgcrea.ngStrap.select', [
-  'mgcrea.ngStrap.tooltip',
-  'mgcrea.ngStrap.helpers.parseOptions'
-]).provider('$select', function () {
-  var defaults = this.defaults = {
-      animation: 'am-fade',
-      prefixClass: 'select',
-      placement: 'bottom-left',
-      template: 'select/select.tpl.html',
-      trigger: 'focus',
-      container: false,
-      keyboard: true,
-      html: false,
-      delay: 0,
-      multiple: false,
-      sort: true,
-      caretHtml: '&nbsp;<span class="caret"></span>',
-      placeholder: 'Choose among the following...',
-      maxLength: 3,
-      maxLengthHtml: 'selected'
-    };
-  this.$get = [
-    '$window',
-    '$document',
-    '$rootScope',
-    '$tooltip',
-    function ($window, $document, $rootScope, $tooltip) {
-      var bodyEl = angular.element($window.document.body);
-      var isTouch = 'createTouch' in $window.document;
-      function SelectFactory(element, controller, config) {
-        var $select = {};
-        // Common vars
-        var options = angular.extend({}, defaults, config);
-        $select = $tooltip(element, options);
-        var parentScope = config.scope;
-        var scope = $select.$scope;
-        scope.$matches = [];
-        scope.$activeIndex = 0;
-        scope.$isMultiple = options.multiple;
-        scope.$activate = function (index) {
-          scope.$$postDigest(function () {
-            $select.activate(index);
-          });
-        };
-        scope.$select = function (index, evt) {
-          scope.$$postDigest(function () {
-            $select.select(index);
-          });
-        };
-        scope.$isVisible = function () {
-          return $select.$isVisible();
-        };
-        scope.$isActive = function (index) {
-          return $select.$isActive(index);
-        };
-        // Public methods
-        $select.update = function (matches) {
-          scope.$matches = matches;
-          $select.$updateActiveIndex();
-        };
-        $select.activate = function (index) {
-          if (options.multiple) {
-            scope.$activeIndex.sort();
-            $select.$isActive(index) ? scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1) : scope.$activeIndex.push(index);
-            if (options.sort)
-              scope.$activeIndex.sort();
-          } else {
-            scope.$activeIndex = index;
-          }
-          return scope.$activeIndex;
-        };
-        $select.select = function (index) {
-          var value = scope.$matches[index].value;
-          $select.activate(index);
-          if (options.multiple) {
-            controller.$setViewValue(scope.$activeIndex.map(function (index) {
-              return scope.$matches[index].value;
-            }));
-          } else {
-            controller.$setViewValue(value);
-          }
-          controller.$render();
-          if (parentScope)
-            parentScope.$digest();
-          // Hide if single select
-          if (!options.multiple) {
-            $select.hide();
-          }
-          // Emit event
-          scope.$emit('$select.select', value, index);
-        };
-        // Protected methods
-        $select.$updateActiveIndex = function () {
-          if (controller.$modelValue && scope.$matches.length) {
-            if (options.multiple && angular.isArray(controller.$modelValue)) {
-              scope.$activeIndex = controller.$modelValue.map(function (value) {
-                return $select.$getIndex(value);
-              });
-            } else {
-              scope.$activeIndex = $select.$getIndex(controller.$modelValue);
-            }
-          } else if (scope.$activeIndex >= scope.$matches.length) {
-            scope.$activeIndex = options.multiple ? [] : 0;
-          }
-        };
-        $select.$isVisible = function () {
-          if (!options.minLength || !controller) {
-            return scope.$matches.length;
-          }
-          // minLength support
-          return scope.$matches.length && controller.$viewValue.length >= options.minLength;
-        };
-        $select.$isActive = function (index) {
-          if (options.multiple) {
-            return scope.$activeIndex.indexOf(index) !== -1;
-          } else {
-            return scope.$activeIndex === index;
-          }
-        };
-        $select.$getIndex = function (value) {
-          var l = scope.$matches.length, i = l;
-          if (!l)
-            return;
-          for (i = l; i--;) {
-            if (scope.$matches[i].value === value)
-              break;
-          }
-          if (i < 0)
-            return;
-          return i;
-        };
-        $select.$onMouseDown = function (evt) {
-          // Prevent blur on mousedown on .dropdown-menu
-          evt.preventDefault();
-          evt.stopPropagation();
-          // Emulate click for mobile devices
-          if (isTouch) {
-            var targetEl = angular.element(evt.target);
-            targetEl.triggerHandler('click');
-          }
-        };
-        $select.$onKeyDown = function (evt) {
-          if (!/(9|13|38|40)/.test(evt.keyCode))
-            return;
-          evt.preventDefault();
-          evt.stopPropagation();
-          // Select with enter
-          if (evt.keyCode === 13 || evt.keyCode === 9) {
-            return $select.select(scope.$activeIndex);
-          }
-          // Navigate with keyboard
-          if (evt.keyCode === 38 && scope.$activeIndex > 0)
-            scope.$activeIndex--;
-          else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1)
-            scope.$activeIndex++;
-          else if (angular.isUndefined(scope.$activeIndex))
-            scope.$activeIndex = 0;
-          scope.$digest();
-        };
-        // Overrides
-        var _show = $select.show;
-        $select.show = function () {
-          _show();
-          if (options.multiple) {
-            $select.$element.addClass('select-multiple');
-          }
-          setTimeout(function () {
-            $select.$element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
-            if (options.keyboard) {
-              element.on('keydown', $select.$onKeyDown);
-            }
-          });
-        };
-        var _hide = $select.hide;
-        $select.hide = function () {
-          $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
-          if (options.keyboard) {
-            element.off('keydown', $select.$onKeyDown);
-          }
-          _hide();
-        };
-        return $select;
-      }
-      SelectFactory.defaults = defaults;
-      return SelectFactory;
-    }
-  ];
-}).directive('bsSelect', [
-  '$window',
-  '$parse',
-  '$q',
-  '$select',
-  '$parseOptions',
-  function ($window, $parse, $q, $select, $parseOptions) {
-    var defaults = $select.defaults;
-    return {
-      restrict: 'EAC',
-      require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
-        // Directive options
-        var options = { scope: scope };
-        angular.forEach([
-          'placement',
-          'container',
-          'delay',
-          'trigger',
-          'keyboard',
-          'html',
-          'animation',
-          'template',
-          'placeholder',
-          'multiple',
-          'maxLength',
-          'maxLengthHtml'
-        ], function (key) {
-          if (angular.isDefined(attr[key]))
-            options[key] = attr[key];
-        });
-        // Add support for select markup
-        if (element[0].nodeName.toLowerCase() === 'select') {
-          var inputEl = element;
-          inputEl.css('display', 'none');
-          element = angular.element('<button type="button" class="btn btn-default"></button>');
-          inputEl.after(element);
-        }
-        // Build proper ngOptions
-        var parsedOptions = $parseOptions(attr.ngOptions);
-        // Initialize select
-        var select = $select(element, controller, options);
-        // Watch ngOptions values before filtering for changes
-        var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
-        scope.$watch(watchedOptions, function (newValue, oldValue) {
-          // console.warn('scope.$watch(%s)', watchedOptions, newValue, oldValue);
-          parsedOptions.valuesFn(scope, controller).then(function (values) {
-            select.update(values);
-            controller.$render();
-          });
-        }, true);
-        // Watch model for changes
-        scope.$watch(attr.ngModel, function (newValue, oldValue) {
-          // console.warn('scope.$watch(%s)', attr.ngModel, newValue, oldValue);
-          select.$updateActiveIndex();
-        }, true);
-        // Model rendering in view
-        controller.$render = function () {
-          // console.warn('$render', element.attr('ng-model'), 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue, 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue);
-          var selected, index;
-          if (options.multiple && angular.isArray(controller.$modelValue)) {
-            selected = controller.$modelValue.map(function (value) {
-              index = select.$getIndex(value);
-              return angular.isDefined(index) ? select.$scope.$matches[index].label : false;
-            }).filter(angular.isDefined);
-            if (selected.length > (options.maxLength || defaults.maxLength)) {
-              selected = selected.length + ' ' + (options.maxLengthHtml || defaults.maxLengthHtml);
-            } else {
-              selected = selected.join(', ');
-            }
-          } else {
-            index = select.$getIndex(controller.$modelValue);
-            selected = angular.isDefined(index) ? select.$scope.$matches[index].label : false;
-          }
-          element.html((selected ? selected : attr.placeholder || defaults.placeholder) + defaults.caretHtml);
-        };
-        // Garbage collection
-        scope.$on('$destroy', function () {
-          select.destroy();
-          options = null;
-          select = null;
-        });
-      }
-    };
-  }
-]);
-
 // Source: tab.js
 angular.module('mgcrea.ngStrap.tab', []).run([
   '$templateCache',
@@ -2739,6 +2748,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
         $timepicker.switchMeridian = function (date) {
           var hours = (date || controller.$dateValue).getHours();
           controller.$dateValue.setHours(hours < 12 ? hours + 12 : hours - 12);
+          controller.$setViewValue(controller.$dateValue);
           controller.$render();
         };
         // Protected methods
@@ -2793,7 +2803,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
           } else if (index === 1) {
             selectedTime = date.getTime() + viewDate.hour * 3600000;
           }
-          return selectedTime < options.minTime || selectedTime > options.maxTime;
+          return selectedTime < options.minTime * 1 || selectedTime > options.maxTime * 1;
         };
         $timepicker.$moveIndex = function (value, index) {
           var targetDate;
@@ -2842,26 +2852,38 @@ angular.module('mgcrea.ngStrap.timepicker', [
               selectedIndex = selectedIndex < count - 1 ? selectedIndex + 1 : 0;
           }
           // Update values (up, down)
+          var selectRange = [
+              0,
+              hoursLength
+            ];
           if (selectedIndex === 0) {
-            if (lateralMove)
-              return createSelection(0, hoursLength);
             if (evt.keyCode === 38)
               newDate.setHours(hours - parseInt(options.hourStep, 10));
             else if (evt.keyCode === 40)
               newDate.setHours(hours + parseInt(options.hourStep, 10));
+            selectRange = [
+              0,
+              hoursLength
+            ];
           } else if (selectedIndex === 1) {
-            if (lateralMove)
-              return createSelection(hoursLength + 1, hoursLength + 1 + minutesLength);
             if (evt.keyCode === 38)
               newDate.setMinutes(minutes - parseInt(options.minuteStep, 10));
             else if (evt.keyCode === 40)
               newDate.setMinutes(minutes + parseInt(options.minuteStep, 10));
+            selectRange = [
+              hoursLength + 1,
+              hoursLength + 1 + minutesLength
+            ];
           } else if (selectedIndex === 2) {
-            if (lateralMove)
-              return createSelection(hoursLength + 1 + minutesLength + 1, hoursLength + 1 + minutesLength + 3);
-            $timepicker.switchMeridian();
+            if (!lateralMove)
+              $timepicker.switchMeridian();
+            selectRange = [
+              hoursLength + 1 + minutesLength + 1,
+              hoursLength + 1 + minutesLength + 3
+            ];
           }
           $timepicker.select(newDate, selectedIndex, true);
+          createSelection(selectRange[0], selectRange[1]);
           parentScope.$digest();
         };
         // Private
@@ -2963,7 +2985,8 @@ angular.module('mgcrea.ngStrap.timepicker', [
           'timeFormat',
           'useNative',
           'hourStep',
-          'minuteStep'
+          'minuteStep',
+          'length'
         ], function (key) {
           if (angular.isDefined(attr[key]))
             options[key] = attr[key];
@@ -2990,7 +3013,7 @@ angular.module('mgcrea.ngStrap.timepicker', [
             } else if (angular.isString(newValue) && newValue.match(/^".+"$/)) {
               timepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
             } else {
-              timepicker.$options[key] = dateParser.parse(newValue);
+              timepicker.$options[key] = dateParser.parse(newValue, new Date(1970, 0, 1, 0));
             }
             !isNaN(timepicker.$options[key]) && timepicker.$build();
           });
@@ -3098,6 +3121,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
       function TooltipFactory(element, config) {
         var $tooltip = {};
         // Common vars
+        var nodeName = element[0].nodeName.toLowerCase();
         var options = $tooltip.$options = angular.extend({}, defaults, config);
         $tooltip.$promise = fetchTemplate(options.template);
         var scope = $tooltip.$scope = options.scope && options.scope.$new() || $rootScope.$new();
@@ -3178,7 +3202,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
             } else if (trigger !== 'manual') {
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+              nodeName === 'button' && trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
             }
           });
           // Options: show
@@ -3198,7 +3222,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions']).
             } else if (trigger !== 'manual') {
               element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
-              trigger !== 'hover' && element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
+              nodeName === 'button' && trigger !== 'hover' && element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
             }
           }
           // Remove element
@@ -3486,11 +3510,10 @@ angular.module('mgcrea.ngStrap.typeahead', [
     '$tooltip',
     function ($window, $rootScope, $tooltip) {
       var bodyEl = angular.element($window.document.body);
-      function TypeaheadFactory(element, config) {
+      function TypeaheadFactory(element, controller, config) {
         var $typeahead = {};
         // Common vars
         var options = angular.extend({}, defaults, config);
-        var controller = options.controller;
         $typeahead = $tooltip(element, options);
         var parentScope = config.scope;
         var scope = $typeahead.$scope;
@@ -3524,13 +3547,11 @@ angular.module('mgcrea.ngStrap.typeahead', [
         };
         $typeahead.select = function (index) {
           var value = scope.$matches[index].value;
-          if (controller) {
-            controller.$setViewValue(value);
-            controller.$render();
-            if (parentScope)
-              parentScope.$digest();
-          }
+          controller.$setViewValue(value);
           scope.$resetMatches();
+          controller.$render();
+          if (parentScope)
+            parentScope.$digest();
           // Emit event
           scope.$emit('$typeahead.select', value, index);
         };
@@ -3566,10 +3587,9 @@ angular.module('mgcrea.ngStrap.typeahead', [
           evt.stopPropagation();
           // Select with enter
           if (evt.keyCode === 13 && scope.$matches.length) {
-            return $typeahead.select(scope.$activeIndex);
-          }
-          // Navigate with keyboard
-          if (evt.keyCode === 38 && scope.$activeIndex > 0)
+            $typeahead.select(scope.$activeIndex);
+          }  // Navigate with keyboard
+          else if (evt.keyCode === 38 && scope.$activeIndex > 0)
             scope.$activeIndex--;
           else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1)
             scope.$activeIndex++;
@@ -3615,10 +3635,7 @@ angular.module('mgcrea.ngStrap.typeahead', [
       require: 'ngModel',
       link: function postLink(scope, element, attr, controller) {
         // Directive options
-        var options = {
-            scope: scope,
-            controller: controller
-          };
+        var options = { scope: scope };
         angular.forEach([
           'placement',
           'container',
@@ -3645,16 +3662,18 @@ angular.module('mgcrea.ngStrap.typeahead', [
           ngOptions += ' | limitTo:' + limit;
         var parsedOptions = $parseOptions(ngOptions);
         // Initialize typeahead
-        var typeahead = $typeahead(element, options);
-        // if(!dump) var dump = console.error.bind(console);
+        var typeahead = $typeahead(element, controller, options);
         // Watch model for changes
         scope.$watch(attr.ngModel, function (newValue, oldValue) {
+          // console.warn('$watch', element.attr('ng-model'), newValue);
           scope.$modelValue = newValue;
-          //Set model value on the scope to custom templates can use it.
+          // Publish modelValue on scope for custom templates
           parsedOptions.valuesFn(scope, controller).then(function (values) {
             if (values.length > limit)
               values = values.slice(0, limit);
-            // if(matches.length === 1 && matches[0].value === newValue) return;
+            // Do not re-queue an update if a correct value has been selected
+            if (values.length === 1 && values[0].value === newValue)
+              return;
             typeahead.update(values);
             // Queue a new rendering that will leverage collection loading
             controller.$render();
@@ -3667,6 +3686,7 @@ angular.module('mgcrea.ngStrap.typeahead', [
             return element.val('');
           var index = typeahead.$getIndex(controller.$modelValue);
           var selected = angular.isDefined(index) ? typeahead.$scope.$matches[index].label : controller.$viewValue;
+          selected = angular.isObject(selected) ? selected.label : selected;
           element.val(selected.replace(/<(?:.|\n)*?>/gm, '').trim());
         };
         // Garbage collection

@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.0.1 - 2014-04-10
+ * @version v2.0.2 - 2014-04-27
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -153,7 +153,7 @@ angular.module('mgcrea.ngStrap.select', [
           evt.preventDefault();
           evt.stopPropagation();
           // Select with enter
-          if (evt.keyCode === 13 || evt.keyCode === 9) {
+          if (!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
             return $select.select(scope.$activeIndex);
           }
           // Navigate with keyboard
@@ -185,7 +185,7 @@ angular.module('mgcrea.ngStrap.select', [
           if (options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
           }
-          _hide();
+          _hide(true);
         };
         return $select;
       }

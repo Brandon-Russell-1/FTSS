@@ -88,6 +88,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
         $timepicker.switchMeridian = function(date) {
           var hours = (date || controller.$dateValue).getHours();
           controller.$dateValue.setHours(hours < 12 ? hours + 12 : hours - 12);
+          controller.$setViewValue(controller.$dateValue);
           controller.$render();
         };
 
@@ -133,7 +134,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           } else if(index === 1) {
             selectedTime = date.getTime() + viewDate.hour * 36e5;
           }
-          return selectedTime < options.minTime || selectedTime > options.maxTime;
+          return selectedTime < options.minTime * 1 || selectedTime > options.maxTime * 1;
         };
 
         $timepicker.$moveIndex = function(value, index) {
@@ -184,19 +185,21 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
           }
 
           // Update values (up, down)
+          var selectRange = [0, hoursLength];
           if(selectedIndex === 0) {
-            if(lateralMove) return createSelection(0, hoursLength);
             if(evt.keyCode === 38) newDate.setHours(hours - parseInt(options.hourStep, 10));
             else if(evt.keyCode === 40) newDate.setHours(hours + parseInt(options.hourStep, 10));
+            selectRange = [0, hoursLength];
           } else if(selectedIndex === 1) {
-            if(lateralMove) return createSelection(hoursLength + 1, hoursLength + 1 + minutesLength);
             if(evt.keyCode === 38) newDate.setMinutes(minutes - parseInt(options.minuteStep, 10));
             else if(evt.keyCode === 40) newDate.setMinutes(minutes + parseInt(options.minuteStep, 10));
+            selectRange = [hoursLength + 1, hoursLength + 1 + minutesLength];
           } else if(selectedIndex === 2) {
-            if(lateralMove) return createSelection(hoursLength + 1 + minutesLength + 1, hoursLength + 1 + minutesLength + 3);
-            $timepicker.switchMeridian();
+            if(!lateralMove) $timepicker.switchMeridian();
+            selectRange = [hoursLength + 1 + minutesLength + 1, hoursLength + 1 + minutesLength + 3];
           }
           $timepicker.select(newDate, selectedIndex, true);
+          createSelection(selectRange[0], selectRange[1]);
           parentScope.$digest();
         };
 
@@ -277,11 +280,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
   })
 
 
-  .directive('bsTimepicker',
-
-
-             ['$window', '$parse', '$q', '$locale', 'dateFilter', '$timepicker', '$dateParser', '$timeout',
-             function($window, $parse, $q, $locale, dateFilter, $timepicker, $dateParser, $timeout) {
+  .directive('bsTimepicker', function($window, $parse, $q, $locale, dateFilter, $timepicker, $dateParser, $timeout) {
 
     var defaults = $timepicker.defaults;
     var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
@@ -294,7 +293,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'useNative', 'hourStep', 'minuteStep'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'timeType', 'timeFormat', 'useNative', 'hourStep', 'minuteStep', 'length'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -315,7 +314,7 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
             } else if(angular.isString(newValue) && newValue.match(/^".+"$/)) {
               timepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
             } else {
-              timepicker.$options[key] = dateParser.parse(newValue);
+              timepicker.$options[key] = dateParser.parse(newValue, new Date(1970, 0, 1, 0));
             }
             !isNaN(timepicker.$options[key]) && timepicker.$build();
           });
@@ -390,4 +389,4 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
       }
     };
 
-  }]);
+  });

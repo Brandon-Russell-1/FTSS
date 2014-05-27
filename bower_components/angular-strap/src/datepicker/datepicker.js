@@ -18,6 +18,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
       useNative: false,
       dateType: 'date',
       dateFormat: 'shortDate',
+      dayFormat: 'dd',
       strictFormat: false,
       autoclose: false,
       minDate: -Infinity,
@@ -221,10 +222,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
   })
 
-  .directive('bsDatepicker',
-
-             ['$window', '$parse', '$q', '$locale', 'dateFilter', '$datepicker', '$dateParser', '$timeout',
-             function($window, $parse, $q, $locale, dateFilter, $datepicker, $dateParser, $timeout) {
+  .directive('bsDatepicker', function($window, $parse, $q, $locale, dateFilter, $datepicker, $dateParser, $timeout) {
 
     var defaults = $datepicker.defaults;
     var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
@@ -239,7 +237,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
         // Directive options
         var options = {scope: scope, controller: controller};
-        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'strictFormat', 'startWeek', 'useNative', 'lang', 'startView', 'minView'], function(key) {
+        angular.forEach(['placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'template', 'autoclose', 'dateType', 'dateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'useNative', 'lang', 'startView', 'minView'], function(key) {
           if(angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
@@ -343,7 +341,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
       }
     };
 
-  }])
+  })
 
   .provider('datepickerViews', function() {
 
@@ -381,66 +379,53 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         var viewDate = {year: startDate.getFullYear(), month: startDate.getMonth(), date: startDate.getDate()};
         var timezoneOffset = startDate.getTimezoneOffset() * 6e4;
 
-        var views = [
-	        {
-		        format: 'dd',
-		        split: 5,
-		        steps: { month: 1 },
-		        update: function (date, force) {
-			        if (!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
-				        angular.extend(viewDate, {
-					        year: picker.$date.getFullYear(),
-					        month: picker.$date.getMonth(),
-					        date: picker.$date.getDate()
-				        });
-				        picker.$build();
-			        } else if (date.getDate() !== viewDate.date) {
-				        viewDate.date = picker.$date.getDate();
-				        picker.$updateSelected();
-			        }
-		        },
-		        build: function () {
-			        var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1);
-			        var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getDay() - options.startWeek) * 86400000);
-			        var days = [], day;
-			        for (var i = 0; i < 42; i++) {
-				        // < 7 * 6
-				        day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
+        var views = [{
+            format: options.dayFormat,
+            split: 7,
+            steps: { month: 1 },
+            update: function(date, force) {
+              if(!this.built || force || date.getFullYear() !== viewDate.year || date.getMonth() !== viewDate.month) {
+                angular.extend(viewDate, {year: picker.$date.getFullYear(), month: picker.$date.getMonth(), date: picker.$date.getDate()});
+                picker.$build();
+              } else if(date.getDate() !== viewDate.date) {
+                viewDate.date = picker.$date.getDate();
+                picker.$updateSelected();
+              }
+            },
+            build: function() {
+              var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1), firstDayOfMonthOffset = firstDayOfMonth.getTimezoneOffset();
+              var firstDate = new Date(+firstDayOfMonth - mod(firstDayOfMonth.getDay() - options.startWeek, 7) * 864e5), firstDateOffset = firstDate.getTimezoneOffset();
+              // Handle daylight time switch
+              if(firstDateOffset !== firstDayOfMonthOffset) firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60e3);
+              var days = [], day;
+              for(var i = 0; i < 42; i++) { // < 7 * 6
+                day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
+                days.push({date: day, label: dateFilter(day, this.format), selected: picker.$date && this.isSelected(day), muted: day.getMonth() !== viewDate.month, disabled: this.isDisabled(day)});
+              }
+              scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
+              scope.showLabels = true;
+              scope.labels = weekDaysLabelsHtml;
+              scope.rows = split(days, this.split);
+              this.built = true;
+            },
+            isSelected: function(date) {
+              return picker.$date && date.getFullYear() === picker.$date.getFullYear() && date.getMonth() === picker.$date.getMonth() && date.getDate() === picker.$date.getDate();
+            },
+            isDisabled: function(date) {
+              return date.getTime() < options.minDate || date.getTime() > options.maxDate;
+            },
+            onKeyDown: function(evt) {
+              var actualTime = picker.$date.getTime();
+              var newDate;
 
-				        if (day.getDay() > 0 && day.getDay() < 6) {
+              if(evt.keyCode === 37) newDate = new Date(actualTime - 1 * 864e5);
+              else if(evt.keyCode === 38) newDate = new Date(actualTime - 7 * 864e5);
+              else if(evt.keyCode === 39) newDate = new Date(actualTime + 1 * 864e5);
+              else if(evt.keyCode === 40) newDate = new Date(actualTime + 7 * 864e5);
 
-					        days.push({
-						                  date: day,
-						                  label: dateFilter(day, this.format),
-						                  selected: picker.$date && this.isSelected(day),
-						                  muted: day.getMonth() !== viewDate.month,
-						                  disabled: this.isDisabled(day)
-					                  });
-				        }
-			        }
-			        scope.title = dateFilter(firstDayOfMonth, 'MMMM yyyy');
-			        scope.labels = weekDaysLabelsHtml;
-			        scope.rows = split(days, this.split);
-			        this.built = true;
-		        },
-		        isSelected: function (date) {
-			        return picker.$date && date.getFullYear() === picker.$date.getFullYear() && date.getMonth() === picker.$date.getMonth() && date.getDate() === picker.$date.getDate();
-		        },
-		        isDisabled: function (date) {
-			        return date.getTime() < options.minDate || date.getTime() > options.maxDate;
-		        },
-		        onKeyDown: function (evt) {
-			        var actualTime = picker.$date.getTime();
-			        if (evt.keyCode === 37)
-				        picker.select(new Date(actualTime - 1 * 86400000), true);
-			        else if (evt.keyCode === 38)
-				        picker.select(new Date(actualTime - 7 * 86400000), true);
-			        else if (evt.keyCode === 39)
-				        picker.select(new Date(actualTime + 1 * 86400000), true);
-			        else if (evt.keyCode === 40)
-				        picker.select(new Date(actualTime + 7 * 86400000), true);
-		        }
-	        }, {
+              if (!this.isDisabled(newDate)) picker.select(newDate, true);
+            }
+          }, {
             name: 'month',
             format: 'MMM',
             split: 4,
@@ -462,7 +447,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
                 months.push({date: month, label: dateFilter(month, this.format), selected: picker.$isSelected(month), disabled: this.isDisabled(month)});
               }
               scope.title = dateFilter(month, 'yyyy');
-              scope.labels = false;
+              scope.showLabels = false;
               scope.rows = split(months, this.split);
               this.built = true;
             },
@@ -475,10 +460,14 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             },
             onKeyDown: function(evt) {
               var actualMonth = picker.$date.getMonth();
-              if(evt.keyCode === 37) picker.select(new Date(picker.$date.setMonth(actualMonth - 1)), true);
-              else if(evt.keyCode === 38) picker.select(new Date(picker.$date.setMonth(actualMonth - 4)), true);
-              else if(evt.keyCode === 39) picker.select(new Date(picker.$date.setMonth(actualMonth + 1)), true);
-              else if(evt.keyCode === 40) picker.select(new Date(picker.$date.setMonth(actualMonth + 4)), true);
+              var newDate = new Date(picker.$date);
+
+              if(evt.keyCode === 37) newDate.setMonth(actualMonth - 1);
+              else if(evt.keyCode === 38) newDate.setMonth(actualMonth - 4);
+              else if(evt.keyCode === 39) newDate.setMonth(actualMonth + 1);
+              else if(evt.keyCode === 40) newDate.setMonth(actualMonth + 4);
+
+              if (!this.isDisabled(newDate)) picker.select(newDate, true);
             }
           }, {
             name: 'year',
@@ -502,7 +491,7 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
                 years.push({date: year, label: dateFilter(year, this.format), selected: picker.$isSelected(year), disabled: this.isDisabled(year)});
               }
               scope.title = years[0].label + '-' + years[years.length - 1].label;
-              scope.labels = false;
+              scope.showLabels = false;
               scope.rows = split(years, this.split);
               this.built = true;
             },
@@ -514,11 +503,15 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               return lastDate < options.minDate || date.getTime() > options.maxDate;
             },
             onKeyDown: function(evt) {
-              var actualYear = picker.$date.getFullYear();
-              if(evt.keyCode === 37) picker.select(new Date(picker.$date.setYear(actualYear - 1)), true);
-              else if(evt.keyCode === 38) picker.select(new Date(picker.$date.setYear(actualYear - 4)), true);
-              else if(evt.keyCode === 39) picker.select(new Date(picker.$date.setYear(actualYear + 1)), true);
-              else if(evt.keyCode === 40) picker.select(new Date(picker.$date.setYear(actualYear + 4)), true);
+              var actualYear = picker.$date.getFullYear(),
+                  newDate = new Date(picker.$date);
+
+              if(evt.keyCode === 37) newDate.setYear(actualYear - 1);
+              else if(evt.keyCode === 38) newDate.setYear(actualYear - 4);
+              else if(evt.keyCode === 39) newDate.setYear(actualYear + 1);
+              else if(evt.keyCode === 40) newDate.setYear(actualYear + 4);
+
+              if (!this.isDisabled(newDate)) picker.select(newDate, true);
             }
           }];
 

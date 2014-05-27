@@ -243,9 +243,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
 
   })
 
-  .directive('bsModal', [
-	             '$window', '$location', '$sce', '$modal',
-             function($window, $location, $sce, $modal) {
+  .directive('bsModal', function($window, $location, $sce, $modal) {
 
     return {
       restrict: 'EAC',
@@ -290,4 +288,4 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
       }
     };
 
-  }]);
+  });
