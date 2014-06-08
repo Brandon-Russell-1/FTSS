@@ -14,12 +14,13 @@ div
 
     +grouping()
 
-        .well(ng-repeat='row in group', ng-class='{archived:row.Archived, updated:row.updated}', id='{{row.Id}}wr')
+        .well(ng-repeat='row in group', ng-class='{archived:row.Archived, updated:row.updated, denied:row.Denied}', id='{{row.Id}}wr')
 
             #requirementsProgress.wizard
                 ul.steps
                     li(ng-repeat='step in row.steps', class='{{step.status}}')
                         +icon('check-square-o')
+                        +icon('times')
                         +icon('wait', '0 0 36 32')
                         span.text {{step.text}}
                         span.chevron
@@ -71,16 +72,17 @@ div
 
                         tr(ng-repeat='req in row.Requirements', ng-class='{priority:req.priority}')
 
-                            td
+                            td.btn-muted
                                 +icon('asterisk')
-                                span.btn-muted(title='{{req.course.Title}}', hover='{{req.hover}}', right)
+                                span(title='{{req.course.Title}}',
+                                        hover='{{req.hover}}',
+                                        style='position:relative;top:-.35em',
+                                        right)
                                     +icon('info')
 
-                            td.left
-                                b {{req.course.PDS}}
+                            td.left: b {{req.course.PDS}}
 
-                            td.left
-                                b {{req.course.Number}} ({{req.course.MDS}})
+                            td.left: b {{req.course.Number}} ({{req.course.MDS}})
 
                             td(class="{{req.history1.style}}") {{req.history1.text}}
 
@@ -94,15 +96,35 @@ div
 
                             td.bold(style='font-size:1.25em') {{req.seatCount}}
 
-            .requestActions
+
+                .clearfix
+
+                .pull-right
+
+                    table.table.table-split
+
+                        tr(ng-show='row.ApprovedCC')
+
+                            td Group/CC {{row.ApprovedCC.status}} By:
+                            td {{row.ApprovedCC.user}}
+
+                        tr(ng-show='row.ApprovedMAJCOM')
+
+                            td MAJCOM Funding {{row.ApprovedMAJCOM.status}} By:
+                            td {{row.ApprovedMAJCOM.user}}
+
+                .clearfix
+
+            .requestActions(ng-hide='row.Archived || row.Denied')
                 hr
+
                 .pull-right.invert
-                    .btn.btn-success.btn-labeled.btn-muted(ng-click='approve()')
-                        span.btn-label.invert
-                            +icon('approve')
+                    .btn.btn-success.btn-labeled.btn-muted(bs-popover, data-placement='left', data-template='/partials/popover-approve.html')
+                        .btn-label.invert: +icon('approve')
                         | Approve
-                    .btn.btn-danger.btn-labeled.btn-muted(ng-click='deny()')
-                        span.btn-label.invert
-                            +icon('deny')
+
+                    .btn.btn-danger.btn-labeled.btn-muted(bs-popover, data-placement='left', data-template='/partials/popover-deny.html')
+                        .btn-label.invert: +icon('deny')
                         | Deny
+
                 .clearfix

@@ -1,0 +1,21 @@
+include ../__mixins
+
+.popover
+
+    .arrow
+
+    h3.popover-title Confirm Approval
+
+    .popover-content
+
+        p Are you sure you want to approve this 898?
+
+        p
+
+            .pull-right
+
+                .btn.btn-success.btn-sm(ng-click='approve()') Yes, approve
+
+                .btn.btn-default.btn-sm(ng-click='$hide()') No, cancel
+
+        .clearfix

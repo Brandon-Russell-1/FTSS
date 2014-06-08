@@ -6,11 +6,41 @@
     top: 1em
 }
 
-#requirementsProgress .pending .wait,
-#requirementsProgress .pending .check-square-o,
-#requirementsProgress .complete .wait,
-#requirementsProgress .active .check-square-o {
+.well.denied {
+    background: #f9eded;
+    color: #a94442
+}
+
+.well.denied .steps * {
+    background-color: transparent!important;;
+}
+
+.well.denied .steps .chevron {
     display: none;
+}
+
+.well.denied .btnFake {
+    background-color: transparent;
+}
+
+.well.denied * {
+    color: #a94442!important;
+    fill: #a94442;
+}
+
+.steps li label {
+    display: none;
+}
+
+.steps li.denied, .steps li.denied * {
+    color: #a94442;
+    fill: #a94442;
+}
+
+.steps li.complete label.lbl-check-square-o,
+.steps li.active label.lbl-wait,
+.steps li.denied label.lbl-times {
+    display: inline-block;
 }
 
 #requirementsProgress .complete .badge:before {

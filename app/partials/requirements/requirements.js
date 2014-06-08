@@ -5,7 +5,8 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		function ($scope) {
+		'SharePoint',
+		function ($scope, SharePoint) {
 
 			var self = FTSS.controller($scope, {
 				'sort' : 'Course.PDS',
@@ -39,6 +40,40 @@ FTSS.ng.controller(
 
 					      stepBuilder = function (d) {
 
+						      var hasActive = false,
+
+						          getState = function (prop) {
+
+							          var test = d[prop];
+
+							          switch (true) {
+
+								          case hasActive:
+									          return 'pending';
+
+								          case (test && test.substring(0, 3) === 'NO:'):
+									          hasActive = true;
+									          d.Denied = true;
+									          d[prop] = {
+										          'status': 'Denied',
+										          'user'  : test.substring(3)
+									          };
+									          return 'denied';
+
+								          case !!test:
+									          d[prop] = {
+										          'status': 'Approved',
+										          'user'  : test
+									          };
+									          return 'complete';
+
+								          default:
+									          d.ActiveProp = prop;
+									          hasActive = true;
+									          return 'active';
+							          }
+						          };
+
 						      d.steps = [
 							      {
 								      'text'  : 'MTF',
@@ -46,8 +81,9 @@ FTSS.ng.controller(
 							      },
 
 							      {
+								      'key'   : 'ApprovedCC',
 								      'text'  : 'Group/CC',
-								      'status': d.Approved ? 'complete' : 'active'
+								      'status': getState('ApprovedCC')
 							      }
 						      ];
 
@@ -55,18 +91,18 @@ FTSS.ng.controller(
 
 							      d.steps.push(
 								      {
+									      'key'   : 'ApprovedMAJCOM',
 									      'text'  : 'MAJCOM',
-									      'status': d.Approved ? d.ApprovedMAJCOM ? 'complete' : 'active' : 'pending'
+									      'status': getState('ApprovedMAJCOM')
 								      });
 
 						      }
 
 						      d.steps.push(
 							      {
+								      'key'   : 'Built',
 								      'text'  : 'FTD',
-								      'status': d.Approved && (d.TDY &&
-								                d.Funded ||
-								                d.ApprovedMAJCOM) ? (d.Archived ? 'complete' : 'active') : 'pending'
+								      'status': hasActive ? 'pending' : d.Archived ? 'complete' : 'active'
 							      });
 
 
@@ -136,7 +172,10 @@ FTSS.ng.controller(
 						      d.Requirements = {};
 						      d.History = {};
 
-						      d.email = encodeURI('subject=FTSS 898 Submission - ' + d.Month + ' for ' + d.FTD.LongName);
+						      d.email = encodeURI('subject=FTSS 898 Submission - ' +
+						                          d.Month +
+						                          ' for ' +
+						                          d.FTD.LongName);
 
 						      stepBuilder(d);
 
@@ -180,6 +219,59 @@ FTSS.ng.controller(
 					      self.initialize(processed).then();
 
 				      });
+
+			$scope.doUpdate = function (row, approve) {
+
+				var send = {
+
+					'cache': true,
+
+					'__metadata': row.__metadata
+
+				};
+
+				if (row.ActiveProp) {
+
+					SharePoint.user(row);
+
+					send[row.ActiveProp] = (approve ? '' : 'NO:') + row.user.Name;
+
+					// Call sharePoint.update() with our data and handle the success/failure response
+					SharePoint.update(send).then(function (resp) {
+
+						// HTTP 204 is the status given for a successful update, there will be no body
+						if (resp.status === 204) {
+
+							utils.alert.update();
+
+							// Call actions.process() to reprocess the data by our controllers
+							self.reload();
+
+						} else {
+
+							utils.alert.error('Unable to approve or deny 898.');
+
+						}
+
+
+					});
+
+				}
+
+
+			};
+
+			$scope.approve = function () {
+
+				$scope.doUpdate(this.row, true);
+
+			};
+
+			$scope.deny = function () {
+
+				$scope.doUpdate(this.row, false);
+
+			};
 
 		}
 	]);
