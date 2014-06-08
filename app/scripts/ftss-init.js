@@ -45,14 +45,15 @@ var LOG;
 						    'scheduled',
 						    'requests',
 						    'instructors',
-						    'students',
 						    'catalog',
 						    'units',
 						    'backlog',
 						    'hosts'
 					    ];
 
-				_.each(routes, function (route) {
+				while (routes.length) {
+
+					var route = routes.shift();
 
 					$routeProvider.when('/' + route + '/:link?/:view?', {
 
@@ -61,7 +62,7 @@ var LOG;
 
 					});
 
-				});
+				}
 
 				$routeProvider.otherwise({'redirectTo': '/home'});
 
