@@ -229,7 +229,7 @@ FTSS.ng.controller(
 
 							    self.reload();
 
-							    scope.$hide();
+							    scope.close();
 							    utils.alert.create();
 
 							    scope.submitted = false;
