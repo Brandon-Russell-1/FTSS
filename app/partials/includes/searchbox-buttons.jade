@@ -30,10 +30,10 @@ include ../__mixins
 
     span(style='width:5%')  
 
-    span#toggleExpand(ng-click='fn.doToggleCollapse()', hover='button-collapse', left, class='btn btn-default {{wellCollapse}}')
+    span#toggleExpand(ng-click='fn.doToggleCollapse()', hover='button-collapse', left, class='btn btn-default')
         +icon('expand')
         +icon('collapse')
 
-    span#toggleArchive(ng-click='fn.doToggleArchive()', hover='button-archive', left, class='btn btn-default {{showArchive}}')
+    span#toggleArchive(ng-click='fn.doToggleArchive()', hover='button-archive', left, class='btn btn-default')
         +icon('trash_hide')
         +icon('trash_show')

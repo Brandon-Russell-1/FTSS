@@ -9,7 +9,7 @@ include partials/__mixins
 
         script(src=base + 'js/vendor.js')
 
-    body.wait(ng-controller='mainController', id='{{fn.getPage()}}')
+    body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}}')
 
         img#bg1
         img#bg2

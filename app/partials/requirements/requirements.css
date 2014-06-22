@@ -6,7 +6,13 @@
     top: 1em
 }
 
+
+body.archived .well.denied {
+    display:block;
+}
+
 .well.denied {
+    display:none;
     background: #f9eded;
     color: #a94442
 }
