@@ -1,17 +1,17 @@
 exports.config =
-  # See docs at http://brunch.readthedocs.org/en/latest/config.html.
+# See docs at http://brunch.readthedocs.org/en/latest/config.html.
   conventions:
-    assets:  /^app\/assets\//
-    ignored: /^(app\/styles\/overrides|(.*?\/|app\/partials\/includes)?[_][a-zA-Z0-9]*)/
-  modules:
+    assets : /^app\/assets\//
+    ignored: /^(app\/styles\/overrides|(.*?\/|app\/partials\/includes)?[_][a-zA-Z0-9]*)|(app\/.*?\.spec\.js)/
+  modules    :
     definition: false
-    wrapper: false
-  paths:
+    wrapper   : false
+  paths      :
     public: '_public'
-  files:
+  files      :
     javascripts:
       joinTo:
-        'js/app.js': /^app/
+        'js/app.js'   : /^app/
         'js/vendor.js': /^(bower_components|vendor)/
       order :
         before: [
@@ -27,24 +27,24 @@ exports.config =
     stylesheets:
       joinTo:
         'css/app.css': /^(app|vendor|bower_components)/
-      order:
+      order :
         before: [
           'vendor/selectize.css'
         ]
-        after: [
+        after : [
           'app/styles/theme.css'
         ]
 
     templates:
       joinTo:
-        'js/dontUseMe' : /^app/ # dirty hack for Jade compiling.
+        'js/dontUseMe': /^app/ # dirty hack for Jade compiling.
 
   plugins:
-    jade:
+    jade        :
       pretty: false # Adds pretty-indentation whitespaces to output (false by default)
     jade_angular:
       modules_folder: 'partials'
-      locals: {}
+      locals        : {}
 
-  # Enable or disable minifying of result js / css files.
-  # minify: true
+# Enable or disable minifying of result js / css files.
+# minify: true

@@ -23,7 +23,8 @@
     "bean": "~1.0.6",
     "db.js": "~0.9.0",
     "angular-sanitize": "~1.2.15",
-    "IndexedDBShim": "*"
+    "IndexedDBShim": "*",
+    "angular-mocks": "~1.2.18"
   },
   "overrides": {
     "angular-mocks": {
@@ -31,6 +32,6 @@
     }
   },
   "resolutions": {
-    "angular": "1.2.16"
+    "angular": "~1.2.14"
   }
 }
