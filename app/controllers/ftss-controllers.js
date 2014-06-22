@@ -60,6 +60,7 @@ FTSS.controller = (function () {
 			'bind': function (prop) {
 
 				// If loaded we only want to bind the first time
+
 				var single = !prop,
 
 				    page = FTSS._fn.getPage();

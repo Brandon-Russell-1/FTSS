@@ -22,6 +22,7 @@ FTSS.ng.controller('instructorsController',
 				                   'Name': 'Name',
 				                   'AFSC': 'AFSC'
 			                   },
+
 			                   'model'  : 'instructors',
 
 			                   'edit': function (scope) {
@@ -42,9 +43,9 @@ FTSS.ng.controller('instructorsController',
 
 						                              'https://cs3.eis.af.mil/sites/OO-ED-AM-11/FTSS/Prototype' :
 
-						                              'https://ftss.plexhosted.net') + '/_vti_bin/ListData.svc/Bios',
+						                              'http://virtualpc') + '/_vti_bin/ListData.svc/Bios',
 
-						                       slug = (PRODUCTION ? '/sites/OO-ED-AM-11/FTSS/Prototype/Bios/' : '/Bios/');
+						                       slug = (PRODUCTION ? '/sites/OO-ED-AM-11/FTSS/Prototype/Bios/' : '/dev/Bios/');
 
 						                   $.ajax({
 							                          'url'        : url,
