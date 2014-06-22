@@ -172,7 +172,9 @@ mixin modalFooter(submitText, defaultShow)
             spinner(size='2em')
             | Please wait, sending data...
 
-        button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-hide='modal.$invalid || submitted' + (defaultShow ? '' : '|| !modal.$dirty'))
+        .btn.btn-success.btn-labeled(type='button',
+                                    ng-click='submit()',
+                                    ng-hide='modal.$invalid || submitted' + (defaultShow ? '' : '|| !modal.$dirty'))
 
             span.btn-label.white
                 +icon('check-circle')
@@ -183,7 +185,7 @@ mixin modalFooter(submitText, defaultShow)
             else
                 span.text &nbsp;Submit
 
-        button.btn.btn-default(ng-click='close()') Cancel
+        .btn.btn-default(ng-click='close()') Cancel
 
 
 mixin formGroup(label,explain)
