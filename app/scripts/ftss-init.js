@@ -82,6 +82,17 @@ var LOG;
 			}
 		]);
 
+	FTSS.ng.value('SP_CONFIG', PRODUCTION ?
+	                           {
+		                           'baseURL': '/sites/OO-ED-AM-11/FTSS/Prototype/_vti_bin/ListData.svc/'
+	                           } : {
+
+		                           'baseURL': 'http://virtualpc/dev/_vti_bin/ListData.svc/',
+		                           'userURL': 'http://virtualpc/_layouts/userdisp.aspx?Force=True',
+		                           'pplURL' : 'http://virtualpc/_vti_bin/ListData.svc/UserInformationList'
+
+	                           })
+
 	FTSS.people = {};
 	FTSS.utils = {};
 
