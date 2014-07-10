@@ -91,7 +91,7 @@ var LOG;
 		                           'userURL': 'http://virtualpc/_layouts/userdisp.aspx?Force=True',
 		                           'pplURL' : 'http://virtualpc/_vti_bin/ListData.svc/UserInformationList'
 
-	                           })
+	                           });
 
 	FTSS.people = {};
 	FTSS.utils = {};

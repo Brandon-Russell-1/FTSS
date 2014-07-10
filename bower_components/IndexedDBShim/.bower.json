@@ -2,14 +2,13 @@
   "name": "IndexedDBShim",
   "main": "dist/IndexedDBShim.js",
   "homepage": "https://github.com/axemclion/IndexedDBShim",
-  "_release": "09e440e588",
+  "_release": "7e3a835612",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "09e440e588142e23556f09f92c44edd12c118a91"
+    "commit": "7e3a8356125f66d2daa8719d759ccdda7786b6d2"
   },
   "_source": "git://github.com/axemclion/IndexedDBShim.git",
   "_target": "*",
-  "_originalSource": "IndexedDBShim",
-  "_direct": true
+  "_originalSource": "IndexedDBShim"
 }
