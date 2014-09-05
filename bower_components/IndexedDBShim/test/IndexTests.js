@@ -56,6 +56,20 @@ function openObjectStore(name, storeName, callback){
     });
 }
 
+openObjectStore("Check index exists after reopening database", DB.OBJECT_STORE_1, function(objectStore){
+    equal(objectStore.indexNames.length, 2, "2 Indexes on still exist");
+    _(objectStore.indexNames);
+    start();
+    nextTest();
+});
+
+openObjectStore("Check index keyPath exists after reopening database", DB.OBJECT_STORE_1, function(objectStore){
+    var index = objectStore.index("IntIndex");
+    equal(index.keyPath, "Int", "keyPath on index still exists");
+    start();
+    nextTest();
+});
+
 var key = sample.integer();
 var value = sample.obj();
 openObjectStore("Adding data after index is created", DB.OBJECT_STORE_1, function(objectStore){
