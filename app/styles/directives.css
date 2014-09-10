@@ -2,7 +2,7 @@
     display: none;
 }
 
-.archived .archiveOnly, .archive .archiveExclude {
+body.archived tr.archived .archiveOnly, .archive .archiveExclude {
     display: inline-block;
 }
 
