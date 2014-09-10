@@ -63,7 +63,7 @@ FTSS.controller = (function () {
 
 				var single = !prop,
 
-				    page = FTSS._fn.getPage();
+				    page = $scope.fn.getPage();
 
 				// Default to cached mode & watch cleanSlate
 				prop = prop || 'cleanSlate';
