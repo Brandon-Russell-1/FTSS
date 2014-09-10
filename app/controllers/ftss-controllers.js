@@ -77,8 +77,8 @@ FTSS.controller = (function () {
 				// Bind archive() & edit() to the scope in case they are needed
 				$scope.archive = actions.archive;
 				$scope.edit = actions.edit(opts.edit);
-
-				$scope.showHelp = (localStorage['FTSS_show_help_' + page] !== '');
+				
+				$scope.showHelp = FTSS.prefs.page && (localStorage['FTSS_show_help_' + page] !== '');
 
 				$scope.hideHelp = function () {
 					$scope.showHelp = localStorage['FTSS_show_help_' + page] = '';
