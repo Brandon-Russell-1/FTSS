@@ -59,8 +59,6 @@ FTSS.ng.controller(
 
 						      .then(function (d) {
 
-							            d.priority = d.CAFMCL || false;
-
 							            if (d.Units) {
 								            d.units = d.Units.sort().join('<br>');
 							            }

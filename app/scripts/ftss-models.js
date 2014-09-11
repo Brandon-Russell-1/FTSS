@@ -29,7 +29,7 @@
 					'Title',
 					'Number',
 					'IMDS',
-					'CAFMCL',
+					'Priority',
 					'Archived'
 				]
 			}
@@ -47,7 +47,9 @@
 					'Email',
 					'Phone',
 					'Location',
-					'Courses_JSON'
+					'LCode',
+					'Courses_JSON',
+				    'Thumb'
 				]
 			}
 

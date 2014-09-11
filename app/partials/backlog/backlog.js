@@ -16,7 +16,7 @@ FTSS.ng.controller(
 
 				    'grouping': {
 					    'course.MDS' : 'MDS',
-					    'CAFMCL'     : 'CAF/MCL',
+					    'priority'   : 'Priority',
 					    'course.AFSC': 'AFSC'
 				    },
 
@@ -475,8 +475,8 @@ FTSS.ng.controller(
 								courses[course.Id] = {
 									'requirements': c,
 									'course'      : course,
-									'priority'    : course.CAFMCL,
-									'CAFMCL'      : course.CAFMCL ? 'CAF/MCL Course(s)' : 'Regular Course(s)',
+									'priority'    : course.priority,
+									'Priority'      : course.priority ? 'Priority Course(s)' : 'Regular Course(s)',
 									'listFTD'     : []
 								};
 
