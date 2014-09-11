@@ -30,8 +30,6 @@
 					'Number',
 					'IMDS',
 					'CAFMCL',
-					'Earliest',
-					'Suspense',
 					'Archived'
 				]
 			}
