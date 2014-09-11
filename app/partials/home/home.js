@@ -13,10 +13,6 @@
 
 		 function ($scope, SharePoint) {
 
-			 var html = $('html');
-
-			 $scope.pref = FTSS.prefs;
-
 			 SharePoint
 
 				 .read(FTSS.models.updates)
@@ -52,21 +48,6 @@
 					 }
 
 				 });
-
-			 $scope.$watch(
-				 'pref',
-
-				 function (val, old) {
-
-					 if (val && val !== old) {
-
-						 localStorage.FTSS_prefs = JSON.stringify(val);
-
-						 html.attr('id', FTSS.prefs.animate ? '' : 'noAnimate');
-
-					 }
-
-				 }, true);
 
 		 }
 		]);

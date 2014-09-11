@@ -204,6 +204,7 @@
 
 		'updates': {
 
+			'debounce': 21600,
 			'cache' : true,
 			'source': 'Updates',
 			'params': {

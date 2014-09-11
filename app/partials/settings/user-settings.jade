@@ -1,0 +1,27 @@
+include ../__mixins
+
+
+table.table.table-split#prefs(ng-controller='userSettings')
+
+    tr
+        td Show Instructions
+        td
+            input.css-checkbox(type='checkbox', ng-model='pref.page')
+            label.css-label
+    tr
+        td Show Tooltips
+        td
+            input.css-checkbox(type='checkbox', ng-model='pref.tooltips')
+            label.css-label
+    tr
+        td Enable Animations
+        td
+            input.css-checkbox(type='checkbox', ng-model='pref.animate')
+            label.css-label
+    tr
+        td(style='padding-top:1em') Page Item Limit
+        td
+            input.form-control.pageLimit(type='number',
+            min='10',
+            max='99',
+            ng-model='pref.limit')
