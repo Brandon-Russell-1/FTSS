@@ -70,15 +70,16 @@
 }
 
 .support {
-    cursor: pointer;
+    cursor: pointer!important;
     opacity: .6;
     margin: 10px 10px;
     font-size: 1.25em;
     transition: 500ms ease;
 }
 
-.support:hover {
+.support:hover, .support:hover * {
     opacity: 1;
+    cursor:pointer!important;
 }
 
 .support svg {
