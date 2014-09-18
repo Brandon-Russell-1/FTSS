@@ -1,10 +1,8 @@
-/*global _, angular, LOG, FTSS */
+/*global angular, PRODUCTION, FTSS */
 /**
  * FTSS Initializer
  *
  */
-
-var LOG;
 
 (function () {
 
@@ -109,31 +107,5 @@ var LOG;
 		'hover': true
 
 	};
-
-	LOG = FTSS.utils.log = (function () {
-
-		var last = (new Date()).getTime();
-
-		return function (data, noStamp) {
-
-			if (console) {
-
-				var stamp = (new Date()).getTime();
-
-				if (noStamp) {
-					console.dir(data);
-				} else {
-					console.log(stamp);
-					console.dir(data);
-					console.info(stamp - last);
-				}
-
-				last = stamp;
-
-			}
-
-		};
-
-	}());
 
 }());
