@@ -72,7 +72,7 @@
 .support {
     cursor: pointer!important;
     opacity: .6;
-    margin: 10px 10px;
+    margin-top:.5em;
     font-size: 1.25em;
     transition: 500ms ease;
 }
