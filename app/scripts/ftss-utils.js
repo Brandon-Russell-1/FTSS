@@ -84,7 +84,7 @@ utils.masterReset = function () {
 
 		window.sessionStorage.clear();
 		window.localStorage.clear();
-		window.indexedDB.deleteDatabase('angularSharepoint');
+		window.indexedDB.deleteDatabase('angularSharePoint');
 
 	} catch (e) {
 
