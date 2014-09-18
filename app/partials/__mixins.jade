@@ -127,7 +127,7 @@ mixin actions(view, edit, archive, label)
 
         if archive
             span.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive()', hover='Archive ' + label, left)
-                +icon('delete')
+                +icon('trash_hide')
 
             span.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive()', hover='Restore ' + label, left)
                 +icon('rotate-left')

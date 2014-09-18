@@ -38,13 +38,15 @@
     background-color: transparent;
 }
 
-.table-hover tbody tr:hover > td,
-.table-hover tbody tr:hover > th {
+.table-hover tbody tr:hover > td {
     transition: background-color 200ms ease;
     background-color: #f5fafc;
     color: #428bca;
+}
+
+.table-hover tbody tr:hover .lbl-instructor *,
+.table-hover tbody tr:hover .lbl-books *{
     fill: #428bca !important;
-    stroke: #428bca !important;
 }
 
 .table-expanded tr td {

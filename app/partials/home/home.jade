@@ -46,7 +46,7 @@ mixin panelGroup(ico, title, type)
                     p {{course.Title}}
 
             #updates
-                +panelGroup('info', 'Application Updates', 'warning')
+                +panelGroup('info-circle', 'Application Updates', 'warning')
                     blockquote.blockquote-reverse(ng-repeat='update in updates')
                         p(style='font-size:.85em') {{update.Update}}
                         footer {{update.date}}
