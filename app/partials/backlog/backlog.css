@@ -80,7 +80,7 @@
     font-size: 1.1em;
 }
 
-#backlogRequests h4 .lbl-add,
+#backlogRequests h4 .plus-circle,
 #backlogRequests h4:hover .lbl-arrow-circle-o-right {
     display: none;
 }
@@ -89,7 +89,7 @@
     background-color: #47a447;
 }
 
-#backlogRequests h4:hover .lbl-add {
+#backlogRequests h4:hover .plus-circle {
     display: block;
 }
 
