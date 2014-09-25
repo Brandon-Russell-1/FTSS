@@ -8,7 +8,6 @@
 	"use strict";
 
 	FTSS.ng.directive(
-
 		'traverse',
 
 		[
@@ -88,7 +87,6 @@
 
 			}
 		]
-
 	);
 
 }());
