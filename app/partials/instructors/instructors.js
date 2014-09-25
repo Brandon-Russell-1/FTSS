@@ -43,7 +43,7 @@ FTSS.ng.controller('instructorsController',
 
 						                              'https://cs1.eis.af.mil/sites/FTSS/rebuild' :
 
-						                              'http://virtualpc') + '/_vti_bin/ListData.svc/Bios',
+						                              'http://virtualpc') + '/dev/_vti_bin/ListData.svc/Bios',
 
 						                       slug = (PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' : '/dev/Bios/');
 
