@@ -22,6 +22,11 @@
     position: relative
 }
 
+/* work around for ng-animate lameness */
+.ng-hide-add-active.btn, .ng-hide-remove.btn {
+    display: inline-block!important;
+}
+
 .btn-labeled {
     padding-bottom: 0;
     padding-top: 0
