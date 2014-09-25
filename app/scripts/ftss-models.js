@@ -1,9 +1,9 @@
 /*global FTSS */
 
 /**
- * FTSS Models
+ *  FTSS Models
  *
- *        '$inlinecount': 'allpages',
+ *      '$inlinecount': 'allpages',
  *      '$top'        : 25,
  *
  */
@@ -49,7 +49,7 @@
 					'Location',
 					'LCode',
 					'Courses_JSON',
-				    'Thumb'
+					'Thumb'
 				]
 			}
 
@@ -163,20 +163,20 @@
 					'Funded',
 					'TDY',
 					'Notes',
-				    'CreatedBy/Name',
-				    'CreatedBy/WorkEMail'
+					'CreatedBy/Name',
+					'CreatedBy/WorkEMail'
 				]
 			}
 		},
 
 		'requirements_stats': {
 
-			'cache': true,
+			'cache' : true,
 			'source': 'RequirementsStats',
 			'params': {
 				'$select': [
-				    'Month',
-				    'Data_JSON'
+					'Month',
+					'Data_JSON'
 				]
 			}
 
@@ -205,9 +205,9 @@
 		'updates': {
 
 			'debounce': 21600,
-			'cache' : true,
-			'source': 'Updates',
-			'params': {
+			'cache'   : true,
+			'source'  : 'Updates',
+			'params'  : {
 				'$select': [
 					'Update',
 					'Created'

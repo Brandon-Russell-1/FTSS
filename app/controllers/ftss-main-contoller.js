@@ -280,42 +280,62 @@
 
 				};
 
-				// Load our user data into FTSS
-				SharePoint.user($scope);
 
-				/**
-				 * User feedback function, provides alerts, errors and general instructions to users
-				 *
-				 * @todo do something with this garbage code.....
-				 * @param Object msg
-				 */
-				utils.$message = function (msg) {
+				// Keep the user loading parts in a closure for neatness
+				(function () {
 
-					switch (msg) {
+					// Load our user data into FTSS
+					SharePoint.user($scope);
 
-						case false:
-							$scope.messages = {};
-							return;
+					// Setup a watch for the user.groups to wait for the SOAP callback of group memberships
+					var groupWatch = $scope.$watch('user.groups', function (groups) {
 
-						case 'empty':
-							utils.loading(false);
-							msg = {
-								'class'  : 'warning',
-								'intro'  : 'Nothing Found!  ',
-								'message': "There doesn't seem to be anything that matches your request.  Maybe you should add some more tags to your search."
+						// Only act if we have group memberships
+						if (groups) {
+
+							// Extract the name of any groups the user is a member of
+							groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
+
+							// Used to modify views based on roles
+							$scope.roleClasses = groups.join(' ');
+
+							$scope.roleText = groups.join(' • ')
+								.replace('mtf', 'MTF')
+								.replace('ftd', 'FTD')
+								.replace('curriculum', 'Curriculum Manager')
+								.replace('scheduling', 'J4 Scheduler')
+								.replace('approvers', 'Approver')
+								.replace('admin', 'Administrator');
+
+							/**
+							 * Test for a particular user role
+							 *
+							 * @param roles
+							 * @returns {boolean}
+							 */
+							$scope.hasRole = function (roles) {
+
+								var authorized = false;
+
+								_(roles).each(function (role) {
+
+									authorized = authorized || groups.indexOf(role) > -1;
+
+								});
+
+								return authorized;
+
 							};
-							break;
 
-					}
+							// Unbind our watcher
+							groupWatch();
 
-					$scope.messages = {
-						'newLine': msg.newLine || 'false',
-						'class'  : msg.class || 'info',
-						'intro'  : msg.intro || 'Quick Note:  ',
-						'message': msg.message || ''
-					};
+						}
 
-				};
+					});
+
+				}());
+
 
 				/**
 				 * Starts the loading indicators on navigation begin
