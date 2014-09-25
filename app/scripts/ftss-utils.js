@@ -463,9 +463,20 @@ utils.alert = (function () {
 
 		'update': builder,
 
-		'error': function (err) {
+		'security': function () {
 
-			FTSS.utils.log(err);
+			builder({
+				        'title'    : 'Access Denied',
+				        'content'  : 'Sorry, you don\'t seem to have permissions to view this page',
+				        'placement': 'center',
+				        'type'     : 'danger',
+				        'duraction': 30
+
+			        });
+
+		},
+
+		'error': function (err) {
 
 			builder({
 				        'type'    : 'danger',

@@ -1,7 +1,6 @@
 /*global utils, FTSS, _, caches, angular */
 
 FTSS.ng.controller(
-
 	'hostsController',
 
 	[
@@ -9,6 +8,11 @@ FTSS.ng.controller(
 		function ($scope) {
 
 			var self = FTSS.controller($scope, {
+
+				'roles': [
+					'mtf',
+					'ftd'
+				],
 
 				'sort' : 'Unit',
 				'group': 'det.LongName',

@@ -47,8 +47,8 @@ mixin toggleBox(model, title, hover)
             a
 
 
-mixin link(page, tag, name)
-    li(class=page)
+mixin link(page, tag, name, roles)
+    li(class=page + ' ' + roles)
         .pointer
             .arrow
             .arrow_border

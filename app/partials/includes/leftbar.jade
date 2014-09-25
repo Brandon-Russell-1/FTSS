@@ -5,16 +5,17 @@ div
 
         +link('home', 'home', 'Home')
 
-        li: h4 Requirements
-        +link('backlog', 'checklist2', 'Generate 898')
-        +link('requirements', 'agree', '898 Response')
+
+        li.role.ftd.mtf.scheduling.approvers: h4 Requirements
+        +link('backlog', 'checklist2', 'Generate 898', 'role mtf ftd')
+        +link('requirements', 'agree', '898 Response', 'role mtf ftd approvers')
 
         li: h4 Classes
         +link('scheduled', 'calendar_range', 'View Scheduled')
-        +link('requests', 'download', 'Manage Requests')
+        +link('requests', 'download', 'Manage Requests', 'role ftd')
 
-        li: h4 Manage FTSS
-        +link('catalog', 'books', 'Course Catalog')
-        +link('instructors', 'instructor', 'Instructors')
-        +link('units', 'building-o', 'FTDs')
-        +link('hosts', 'puzzle-piece', 'Host Units')
+        li.role.mtf.ftd.curriculum: h4 Manage FTSS
+        +link('catalog', 'books', 'Course Catalog', 'role curriculum')
+        +link('instructors', 'instructor', 'Instructors', 'role ftd')
+        +link('units', 'building-o', 'FTDs', 'role ftd')
+        +link('hosts', 'puzzle-piece', 'Host Units', 'role mtf ftd')

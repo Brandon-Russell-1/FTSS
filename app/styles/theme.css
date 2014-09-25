@@ -79,6 +79,7 @@
     color: #3a87ad;
     font-weight: 800;
 }
+
 right {
     margin-left: 1em;
 }
@@ -88,4 +89,15 @@ right {
     line-height: .75em;
     vertical-align: bottom;
     margin-right: .25em;
+}
+
+#ftss {
+    letter-spacing: .1em;
+    font-weight: 700;
+}
+
+#roleText {
+    color: #eee;
+    font-size: .7em;
+    vertical-align: middle;
 }

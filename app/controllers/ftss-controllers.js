@@ -34,6 +34,21 @@ FTSS.controller = (function () {
 
 		var model, process, actions;
 
+		/*if (opts.roles && !$scope.$parent.hasRole(opts.roles)) {
+
+			utils.alert.security();
+
+			return {
+
+				'bind': function () {
+
+
+				}
+
+			};
+
+		}*/
+
 		// We'll just make opts.grouping mandatory, we'll use an int here for perf reasons later on
 		opts.grouping[0] = 'None';
 
@@ -77,7 +92,7 @@ FTSS.controller = (function () {
 				// Bind archive() & edit() to the scope in case they are needed
 				$scope.archive = actions.archive;
 				$scope.edit = actions.edit(opts.edit);
-				
+
 				$scope.showHelp = FTSS.prefs.page && (localStorage['FTSS_show_help_' + page] !== '');
 
 				$scope.hideHelp = function () {
@@ -163,21 +178,10 @@ FTSS.controller = (function () {
 					$scope.$parent.count = count;
 					$scope.$parent.overload = overload;
 
-					if (count < 1) {
-						// Inform users there were no results
-						utils.$message('empty');
-					} else {
-						// Remove the user message box because we had some results
-						utils.$message(false);
-					}
-
 				};
 
 				// If there was no data found pass the User Empty Message and abort the operation
 				if (_.keys(data || {}).length < 1) {
-
-					// Inform users there were no results
-					utils.$message('empty');
 
 					// We must still pass a then() promise to prevent an error, we're just not executing the callback
 					return {

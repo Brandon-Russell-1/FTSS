@@ -32,7 +32,8 @@ exports.config =
           'vendor/selectize.css'
         ]
         after : [
-          'app/styles/theme.css'
+          'app/styles/theme.css',
+          'app/styles/roles.css'
         ]
 
     templates:
