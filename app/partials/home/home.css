@@ -1,3 +1,30 @@
+#homeFooter {
+    font-size:.85em;
+    font-style: italic;
+    color:#888;
+}
+
+#homeInstructions {
+    margin: 0 5% 5% 4%;
+}
+
+#homeInstructions h5 {
+    color: #777!important;
+    font-size: 1.25em;
+    padding-top: 1.5em;
+    padding-bottom: .5em;
+}
+
+#homeInstructions .col-lg-3 {
+    font-weight: 700;
+
+}
+
+#homeInstructions .col-lg-9 {
+    line-height: 31px;
+    font-style: italic;
+}
+
 #home #content {
     background: none !important;
 }

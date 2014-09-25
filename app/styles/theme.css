@@ -1,4 +1,6 @@
-
+.italics {
+    font-style: italic;
+}
 .label, .badge {
     font-size: 90%;
     font-weight: lighter
