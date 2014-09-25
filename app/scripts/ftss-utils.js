@@ -202,12 +202,19 @@ utils.loading = (function () {
 
 				loadingState = loading;
 
-				document.body.style.cursor = body.className = loading ? 'wait' : '';
+				body.className = body.className.replace('wait', '');
+
+				if (loading) {
+
+					body.className += ' wait';
+				}
+
+				document.body.style.cursor = loading ? 'wait' : '';
 				FTSS.search && FTSS.search.close();
 
 			}
 
-		});
+		}, 5);
 
 	};
 
