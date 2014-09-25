@@ -1,6 +1,6 @@
 include ../__mixins
 
-- var columns = {Course:50, MDS:10, AFSC:10, Length:15}
+- var columns = {Course:40, 'IMDS/G081':10, MDS:10, AFSC:10, Length:15}
 +tableHeader('Course', columns, 'catalog')
 
     td
@@ -26,6 +26,8 @@ include ../__mixins
         span.pull-right.archiveOnly(style='margin-right:10%') *** ARCHIVED COURSE ***
         br
         span.peek {{row.Title}}
+
+    td {{row.IMDS}} {{row.G081}}
 
     td
         b {{row.MDS}}
