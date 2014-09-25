@@ -6,6 +6,7 @@ body.mtf .role.mtf,
 body.ftd .role.ftd,
 body.approvers .role.approvers,
 body.curriculum .role.curriculum,
-body.scheduling .role.scheduling {
+body.scheduling .role.scheduling,
+body.admin .role {
     display: block !important;
 }
