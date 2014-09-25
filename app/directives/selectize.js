@@ -144,85 +144,92 @@
 				},
 				'onInitialize'   : function () {
 
-					var count = 0, CACHE_COUNT = 6;
+					var count = 0,
 
-					FTSS.search = this;
+					    CACHE_COUNT = 6,
 
-					var loaded = function (data, group, text) {
+					    // Because of some funky async + closures we need to store a copy of this for action
+					    that = this,
 
-						// Add the dataset to the caches object for global access
-						caches[group] = data;
+					    loaded = function (data, group, text) {
 
-						// create the serachBox value of type:Id for eventual filter mapping
-						var id = group.toLowerCase().charAt(0) + ':';
+						    // Add the dataset to the caches object for global access
+						    caches[group] = data;
 
-						options[group] = _.chain(data)
+						    // create the serachBox value of type:Id for eventual filter mapping
+						    var id = group.toLowerCase().charAt(0) + ':';
 
-							// Run the reject Archived operation a second time as some lists will place in caches but not selectize
-							.reject(function (d) {
+						    options[group] = _.chain(data)
 
-								        return (d.Archived === true);
+							    // Run the reject Archived operation a second time as some lists will place in caches but not selectize
+							    .reject(function (d) {
 
-							        })
+								            return (d.Archived === true);
 
-							.map(function (v) {
+							            })
 
-								     var Id, txt;
+							    .map(function (v) {
 
-								     Id = (v.Id || v);
-								     txt = text && text.call ? text(v) : v;
+								         var Id, txt;
 
-								     return {
-									     'Id'      : Id,
-									     'id'      : id + Id,
-									     'optgroup': group,
-									     'label'   : v.label || txt,
-									     'data'    : v,
-									     'search'  : JSON.stringify(v)
-										     .replace(/([,{]"\w+":)|([{}"])/gi, ' ')
-										     .toLowerCase()
-								     };
+								         Id = (v.Id || v);
+								         txt = text && text.call ? text(v) : v;
 
-							     })
+								         return {
+									         'Id'      : Id,
+									         'id'      : id + Id,
+									         'optgroup': group,
+									         'label'   : v.label || txt,
+									         'data'    : v,
+									         'search'  : JSON.stringify(v)
+										         .replace(/([,{]"\w+":)|([{}"])/gi, ' ')
+										         .toLowerCase()
+								         };
 
-							// _.chain() requires value() to get the resultant dataset
-							.value();
+							         })
 
-						var headers = {
-							'Units'           : 'FTD',
-							'MasterCourseList': 'Course',
-							'Instructors'     : 'Instructor',
-							'Hosts'           : 'Host Unit'
-						};
+							    // _.chain() requires value() to get the resultant dataset
+							    .value();
 
-						// Add the option group (header) to our searchBox
-						FTSS.search.addOptionGroup(group, {
-							'label': headers[group] || group,
-							'value': group
-						});
+						    var headers = {
+							    'Units'           : 'FTD',
+							    'MasterCourseList': 'Course',
+							    'Instructors'     : 'Instructor',
+							    'Hosts'           : 'Host Unit'
+						    };
 
-						// Keep track of our async loads and fire once they are all done (not using $q.all())
-						if (++count === CACHE_COUNT) {
+						    // Add the option group (header) to our searchBox
+						    that.addOptionGroup(group, {
+							    'label': headers[group] || group,
+							    'value': group
+						    });
 
-							var tagBoxOpts = []
+						    // Keep track of our async loads and fire once they are all done (not using $q.all())
+						    if (++count === CACHE_COUNT) {
 
-								.concat(options.AFSC,
-							            options.MDS,
-							            options.MasterCourseList,
-							            options.Units,
-							            options.Instructors,
-							            options.Hosts);
+							    var tagBoxOpts = []
 
-							// Add the options to our searchBox
-							FTSS.search.addOption(tagBoxOpts);
+								    .concat(options.AFSC,
+							                options.MDS,
+							                options.MasterCourseList,
+							                options.Units,
+							                options.Instructors,
+							                options.Hosts);
 
-							scope.fn.doInitPage();
+							    // Add the options to our searchBox
+							    that.addOption(tagBoxOpts);
 
-							$('.hide').removeClass('hide');
+							    // Copy that(this) back to FTSS.search
+							    FTSS.search = that;
 
-						}
+							    // Call completion now
+							    scope.fn.doInitPage();
 
-					};
+							    $('.hide').removeClass('hide');
+
+						    }
+
+					    };
 
 					SharePoint
 

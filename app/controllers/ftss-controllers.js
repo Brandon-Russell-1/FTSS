@@ -34,21 +34,6 @@ FTSS.controller = (function () {
 
 		var model, process, actions;
 
-		/*if (opts.roles && !$scope.$parent.hasRole(opts.roles)) {
-
-			utils.alert.security();
-
-			return {
-
-				'bind': function () {
-
-
-				}
-
-			};
-
-		}*/
-
 		// We'll just make opts.grouping mandatory, we'll use an int here for perf reasons later on
 		opts.grouping[0] = 'None';
 

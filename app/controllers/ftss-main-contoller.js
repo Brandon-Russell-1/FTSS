@@ -159,9 +159,13 @@
 
 					},
 
+					/**
+					 * Peforms the final page initialization.  This is called by multiple async operations so we must
+					 * make several checks before running.
+					 */
 					'doInitPage': function () {
 
-						if (FTSS.search || $scope.loaded) {
+						if ($scope.user && $scope.user.groups && (FTSS.search || $scope.loaded)) {
 
 							if ($scope.tagBox) {
 
@@ -299,6 +303,7 @@
 							// Used to modify views based on roles
 							$scope.roleClasses = groups.join(' ');
 
+							// This is the text that is displayed in the top-left corner of the app
 							$scope.roleText = groups.join(' • ')
 								.replace('mtf', 'MTF')
 								.replace('ftd', 'FTD')
@@ -329,6 +334,9 @@
 
 							// Unbind our watcher
 							groupWatch();
+
+							// Call doInitPage() as this might be the last item in the async chain to complete
+							_fn.doInitPage();
 
 						}
 
