@@ -41,11 +41,11 @@ FTSS.ng.controller('instructorsController',
 
 						                       url = (PRODUCTION ?
 
-						                              'https://cs3.eis.af.mil/sites/OO-ED-AM-11/FTSS/Prototype' :
+						                              'https://cs1.eis.af.mil/sites/FTSS/rebuild' :
 
 						                              'http://virtualpc') + '/_vti_bin/ListData.svc/Bios',
 
-						                       slug = (PRODUCTION ? '/sites/OO-ED-AM-11/FTSS/Prototype/Bios/' : '/dev/Bios/');
+						                       slug = (PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' : '/dev/Bios/');
 
 						                   $.ajax({
 							                          'url'        : url,

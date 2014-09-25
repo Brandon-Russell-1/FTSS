@@ -49,7 +49,7 @@
 
 								img = PRODUCTION ?
 
-								      '<img src="' + (data.Photo ? 'https://cs3.eis.af.mil/sites/OO-ED-AM-11/FTSS/Prototype/Bios/' + photo : noPhoto) + '" />' :
+								      '<img src="' + (data.Photo ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' + photo : noPhoto) + '" />' :
 
 								      '<img src="' + (data.Photo ? 'http://virtualpc/dev/Bios/' + photo : noPhoto) + '" />';
 

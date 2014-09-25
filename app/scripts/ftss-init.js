@@ -82,12 +82,16 @@
 
 	FTSS.ng.value('SP_CONFIG', PRODUCTION ?
 	                           {
-		                           'baseURL': '/sites/OO-ED-AM-11/FTSS/Prototype/_vti_bin/ListData.svc/'
+
+		                           'baseURL': 'https://cs1.eis.af.mil/sites/FTSS/rebuild/_vti_bin/ListData.svc/',
+		                           'user'   : { 'url': 'https://cs1.eis.af.mil//_vti_bin/UserGroup.asmx' },
+		                           'people' : { 'url': 'https://cs1.eis.af.mil/_vti_bin/ListData.svc/UserInformationList' }
+
 	                           } : {
 
 		                           'baseURL': 'http://virtualpc/dev/_vti_bin/ListData.svc/',
-		                           'userURL': 'http://virtualpc/_layouts/userdisp.aspx?Force=True',
-		                           'pplURL' : 'http://virtualpc/_vti_bin/ListData.svc/UserInformationList'
+		                           'user'   : { 'url': 'http://virtualpc/_vti_bin/UserGroup.asmx' },
+		                           'people' : { 'url': 'http://virtualpc/_vti_bin/ListData.svc/UserInformationList' }
 
 	                           });
 
