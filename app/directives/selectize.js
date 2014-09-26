@@ -414,7 +414,7 @@
 				'labelField'  : 'label',
 				'valueField'  : 'Name',
 				'sortField'   : 'Name',
-				'searchField' : 'WorkEMail',
+				'searchField' : 'Name',
 				'persist'     : false,
 				'create'      : true,
 				'plugins'     : [
@@ -434,8 +434,10 @@
 				},
 				'load'        : function (query, callback) {
 
-					// Dont start searching until after the dot
-					if (!PRODUCTION || query.indexOf('.') > 1) {
+					var test = query.split(',')[1];
+
+					// Don't start searching until after the dot
+					if (test && test.length > 3) {
 
 						SharePoint
 
