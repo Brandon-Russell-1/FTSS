@@ -305,6 +305,7 @@
 
 							// This is the text that is displayed in the top-left corner of the app
 							$scope.roleText = groups.join(' • ')
+								.replace('guest', 'Visitor')
 								.replace('mtf', 'MTF')
 								.replace('ftd', 'FTD')
 								.replace('curriculum', 'Curriculum Manager')
