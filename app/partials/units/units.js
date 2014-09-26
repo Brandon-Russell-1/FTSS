@@ -27,7 +27,7 @@ FTSS.ng.controller(
 
 				edit: function () {
 
-					/*FTSS.pasteAction = function (text) {
+					FTSS.pasteAction = function (text) {
 
 						var match = text.split(','),
 
@@ -45,7 +45,7 @@ FTSS.ng.controller(
 						collection.length && FTSS.selectizeInstances.Courses_JSON.setValue(collection);
 
 					};
-*/
+
 				}
 
 			});
@@ -59,13 +59,15 @@ FTSS.ng.controller(
 					      // Attach all the instructors to this unit
 					      _(caches.Instructors).each(function (i) {
 
-						      var u = data[i.UnitId];
+						      if (!i.Archived) {
 
-						      u.Instructors = u.Instructors ||
-						                      [
-						                      ];
+							      var u = data[i.UnitId];
 
-						      u.Instructors.push(i.label);
+							      u.Instructors = u.Instructors || [];
+
+							      u.Instructors.push(i.label);
+
+						      }
 
 					      });
 
