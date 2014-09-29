@@ -182,6 +182,12 @@
 
 						if ($scope.user && $scope.user.groups && (FTSS.search || $scope.loaded)) {
 
+							if (!$scope.isAuthorized()) {
+
+								_fn.doNavigate('home');
+
+							}
+
 							if ($scope.tagBox) {
 
 								FTSS.filters.$refresh();

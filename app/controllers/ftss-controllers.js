@@ -346,6 +346,10 @@ FTSS.controller = (function () {
 							// The main limiting, filtering, grouping, sorting function our views
 							exec = function () {
 
+								if ($scope.abort) {
+									return false;
+								}
+
 								// reference for our searchText
 								var text = $scope.searchText.$ || '';
 
