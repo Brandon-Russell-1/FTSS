@@ -30,6 +30,10 @@
 
 				var _fn = $scope.fn = {
 
+					/**
+					 * Disables the page spinner/loading functions and marks everything as complete
+					 * @param callback
+					 */
 					'setLoaded': function (callback) {
 
 						callback && callback();
@@ -39,6 +43,9 @@
 
 					},
 
+					/**
+					 * Used to create a permaLink for a given page for bookmarking/sharing
+					 */
 					'setPermaLink': function () {
 
 						var view = {
@@ -60,10 +67,18 @@
 
 					},
 
+					/**
+					 * Gets the current page
+					 * @returns {*}
+					 */
 					'getPage': function () {
 						return  $location.path().split('/')[1];
 					},
 
+					/**
+					 * Performs our page navigations function
+					 * @param pg
+					 */
 					'doNavigate': function (pg) {
 
 						$timeout(function () {
@@ -160,7 +175,7 @@
 					},
 
 					/**
-					 * Peforms the final page initialization.  This is called by multiple async operations so we must
+					 * Performs the final page initialization.  This is called by multiple async operations so we must
 					 * make several checks before running.
 					 */
 					'doInitPage': function () {
