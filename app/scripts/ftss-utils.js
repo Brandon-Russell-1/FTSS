@@ -477,7 +477,7 @@ utils.alert = (function () {
 				        'content'  : 'Sorry, you don\'t seem to have permissions to view this page',
 				        'placement': 'center',
 				        'type'     : 'danger',
-				        'duraction': 30
+				        'duration': 30
 
 			        });
 
