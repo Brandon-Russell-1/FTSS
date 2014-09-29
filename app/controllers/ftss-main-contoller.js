@@ -305,67 +305,7 @@
 
 				};
 
-
-				// Keep the user loading parts in a closure for neatness
-				(function () {
-
-					// Load our user data into FTSS
-					SharePoint.user($scope);
-
-					// Setup a watch for the user.groups to wait for the SOAP callback of group memberships
-					var groupWatch = $scope.$watch('user.groups', function (groups) {
-
-						// Only act if we have group memberships
-						if (groups) {
-
-							// Extract the name of any groups the user is a member of
-							groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
-
-							// Used to modify views based on roles
-							$scope.roleClasses = groups.join(' ');
-
-							// This is the text that is displayed in the top-left corner of the app
-							$scope.roleText = groups.join(' • ')
-								.replace('guest', 'Visitor')
-								.replace('mtf', 'MTF')
-								.replace('ftd', 'FTD')
-								.replace('curriculum', 'Curriculum Manager')
-								.replace('scheduling', 'J4 Scheduler')
-								.replace('approvers', 'Approver')
-								.replace('admin', 'Administrator');
-
-							/**
-							 * Test for a particular user role
-							 *
-							 * @param roles
-							 * @returns {boolean}
-							 */
-							$scope.hasRole = function (roles) {
-
-								var authorized = false;
-
-								_(roles).each(function (role) {
-
-									authorized = authorized || groups.indexOf(role) > -1;
-
-								});
-
-								return authorized;
-
-							};
-
-							// Unbind our watcher
-							groupWatch();
-
-							// Call doInitPage() as this might be the last item in the async chain to complete
-							_fn.doInitPage();
-
-						}
-
-					});
-
-				}());
-
+				FTSS.security(SharePoint, $scope, _fn);
 
 				/**
 				 * Starts the loading indicators on navigation begin
