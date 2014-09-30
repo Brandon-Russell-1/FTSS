@@ -39,7 +39,7 @@
 		if (FTSS.pasteAction) {
 
 			e.preventDefault();
-			FTSS.pasteAction(e.originalEvent.clipboardData.getData('Text'));
+			FTSS.pasteAction((window.clipboardData || e.originalEvent.clipboardData).getData('Text'));
 
 		}
 
