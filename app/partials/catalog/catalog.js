@@ -10,7 +10,7 @@ FTSS.ng.controller(
 			var self = FTSS.controller($scope, {
 
 				'sort' : 'PDS',
-				'group': 'MDS',
+				'group': 'AFSC',
 
 				'grouping': {
 					'MDS' : 'MDS',
