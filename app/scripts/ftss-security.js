@@ -83,15 +83,24 @@
 				 *
 				 * @private
 				 */
-				$scope.isAuthorized = function () {
+				$scope.isAuthorized = groups.indexOf('admin') > -1 ?
 
-					var page = authorizationMatrix[_fn.getPage()] || groups;
+				                      function () {
 
-					$scope.abort = _.intersection(page, groups).length < 1;
+					                      $scope.abort = false;
+					                      return true;
 
-					return !$scope.abort;
+				                      } :
 
-				};
+				                      function () {
+
+					                      var page = authorizationMatrix[_fn.getPage()] || groups;
+
+					                      $scope.abort = _.intersection(page, groups).length < 1;
+
+					                      return !$scope.abort;
+
+				                      };
 
 				// Unbind our watcher
 				groupWatch();
