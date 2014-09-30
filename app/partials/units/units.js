@@ -11,7 +11,7 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				'sort' : 'Base',
+				'sort' : 'Det',
 				'group': 'Squadron',
 
 				'grouping': {
@@ -29,7 +29,7 @@ FTSS.ng.controller(
 
 					FTSS.pasteAction = function (text) {
 
-						var match = text.split(','),
+						var match = text.toUpperCase().match(/(\w+)/g),
 
 						    courses = _(caches.MasterCourseList),
 
@@ -37,7 +37,8 @@ FTSS.ng.controller(
 
 						_(match).each(function (val) {
 
-							var valid = courses.findWhere({'PDS': val.trim().toUpperCase()}).value();
+							var valid = courses.find({'PDS': val});
+
 							valid && collection.push(valid.Id);
 
 						});
