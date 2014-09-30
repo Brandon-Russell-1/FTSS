@@ -120,6 +120,7 @@ a, a:hover {
     fill: #a94442 !important;
 }
 
+.text-info .icon,
 .active .icon {
     color: #3a87ad;
     fill: #3a87ad !important;
