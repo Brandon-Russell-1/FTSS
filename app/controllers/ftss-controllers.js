@@ -171,6 +171,9 @@ FTSS.controller = (function () {
 					// We must still pass a then() promise to prevent an error, we're just not executing the callback
 					return {
 						'then': function () {
+
+							$scope.fn.setLoaded();
+
 						}
 					};
 
