@@ -1,6 +1,10 @@
 include ../__mixins
 
++addButton('Create Class')
+
 .wrapped
+
+    +userInstructions('scheduled', true)
 
     +grouping()
 
@@ -73,9 +77,9 @@ include ../__mixins
                     .pull-right.invert
                         button.btn.btn-success.btn-labeled.btn-muted(type='button', ng-click='add(r)', ng-show='row.openSeats')
                             span.btn-label
-                                +icon('add')
+                                +icon('plus-circle')
                             | Request Seats
-                        button.btn.btn-primaryr.btn-labeled.btn-muted(type='button', ng-show='row.requestCount', ng-click='view(r)')
+                        button.btn.btn-primary.btn-labeled.btn-muted(type='button', ng-show='row.requestCount', ng-click='view(r)')
                             span.btn-label
                                 +icon('search')
                             | View Requests
@@ -83,7 +87,7 @@ include ../__mixins
                             span.btn-label
                                 +icon('edit')
                             | Edit Class
-                        button.btn.btn-dangerow.btn-labeled.btn-muted(type='button', ng-click='archive(r)')
+                        button.btn.btn-danger.btn-labeled.btn-muted(type='button', ng-click='archive(r)')
                             span.btn-label
                                 +icon('trash_hide')
                             | Cancel Class
