@@ -19,45 +19,41 @@
 
 				var lastPhoto = false,
 
-					force = $attrs.hasOwnProperty('force'),
+				    force = $attrs.hasOwnProperty('force'),
 
-					size = $attrs.size || '100px',
+				    size = $attrs.size || '100px',
 
-					shape = $attrs.shape || 'circle',
+				    shape = $attrs.shape || 'circle',
 
-					height = (shape === 'circle' || shape === 'square') ? ';height:' + size : ';height:185px',
+				    height = (shape === 'circle' || shape === 'square') ? ';height:' + size : ';height:185px',
 
-					linker = function () {
+				    linker = function () {
 
-						var data = utils.deepRead($scope, $attrs.data) || {};
+					    var data = utils.deepRead($scope, $attrs.data) || {};
 
-						if (lastPhoto !== data.Photo) {
+					    if (lastPhoto !== data.Photo) {
 
-							lastPhoto = data.Photo;
+						    lastPhoto = data.Photo;
 
-							var photo = '_w/' + data.Photo + '_jpg.jpg',
+						    var photo = '_w/' + data.Photo + '_jpg.jpg',
 
-								html = [
-									'<div class="mask-img',
-									shape,
-									(data.Photo ? 'valid' : 'invalid'),
-									'" style="width:',
-									size,
-									height,
-									'">'
-								].join(' '),
+						        html = [
+							        '<div class="mask-img',
+							        shape,
+							        (data.Photo ? 'valid' : 'invalid'),
+							        '" style="width:',
+							        size,
+							        height,
+							        '">'
+						        ].join(' '),
 
-								img = PRODUCTION ?
+						        img = '<img src="' + (data.Photo ? FTSS.photoURL + photo : noPhoto) + '" />';
 
-								      '<img src="' + (data.Photo ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' + photo : noPhoto) + '" />' :
+						    $el[0].innerHTML = html + (data.Photo || force ? img : '') + '</div>';
 
-								      '<img src="' + (data.Photo ? 'http://virtualpc/dev/Bios/' + photo : noPhoto) + '" />';
+					    }
 
-							$el[0].innerHTML = html + (data.Photo || force ? img : '') + '</div>';
-
-						}
-
-					};
+				    };
 
 				if ($attrs.hasOwnProperty('watch')) {
 					$scope.$watch($attrs.data, linker);

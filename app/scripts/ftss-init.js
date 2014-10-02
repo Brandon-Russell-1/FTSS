@@ -99,6 +99,8 @@
 	FTSS.people = {};
 	FTSS.utils = {};
 
+	FTSS.photoURL = PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' : 'http://virtualpc/dev/Bios/';
+
 	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {
 
 		'limit': 35,
