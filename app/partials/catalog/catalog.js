@@ -34,30 +34,23 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
-					      _(caches.Units).each(function (u) {
-
-						      try {
-
-							      _(u.Courses_JSON).each(function (c) {
-
-								      var d = data[c].Units = data[c].Units || [];
-
-								      d.push(u.LongName);
-
-							      });
-
-						      } catch (e) {
-
-						      }
-
-
-					      });
-
 					      self
 
 						      .initialize(data)
 
 						      .then(function (d) {
+
+							            d.Units = [];
+
+							            _(caches.Units).each(function (u) {
+
+								            if (u.Courses_JSON.indexOf(d.Id) > -1) {
+
+									            d.Units.push(u.label);
+
+								            }
+
+							            });
 
 							            if (d.Units) {
 								            d.units = d.Units.sort().join('<br>');
