@@ -1,4 +1,4 @@
-/*global utils, FTSS, _, caches, angular */
+/*global FTSS, _, caches */
 
 FTSS.ng.controller(
 	'unitsController',
@@ -57,57 +57,34 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
-					      // Attach all the instructors to this unit
-					      _(caches.Instructors).each(function (i) {
-
-						      if (!i.Archived) {
-
-							      var u = data[i.UnitId];
-
-							      u.Instructors = u.Instructors || [];
-
-							      u.Instructors.push(i.label);
-
-						      }
-
-					      });
-
 					      self
 
 						      .initialize(data)
 
 						      .then(function (unit) {
 
-							            // Flatten Instructors into string after sorting
-							            if (_.isArray(unit.Instructors)) {
+							            // Flatten Instructors into string
 
-								            unit.InstructorsCount = unit.Instructors.length;
+							            unit.Instructors = _.where(caches.Instructors, {'UnitId': unit.Id});
 
-								            unit.Instructors = unit.Instructors.sort().join('<br>');
-
-							            }
+							            unit.InstructorsList = _.pluck(unit.Instructors, 'label').sort().join('<br>');
 
 							            unit.Squadron = unit.Det < 300 ? '372 TRS' : '373 TRS';
 
 							            if (unit.Courses_JSON) {
 
-								            // Add all the course data to each unit for searching
-								            unit.CoursesMap = _(unit.Courses_JSON)
+								            unit.Courses = [];
 
-									            .map(function (c) {
+								            _(unit.Courses_JSON).each(function (course) {
 
-										                 return caches.MasterCourseList[c] || false;
+									            unit.Courses.push(caches.MasterCourseList[course]);
 
-									                 })
-
-									            .compact()
-
-									            .value();
+								            });
 
 								            // Flattened string (yes this is HTML in a controller :-( for Hover
-								            unit.CoursesHover = _.map(unit.CoursesMap, function (c) {
+								            unit.CoursesHover = _.map(unit.Courses, function (c) {
 
-									            if (unit.CoursesMap.length > 10) {
+									            if (unit.Courses.length > 10) {
 										            return '<div class="col-lg-4" hover="' +
 										                   c.Title +
 										                   '" left><b>' +

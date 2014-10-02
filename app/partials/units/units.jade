@@ -12,15 +12,15 @@ include ../__mixins
     td: b {{row.Base}}
 
     td
-        p(ng-show='row.CoursesHover',
-                hover='There are {{row.CoursesMap.length}} courses taught at Det {{row.Det}}:',
+        p(ng-if='row.Courses.length',
+                hover='There are {{row.Courses.length}} courses taught at Det {{row.Det}}:',
                 content='<dl class="dl-horizontal">{{row.CoursesHover}}</dl>', style='padding:5px')
             +icon('books')
-            | {{row.CoursesMap.length}} Courses
+            | {{row.Courses.length}} Courses
 
-        p(ng-show='row.Instructors',
-                hover='There are {{row.InstructorsCount}} instructors assigned to Det {{row.Det}}:',
-                content='{{row.Instructors}}', left, style='padding:5px')
+        p(ng-if='row.Instructors',
+                hover='There are {{row.Instructors.length}} instructors assigned to Det {{row.Det}}:',
+                content='{{row.InstructorsList}}', left, style='padding:5px')
             +icon('instructor')
             | {{row.InstructorsCount}} Instructors
 
