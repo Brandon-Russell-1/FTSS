@@ -361,7 +361,7 @@
     cursor: text;
 }
 
-.selectize-control.single .selectize-input:after {
+.selectize-control.single .selectize-input:not(.disabled):after {
     position: absolute;
     top: 50%;
     right: 17px;
@@ -391,8 +391,7 @@
 }
 
 .selectize-control .selectize-input.disabled {
-    background-color: #ffffff;
-    opacity: 0.5;
+    background-color: #f5f5f5;
 }
 
 .selectize-dropdown,

@@ -158,7 +158,7 @@
     color: #FFF !important;
 }
 
-.item small, .item em {
+.multi .item small, .multi .item em {
     display: none !important;
 }
 
