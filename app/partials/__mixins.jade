@@ -69,14 +69,16 @@ mixin grouping()
             block
 
 
+mixin addButton(text)
+    .add-button.btn.btn-labeled.btn-success(ng-click='edit(true)')
+        span.btn-label.white
+            +icon('plus-circle')
+        span.text  &nbsp;
+            =text
 
 mixin tableHeader(addNew, columns, instructions)
     if addNew
-        .add-button.btn.btn-labeled.btn-success(ng-click='edit(true)')
-            span.btn-label.white
-                +icon('plus-circle')
-            span.text  &nbsp;Add&nbsp;
-                =addNew
+        +addButton('Add' + addNew)
 
     .wrapped(class=addNew?'addNew':'noAdd')
 
