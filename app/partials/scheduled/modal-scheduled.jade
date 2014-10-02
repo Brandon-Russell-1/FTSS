@@ -9,24 +9,43 @@ form.form-horizontal(name='modal')
 
     .modal-body
 
-        .col-lg-8
+        .row
 
-            .input-group
-                .input-group-addon
-                    +icon('books')
-                .input-group-selectize.show-em
-                    select(selectize='MasterCourseList', bind='CourseId', 'Course')
+            +formGroup('FTD', 'helper text')
+                .input-group
+                    .input-group-addon.w15
+                        +icon('building-o')
+                    .input-group-selectize
+                        select(selectize='Units', bind='UnitId')
+
 
             br
 
-            .input-group
-                .input-group-addon
-                    +icon('location_small')
-                .input-group-selectize
-                    select(selectize='Units', bind='UnitId', 'FTD')
+            +formGroup('Course', 'helper text')
+                .input-group
+                    .input-group-addon.w15
+                        +icon('books')
+                    .input-group-selectize
+                        select(selectize='MasterCourseList',
+                                bind='CourseId',
+                                watch='UnitId',
+                                watchList='Units.Courses')
+
             br
 
-        .col-lg-4
+
+            +formGroup('Instructor', 'helper text')
+                .input-group
+                    .input-group-addon.w15
+                        +icon('instructor')
+                    .input-group-selectize
+                        select(selectize='Instructors',
+                                bind='InstructorId',
+                                watch='UnitId',
+                                watchList='Units.Instructors')
+                br
+
+        .row
 
             .input-group
                 .input-group-addon Host
@@ -40,13 +59,5 @@ form.form-horizontal(name='modal')
 
             br
 
-        .col-lg-12
-            .input-group
-                .input-group-addon
-                    +icon('instructor')
-                .input-group-selectize
-                    select(selectize='Instructors', bind='InstructorId', watch='UnitId')
-
-        .clearfix
 
     +modalFooter()
