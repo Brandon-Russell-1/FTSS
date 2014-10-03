@@ -19,12 +19,15 @@
     overflow: hidden;
 }
 
-.well .rollup,.well .collapsed .rollupOnly {
+.well .rollup,
+.collapsed .well .rollupOnly {
     opacity: 1;
     transition: opacity 2s ease;
 }
-.wel .collapsed .rollup,.well .rollupOnly {
-    opacity: 0!important;
+
+.collapsed .well  .rollup,
+.well .rollupOnly {
+    opacity: 0;
     transition: opacity 1s ease;
 }
 
