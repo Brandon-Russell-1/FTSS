@@ -55,14 +55,19 @@ time-ago {
     font-style: italic;
 }
 
-.datepicker tr :nth-child(6), .datepicker tr :nth-child(7) {
-    display: none;
-
+.datepicker {
+    min-width: 200px!important;
 }
 
-.datepicker .btn {
-    border: none !important;
-    box-shadow: none !important;
+.datepicker table {
+    table-layout: auto;
+}
+
+.datepicker tr :nth-child(6), .datepicker tr :nth-child(7) {
+    display: none;
+}
+.datepicker .btn[disabled] {
+    color:#aaaaaa;
 }
 
 .modal-header, .modal-body, .modal-footer {
