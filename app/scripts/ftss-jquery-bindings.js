@@ -59,7 +59,7 @@
 
 			return content
 
-				.replace(/\[icon\=([a-z]+)\]/g,
+				.replace(/\[icon\=([a-z\-\_]+)\]/g,
 
 			             function (match, icon) {
 				             return '<svg class="icon icon-' +
