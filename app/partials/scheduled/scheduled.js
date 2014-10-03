@@ -3,12 +3,12 @@
 //FTSS.ng.controller('requestSeats', );
 
 FTSS.ng.controller(
-
 	'scheduledController',
 
 	[
 		'$scope',
-		function ($scope) {
+		'$modal',
+		function ($scope, $modal) {
 
 			var self = FTSS.controller($scope, {
 				'sort' : 'Start',
@@ -28,59 +28,40 @@ FTSS.ng.controller(
 					'Course.AFSC': 'AFSC'
 				},
 
-				'model'  : 'scheduled'
+				'model': 'scheduled'
 
 			});
 
 			$scope.add = function (data) {
 
-				utils.modal({
-					            'templateUrl': '/partials/modal-request-seats.html',
-					            'controller' :
-						            [
-							            '$scope',
-							            '$modalInstance',
-							            function ($scope, $modalInstance) {
+				var scope = $scope.$new();
 
-								            $scope.class = data;
-								            $scope.seatCount = 0;
 
-								            $scope.selectizeOptions = {
-									            'labelField' : 'Name',
-									            'valueField' : 'Id',
-									            'sortField'  : 'Name',
-									            'searchField': 'Name',
-									            'persist'    : false,
-									            'maxItems'   : data.openSeats,
-									            'create'     : false,
-									            'plugins'    :
-										            [
-											            'remove_button'
-										            ],
-									            'onChange'   : function (val) {
-										            $scope.seatCount = val && val.length || 0;
-									            },
-									            'load'       : function (query, callback) {
+				scope.class = data;
+				scope.seatCount = 0;
 
-										            //	if (query.indexOf(', ') > 1) {                      <-- only limit queries on the production server
+				scope.selectizeOptions = {
+					'labelField' : 'Name',
+					'valueField' : 'Id',
+					'sortField'  : 'Name',
+					'searchField': 'Name',
+					'persist'    : false,
+					'maxItems'   : data.openSeats,
+					'create'     : true,
+					'plugins'    : [
+						'remove_button'
+					],
+					'onChange'   : function (val) {
+						scope.seatCount = val && val.length || 0;
+					}
 
-										            SharePoint.people(query).then(callback);
+				};
 
-										            //	}
-
-									            }
-								            };
-
-								            $scope.submit = function () {
-									            $modalInstance.close($scope);
-								            };
-
-								            $scope.cancel = $modalInstance.dismiss;
-
-							            }
-						            ]
-
-				            });
+				$modal({
+					       'scope'          : scope,
+					       'backdrop'       : 'static',
+					       'contentTemplate': '/partials/modal-request-seats.html'
+				       });
 
 
 			};

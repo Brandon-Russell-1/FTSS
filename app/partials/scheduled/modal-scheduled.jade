@@ -9,55 +9,63 @@ form.form-horizontal(name='modal')
 
     .modal-body
 
-        .row
-
-            +formGroup('FTD', 'helper text')
-                .input-group
-                    .input-group-addon.w15
-                        +icon('building-o')
-                    .input-group-selectize
-                        select(selectize='Units', bind='UnitId')
-
-
-            br
-
-            +formGroup('Course', 'helper text')
-                .input-group
-                    .input-group-addon.w15
-                        +icon('books')
-                    .input-group-selectize
-                        select(selectize='MasterCourseList',
-                                bind='CourseId',
-                                watch='UnitId',
-                                watchList='Units.Courses')
-
-            br
-
-
-            +formGroup('Instructor', 'helper text')
-                .input-group
-                    .input-group-addon.w15
-                        +icon('instructor')
-                    .input-group-selectize
-                        select(selectize='Instructors',
-                                bind='InstructorId',
-                                watch='UnitId',
-                                watchList='Units.Instructors')
-                br
-
-        .row
-
+        +formGroup('FTD', 'helper text')
             .input-group
-                .input-group-addon Host
-                input.form-control(ng-model='data.Host')
-
-            br
-
+                .input-group-addon.w15
+                    +icon('building-o')
+                .input-group-selectize
+                    select(selectize='Units', bind='UnitId')
+        br
+        +formGroup('Course', 'helper text')
             .input-group
-                .input-group-addon Other
-                input.form-control(ng-model='data.Other')
+                .input-group-addon.w15
+                    +icon('books')
+                .input-group-selectize
+                    select(selectize='MasterCourseList',
+                            bind='CourseId',
+                            watch='UnitId',
+                            watchList='Units.Courses')
+        br
 
-            br
+        +formGroup('Instructor', 'helper text')
+            .input-group
+                .input-group-addon.w15
+                    +icon('instructor')
+                .input-group-selectize
+                    select(selectize='Instructors',
+                            bind='InstructorId',
+                            watch='UnitId',
+                            watchList='Units.Instructors')
+        br
+
+        +formGroup('Dates', 'helper text')
+            .input-group
+                .input-group-addon.w15
+                    +icon('calendar_range')
+
+                input.form-control.w45(ype='text', ng-model='data.Start', data-max-date='{{End}}', placeholder='Start Date', bs-datepicker='', required='required')
+
+                input.form-control.w45.pull-right(type='text', ng-model='data.End', data-min-date='{{Start}}', placeholder='End Date', bs-datepicker='')
+
+        hr
+
+        .col-lg-10.pull-right
+
+            h4.light-bottom
+                +icon('student_hand')
+                | Existing Seat Reservations
+
+            .col-lg-5
+                .input-group
+                    .input-group-addon Host
+                    input.form-control(ng-model='data.Host', type='number', min='0', required)
+
+            .col-lg-5.pull-right
+                .input-group
+                    .input-group-addon Other
+                    input.form-control(ng-model='data.Other', type='number', min='0', required)
+
+        .clearfix
 
 
     +modalFooter()

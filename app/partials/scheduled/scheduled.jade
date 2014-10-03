@@ -8,9 +8,9 @@ include ../__mixins
 
     +grouping()
 
-        .well(ng-repeat='row in group', ng-once)
+        .well(ng-repeat='row in group')
             h4
-                span(class='btn btn-{{row.openSeatsClass}} availSeats(disabled="")') {{row.openSeats}} Open
+                span(class='btn btn-{{row.openSeatsClass}} availSeats(disabled="")', ng-click='add(row)') {{row.openSeats}} Open
                 span.rollupOnly {{row.Course.PDS}} - {{row.Course.Number}}
                 span.pull-right(style='letter-spacing: .1em')
                     | {{row.start}} - {{row.end}}
@@ -75,19 +75,19 @@ include ../__mixins
                 .requestActions
                     hr
                     .pull-right.invert
-                        button.btn.btn-success.btn-labeled.btn-muted(type='button', ng-click='add(r)', ng-show='row.openSeats')
+                        .btn.btn-success.btn-labeled.btn-muted(ng-click='add(row)', ng-show='row.openSeats')
                             span.btn-label
                                 +icon('plus-circle')
                             | Request Seats
-                        button.btn.btn-primary.btn-labeled.btn-muted(type='button', ng-show='row.requestCount', ng-click='view(r)')
+                        .btn.btn-primary.btn-labeled.btn-muted(ng-show='row.requestCount', ng-click='view(row)')
                             span.btn-label
                                 +icon('search')
                             | View Requests
-                        button.btn.btn-warning.btn-labeled.btn-muted(type='button', ng-click='edit(r)')
+                        .btn.btn-warning.btn-labeled.btn-muted(ng-click='edit(false)')
                             span.btn-label
                                 +icon('edit')
                             | Edit Class
-                        button.btn.btn-danger.btn-labeled.btn-muted(type='button', ng-click='archive(r)')
+                        .btn.btn-danger.btn-labeled.btn-muted(ng-click='archive()')
                             span.btn-label
                                 +icon('trash_hide')
                             | Cancel Class
