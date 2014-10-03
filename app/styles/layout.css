@@ -76,11 +76,11 @@
 }
 
 .w5 {
-    width: 5%;
+    width: 5%!important;
 }
 
 .w10 {
-    width: 10%;
+    width: 10%!important;
 }
 
 .w15 {
@@ -103,12 +103,16 @@
     width: 30%;
 }
 
+.w40 {
+    width: 40%!important;
+}
+
 .w45 {
-    width: 45%;
+    width: 45%!important;
 }
 
 .w50 {
-    width: 50%;
+    width: 50%!important;
 }
 
 .w55 {
