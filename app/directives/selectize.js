@@ -1,4 +1,4 @@
-/*global FTSS, _, caches, PRODUCTION */
+/*global FTSS, _, caches */
 
 /**
  * Selectize directive
@@ -22,8 +22,9 @@
 			opts,
 
 			{
+				'labelField'  : opts.label || 'label',
 				'maxItems'    : 1,
-				'options'     : options[opts.select] || null,
+				'options'     : !opts.watch && options[opts.select] || null,
 				'plugins'     : opts.maxItems > 1 ? [
 					'remove_button'
 				] : null,
@@ -37,25 +38,32 @@
 						// So that Angular will update the model immediately rather than waiting until we click somewhere else
 						timeout(function () {
 
+							var oldVal = scope.data[opts.field],
+
+							    newVal = (val && val.map ? val.map(Number) : Number(val)) || val;
+							
 							// Update the field with the value(s)
-							scope.data[opts.field] =
-							(val && val.map ? val.map(Number) : Number(val)) || val;
+							if (oldVal !== newVal) {
 
-							// Flip the $dirty flag on this modal
-							modal.$setDirty();
+								scope.data[opts.field] = newVal;
 
-							// Add ng-dirty class manually as we aren't really a ngForm control
-							self.$control.addClass('ng-dirty');
+								// Flip the $dirty flag on this modal
+								modal.$setDirty();
 
-							// Make sure we add the value to the list if it's new
-							if (opts.create && val) {
+								// Add ng-dirty class manually as we aren't really a ngForm control
+								self.$control.addClass('ng-dirty');
 
-								options[opts.select]
+								// Make sure we add the value to the list if it's new
+								if (opts.create && val) {
 
-									.push({
-										      'label': val,
-										      'Id'   : val
-									      });
+									options[opts.select]
+
+										.push({
+											      'label': val,
+											      'Id'   : val
+										      });
+
+								}
 
 							}
 
@@ -218,6 +226,28 @@
 
 							    // Add the options to our searchBox
 							    that.addOption(tagBoxOpts);
+							    /*
+							     _(caches.Units).each(function(unit) {
+
+							     _(unit.Courses_JSON).each(function(course) {
+
+							     caches.MasterCourseList[course].Units[unit.Id] = unit;
+
+							     });
+
+							     });*/
+
+							    _(caches.Units).each(function (unit) {
+
+								    _(unit.Courses_JSON).each(function (course) {
+
+									    unit.Courses.push(caches.MasterCourseList[course]);
+
+								    });
+
+								    unit.Instructors = _.where(caches.Instructors, {'UnitId': unit.Id});
+
+							    });
 
 							    // Copy that(this) back to FTSS.search
 							    FTSS.search = that;
@@ -260,7 +290,7 @@
 							      loaded(response, 'MasterCourseList', function (v) {
 
 								      // Save for later  our unit listings
-								      v.Units = {};
+								      v.Units = [];
 
 								      /**
 								       * Generates string format for dropdown display
@@ -308,6 +338,8 @@
 
 							      // Add Units to Selectize with row callback
 							      loaded(response, 'Units', function (v) {
+
+								      v.Courses = [];
 
 								      // Use Det # to determine squadron 2XX for 372 TRS / 3XX for 373 TRS
 								      v.Squadron = v.Det < 300 ? '372 TRS' : '373 TRS';
@@ -480,13 +512,14 @@
 
 					timeout = $timeout;
 
-					setTimeout(function () {
+					timeout(function () {
 
 						var opts;
 
 						if (attrs.bind) {
 
 							opts = builder(scope, {
+								'watch'   : attrs.watch,
 								'select'  : attrs.selectize,
 								'field'   : attrs.bind,
 								'create'  : attrs.hasOwnProperty('create'),
@@ -499,41 +532,41 @@
 
 						}
 
+						// Lets us bind subordinate dropdowns
 						if (attrs.watch) {
 
-							var init, filter, refresh;
+							var watchList = attrs.watchlist.split('.'),
 
-							filter = function (f) {
+							    /**
+							     * Our watch function that updates and enables/disables this dropdown
+							     *
+							     * @param find
+							     */
+							    refresh = function (find) {
 
-								return _.filter(options[attrs.selectize], function (o) {
-									return (o.data[attrs.watch] === f);
-								});
+								    var select = element[0].selectize;
 
-							};
+								    // First, disable and clear the dropdown
+								    select.disable();
+								    select.clearOptions();
 
-							refresh = function (f) {
+								    // Attempt to load the list of options
+								    find = find && caches[watchList[0]][find][watchList[1]];
 
-								if (init) {
+								    // If options exist, add them, refresh and enable the list
+								    if (find) {
 
-									var select = element[0].selectize;
+									    select.addOption(find);
+									    select.setValue(scope.data[opts.field]);
+									    select.refreshOptions(false);
+									    select.enable();
 
-									if (select) {
+								    }
 
-										select.clearOptions();
-										select.addOption(filter(f));
-										select.setValue(scope.data[opts.field]);
+							    };
 
-									}
-
-								} else {
-									init = true;
-								}
-
-							};
-
+							// Our watch binding
 							scope.$watch('data.' + attrs.watch, refresh);
-
-							opts.options = filter(scope.data[attrs.watch]);
 
 						}
 
@@ -541,12 +574,11 @@
 
 						scope.modal && scope.modal
 
-							.$addControl(
-							{
-								'$setPristine': function () {
-									selectize.$control.removeClass('ng-dirty');
-								}
-							});
+							.$addControl({
+								             '$setPristine': function () {
+									             selectize.$control.removeClass('ng-dirty');
+								             }
+							             });
 					});
 				}
 			};
