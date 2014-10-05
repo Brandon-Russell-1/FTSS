@@ -4,6 +4,17 @@
 	height: 32px;
 	fill: currentColor;
 }
+.icon-camera {
+	/*fill: #333333;*/
+	width: 34px;
+}
+.icon-refresh {
+	/*fill: #333333;*/
+}
+.icon-envelope {
+	/*fill: #333333;*/
+	width: 36px;
+}
 .icon-rotate-left {
 	/*fill: #333333;*/
 	width: 35px;
@@ -54,7 +65,6 @@
 }
 .icon-edit {
 	/*fill: #333333;*/
-	width: 36px;
 }
 .icon-check-square-o {
 	/*fill: #333333;*/
