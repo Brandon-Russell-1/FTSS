@@ -1,37 +1,38 @@
 {
-  "name": "angular-brunch-seed",
-  "repo": "scotch/angular-brunch-seed",
-  "version": "0.3.0",
-  "main": "_public/js/app.js",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "components"
-  ],
-  "dependencies": {
-    "jquery": "~2.1.0",
-    "sifter": "~0.3.1",
-    "microplugin": "~0.0.3",
-    "angular": "~1.2.14",
-    "angular-route": "1.2.5",
-    "ng-file-upload": "~1.2.8",
-    "angular-motion": "~0.3.2",
-    "angular-strap": "~2.0.0",
-    "momentjs": "~2.5.1",
-    "angular-animate": "~1.2.14",
-    "lodash": "~2.4.1",
-    "bean": "~1.0.6",
-    "db.js": "~0.9.0",
-    "angular-sanitize": "~1.2.15",
-    "IndexedDBShim": "*",
-    "angular-mocks": "~1.2.18"
-  },
-  "overrides": {
-    "angular-mocks": {
-      "main": "README.md"
-    }
-  },
-  "resolutions": {
-    "angular": "~1.2.14"
-  }
+	"name"        : "angular-brunch-seed",
+	"repo"        : "scotch/angular-brunch-seed",
+	"version"     : "0.3.0",
+	"main"        : "_public/js/app.js",
+	"ignore"      : [
+		"**/.*",
+		"node_modules",
+		"components"
+	],
+	"dependencies": {
+		"jquery"          : "~2.1.0",
+		"sifter"          : "~0.3.1",
+		"microplugin"     : "~0.0.3",
+		"angular"         : "~1.2.14",
+		"angular-route"   : "1.2.5",
+		"ng-file-upload"  : "~1.2.8",
+		"angular-motion"  : "~0.3.2",
+		"angular-strap"   : "~2.0.0",
+		"momentjs"        : "~2.5.1",
+		"angular-animate" : "~1.2.14",
+		"lodash"          : "~2.4.1",
+		"bean"            : "~1.0.6",
+		"db.js"           : "~0.9.0",
+		"angular-sanitize": "~1.2.15",
+		"IndexedDBShim"   : "*",
+		"angular-mocks"   : "~1.2.18",
+		"selectize"       : "*"
+	},
+	"overrides"   : {
+		"angular-mocks": {
+			"main": "README.md"
+		}
+	},
+	"resolutions" : {
+		"angular": "~1.2.14"
+	}
 }
