@@ -2,10 +2,7 @@ include ../__mixins
 
 form.form-horizontal(name='modal')
 
-    .modal-header
-        h3
-            +icon('calendar_range')
-            | Scheduled Class Update
+    +modalHeader('Build Class', "{{data.Course.Number}}")
 
     .modal-body
 
@@ -16,6 +13,7 @@ form.form-horizontal(name='modal')
                 .input-group-selectize
                     select(selectize='Units', bind='UnitId')
         br
+
         +formGroup('Course', 'helper text')
             .input-group
                 .input-group-addon.w15
@@ -62,7 +60,7 @@ form.form-horizontal(name='modal')
 
             .col-lg-5.pull-right
                 .input-group
-                    .input-group-addon Other
+                    .input-group-addon Non-host
                     input.form-control(ng-model='data.Other', type='number', min='0', required)
 
         .clearfix
