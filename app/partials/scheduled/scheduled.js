@@ -70,6 +70,8 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
+					      $scope.canEdit = $scope.hasRole('ftd');
+
 					      self
 
 						      .initialize(data)
