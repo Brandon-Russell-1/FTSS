@@ -555,7 +555,7 @@
 
 								    // If options exist, add them, refresh and enable the list
 								    if (find) {
-debugger;
+
 									    select.addOption(find);
 									    select.refreshOptions(false);
 									    select.setValue(scope.data[opts.field]);
