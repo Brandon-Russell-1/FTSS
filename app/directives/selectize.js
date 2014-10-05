@@ -40,7 +40,7 @@
 
 							var oldVal = scope.data[opts.field],
 
-							    newVal = (val && val.map ? val.map(Number) : Number(val)) || val;
+							    newVal = (val && val.map && !isNaN(val[0]) ? val.map(Number) : Number(val)) || val;
 							
 							// Update the field with the value(s)
 							if (oldVal !== newVal) {
@@ -54,7 +54,7 @@
 								self.$control.addClass('ng-dirty');
 
 								// Make sure we add the value to the list if it's new
-								if (opts.create && val) {
+								if (opts.create && val && options[opts.select]) {
 
 									options[opts.select]
 
@@ -523,7 +523,7 @@
 								'select'  : attrs.selectize,
 								'field'   : attrs.bind,
 								'create'  : attrs.hasOwnProperty('create'),
-								'maxItems': attrs.hasOwnProperty('multiple') ? 999 : 1
+								'maxItems': parseInt(attrs.max) || (attrs.hasOwnProperty('multiple') ? 999 : 1)
 							});
 
 						} else {
@@ -555,10 +555,10 @@
 
 								    // If options exist, add them, refresh and enable the list
 								    if (find) {
-
+debugger;
 									    select.addOption(find);
-									    select.setValue(scope.data[opts.field]);
 									    select.refreshOptions(false);
+									    select.setValue(scope.data[opts.field]);
 									    select.enable();
 
 								    }
