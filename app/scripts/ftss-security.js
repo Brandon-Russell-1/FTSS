@@ -46,6 +46,8 @@
 				// Extract the name of any groups the user is a member of
 				groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
 
+				var isAdmin = groups.indexOf('admin') > -1;
+
 				// Used to modify views based on roles
 				$scope.roleClasses = groups.join(' ');
 
@@ -66,15 +68,11 @@
 				 */
 				$scope.hasRole = function (roles) {
 
-					var authorized = false;
+					return isAdmin || _(roles.map ? roles : [roles]).any(function (role) {
 
-					_(roles).each(function (role) {
-
-						authorized = authorized || groups.indexOf(role) > -1;
+						return groups.indexOf(role) > -1;
 
 					});
-
-					return authorized;
 
 				};
 
