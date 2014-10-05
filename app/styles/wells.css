@@ -1,3 +1,13 @@
+.well:not(.archived) .archiveOnly,
+.well.archived .archiveExclude
+{
+    display: none!important;
+}
+
+.well.archived {
+    opacity: .75;
+}
+
 .well hr {
     border-color: #333
 }
@@ -25,7 +35,7 @@
     transition: opacity 2s ease;
 }
 
-.collapsed .well  .rollup,
+.collapsed .well .rollup,
 .well .rollupOnly {
     opacity: 0;
     transition: opacity 1s ease;
