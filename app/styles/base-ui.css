@@ -157,3 +157,7 @@ html#noAnimate body * {
     transform: none !important;
     animation: none !important;
 }
+
+label {
+    cursor: inherit;
+}
