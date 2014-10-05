@@ -113,7 +113,10 @@ include ../__mixins
                             span.btn-label: +icon('edit')
                             | Edit Class
 
-                        .btn.btn-danger.btn-labeled.btn-muted(ng-click='archive()')
+                        .btn.btn-danger.btn-labeled.btn-muted(bs-popover,
+                                    data-placement='left',
+                                    data-template='/partials/popover-cancel-class.html')
+
                             span.btn-label: +icon('trash_hide')
                             | Cancel Class
 
