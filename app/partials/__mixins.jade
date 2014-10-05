@@ -229,3 +229,25 @@ mixin peoplePicker(field)
         select(selectize='people', field=field, placeholder='Type a name to search...')
         #loading.hide(style='position: absolute;right: -1.5em; margin-top: -2.75em;')
             spinner(size='2em')
+
+mixin confirmPopover(className, title, text, action)
+
+    .popover
+
+        .arrow
+
+        h3.popover-title(class=className)= title
+
+        .popover-content
+
+            p= text
+
+            p
+
+                .pull-right
+
+                    .btn.btn-danger.btn-sm(ng-click= action + '()') Yes, continue
+
+                    .btn.btn-default.btn-sm(ng-click='$hide()') No, cancel
+
+            .clearfix

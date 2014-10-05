@@ -1,21 +1,3 @@
 include ../__mixins
 
-.popover
-
-    .arrow
-
-    h3.popover-title.text-danger Confirm Denial
-
-    .popover-content
-
-        p Are you sure you want to deny this 898?
-
-        p
-
-            .pull-right
-
-                .btn.btn-danger.btn-sm(ng-click='deny()') Yes, continue
-
-                .btn.btn-default.btn-sm(ng-click='$hide()') No, cancel
-
-        .clearfix
++confirmPopover('text-danger', 'Confirm Denial', 'Are you sure you want to deny this 898?', 'deny')
