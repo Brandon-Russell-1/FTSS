@@ -258,7 +258,7 @@ FTSS.controller = (function () {
 					req.unit = req.det.LongName;
 
 					seats = _.reduce(schedClass.Requests.results, function (memo, r) {
-						memo[r.Status] += r.Students.results.length;
+						memo[r.Status] += r.Students_JSON.length;
 						return memo;
 					}, {'1': 0, '2': 0, '3': 0});
 

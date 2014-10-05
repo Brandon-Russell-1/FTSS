@@ -93,31 +93,27 @@
 			'source': 'Requests',
 			'params': {
 				'$expand': [
-					'Students',
 					'CreatedBy',
-					'Scheduled/Course',
-					'Scheduled/Requests/Students'
+					'Scheduled/Course'
 				],
 				'$select': [
+					'Archived',
 					'Notes',
 					'Status',
 					'Created',
 					'CreatedBy/Name',
 					'CreatedBy/WorkEMail',
 					'CreatedBy/WorkPhone',
-					'Response_JSON',
-					'Students/Name',
-					'Students/WorkEMail',
-					'Students/WorkPhone',
+					'Response',
+					'Responder',
+					'Students_JSON',
 					'Scheduled/UnitId',
 					'Scheduled/CourseId',
 					'Scheduled/Start',
 					'Scheduled/End',
 					'Scheduled/Host',
 					'Scheduled/Other',
-					'Scheduled/InstructorId',
-					'Scheduled/Requests/Status',
-					'Scheduled/Requests/Students/Id'
+					'Scheduled/InstructorId'
 				]
 			}
 
@@ -130,9 +126,10 @@
 			'params': {
 				'$expand': [
 					'Course',
-					'Requests/Students'
+					'Requests'
 				],
 				'$select': [
+					'Archived',
 					'UnitId',
 					'CourseId',
 					'Start',
@@ -141,7 +138,7 @@
 					'Host',
 					'Other',
 					'Requests/Status',
-					'Requests/Students/Id'
+					'Requests/Students_JSON'
 				]
 			}
 
