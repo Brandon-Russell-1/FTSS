@@ -49,6 +49,8 @@
 
 				 });
 
+			 $scope.toggleSlides = true;
+
 		 }
 		]);
 

@@ -46,6 +46,7 @@ body:not(#home) #bgText {
     z-index: -1;
     color: #555;
     opacity: .9;
+    padding-right: 5em;
 }
 
 #bg1, #bg2 {
@@ -97,4 +98,33 @@ html:not(.flip) #bg2, html.flip #bg1 {
 #home #updates .panel-body {
     overflow-y: auto;
     height: calc(100% - 50px);
+}
+
+#slideshowToggle {
+
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    font-size: 3em;
+    opacity: .5;
+    transition: opacity 500ms ease;
+    cursor: pointer!important;
+}
+
+
+#slideshowToggle .icon {
+    fill: #777;
+}
+
+#slideshowToggle:hover {
+    opacity: 1;
+}
+
+#home .wrapped.showContent {
+    opacity: 1;
+}
+
+#home .wrapped {
+    opacity: 0;
+    transition: opacity 750ms ease;
 }
