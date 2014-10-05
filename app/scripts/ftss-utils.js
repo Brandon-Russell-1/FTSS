@@ -326,7 +326,7 @@ utils.flickr = function () {
 
 	    loadFlickr = function (resp) {
 
-		    var secondsInterval = 15,
+		    var secondsInterval = 12,
 
 		        timer,
 
