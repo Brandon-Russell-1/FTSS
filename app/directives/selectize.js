@@ -134,7 +134,6 @@
 				'valueField'     : 'id',
 				'persist'        : true,
 				'optgroupOrder'  : [
-					'SMART FILTERS',
 					'Units',
 					'AFSC',
 					'MDS',

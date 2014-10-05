@@ -6,27 +6,6 @@
 
 	var filters = {},
 
-	    routes = {
-		    'scheduled'   : [
-			    {'q': "Start ge datetime'TODAY'", 'label': 'Not Started'},
-			    {'q': "End le datetime'TODAY'", 'label': 'Completed'},
-			    {'q': "(Start le datetime'TODAY' and End ge datetime'TODAY')", 'label': 'In Progress'}
-		    ],
-		    'requests'    : [
-			    {'q': 'Status gt 1', 'label': 'Completed Requests'},
-			    {'q': 'Status eq 1', 'label': 'Pending Requests'},
-			    {'q': 'Status eq 2', 'label': 'Approved Requests'},
-			    {'q': 'Status eq 3', 'label': 'Denied Requests'}
-		    ],
-		    'requirements': [
-			    {'q': '', 'label': ''}
-		    ],
-		    'backlog'     : [
-			    {'q': '', 'label': ''}
-		    ]
-
-	    },
-
 	    filterMaps = {
 		    'scheduled'   : {
 			    'u': 'UnitId',
@@ -56,43 +35,6 @@
 		    'requirements': 1
 	    };
 
-	/**
-	 *  This is the app-wide collection of custom filters used by the search box
-	 */
-	filters.route = (function () {
-
-		var today, routeWrap = {};
-
-		// Store today's value throughout the app's lifecycle as it will be used numerous times
-		today = angular.injector(
-			[
-				"ng"
-			]).get("dateFilter")(new Date(), 'yyyy-MM-dd');
-
-		_(routes).each(function (filter, name) {
-
-			var route = routeWrap[name] = [];
-
-			_(filter).each(function (f, id) {
-
-				f.id = 'q:' + name.charAt(0) + id;
-				f.q = f.q.replace(/TODAY/g, today);
-				f.optgroup = 'SMART FILTERS';
-
-				route.push(f);
-
-			});
-
-		});
-
-		return function (all) {
-
-			return all ? _.flatten(routeWrap) : routeWrap[FTSS._fn.getPage()];
-
-		};
-
-	}());
-
 	filters.map = function () {
 
 		return filterMaps[FTSS._fn.getPage()];
@@ -100,8 +42,7 @@
 	};
 
 	/**
-	 * When the view is updated, this will remove custom filters and then add the custom filters for this view
-	 * as defined by filters.route().
+	 * When the view is updated, this will update the page-specific filters for tagBox or SearchBox
 	 */
 	filters.$refresh = (function () {
 
@@ -119,13 +60,6 @@
 			// empty the options--how wild is that!?@!
 			FTSS.search.options = {};
 			FTSS.search.userOptions = {};
-
-			// Add our custom searches back for this page
-			_.each(filters.route(), function (filter) {
-
-				FTSS.search.addOption(filter);
-
-			});
 
 			// Temporary list of valid filter keys for this page
 			var validFilters = _.keys(filterMaps[page]);
@@ -169,10 +103,6 @@
 				];
 
 			if (tags) {
-
-				if (tags.q) {
-					filter.push('(' + tags.q.join(' or ') + ')');
-				}
 
 				_.each(maps, function (map, key) {
 

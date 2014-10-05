@@ -197,13 +197,9 @@
 
 								if (pending) {
 
-									var valMap, tagMap, customFilters;
+									var valMap = [],
 
-									valMap = [
-									];
-									tagMap = {};
-
-									customFilters = FTSS.filters.route();
+									    tagMap = {};
 
 									if (pending.special) {
 
@@ -236,24 +232,14 @@
 
 											_.each(filterItems, function (filter) {
 
-												var valid = true, custom = false;
-
-												if (filterGroup === 'q') {
-
-													valid = _.some(customFilters, function (f) {
-														return f.id === 'q:' + filter;
-													});
-
-													custom = 'q:' + filter;
-													filter = customFilters[filter.charAt(1)].q;
-
-												}
+												var valid = true;
 
 												if (valid) {
 
 													tagMap[filterGroup] = tagMap[filterGroup] || [];
 													tagMap[filterGroup].push(filter);
-													valMap.push(custom || filterGroup + ':' + filter);
+													valMap.push(filterGroup + ':' + filter);
+
 												}
 
 											});
