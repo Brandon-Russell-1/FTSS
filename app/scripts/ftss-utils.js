@@ -166,7 +166,7 @@ utils.tagHighlight = function (data) {
 				 *  from a controller but for performance reasons, this is much faster than relying on
 				 *  AngularJS.
 				 */
-				if (utils.deepRead(req, t.testField) === t.testValue) {
+				if (!req.Archived && utils.deepRead(req, t.testField) === t.testValue) {
 
 					FTSS.search.$control.find('.item[data-value="' + t.id + '"]').addClass('matched');
 
