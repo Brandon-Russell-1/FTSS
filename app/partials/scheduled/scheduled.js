@@ -32,37 +32,26 @@ FTSS.ng.controller(
 
 			});
 
-			$scope.add = function (data) {
+			$scope.request = function (data) {
 
-				var scope = $scope.$new();
+				if (data.openSeats > 0) {
 
+					var scope = $scope.$new();
 
-				scope.class = data;
-				scope.seatCount = 0;
+					scope.data = data;
 
-				scope.selectizeOptions = {
-					'labelField' : 'Name',
-					'valueField' : 'Id',
-					'sortField'  : 'Name',
-					'searchField': 'Name',
-					'persist'    : false,
-					'maxItems'   : data.openSeats,
-					'create'     : true,
-					'plugins'    : [
-						'remove_button'
-					],
-					'onChange'   : function (val) {
-						scope.seatCount = val && val.length || 0;
-					}
+					scope.data.Students_JSON = [];
 
-				};
+					scope.close = $modal(
+						{
 
-				$modal({
-					       'scope'          : scope,
-					       'backdrop'       : 'static',
-					       'contentTemplate': '/partials/modal-request-seats.html'
-				       });
+							'scope'          : scope,
+							'backdrop'       : 'static',
+							'contentTemplate': '/partials/modal-request-seats.html'
 
+						}).destroy;
+
+				}
 
 			};
 

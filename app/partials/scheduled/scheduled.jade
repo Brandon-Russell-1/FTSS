@@ -8,21 +8,35 @@ include ../__mixins
 
     +grouping()
 
-        .well(ng-repeat='row in group')
+        .well(ng-repeat='row in group',
+                ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}')
+
             h4
-                span(class='btn btn-{{row.openSeatsClass}} availSeats(disabled="")', ng-click='add(row)') {{row.openSeats}} Open
-                span.rollupOnly {{row.Course.PDS}} - {{row.Course.Number}}
-                span.pull-right(style='letter-spacing: .1em')
-                    | {{row.start}} - {{row.end}}
-                    +icon('calendar_range')
+
+                span.archiveOnly ***CANCELLED CLASS***
+
+                span.archiveExclude(class='btn btn-{{row.openSeatsClass}} availSeats(disabled="")',
+                                    ng-click='request(row)') {{row.openSeats}} Open
+
+                span(style='letter-spacing: .1em')
+
+                   span &nbsp;{{row.Course.PDS}} - {{row.Course.Number}}
+
+                    span.pull-right
+                        | {{row.start}} - {{row.end}}
+                        +icon('calendar_range')
             hr.rollup
+
             .rollup
+
                 .col-lg-8.pull-left
+
                     table.table.table-split
-                        thead
-                            tr
-                                th.truncate(colspan='3') {{row.Course.PDS}} - {{row.Course.Number}}: {{row.Course.Title}}
+
+                        thead: tr: th.truncate(colspan='3') {{row.Course.Title}}
+
                         tbody
+
                             tr(ng-show='row.Instructor.Photo')
                                 td(rowspan='7', colspan='1', style='border-right: none;width:175px;padding-top: 20px')
                                     photo.img-rounded(size='150px', shape='rectangle', data='row.Instructor')
@@ -44,51 +58,63 @@ include ../__mixins
                             tr
                                 td Hours
                                 td {{row.Course.Hours}}
+
                 .col-lg-2.pull-right.text-right
+
                     table.table.table-split
-                        thead
-                            tr
-                                th.text-right(colspan='2') TRAINING SEATS
+
+                        thead: tr: th.text-right(colspan='2') TRAINING SEATS
+
                         tbody
                             tr
                                 td Host
                                 td.text-center {{row.Host}}
+
                             tr
-                                td Other
+                                td Non-host
                                 td.text-center {{row.Other}}
+
                             tr
                                 td Approved
                                 td.text-center {{row.approvedSeats}}
+
                             tr(style='border-top:2px solid;')
                                 td Minimum
                                 td.text-center {{row.Course.Min}}
+
                             tr
                                 td Maximum
                                 td.text-center {{row.Course.Max}}
+
                             tr(style='border-top:2px solid;')
                                 td Pending
                                 td.text-center {{row.pendingSeats}}
                             tr
                                 td Available
                                 td.text-center {{row.openSeats}}
+
                 .clearfix
-                .requestActions
+
+                .requestActions.archiveExclude
+
                     hr
+
                     .pull-right.invert
-                        .btn.btn-success.btn-labeled.btn-muted(ng-click='add(row)', ng-show='row.openSeats')
-                            span.btn-label
-                                +icon('plus-circle')
+
+                        .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-show='row.openSeats')
+                            span.btn-label: +icon('plus-circle')
                             | Request Seats
+
                         .btn.btn-primary.btn-labeled.btn-muted(ng-show='row.requestCount', ng-click='view(row)')
-                            span.btn-label
-                                +icon('search')
+                            span.btn-label: +icon('search')
                             | View Requests
+
                         .btn.btn-warning.btn-labeled.btn-muted(ng-click='edit(false)')
-                            span.btn-label
-                                +icon('edit')
+                            span.btn-label: +icon('edit')
                             | Edit Class
+
                         .btn.btn-danger.btn-labeled.btn-muted(ng-click='archive()')
-                            span.btn-label
-                                +icon('trash_hide')
+                            span.btn-label: +icon('trash_hide')
                             | Cancel Class
+
                     .clearfix
