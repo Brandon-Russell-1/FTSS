@@ -21,7 +21,7 @@
 		    'requirements': [
 			    {'q': '', 'label': ''}
 		    ],
-		    'backlog': [
+		    'backlog'     : [
 			    {'q': '', 'label': ''}
 		    ]
 
@@ -52,7 +52,7 @@
 	    },
 
 	    max = {
-		    'backlog': 1,
+		    'backlog'     : 1,
 		    'requirements': 1
 	    };
 
@@ -71,9 +71,7 @@
 
 		_(routes).each(function (filter, name) {
 
-			var route = routeWrap[name] =
-			            [
-			            ];
+			var route = routeWrap[name] = [];
 
 			_(filter).each(function (f, id) {
 
@@ -178,9 +176,9 @@
 
 				_.each(maps, function (map, key) {
 
-					var isString = (key === 'm' || key === 'a'), fTemp =
-						[
-						];
+					var isString = (key === 'm' || key === 'a'),
+
+					    fTemp = [];
 
 					_.each(tags[key], function (tag) {
 
