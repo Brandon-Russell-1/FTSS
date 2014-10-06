@@ -15,11 +15,7 @@
 			    'c': 'CourseId'
 		    },
 		    'requests'    : {
-			    'u': 'Scheduled/UnitId',
-			    'm': "Scheduled/Course/MDS",
-			    'a': "Scheduled/Course/AFSC",
-			    'i': 'Scheduled/InstructorId',
-			    'c': 'Scheduled/CourseId'
+			    'u': 'Scheduled/UnitId'
 		    },
 		    'requirements': {
 			    'h': 'HostId',
@@ -32,7 +28,8 @@
 
 	    max = {
 		    'backlog'     : 1,
-		    'requirements': 1
+		    'requirements': 1,
+		    'requests'    : 1
 	    };
 
 	filters.map = function () {
