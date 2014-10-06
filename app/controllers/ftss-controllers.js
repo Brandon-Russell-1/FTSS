@@ -257,8 +257,8 @@ FTSS.controller = (function () {
 
 					req.unit = req.det.LongName;
 
-					seats = _.reduce(schedClass.Requests.results, function (memo, r) {
-						memo[r.Status] += r.Students_JSON.length;
+					seats = _.reduce(schedClass.Requests_JSON || [], function (memo, r) {
+						memo[r[0]] += r[1].length;
 						return memo;
 					}, {'1': 0, '2': 0, '3': 0});
 
@@ -267,7 +267,7 @@ FTSS.controller = (function () {
 					req.deniedSeats = seats[3];
 					req.requestCount = seats[1] + seats[2] + seats[3];
 
-					req.openSeats = req.Course.Max - schedClass.Host - schedClass.Other - req.approvedSeats;
+					req.openSeats = req.Course.Max - schedClass.Host - schedClass.Other - req.approvedSeats - req.pendingSeats;
 
 				} catch (e) {
 

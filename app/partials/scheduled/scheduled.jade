@@ -66,17 +66,21 @@ include ../__mixins
                         thead: tr: th.text-right(colspan='2') TRAINING SEATS
 
                         tbody
-                            tr
+                            tr(explain='These are seats reserved by the FTD for the host.')
                                 td Host
                                 td.text-center {{row.Host}}
 
-                            tr
+                            tr(explain='These are seats reserved by the FTD for other units besides the host.')
                                 td Non-host
                                 td.text-center {{row.Other}}
 
-                            tr
+                            tr(explain='These are seat requests that have been approved and funded (if applicable).')
                                 td Approved
                                 td.text-center {{row.approvedSeats}}
+
+                            tr.italics(explain='These are seats that are still pending FTD approval or funded.')
+                                td Pending
+                                td.text-center {{row.pendingSeats}}
 
                             tr(style='border-top:2px solid;')
                                 td Minimum
@@ -87,9 +91,6 @@ include ../__mixins
                                 td.text-center {{row.Course.Max}}
 
                             tr(style='border-top:2px solid;')
-                                td Pending
-                                td.text-center {{row.pendingSeats}}
-                            tr
                                 td Available
                                 td.text-center {{row.openSeats}}
 
@@ -104,10 +105,6 @@ include ../__mixins
                         .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-show='row.openSeats')
                             span.btn-label: +icon('plus-circle')
                             | Request Seats
-
-                        .btn.btn-primary.btn-labeled.btn-muted(ng-show='row.requestCount', ng-click='view(row)')
-                            span.btn-label: +icon('search')
-                            | View Requests
 
                         .btn.btn-warning.btn-labeled.btn-muted(ng-click='edit(false)', ng-show='canEdit')
                             span.btn-label: +icon('edit')

@@ -1,4 +1,4 @@
-/*global app, utils, caches, FTSS, _ */
+/*global utils, FTSS */
 
 //FTSS.ng.controller('requestSeats', );
 
@@ -8,7 +8,8 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'$modal',
-		function ($scope, $modal) {
+		'SharePoint',
+		function ($scope, $modal, SharePoint) {
 
 			var self = FTSS.controller($scope, {
 				'sort' : 'Start',
@@ -40,7 +41,7 @@ FTSS.ng.controller(
 
 					scope.data = data;
 
-					scope.data.Students_JSON = [];
+					scope.data.Students = [];
 
 					scope.close = $modal(
 						{
@@ -51,8 +52,58 @@ FTSS.ng.controller(
 
 						}).destroy;
 
-				}
+					scope.submit = function () {
 
+						var request = data.Requests_JSON || [];
+
+						request.push([
+							             // Status
+							             1,
+
+							             // Students Array
+							             scope.data.Students,
+
+							             // Notes
+							             scope.data.Notes,
+
+							             // Host ID
+							             scope.data.HostId
+						             ]);
+
+						// Call sharePoint.update() with our data and handle the success/failure response
+						SharePoint.update({
+
+							                  'cache'        : true,
+							                  '__metadata'   : data.__metadata,
+							                  'Requests_JSON': request
+
+						                  })
+
+							.then(function (resp) {
+
+								      scope.submitted = false;
+
+								      // HTTP 204 is the status given for a successful update, there will be no body
+								      if (resp.status === 204) {
+
+									      utils.alert.create();
+
+									      self.reload();
+
+									      scope.close();
+
+									      utils.alert.create();
+
+								      } else {
+
+									      utils.alert.error('unknown update issue');
+
+								      }
+
+							      });
+
+					};
+				}
 			};
 
 			$scope.view = function (data) {
@@ -105,4 +156,5 @@ FTSS.ng.controller(
 				      });
 
 		}
-	]);
+	])
+;

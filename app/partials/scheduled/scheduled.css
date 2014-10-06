@@ -1,0 +1,8 @@
+#modalScheduledOpenSeats {
+    float:right!important;
+    width: 30%!important;
+    text-align: right;
+    font-style: italic;
+    line-height: 2.5em;
+    font-weight: 700;
+}

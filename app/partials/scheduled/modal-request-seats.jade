@@ -10,16 +10,24 @@ form.form-horizontal(name='modal')
     #requestSeats.modal-body
 
         p.lead
-            ng-pluralize(count='data.openSeats - data.Students_JSON.length',
+            ng-pluralize(count='data.openSeats - data.Students.length',
                             when='{1:"There is only one seat ", 0: "There are no more seats ", "other":"There are {} seats "}')
             | available for the {{data.start}} class.
         br
 
-        div(explain='request-seats-students', right)
-            h4
-                +icon('student_hand')
-                | Requested Student(s)
-            select(selectize, bind='Students_JSON', multiple, max='{{data.openSeats}}', create)
+        +formGroup('Host', 'helper text')
+            .input-group
+                .input-group-addon.w15
+                    +icon('puzzle-piece')
+                .input-group-selectize
+                    select(selectize='Hosts', bind='HostId')
+
+        +formGroup('Students', 'request-seats-students')
+            .input-group
+                .input-group-addon.w15
+                    +icon('student_hand')
+                .input-group-selectize
+                    select(selectize, bind='Students', multiple, max='{{data.openSeats}}', create)
 
         br
 
@@ -27,16 +35,16 @@ form.form-horizontal(name='modal')
             h4
                 +icon('edit')
                 | Request Comments
-            textarea.form-control.animate(ng-model='comments')
+            textarea.form-control.animate(ng-model='Notes')
 
         br
 
-        h4.pull-right(ng-show='data.Students_JSON.length > 0')
+        h4.pull-right(ng-show='data.Students.length > 0')
             +icon('info-circle')
             | You are requesting
-            b(ng-pluralize, count='data.Students_JSON.length', when='{1:" one seat","other":" {} seats"}') .
+            b(ng-pluralize, count='data.Students.length', when='{1:" one seat","other":" {} seats"}') .
 
         .clearfix
 
-    +modalFooter()
+    +modalFooter('Submit Request', '!data.HostId || data.Students.length < 1')
 

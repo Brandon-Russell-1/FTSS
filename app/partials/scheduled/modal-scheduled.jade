@@ -47,21 +47,17 @@ form.form-horizontal(name='modal')
 
         hr
 
-        .col-lg-10.pull-right
+        +formGroup('Reserved', 'replace me')
+            .input-group.pull-left(style='width:30%!important')
+                input.form-control(ng-model='data.Host', type='number', min='0', required)
+                .input-group-addon Host
 
-            h4.light-bottom
-                +icon('student_hand')
-                | Existing Seat Reservations
+            .input-group.pull-left(style='width:30%!important;margin-left:5%')
+                input.form-control(ng-model='data.Other', type='number', min='0', required)
+                .input-group-addon Non-Host
 
-            .col-lg-5
-                .input-group
-                    .input-group-addon Host
-                    input.form-control(ng-model='data.Host', type='number', min='0', required)
-
-            .col-lg-5.pull-right
-                .input-group
-                    .input-group-addon Non-host
-                    input.form-control(ng-model='data.Other', type='number', min='0', required)
+            #modalScheduledOpenSeats.input-group
+                | {{data.Course.Max - data.Host - data.Other}} Open Seats
 
         .clearfix
 

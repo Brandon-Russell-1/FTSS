@@ -87,46 +87,13 @@
 
 		},
 
-		'requests': {
-
-			'cache' : true,
-			'source': 'Requests',
-			'params': {
-				'$expand': [
-					'CreatedBy',
-					'Scheduled/Course'
-				],
-				'$select': [
-					'Archived',
-					'Notes',
-					'Status',
-					'Created',
-					'CreatedBy/Name',
-					'CreatedBy/WorkEMail',
-					'CreatedBy/WorkPhone',
-					'Response',
-					'Responder',
-					'Students_JSON',
-					'Scheduled/UnitId',
-					'Scheduled/CourseId',
-					'Scheduled/Start',
-					'Scheduled/End',
-					'Scheduled/Host',
-					'Scheduled/Other',
-					'Scheduled/InstructorId'
-				]
-			}
-
-		},
-
 		'scheduled': {
 
 			'cache' : true,
 			'source': 'Scheduled',
 			'params': {
 				'$expand': [
-					'Course',
-					'Requests'
+					'Course'
 				],
 				'$select': [
 					'Archived',
@@ -137,8 +104,9 @@
 					'InstructorId',
 					'Host',
 					'Other',
-					'Requests/Status',
-					'Requests/Students_JSON'
+					'Requests_JSON',
+					'ClassNotes',
+				    'TTMS'
 				]
 			}
 

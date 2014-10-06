@@ -147,10 +147,7 @@
 		 */
 		'clear': function (self) {
 
-			var obj = self.data('bs.popover');
-
 			self.popover((self[0].hasAttribute('live')) ? 'destroy' : 'hide');
-
 
 		}
 	};
