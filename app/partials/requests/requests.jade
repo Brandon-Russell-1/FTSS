@@ -9,8 +9,7 @@ include ../__mixins
 
             h4(ng-click='row.expand = !row.expand')
                 span.btn.invertSimple.btnFake(class='btn-{{row.iconClass}}', style='opacity: 1;')
-                    +icon('approve')
-                    +icon('deny')
+                    +icon('wait')
                 | &nbsp;&nbsp; {{row.Course.PDS}} - {{row.reqSeats}} Requested ({{row.openSeats}} Open)
                 span.pull-right(style='letter-spacing: .1em')
                     | {{row.start}} - {{row.end}}
@@ -26,7 +25,7 @@ include ../__mixins
                             tr
                                 td(style='width:150px') Location
                                 td(style='width:40px')
-                                    +icon('location')
+                                    +icon('building-o')
                                 td
                                     b {{row.det.Base}} (Detachment {{row.det.Det}})
                             tr
@@ -44,20 +43,13 @@ include ../__mixins
                                 td Comments
                                 td
                                     +icon('comments')
-                                td.bold
-                                    button.btn.btn-link.btn-inline.btn-muted(hover='{{row.CreatedBy.Name}} ({{row.CreatedBy.WorkPhone}})', content='{{row.Notes}}')
-                                        | By Requester
-                                    span(ng-if='row.responseText')
-                                        | -
-                                        button.btn.btn-link.btn-inline.btn-muted(hover='{{row.responseName}}', content='{{row.responseText}}')
-                                            | FTD Response
+                                td {{row.Notes}}
+
 
                 .col-lg-5.pull-right.text-right(style='margin-top: 10px')
-                    p.truncate(ng-repeat='s in row.Students.results', style='margin-bottom: 10px')
+                    p.truncate(ng-repeat='s in row.Students_JSON', style='margin-bottom: 10px')
                         +icon('student_hand')
-                        a(href='mailto:{{s.WorkEMail}}{{row.mail}}') {{s.Name}}
-                        br
-                        span(ng-show='s.WorkPhone') {{s.WorkPhone}}
+                        {{s}}
                 .clearfix
                 .requestActions(ng-if='row.Status < 2')
                     hr

@@ -52,7 +52,7 @@ FTSS.ng.controller(
 
 							            req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
 
-							            req.reqSeats = req.Students.results.length;
+							            req.reqSeats = req.Students_JSON.length;
 
 							            req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
 
