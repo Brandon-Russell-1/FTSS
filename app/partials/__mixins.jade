@@ -178,9 +178,12 @@ mixin modalFooter(submitText, defaultShow)
             spinner(size='2em')
             | Please wait, sending data...
 
+        if defaultShow
+            - defaultShow = '|| ' + defaultShow
+
         .btn.btn-success.btn-labeled(type='button',
                                     ng-click='submit()',
-                                    ng-hide='modal.$invalid || submitted' + (defaultShow ? '' : '|| !modal.$dirty'))
+                                    ng-hide='modal.$invalid || submitted || !modal.$dirty ' + defaultShow)
 
             span.btn-label.white
                 +icon('check-circle')
