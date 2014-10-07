@@ -1,7 +1,6 @@
 /*global FTSS */
 
 FTSS.ng.controller(
-
 	'requestsController',
 
 	[
@@ -9,13 +8,13 @@ FTSS.ng.controller(
 		function ($scope) {
 
 			var self = FTSS.controller($scope, {
+
 				'sort' : 'status',
 				'group': 'course',
 
 				'grouping': {
 					'course'     : 'Course',
 					'status'     : 'Status',
-					'unit'       : 'Unit',
 					'Course.MDS' : 'MDS',
 					'Course.AFSC': 'AFSC'
 				},
@@ -23,10 +22,13 @@ FTSS.ng.controller(
 				'sorting': {
 					'status'     : 'Status',
 					'course'     : 'Course',
-					'unit'       : 'Unit',
 					'Course.AFSC': 'AFSC'
 				},
-				'model'  : 'requests'
+
+				'model' : 'scheduled',
+
+				// We only want classes with requests
+				'filter': 'Requests_JSON ne null'
 
 			});
 
@@ -36,39 +38,49 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
+					      var collection = [];
+
+					      _(data).each(function (row) {
+
+						      _(row.Requests_JSON).each(function (request) {
+
+							      row.request = _.zipObject(['Status',
+							                                 'Students',
+							                                 'Notes',
+							                                 'HostId'
+							                                ], request);
+
+							      row.request.Host = caches.Hosts[row.request.HostId];
+
+							      collection.push(row);
+						      });
+					      });
+
 					      self
 
 						      .initialize(data)
 
-						      .then(function (req) {
+						      .then(function (row) {
 
-							            self.scheduledClass(req);
+							            utils.cacheFiller(row);
 
-							            req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
+							            row.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[row.Status];
 
-							            req.icon = {'1': 'time', '2': 'approve', '3': 'deny'}[req.Status];
+							            row.icon = {'1': 'time', '2': 'approve', '3': 'deny'}[row.Status];
 
-							            req.iconClass = {'1': 'info', '2': 'success', '3': 'danger'}[req.Status];
+							            row.iconClass = {'1': 'info', '2': 'success', '3': 'danger'}[row.Status];
 
-							            req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
+							            row.mail = '?subject=' +
+							                       encodeURIComponent('FTD Registration (' + row.Course.Title + ')') +
+							                       '&body=' +
+							                       encodeURIComponent(row.start +
+							                                          ' - ' +
+							                                          row.end +
+							                                          '\n' +
+							                                          row.FTD.Base);
 
-							            req.reqSeats = req.Students_JSON.length;
 
-							            req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
-
-							            req.Scheduled.Course = req.Course;
-
-							            try {
-
-								            var response = req.Response.split('|');
-
-								            req.responseName = response.shift() || '';
-
-								            req.responseText = response.join('|') || 'Requester left no comments';
-
-							            } catch (e) {
-
-							            }
+							            row.openSeatsClass = row.reqSeats > row.openSeats ? 'danger' : 'success';
 
 						            });
 

@@ -10,7 +10,7 @@ include ../__mixins
             h4(ng-click='row.expand = !row.expand')
                 span.btn.invertSimple.btnFake(class='btn-{{row.iconClass}}', style='opacity: 1;')
                     +icon('wait')
-                | &nbsp;&nbsp; {{row.Course.PDS}} - {{row.reqSeats}} Requested ({{row.openSeats}} Open)
+                | &nbsp;&nbsp; {{row.Course.PDS}} - {{row.request.Students.length}} Requested ({{row.openSeats}} Open)
                 span.pull-right(style='letter-spacing: .1em')
                     | {{row.start}} - {{row.end}}
                     +icon('calendar_range')
@@ -22,36 +22,27 @@ include ../__mixins
                 .col-lg-7.pull-left
                     table.table.table-split.no-border
                         tbody
-                            tr
-                                td(style='width:150px') Location
-                                td(style='width:40px')
-                                    +icon('building-o')
-                                td
-                                    b {{row.det.Base}} (Detachment {{row.det.Det}})
+
                             tr
                                 td Instructor
-                                td
-                                    +icon('instructor')
-                                td.truncate.bold {{row.instructor}}
+                                td: +icon('instructor')
+                                td.truncate.bold {{row.Instructor.InstructorName}}
                             tr
                                 td Requested
-                                td
-                                    +icon('download')
-                                td
-                                    b {{row.Created.toLocaleString()}}
-                            tr
+                                td: +icon('download')
+                                td: b {{row.request.Host.Unit}}
+                            tr(ng-show='row.Notes')
                                 td Comments
-                                td
-                                    +icon('comments')
-                                td {{row.Notes}}
+                                td: +icon('comments')
+                                td {{row.request.Notes}}
 
 
                 .col-lg-5.pull-right.text-right(style='margin-top: 10px')
-                    p.truncate(ng-repeat='s in row.Students_JSON', style='margin-bottom: 10px')
+                    p.truncate(ng-repeat='s in row.request.Students', style='margin-bottom: 10px')
                         +icon('student_hand')
                         {{s}}
                 .clearfix
-                .requestActions(ng-if='row.Status < 2')
+                .requestActions(ng-if='row.request.Status < 2')
                     hr
                     .col-lg-9.pull-left.requestStats(style='margin-top: 8px;')
                         table.table-tiny(style='width:20%')
@@ -66,8 +57,8 @@ include ../__mixins
                         table.table-tiny
                             thead(style='font-size:1.2em')
                                 tr
-                                    th {{row.Scheduled.Host}}
-                                    th {{row.Scheduled.Other}}
+                                    th {{row.Host}}
+                                    th {{row.Other}}
                                     th {{row.approvedSeats}}
                             tbody
                                 tr
@@ -77,20 +68,18 @@ include ../__mixins
                         table.table-tiny
                             thead(style='font-size:1.2em')
                                 tr
-                                    th {{row.reqSeats}}
                                     th {{row.pendingSeats}}
                                     th {{row.openSeats}}
                             tbody
                                 tr
-                                    td Requested
                                     td Pending
                                     td Open
                     .pull-right
-                        button.btn.btn-success.btn-labeled.btn-muted(type='button')
+                        .btn.btn-success.btn-labeled.btn-muted
                             span.btn-label.invert
                                 +icon('approve')
-                            | Approve
-                        button.btn.btn-dangerow.btn-labeled.btn-muted(type='button')
+                            | Approve {{row.request.Students.length}} seat(s)
+                        .btn.btn-danger.row.btn-labeled.btn-muted
                             span.btn-label.invert
                                 +icon('deny')
                             | Deny

@@ -15,7 +15,7 @@
 			    'c': 'CourseId'
 		    },
 		    'requests'    : {
-			    'u': 'Scheduled/UnitId'
+			    'u': 'UnitId'
 		    },
 		    'requirements': {
 			    'h': 'HostId',

@@ -42,10 +42,10 @@ include ../__mixins
                                     photo.img-rounded(size='150px', shape='rectangle', data='row.Instructor')
                             tr
                                 td Location
-                                td {{row.det.Base}} (Detachment {{row.det.Det}})
+                                td {{row.FTD.Base}} (Detachment {{row.FTD.Det}})
                             tr
                                 td Instructor
-                                td {{row.instructor}}
+                                td {{row.Instructor.InstructorName}}
                             tr
                                 td MDS
                                 td {{row.Course.MDS}}
