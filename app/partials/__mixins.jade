@@ -180,6 +180,8 @@ mixin modalFooter(submitText, defaultShow)
 
         if defaultShow
             - defaultShow = '|| ' + defaultShow
+        else
+            - defaultShow = ''
 
         .btn.btn-success.btn-labeled(type='button',
                                     ng-click='submit()',
