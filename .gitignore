@@ -15,3 +15,5 @@ npm-debug.log
 
 test/test-results.xml
 
+
+vendor/random.js
