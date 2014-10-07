@@ -10,19 +10,19 @@ FTSS.ng.controller(
 			var self = FTSS.controller($scope, {
 
 				'sort' : 'status',
-				'group': 'course',
+				'group': 'Course.Number',
 
 				'grouping': {
-					'course'     : 'Course',
-					'status'     : 'Status',
-					'Course.MDS' : 'MDS',
-					'Course.AFSC': 'AFSC'
+					'Course.Number': 'Course',
+					'status'       : 'Status',
+					'Course.MDS'   : 'MDS',
+					'Course.AFSC'  : 'AFSC'
 				},
 
 				'sorting': {
-					'status'     : 'Status',
-					'course'     : 'Course',
-					'Course.AFSC': 'AFSC'
+					'status'       : 'Status',
+					'Course.Number': 'Course',
+					'Course.AFSC'  : 'AFSC'
 				},
 
 				'model' : 'scheduled',
@@ -40,9 +40,11 @@ FTSS.ng.controller(
 
 					      var collection = [];
 
-					      _(data).each(function (row) {
+					      _(data).each(function (group) {
 
-						      _(row.Requests_JSON).each(function (request) {
+						      _(group.Requests_JSON).each(function (request) {
+
+							      var row = _.clone(group);
 
 							      row.request = _.zipObject(['Status',
 							                                 'Students',
@@ -58,7 +60,7 @@ FTSS.ng.controller(
 
 					      self
 
-						      .initialize(data)
+						      .initialize(collection)
 
 						      .then(function (row) {
 
