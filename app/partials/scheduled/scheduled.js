@@ -1,4 +1,4 @@
-/*global utils, FTSS */
+/*global utils, FTSS, caches */
 
 //FTSS.ng.controller('requestSeats', );
 
@@ -29,7 +29,43 @@ FTSS.ng.controller(
 					'Course.AFSC': 'AFSC'
 				},
 
-				'model': 'scheduled'
+				'model': 'scheduled',
+
+				'edit': function (scope, isNew) {
+
+					if (isNew) {
+
+						scope.data.Host = 0;
+
+						scope.data.Other = 0;
+
+					}
+
+					scope.getOpenSeats = function () {
+
+						if (scope.data.CourseId) {
+
+							var requests = scope.data.Requests_JSON ? _(scope.data.Requests_JSON)
+								    .pluck(1)
+								    .pluck('length')
+								    .reduce(function (sum, num) {
+									            return sum + num;
+								            }) : 0
+
+								;
+
+							return (caches.MasterCourseList[scope.data.CourseId].Max -
+							        scope.data.Host - scope.data.Other - requests) + ' Open Seats';
+
+						} else {
+
+							return '';
+
+						}
+
+					};
+
+				}
 
 			});
 
@@ -127,29 +163,29 @@ FTSS.ng.controller(
 
 						      .initialize(data)
 
-						      .then(function (req) {
+						      .then(function (row) {
 
-							            self.scheduledClass(req);
+							            utils.cacheFiller(row);
 
 							            switch (true) {
-								            case (req.openSeats > 0):
-									            req.openSeatsClass = 'success';
+								            case (row.openSeats > 0):
+									            row.openSeatsClass = 'success';
 									            break;
 
-								            case (req.openSeats === 0):
-									            req.openSeatsClass = 'warning';
+								            case (row.openSeats === 0):
+									            row.openSeatsClass = 'warning';
 									            break;
 
-								            case(req.openSeats < 0):
-									            req.openSeatsClass = 'danger';
+								            case(row.openSeats < 0):
+									            row.openSeatsClass = 'danger';
 									            break;
 							            }
 
-							            req.availability = {
+							            row.availability = {
 								            'success': 'Open Seats',
 								            'warning': 'No Open Seats',
 								            'danger' : 'Seat Limit Exceeded'
-							            }[req.openSeatsClass];
+							            }[row.openSeatsClass];
 
 						            });
 

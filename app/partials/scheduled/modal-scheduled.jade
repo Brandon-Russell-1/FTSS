@@ -56,8 +56,7 @@ form.form-horizontal(name='modal')
                 input.form-control(ng-model='data.Other', type='number', min='0', required)
                 .input-group-addon Non-Host
 
-            #modalScheduledOpenSeats.input-group
-                | {{data.Course.Max - data.Host - data.Other}} Open Seats
+            #modalScheduledOpenSeats.input-group {{getOpenSeats()}}
 
         .clearfix
 
