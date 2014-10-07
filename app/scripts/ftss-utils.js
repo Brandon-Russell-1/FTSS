@@ -1,4 +1,4 @@
-/*global utils, FTSS, _, angular, moment */
+/*global utils, FTSS, _, angular, moment, caches */
 
 /**
  * Performs nested property lookups without eval or switch(e.length), removed try {} catch(){}
@@ -52,9 +52,58 @@ utils.generateUUID = function () {
 	return uuid;
 };
 
+/**
+ * Cache Filler adds any missing cache lookups
+ *
+ * @todo Still need to finish cleaning up the last part of this function
+ *
+ * @param row
+ */
+utils.cacheFiller = function (row) {
+
+	if (row.CourseId) {
+		row.Course = caches.MasterCourseList[row.CourseId];
+	}
+
+	if (row.UnitId) {
+		row.FTD = caches.Units[row.UnitId];
+	}
+
+	if (row.HostId) {
+		row.Host = caches.Hosts[row.HostId];
+	}
+
+	if (row.InstructorId) {
+		row.Instructor = caches.Instructors[row.InstructorId] ||
+		                 { 'InstructorName': 'No Instructor Identified' };
+
+	}
+
+
+	row.start = row.Start.toDateString();
+
+	row.end = row.End.toDateString();
+
+
+	var seats;
+
+	seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
+		memo[r[0]] += r[1].length;
+		return memo;
+	}, {'1': 0, '2': 0, '3': 0});
+
+	row.approvedSeats = seats[2];
+	row.pendingSeats = seats[1];
+	row.deniedSeats = seats[3];
+	row.requestCount = seats[1] + seats[2] + seats[3];
+
+	row.openSeats = row.Course.Max - row.Host - row.Other - row.approvedSeats - row.pendingSeats;
+
+
+}
 
 /**
- * A simple watch destoyer for when we know we don't need all those dirty checks
+ * A simple watch destroyer for when we know we don't need all those dirty checks
  */
 utils.ignore = (function () {
 
@@ -477,7 +526,7 @@ utils.alert = (function () {
 				        'content'  : 'Sorry, you don\'t seem to have permissions to view this page',
 				        'placement': 'center',
 				        'type'     : 'danger',
-				        'duration': 30
+				        'duration' : 30
 
 			        });
 

@@ -231,51 +231,6 @@ FTSS.controller = (function () {
 			},
 
 			/**
-			 * This doesn't really belong here but is thrown in for convenience
-			 *
-			 * @todo Refactor scheduleClass & move to a better location!
-			 * @param req
-			 */
-			'scheduledClass': function (req) {
-
-				try {
-
-					var seats, schedClass = req.Scheduled || req;
-
-					req.Course = caches.MasterCourseList[schedClass.CourseId];
-
-					req.det = caches.Units[schedClass.UnitId];
-
-					req.Instructor = caches.Instructors[schedClass.InstructorId] || {};
-
-					req.instructor = req.Instructor.InstructorName ||
-					                 'No Instructor Identified';
-
-					req.start = schedClass.Start.toDateString();
-
-					req.end = schedClass.End.toDateString();
-
-					req.unit = req.det.LongName;
-
-					seats = _.reduce(schedClass.Requests_JSON || [], function (memo, r) {
-						memo[r[0]] += r[1].length;
-						return memo;
-					}, {'1': 0, '2': 0, '3': 0});
-
-					req.approvedSeats = seats[2];
-					req.pendingSeats = seats[1];
-					req.deniedSeats = seats[3];
-					req.requestCount = seats[1] + seats[2] + seats[3];
-
-					req.openSeats = req.Course.Max - schedClass.Host - schedClass.Other - req.approvedSeats - req.pendingSeats;
-
-				} catch (e) {
-
-				}
-
-			},
-
-			/**
 			 * Controller Post-Processor
 			 * Here we setup sifter() for full-text searching
 			 *
