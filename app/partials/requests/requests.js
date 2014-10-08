@@ -1,4 +1,4 @@
-/*global FTSS */
+/*global FTSS, angular */
 
 FTSS.ng.controller(
 	'requestsController',
