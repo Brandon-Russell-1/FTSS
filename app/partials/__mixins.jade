@@ -124,18 +124,18 @@ mixin googleMap(small, thumb)
 mixin actions(view, edit, archive, label)
     div.pull-right
         if view
-            span.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view()', hover='View ' + label + ' Stats', left)
+            span.btn.btn-sm.btn-info.btn-muted.no-archive(ng-click='view()', hover='View ' + label + ' Stats', left)
                 +icon('graph_pie')
 
         if edit
-            span.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(false)', hover='Edit ' + label, left)
+            span.btn.btn-sm.btn-warning.btn-muted.no-archive(ng-click='edit(false)', hover='Edit ' + label, left)
                 +icon('edit')
 
         if archive
-            span.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive()', hover='Archive ' + label, left)
+            span.btn.btn-sm.btn-danger.btn-muted.no-archive(ng-click='archive()', hover='Archive ' + label, left)
                 +icon('trash_hide')
 
-            span.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive()', hover='Restore ' + label, left)
+            span.btn.btn-sm.btn-success.btn-muted.archive(ng-click='archive()', hover='Restore ' + label, left)
                 +icon('rotate-left')
 
     unbind
@@ -178,14 +178,8 @@ mixin modalFooter(submitText, defaultShow)
             spinner(size='2em')
             | Please wait, sending data...
 
-        if defaultShow
-            - defaultShow = '|| ' + defaultShow
-        else
-            - defaultShow = ''
-
-        .btn.btn-success.btn-labeled(type='button',
-                                    ng-click='submit()',
-                                    ng-hide='modal.$invalid || submitted || !modal.$dirty ' + defaultShow)
+        .btn.btn-success.btn-labeled(ng-click='submit()',
+                                    ng-hide='modal.$invalid || submitted || !modal.$dirty || ' + defaultShow)
 
             span.btn-label.white
                 +icon('check-circle')
@@ -241,17 +235,19 @@ mixin confirmPopover(className, title, text, action)
 
         .arrow
 
-        h3.popover-title(class=className)= title
+        h3.popover-title(class='text-'+className)= title
 
         .popover-content
 
             p= text
 
+            block
+
             p
 
                 .pull-right
 
-                    .btn.btn-danger.btn-sm(ng-click= action + '()') Yes, continue
+                    .btn.btn-sm(class='btn-'+className, ng-click= action + '()') Yes, continue
 
                     .btn.btn-default.btn-sm(ng-click='$hide()') No, cancel
 
