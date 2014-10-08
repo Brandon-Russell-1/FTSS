@@ -73,16 +73,12 @@ utils.cacheFiller = function (row) {
 		row.Host = caches.Hosts[row.HostId];
 	}
 
-	if (row.InstructorId) {
-		row.Instructor = caches.Instructors[row.InstructorId] ||
-		                 { 'InstructorName': 'No Instructor Identified' };
+	row.Instructor = caches.Instructors[row.InstructorId] ||
+	                 { 'InstructorName': 'No Instructor Identified' };
 
-	}
+	row.start = row.Start.toLocaleDateString();
 
-
-	row.start = row.Start.toDateString();
-
-	row.end = row.End.toDateString();
+	row.end = row.End.toLocaleDateString();
 
 
 	var seats;
@@ -98,7 +94,6 @@ utils.cacheFiller = function (row) {
 	row.requestCount = seats[1] + seats[2] + seats[3];
 
 	row.openSeats = row.Course.Max - row.Host - row.Other - row.approvedSeats - row.pendingSeats;
-
 
 }
 
@@ -532,7 +527,7 @@ utils.alert = (function () {
 
 		},
 
-		'error': function (err) {
+		'error': function () {
 
 			builder({
 				        'type'    : 'danger',
