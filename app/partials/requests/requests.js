@@ -54,6 +54,18 @@ FTSS.ng.controller(
 
 							      row.request.Host = caches.Hosts[row.request.HostId];
 
+							      utils.cacheFiller(row);
+
+							      row.search = [
+								      row.ClassNotes,
+								      row.Course.text,
+								      row.Instructor.label,
+								      row.TTMS,
+								      row.request.Host.Text,
+								      row.request.Notes,
+								      row.request.Students.join(' ')
+							      ].join(' ');
+
 							      collection.push(row);
 						      });
 					      });
