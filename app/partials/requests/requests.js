@@ -9,20 +9,19 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				'sort' : 'status',
+				'sort' : 'Start',
 				'group': 'Course.Number',
 
 				'grouping': {
-					'Course.Number': 'Course',
-					'status'       : 'Status',
-					'Course.MDS'   : 'MDS',
-					'Course.AFSC'  : 'AFSC'
+					'Course.Number': 'Course'
 				},
 
 				'sorting': {
-					'status'       : 'Status',
-					'Course.Number': 'Course',
-					'Course.AFSC'  : 'AFSC'
+
+					'Start'                  : 'Start Date',
+					'request.Students.length': '# Requested',
+					'request.Host.Unit'      : 'Unit'
+
 				},
 
 				'model' : 'scheduled',
