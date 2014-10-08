@@ -71,34 +71,7 @@ FTSS.ng.controller(
 						      });
 					      });
 
-					      self
-
-						      .initialize(collection)
-
-						      .then(function (row) {
-
-							            utils.cacheFiller(row);
-
-							            row.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[row.Status];
-
-							            row.icon = {'1': 'time', '2': 'approve', '3': 'deny'}[row.Status];
-
-							            row.iconClass = {'1': 'info', '2': 'success', '3': 'danger'}[row.Status];
-
-							            row.mail = '?subject=' +
-							                       encodeURIComponent('FTD Registration (' + row.Course.Title + ')') +
-							                       '&body=' +
-							                       encodeURIComponent(row.start +
-							                                          ' - ' +
-							                                          row.end +
-							                                          '\n' +
-							                                          row.FTD.Base);
-
-
-							            row.openSeatsClass = row.reqSeats > row.openSeats ? 'danger' : 'success';
-
-						            });
-
+					      self.initialize(collection).then();
 
 				      });
 
