@@ -41,6 +41,7 @@
 #catalog .catalog .pointer,
 #units .units .pointer,
 #instructors .instructors .pointer,
+#ttms .ttms .pointer,
 #students .students .pointer {
     display: block !important;
 }
@@ -54,6 +55,7 @@
 #catalog .catalog *,
 #units .units *,
 #instructors .instructors *,
+#ttms .ttms *,
 #students .students * {
     font-weight: 600;
     text-shadow: 1px 1px 1px #fff;

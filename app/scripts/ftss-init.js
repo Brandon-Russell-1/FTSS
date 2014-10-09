@@ -41,6 +41,7 @@
 						    'home',
 						    'requirements',
 						    'scheduled',
+						    'ttms',
 						    'requests',
 						    'instructors',
 						    'catalog',

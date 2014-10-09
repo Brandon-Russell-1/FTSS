@@ -92,9 +92,6 @@
 			'cache' : true,
 			'source': 'Scheduled',
 			'params': {
-				'$expand': [
-					'Course'
-				],
 				'$select': [
 					'Archived',
 					'UnitId',
@@ -106,7 +103,23 @@
 					'Other',
 					'Requests_JSON',
 					'ClassNotes',
-				    'TTMS'
+					'TTMS'
+				]
+			}
+
+		},
+
+		'ttms': {
+
+			'source': 'Scheduled',
+			'params': {
+				'$select': [
+					'Created',
+					'UnitId',
+					'CourseId',
+					'Start',
+					'End',
+					'ClassNotes'
 				]
 			}
 
