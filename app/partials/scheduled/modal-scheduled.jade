@@ -45,6 +45,12 @@ form.form-horizontal(name='modal')
 
                 input.form-control.w45.pull-right(type='text', ng-model='data.End', data-min-date='{{Start}}', placeholder='End Date', bs-datepicker='')
 
+        br
+
+        +formGroup('Notes', 'helper text')
+            .input-group
+                textarea.form-control(type='text', ng-model='data.ClassNotes')
+
         hr
 
         +formGroup('Reserved', 'replace me')
