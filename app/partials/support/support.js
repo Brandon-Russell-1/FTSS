@@ -93,9 +93,7 @@
 
 								.each(function (d) {
 
-									      if (d.Thread > 0) {
-										      $scope.comments[d.Thread].replies.push(d);
-									      }
+									      (d.Thread > 0) && $scope.comments[d.Thread].replies.push(d);
 
 								      });
 
