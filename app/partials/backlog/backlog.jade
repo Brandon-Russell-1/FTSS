@@ -86,7 +86,7 @@ include ../__mixins
 
         +grouping()
 
-            .well(id='{{row.course.PDS}}', ng-repeat='row in group'
+            .well(id='{{row.course.PDS}}', ng-repeat='row in group track by row.Id'
             ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}')
 
                 .h4

@@ -96,7 +96,7 @@ mixin tableHeader(addNew, columns, instructions)
                         th.w10#action
 
                     tbody
-                        tr.middle.am-fade-and-scale(ng-repeat='row in group',
+                        tr.middle.am-fade-and-scale(ng-repeat='row in group track by row.Id',
                         ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}',
                         ng-dblclick='edit(false)',
                         id='row-{{row.Id}}')

@@ -8,7 +8,7 @@ div
 
     +grouping()
 
-        .well(ng-repeat='row in group', ng-class='{archived:row.Archived, updated:row.updated, denied:row.Denied}', id='{{row.Id}}wr')
+        .well(ng-repeat='row in group track by row.Id', ng-class='{archived:row.Archived, updated:row.updated, denied:row.Denied}', id='{{row.Id}}wr')
 
             #requirementsProgress.wizard
                 ul.steps
