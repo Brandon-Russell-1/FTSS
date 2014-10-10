@@ -96,11 +96,18 @@ FTSS.controller = (function () {
 							// Only act if there is a valid change to our watch
 							if (watch) {
 
+								var last;
+
 								actions.reload = function () {
 
 									var finalize = function (data) {
 
-										callback && callback(data);
+										if (JSON.stringify(data) !== last) {
+
+											last = JSON.stringify(data);
+											callback && callback(data);
+
+										}
 
 									};
 
@@ -119,6 +126,7 @@ FTSS.controller = (function () {
 											.read(model)
 
 											.then(finalize);
+
 									} else {
 
 										finalize();
@@ -131,6 +139,8 @@ FTSS.controller = (function () {
 
 								// If this is a bind-once and has been called, delete the watch
 								single && unwatch();
+
+								(opts.refresh > 1) && window.setInterval(actions.reload, opts.refresh * 1000);
 
 							}
 
