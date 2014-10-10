@@ -29,6 +29,9 @@ include ../__mixins
     td
 
         .col-lg-10
-            input.form-control.pull-right(ng-bind='row.TTMS', placeholder='Enter Class ID')
+            input.form-control.pull-right(ng-bind='row.TTMS',
+                                            placeholder='Enter Class ID'
+                                            explain='Press enter or click the green button when done.',
+                                            top)
         .col-lg-2
             .btn.btn-small.btn-success.pull-right.white: +icon('arrow-circle-right')
