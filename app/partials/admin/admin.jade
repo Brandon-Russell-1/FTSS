@@ -1,0 +1,36 @@
+include ../__mixins
+
+.wrapped
+
+    +userInstructions('admin', true)
+
+    +grouping()
+
+        .question.am-fade-and-slide-bottom(ng-repeat='comment in group track by comment.Id'
+                                            ng-class='{archived:row.Archived, updated:row.updated}')
+
+            .panel.panel-default
+
+                .panel-body
+                    .pull-left(style='font-size:18px') {{comment.Comment}}
+                    .pull-right.btn-link(ng-click='startReply(comment)') Reply
+
+                .panel-footer
+                    .pull-left {{comment.CreatedBy.Name}}
+                    .pull-right {{comment.TimeAgo}}
+
+            .input-group(ng-show='comment.reply',
+                            style='margin-bottom:15px;margin-left:7%;width:93%!important',
+                            explain="Type your reply and then press ENTER to save.",
+                            right)
+                .input-group-addon Add reply:
+                p.form-control(contenteditable,
+                                ng-model='comment.writeReply',
+                                onEnter='addReply(comment)')
+
+
+            blockquote.answer(ng-repeat='reply in comment.replies')
+
+                p {{reply.Comment}}
+
+                footer {{reply.TimeAgo}} by {{reply.CreatedBy.Name}}

@@ -47,7 +47,8 @@
 						    'catalog',
 						    'units',
 						    'backlog',
-						    'hosts'
+						    'hosts',
+					        'admin'
 					    ];
 
 				while (routes.length) {
