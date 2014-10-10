@@ -1,11 +1,12 @@
-/*global FTSS, angular */
+/*global FTSS, angular, utils, _, caches */
 
 FTSS.ng.controller(
 	'requestsController',
 
 	[
 		'$scope',
-		function ($scope) {
+		'SharePoint',
+		function ($scope, SharePoint) {
 
 			var self = FTSS.controller($scope, {
 
@@ -39,13 +40,24 @@ FTSS.ng.controller(
 
 					      $scope.edit = angular.noop;
 
-					      var collection = [];
+					      var collection = [],
+
+					          increment = 0;
 
 					      _(data).each(function (group) {
 
-						      _(group.Requests_JSON).each(function (request) {
+						      _(group.Requests_JSON).each(function (request, index) {
 
 							      var row = _.clone(group);
+
+							      if (request[0] > 1) {
+
+								      row.Archived = true;
+
+							      }
+
+							      row.Id = increment++;
+							      row.Index = index;
 
 							      row.request = _.zipObject(['Status',
 							                                 'Students',
@@ -68,8 +80,61 @@ FTSS.ng.controller(
 							      ].join(' ');
 
 							      collection.push(row);
+
 						      });
 					      });
+
+					      $scope.respond = function (status, response) {
+						      debugger;
+						      var row = this.row;
+
+						      row.Requests_JSON[row.Index] = [
+							      // Status
+							      status,
+
+							      // Students Array
+							      row.request.Students,
+
+							      // Notes
+							      row.request.Notes,
+
+							      // Host ID
+							      row.request.HostId,
+
+							      // Response
+							      response
+						      ];
+
+						      // Call sharePoint.update() with our data and handle the success/failure response
+						      SharePoint
+
+							      .update({
+								              'cache'        : true,
+								              '__metadata'   : row.__metadata,
+								              'Requests_JSON': row.Requests_JSON
+							              })
+
+							      .then(function (resp) {
+
+								            // HTTP 204 is the status given for a successful update, there will be no body
+								            if (resp.status === 204) {
+
+									            utils.alert.update();
+
+									            row.Archived = true;
+
+									            self.process();
+
+								            } else {
+
+									            utils.alert.error('Please try again later.');
+
+								            }
+
+							            });
+
+					      };
+
 
 					      self.initialize(collection).then();
 
