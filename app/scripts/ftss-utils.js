@@ -82,7 +82,7 @@ utils.cacheFiller = function (row) {
 
 
 	var seats;
-
+try {
 	seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
 		memo[r[0]] += r[1].length;
 		return memo;
@@ -94,7 +94,7 @@ utils.cacheFiller = function (row) {
 	row.requestCount = seats[1] + seats[2] + seats[3];
 
 	row.openSeats = row.Course.Max - row.Host - row.Other - row.approvedSeats - row.pendingSeats;
-
+} catch(e) {debugger;}
 }
 
 /**

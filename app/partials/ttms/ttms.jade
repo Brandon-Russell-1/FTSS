@@ -29,9 +29,10 @@ include ../__mixins
     td
 
         .col-lg-10
-            input.form-control.pull-right(ng-bind='row.TTMS',
+            input.form-control.pull-right(ng-model='row.TTMS',
+                                            ng-blur='addTTMS(row)',
                                             placeholder='Enter Class ID'
                                             explain='Press enter or click the green button when done.',
                                             top)
         .col-lg-2
-            .btn.btn-small.btn-success.pull-right.white: +icon('arrow-circle-right')
+            .btn.btn-small.btn-success.pull-right.white(ng-click='addTTMS(row)'): +icon('arrow-circle-right')
