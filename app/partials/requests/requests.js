@@ -56,7 +56,6 @@ FTSS.ng.controller(
 
 							      }
 
-							      row.Id = increment++;
 							      row.Index = index;
 
 							      row.request = _.zipObject(['Status',
@@ -79,14 +78,17 @@ FTSS.ng.controller(
 								      row.request.Students.join(' ')
 							      ].join(' ');
 
+							      row.Id = row.Id + '.' + index;
+
 							      collection.push(row);
 
 						      });
 					      });
 
 					      $scope.respond = function (status, response) {
-						      debugger;
-						      var row = this.row;
+
+						      var group = this.group,
+						          row = this.row;
 
 						      row.Requests_JSON[row.Index] = [
 							      // Status
@@ -122,6 +124,13 @@ FTSS.ng.controller(
 									            utils.alert.update();
 
 									            row.Archived = true;
+
+									            _(group).each(function (r) {
+
+										            r.__metadata.etag = resp.headers('ETag');
+										            r.Requests_JSON = row.Requests_JSON;
+
+									            });
 
 									            self.process();
 
