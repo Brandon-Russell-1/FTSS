@@ -1,4 +1,4 @@
-/*global FTSS, angular, utils, moment */
+/*global FTSS, angular, utils, moment, _ */
 
 FTSS.ng.controller(
 	'ttmsController',
@@ -40,6 +40,10 @@ FTSS.ng.controller(
 					      $scope.edit = angular.noop;
 
 					      $scope.addTTMS = function (row) {
+
+						      if (_.isEmpty(row.TTMS)) {
+							      return;
+						      }
 
 						      // Call sharePoint.update() with our data and handle the success/failure response
 						      SharePoint
