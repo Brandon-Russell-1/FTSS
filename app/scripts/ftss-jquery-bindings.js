@@ -19,6 +19,23 @@
 		e.preventDefault();
 	}, false);
 
+	(function ($) {
+		$.event.special.destroyed = {
+			remove: function (el) {
+				el.handler && el.handler(this);
+			}
+		};
+	})(jQuery);
+
+	$(document).keyup(function (e) {
+
+		if (e.keyCode === 27) {
+			$('.popover').remove();
+		}
+
+	});
+
+
 	var body, popover, pasteAction;
 
 	body = $('body');
@@ -118,6 +135,11 @@
 					            'placement': placement || 'auto',
 					            'container': 'body'
 				            });
+
+				// Bind to element removal (fixes a long-standing bug that causes orphaned popovers)
+				$el.bind('destroyed', function () {
+					$el.popover('destroy');
+				});
 
 				$el.popover('show');
 
