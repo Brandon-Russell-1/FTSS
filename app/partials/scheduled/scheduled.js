@@ -69,13 +69,13 @@ FTSS.ng.controller(
 
 			});
 
-			$scope.request = function (data) {
+			$scope.request = function (row) {
 
-				if (data.openSeats > 0) {
+				if (row.openSeats > 0) {
 
 					var scope = $scope.$new();
 
-					scope.data = data;
+					scope.data = row;
 
 					scope.data.Students = [];
 
@@ -90,9 +90,9 @@ FTSS.ng.controller(
 
 					scope.submit = function () {
 
-						var request = data.Requests_JSON || [];
+						row.Requests_JSON = row.Requests_JSON || [];
 
-						request.push([
+						row.Requests_JSON.push([
 							             // Status
 							             1,
 
@@ -110,8 +110,8 @@ FTSS.ng.controller(
 						SharePoint.update({
 
 							                  'cache'        : true,
-							                  '__metadata'   : data.__metadata,
-							                  'Requests_JSON': request
+							                  '__metadata'   : row.__metadata,
+							                  'Requests_JSON': row.Requests_JSON
 
 						                  })
 
@@ -124,7 +124,7 @@ FTSS.ng.controller(
 
 									      utils.alert.create();
 
-									      self.reload();
+									      self.process();
 
 									      scope.close();
 
