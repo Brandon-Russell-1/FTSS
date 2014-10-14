@@ -186,6 +186,12 @@ FTSS.ng.controller(
 								            'danger' : 'Seat Limit Exceeded'
 							            }[row.openSeatsClass];
 
+							            row.mailFTD = row.FTD.Email +
+							                          '?subject=FTSS Class Inquiry for ' +
+							                          row.Course.PDS +
+							                          ' Class #' +
+							                          row.TTMS;
+
 							            // This is the hover image for each FTD
 							            row.map = 'https://maps.googleapis.com/maps/api/staticmap?' +
 							                      'sensor=false&size=400x300&zoom=5&markers=color:red|' +
