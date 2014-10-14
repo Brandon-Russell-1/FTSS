@@ -125,7 +125,7 @@
     background: transparent;
 }
 
-#searchContainer.tagBox #searchBox, #searchContainer #tagBox {
+#searchContainer #tagBox {
     display: none;
 }
 
@@ -237,19 +237,25 @@ right {
     width: 55px;
 }
 
-#requirements #searchContainer #tagBox,
-#students #searchContainer #tagBox,
-#backlog #searchContainer #tagBox,
-#requests #searchContainer #tagBox {
+#tagBox {
     right: auto;
     width: 38%;
 }
 
-#requirements #searchContainer #searchBox,
-#students #searchContainer #searchBox,
-#backlog #searchContainer #searchBox,
-#requests #searchContainer #searchBox {
+#searchContainer.tagBox #tagBox {
+    width: 60%;
+}
+
+#searchContainer.tagBox.singleTag #tagBox {
+    width: 38%;
+}
+
+#searchContainer.tagBox #searchBox {
     display: block !important;
     left: auto;
+    width: 33%;
+}
+
+#searchContainer.tagBox.singleTag #searchBox {
     width: 55%;
 }
