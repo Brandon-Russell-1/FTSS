@@ -202,75 +202,45 @@
 
 									    tagMap = {};
 
-									if (pending.special) {
+									_.each(pending, function (filterItems, filterGroup) {
 
-										$timeout(function () {
+										_.each(filterItems, function (filter) {
 
-											$scope.noSearch = true;
+											var valid = true;
 
-											FTSS.search.disable();
+											if (valid) {
 
-											FTSS.search
-
-												.addOption(
-												{
-													'id'      : 'custom:' + pending.special,
-													'label'   : pending.text || 'Special Lookup',
-													'optgroup': 'SMART FILTERS'
-												});
-
-											FTSS.search.setValue('custom:' + pending.special);
-
-											$scope.filter = pending.special;
-
-											$scope.permaLink = '';
-
-										});
-
-									} else {
-
-										_.each(pending, function (filterItems, filterGroup) {
-
-											_.each(filterItems, function (filter) {
-
-												var valid = true;
-
-												if (valid) {
-
-													tagMap[filterGroup] = tagMap[filterGroup] || [];
-													tagMap[filterGroup].push(filter);
-													valMap.push(filterGroup + ':' + filter);
-
-												}
-
-											});
-
-										});
-
-										$timeout(function () {
-
-											var filter = FTSS.filters.$compile(tagMap);
-
-											FTSS.search.setValue(valMap);
-
-											if (filter) {
-
-												FTSS.tags = tagMap;
-												$scope.filter = filter;
-
-												FTSS.search.$control.find('.item').addClass('processed');
+												tagMap[filterGroup] = tagMap[filterGroup] || [];
+												tagMap[filterGroup].push(filter);
+												valMap.push(filterGroup + ':' + filter);
 
 											}
 
 										});
 
-									}
+									});
 
-									pending = false;
+									$timeout(function () {
+
+										var filter = FTSS.filters.$compile(tagMap);
+
+										FTSS.search.setValue(valMap);
+
+										if (filter) {
+
+											FTSS.tags = tagMap;
+											$scope.filter = filter;
+
+											FTSS.search.$control.find('.item').addClass('processed');
+
+										}
+
+									});
 
 								} else {
 
 									if ($scope.tagBox) {
+
 										_fn.setLoaded();
 										FTSS.search.focus();
 										FTSS.search.$control_input.focus();
