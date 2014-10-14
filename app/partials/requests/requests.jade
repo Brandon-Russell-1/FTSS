@@ -4,11 +4,7 @@ include ../__mixins
 
 +tableHeader(false, columns, 'requests')
 
-    td
-        span(hover='This is a new seat request')
-            +icon('flag')
-        span(hover='This course is a priority course.')
-            +icon('asterisk')
+    td: span(hover='popover-priority'): +icon('asterisk')
 
     td {{row.TTMS}}
 

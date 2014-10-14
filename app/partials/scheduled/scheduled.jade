@@ -66,19 +66,19 @@ include ../__mixins
                         thead: tr: th.text-right(colspan='2') TRAINING SEATS
 
                         tbody
-                            tr(explain='These are seats reserved by the FTD for the host.')
+                            tr(hover='scheduled-seats-host', left)
                                 td Host
                                 td.text-center {{row.Host}}
 
-                            tr(explain='These are seats reserved by the FTD for other units besides the host.')
+                            tr(hover='scheduled-seats-non-host', left)
                                 td Non-host
                                 td.text-center {{row.Other}}
 
-                            tr(explain='These are seat requests that have been approved and funded (if applicable).')
+                            tr(hover='scheduled-seats-approved', left)
                                 td Approved
                                 td.text-center {{row.approvedSeats}}
 
-                            tr.italics(explain='These are seats that are still pending FTD approval or funded.')
+                            tr.italics(hover='scheduled-seats-pending', left)
                                 td Pending
                                 td.text-center {{row.pendingSeats}}
 
