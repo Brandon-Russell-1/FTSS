@@ -93,18 +93,18 @@ FTSS.ng.controller(
 						row.Requests_JSON = row.Requests_JSON || [];
 
 						row.Requests_JSON.push([
-							             // Status
-							             1,
+							                       // Status
+							                       1,
 
-							             // Students Array
-							             scope.data.Students,
+							                       // Students Array
+							                       scope.data.Students,
 
-							             // Notes
-							             scope.data.Notes,
+							                       // Notes
+							                       scope.data.Notes,
 
-							             // Host ID
-							             scope.data.HostId
-						             ]);
+							                       // Host ID
+							                       scope.data.HostId
+						                       ]);
 
 						// Call sharePoint.update() with our data and handle the success/failure response
 						SharePoint.update({
@@ -185,6 +185,11 @@ FTSS.ng.controller(
 								            'warning': 'No Open Seats',
 								            'danger' : 'Seat Limit Exceeded'
 							            }[row.openSeatsClass];
+
+							            // This is the hover image for each FTD
+							            row.map = 'https://maps.googleapis.com/maps/api/staticmap?' +
+							                      'sensor=false&size=400x300&zoom=5&markers=color:red|' +
+							                      row.FTD.Location.replace(/\s/g, '');
 
 						            });
 
