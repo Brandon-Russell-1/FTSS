@@ -11,7 +11,7 @@ form.form-horizontal(name='modal')
                 .input-group-addon.w15
                     +icon('building-o')
                 .input-group-selectize
-                    select(selectize='Units', bind='UnitId')
+                    select(selectize='Units', bind='UnitId', remember='ftd')
         br
 
         +formGroup('Course', 'scheduled-edit-course')

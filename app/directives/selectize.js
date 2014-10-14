@@ -41,11 +41,18 @@
 							var oldVal = scope.data[opts.field],
 
 							    newVal = (val && val.map && !isNaN(val[0]) ? val.map(Number) : Number(val)) || val;
-							
+
 							// Update the field with the value(s)
 							if (oldVal !== newVal) {
 
 								scope.data[opts.field] = newVal;
+
+								// This will allow us to retain the last used setting for faster pre-filling of data
+								if (opts.remember) {
+
+									localStorage['FTSS-selectize-' + opts.remember] = newVal;
+
+								}
 
 								// Flip the $dirty flag on this modal
 								modal.$setDirty();
@@ -80,10 +87,18 @@
 
 					setup = function () {
 
-						loaded = false;
+						var remember;
+
+						// Check to see if remember is enabled for this field
+						if (opts.remember) {
+
+							remember = localStorage['FTSS-selectize-' + opts.remember];
+						}
+
+						loaded = remember;
 
 						// Set the value based on the current model
-						self.setValue(scope.data[opts.field]);
+						self.setValue(scope.data[opts.field] || remember);
 
 						self.refreshOptions(false);
 
@@ -518,6 +533,7 @@
 						if (attrs.bind) {
 
 							opts = builder(scope, {
+								'remember': attrs.remember,
 								'watch'   : attrs.watch,
 								'select'  : attrs.selectize,
 								'field'   : attrs.bind,

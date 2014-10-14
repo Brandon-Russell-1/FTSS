@@ -20,7 +20,7 @@ form.form-horizontal(name='modal')
                 .input-group-addon.w15
                     +icon('puzzle-piece')
                 .input-group-selectize
-                    select(selectize='Hosts', bind='HostId')
+                    select(selectize='Hosts', bind='HostId', remember='host')
 
         +formGroup('Students', 'scheduled-request-students')
             .input-group
