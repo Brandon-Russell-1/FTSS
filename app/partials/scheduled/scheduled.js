@@ -172,13 +172,12 @@ FTSS.ng.controller(
 									            row.openSeatsClass = 'success';
 									            break;
 
-								            case (row.openSeats === 0):
-									            row.openSeatsClass = 'warning';
-									            break;
-
 								            case(row.openSeats < 0):
 									            row.openSeatsClass = 'danger';
 									            break;
+
+								            default:
+									            row.openSeatsClass = 'warning';
 							            }
 
 							            row.availability = {
