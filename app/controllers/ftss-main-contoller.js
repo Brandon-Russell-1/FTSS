@@ -192,8 +192,9 @@
 
 								FTSS.filters.$refresh();
 
-								var pending =
-									    $scope.permaLink && JSON.parse(atob($scope.permaLink));
+								$scope.singleTag = FTSS.search.settings.maxItems < 2;
+
+								var pending = $scope.permaLink && JSON.parse(atob($scope.permaLink));
 
 								if (pending) {
 
