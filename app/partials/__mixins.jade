@@ -97,13 +97,11 @@ mixin tableHeader(addNew, columns, instructions)
 
                     tbody
                         tr.middle.am-fade-and-scale(ng-repeat='row in group track by row.Id',
-                        ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}',
+                        ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}',
                         ng-dblclick='edit(false)',
                         id='row-{{row.Id}}')
                             once
                                 block
-
-
 
 mixin googleMap(small, thumb)
     if small
