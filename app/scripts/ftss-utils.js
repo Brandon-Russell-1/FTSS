@@ -73,8 +73,7 @@ utils.cacheFiller = function (row) {
 		row.Host = caches.Hosts[row.HostId];
 	}
 
-	row.Instructor = caches.Instructors[row.InstructorId] ||
-	                 { 'InstructorName': 'No Instructor Identified' };
+	row.Instructor = caches.Instructors[row.InstructorId] || {};
 
 	row.start = row.Start.toLocaleDateString();
 
