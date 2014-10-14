@@ -15,7 +15,7 @@
     font-weight: 700;
 }
 
-.table.no-border * {
+.no-border *, .no-border {
     border: none !important;
 }
 
