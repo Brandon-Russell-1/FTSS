@@ -70,8 +70,8 @@ FTSS.ng.controller(
 			});
 
 			$scope.request = function (row) {
-
-				if (row.openSeats > 0) {
+				
+				if ($scope.canRequest && row.openSeats > 0) {
 
 					var scope = $scope.$new();
 
@@ -150,6 +150,10 @@ FTSS.ng.controller(
 
 					      $scope.canEdit = $scope.hasRole('ftd');
 
+					      $scope.canRequest = $scope.hasRole(['mtf',
+					                                          'ftd'
+					                                         ]);
+
 					      self
 
 						      .initialize(data)
@@ -187,6 +191,7 @@ FTSS.ng.controller(
 							            row.map = 'https://maps.googleapis.com/maps/api/staticmap?' +
 							                      'sensor=false&size=400x300&zoom=5&markers=color:red|' +
 							                      row.FTD.Location.replace(/\s/g, '');
+
 
 						            });
 
