@@ -15,19 +15,27 @@
 		'requirements': ['mtf',
 		                 'ftd'
 		],
-		'requests'    : ['approvers',
-		                 'mtf',
-		                 'ftd'
+
+		'scheduled': [ 'approvers',
+		               'ftd',
+		               'curriculum',
+		               'mtf',
+		               'guest'
 		],
-		'instructors' : ['ftd'],
-		'catalog'     : ['curriculum'],
-		'units'       : ['ftd'],
-		'backlog'     : ['approvers',
-		                 'mtf',
-		                 'ftd'
+
+		'requests'   : ['approvers',
+		                'mtf',
+		                'ftd'
 		],
-		'hosts'       : ['mtf',
-		                 'ftd'
+		'instructors': ['ftd'],
+		'catalog'    : ['curriculum'],
+		'units'      : ['ftd'],
+		'backlog'    : ['approvers',
+		                'mtf',
+		                'ftd'
+		],
+		'hosts'      : ['mtf',
+		                'ftd'
 		]
 
 	};
@@ -46,6 +54,8 @@
 				// Extract the name of any groups the user is a member of
 				groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
 
+				groups = groups.length ? groups : ['guest'];
+
 				var isAdmin = groups.indexOf('admin') > -1;
 
 				// Used to modify views based on roles
@@ -53,12 +63,13 @@
 
 				// This is the text that is displayed in the top-left corner of the app
 				$scope.roleText = groups.join(' • ')
-					                  .replace('mtf', 'MTF User')
-					                  .replace('ftd', 'FTD User')
-					                  .replace('curriculum', 'Curriculum Manager')
-					                  .replace('scheduling', 'J4 Scheduler')
-					                  .replace('approvers', 'Approver')
-					                  .replace('admin', 'Administrator') || 'Visitor';
+					.replace('mtf', 'MTF User')
+					.replace('ftd', 'FTD User')
+					.replace('curriculum', 'Curriculum Manager')
+					.replace('scheduling', 'J4 Scheduler')
+					.replace('approvers', 'Approver')
+					.replace('admin', 'Administrator')
+					.replace('guest', 'Visitor');
 
 				/**
 				 * Test for a particular user role
