@@ -127,7 +127,7 @@ div(ng-if='canEdit')
 
                     .pull-right.invert
 
-                        .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-show='row.openSeats')
+                        .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-if='row.openSeats && canRequest')
                             span.btn-label: +icon('plus-circle')
                             | Request Seats
 
