@@ -1,6 +1,7 @@
 include ../__mixins
 
-+addButton('Create Class')
+div(ng-if='canEdit')
+    +addButton('Create Class')
 
 .wrapped
 
