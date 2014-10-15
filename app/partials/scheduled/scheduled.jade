@@ -55,7 +55,7 @@ div(ng-if='canEdit')
                                         | {{row.FTD.LongName}}
 
                                     a.no-border.pull-right(href='mailto:{{row.mailFTD}}',
-                                                            hover='Contact the FTD about this class.')
+                                    hover='Contact the FTD about this class.')
                                         +icon('envelope')
 
 
@@ -131,14 +131,14 @@ div(ng-if='canEdit')
                             span.btn-label: +icon('plus-circle')
                             | Request Seats
 
-                        .btn.btn-warning.btn-labeled.btn-muted(ng-click='edit(false)', ng-show='canEdit')
+                        .btn.btn-warning.btn-labeled.btn-muted(ng-click='edit(false)', ng-if='canEdit')
                             span.btn-label: +icon('edit')
                             | Edit Class
 
                         .btn.btn-danger.btn-labeled.btn-muted(bs-popover,
-                                    data-placement='left',
-                                    data-template='/partials/popover-cancel-class.html',
-                                    ng-show='canEdit')
+                                                                placement='left',
+                                                                template='/partials/popover-cancel-class.html',
+                                                                ng-show='canEdit')
 
                             span.btn-label: +icon('trash_hide')
                             | Cancel Class
