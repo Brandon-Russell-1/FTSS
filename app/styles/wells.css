@@ -21,7 +21,7 @@
     font-size: 1.1em;
     position: relative;
     max-height: 10000px;
-    transition: all 1s;
+    transition: all 500ms;
 }
 
 .collapsed .well {
@@ -32,25 +32,27 @@
 .well .rollup,
 .collapsed .well .rollupOnly {
     opacity: 1;
-    transition: opacity 2s ease;
+    transition: opacity 500ms ease;
 }
 
 .collapsed .well .rollup,
-.well .rollupOnly {
+.well .rollupOnly,
+.well .icon-envelope {
     opacity: 0;
-    transition: opacity 1s ease;
+    transition: opacity 500ms ease;
 }
 
 .well a {
     color: #555;
+    transition: color 500ms ease;
 }
 
 .well:hover a {
     color: #428bca;
 }
 
-.well:hover .requestStats {
-    display: block;
+.well:hover .icon-envelope {
+    opacity: 1;
 }
 
 .well h4 {
