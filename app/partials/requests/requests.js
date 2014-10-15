@@ -40,9 +40,7 @@ FTSS.ng.controller(
 
 					      $scope.edit = angular.noop;
 
-					      var collection = [],
-
-					          increment = 0;
+					      var collection = [];
 
 					      _(data).each(function (group) {
 
