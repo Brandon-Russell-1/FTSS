@@ -35,7 +35,6 @@
 
 	});
 
-
 	var body, popover, pasteAction;
 
 	body = $('body');
@@ -105,9 +104,10 @@
 
 			if (content) {
 				title = $el.attr('hover') || $el.attr('explain');
+				title = FTSS.messages[title] || title;
 			} else {
 				content = $el.attr('hover') || $el.attr('explain');
-				content = FTSS.messages && FTSS.messages[content] || content;
+				content = FTSS.messages[content] || content;
 			}
 
 			if (content) {
