@@ -91,19 +91,19 @@ div(ng-if='canEdit')
                         thead: tr: th.text-right(colspan='2') TRAINING SEATS
 
                         tbody
-                            tr(hover='scheduled-seats-host', left)
+                            tr(hover='scheduled-seats-host', left, ng-if='row.Host')
                                 td Host
                                 td.text-center {{row.Host}}
 
-                            tr(hover='scheduled-seats-non-host', left)
+                            tr(hover='scheduled-seats-non-host', left, ng-if='row.Other')
                                 td Non-host
                                 td.text-center {{row.Other}}
 
-                            tr(hover='scheduled-seats-approved', left)
+                            tr(ng-if='row.approvedSeats', left, hover='scheduled-seats-approved')
                                 td Approved
                                 td.text-center {{row.approvedSeats}}
 
-                            tr.italics(hover='scheduled-seats-pending', left)
+                            tr.italics(ng-if='row.pendingSeats', hover='scheduled-seats-pending', left)
                                 td Pending
                                 td.text-center {{row.pendingSeats}}
 
