@@ -142,15 +142,6 @@ FTSS.ng.controller(
 				}
 			};
 
-			$scope.view = function (data) {
-
-				utils.permaLink({
-					                'special': 'ScheduledId eq ' + data.Id,
-					                'text'   : data.Course.PDS + ' on ' + data.start
-				                }, 'requests');
-
-			};
-
 			self
 
 				.bind('filter')
