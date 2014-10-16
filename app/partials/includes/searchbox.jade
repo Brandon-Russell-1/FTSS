@@ -1,3 +1,5 @@
+include ../__mixins
+
 #searchContainer(ng-class='{tagBox:tagBox, singleTag:singleTag}')
 
     #stats
@@ -12,6 +14,9 @@
                     style='width:100%',
                     autofocus="autofocus",
                     tabindex='0')
+
+    #fakeSearchButton.btn.btn-info.white(hover='tagBox-button', top, no-arrow)
+        +icon('arrow-right')
 
     #searchBox(explain='searchBox', top, no-arrow)
 

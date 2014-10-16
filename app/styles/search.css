@@ -24,8 +24,7 @@
 #tagBox .selectize-input:not(.focus) {
     height: 34px;
     overflow: hidden;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-radius: 0;
 }
 
 #tagBox .selectize-dropdown-content {
@@ -144,7 +143,7 @@
 
 .multi .item, #tagBox .multi .item.matched {
     background: #555;
-    margin-bottom: 2px !important;
+    margin-top: 2px !important;
     color: #fff;
 }
 
@@ -237,8 +236,18 @@ right {
     width: 55px;
 }
 
+#searchContainer #tagBox .selectize-input {
+    padding-top: 0px;
+}
+
+#searchContainer #tagBox .item,
+#searchContainer #tagBox input {
+    margin: 5px 2px 0!important;
+
+}
+
 #searchContainer.tagBox #tagBox {
-    width: 60%;
+    width: 55%;
 }
 
 #searchContainer.tagBox.singleTag #tagBox {
@@ -253,4 +262,24 @@ right {
 
 #searchContainer.tagBox.singleTag #searchBox {
     width: 55%;
+}
+
+#searchContainer.singleTag #fakeSearchButton,
+#searchContainer:not(.tagBox) #fakeSearchButton {
+    display: none;
+}
+
+#fakeSearchButton {
+    margin: 1px!important;
+    border: none!important;
+    position: absolute;
+    left:calc(55% + 49px);
+    height: 32px;
+    padding-top:3px;
+    border-radius: 0 6px 6px 0;
+    z-index: 100;
+}
+
+#fakeSearchButton:hover *  {
+    fill: #777;
 }
