@@ -1,4 +1,4 @@
-/*global app, utils, caches, FTSS, _, moment */
+/*global utils, caches, FTSS, _, moment */
 
 (function () {
 
