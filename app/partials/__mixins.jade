@@ -78,7 +78,7 @@ mixin addButton(text)
 
 mixin tableHeader(addNew, columns, instructions)
     if addNew
-        +addButton('Add' + addNew)
+        +addButton('Add ' + addNew)
 
     .wrapped(class=addNew?'addNew':'noAdd')
 
