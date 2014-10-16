@@ -187,7 +187,7 @@ FTSS.ng.controller(
 							                          ' Class #' +
 							                          row.TTMS;
 
-							            row.TTMSText = (row.TTMS === 'PENDING') ? '' : ' - ' + row.TTMS;
+							            row.TTMSText = row.TTMS ? ' - ' + row.TTMS : '';
 
 							            // This is the hover image for each FTD
 							            row.map = 'https://maps.googleapis.com/maps/api/staticmap?' +

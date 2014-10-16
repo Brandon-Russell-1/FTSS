@@ -27,7 +27,7 @@ FTSS.ng.controller(
 				'model' : 'ttms',
 
 				// We only want classes with requests
-				'filter': "TTMS eq 'PENDING' and Archived eq false"
+				'filter': "TTMS eq null and Archived eq false"
 
 			});
 
