@@ -13,28 +13,32 @@ header.navbar.navbar-inverse
 
         li
             .support(bs-popover,
-            ng-click='fn.doMakeBitly()',
-            data-animation='am-flip-x',
-            title='Share This Link',
-            data-content-template='/partials/bitly.html',
-            data-placement='bottom-right',
-            data-container='body')
+                        ng-click='fn.doMakeBitly()',
+                        animation='am-flip-x',
+                        hover='topbar-share',
+                        content-template='/partials/bitly.html',
+                        placement='bottom-right',
+                        container='body',
+                        no-arrow)
                 +icon('share')
 
         li
             .support(tabindex='-1',
-            bs-popover,
-            data-container='body',
-            data-content-template='/partials/user-settings.html',
-            data-placement='bottom-right',
-            data-animation='am-flip-x',
-            title='My Settings')
+                        bs-popover,
+                        container='body',
+                        content-template='/partials/user-settings.html',
+                        placement='bottom-right',
+                        animation='am-flip-x',
+                        hover='topbar-settings',
+                        no-arrow)
                 +icon('sliders')
 
         li
             .support(data-content-template='/partials/support.html',
-            data-placement='left',
-            bs-aside='aside',
-            data-container='body',
-            data-animation='am-slide-left')
+                        placement='left',
+                        bs-aside='aside',
+                        container='body',
+                        animation='am-slide-left',
+                        hover='topbar-help',
+                        no-arrow)
                 +icon('question')

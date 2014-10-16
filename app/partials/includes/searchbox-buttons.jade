@@ -2,13 +2,13 @@ include ../__mixins
 
 #searchButtons.no-pad.pull-right(style='width:250px')
 
-    span.btn.btn-default(ng-click='fn.doResetSearch()', hover='button-clear', left)
+    span.btn.btn-default(ng-click='fn.doResetSearch()', hover='button-clear')
         +icon('rotate-left')
 
     span(style='width:5%')  
 
     span.dropdown
-        span.dropdown-toggle.btn.btn-default(hover='button-grouping', left, data-toggle='dropdown')
+        span.dropdown-toggle.btn.btn-default(hover='button-grouping', data-toggle='dropdown')
             +icon('group')
         .dropdown-menu
             h3.popover-title Group By
@@ -18,7 +18,7 @@ include ../__mixins
                     label.css-label {{name}}
 
     span.dropdown
-        span.dropdown-toggle.btn.btn-default(hover='button-sorting', left, data-toggle='dropdown')
+        span.dropdown-toggle.btn.btn-default(hover='button-sorting', data-toggle='dropdown')
             +icon('sort')
 
         .dropdown-menu
@@ -30,10 +30,10 @@ include ../__mixins
 
     span(style='width:5%')  
 
-    span#toggleExpand(ng-click='fn.doToggleCollapse()', hover='button-collapse', left, class='btn btn-default')
+    span#toggleExpand(ng-click='fn.doToggleCollapse()', hover='button-collapse', class='btn btn-default')
         +icon('expand')
         +icon('collapse')
 
-    span#toggleArchive(ng-click='fn.doToggleArchive()', hover='button-archive', left, class='btn btn-default')
+    span#toggleArchive(ng-click='fn.doToggleArchive()', hover='button-archive', class='btn btn-default', no-arrow)
         +icon('trash_hide')
         +icon('trash_show')
