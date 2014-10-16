@@ -237,11 +237,6 @@ right {
     width: 55px;
 }
 
-#tagBox {
-    right: auto;
-    width: 38%;
-}
-
 #searchContainer.tagBox #tagBox {
     width: 60%;
 }
