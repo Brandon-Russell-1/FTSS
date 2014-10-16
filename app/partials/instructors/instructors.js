@@ -67,8 +67,8 @@ FTSS.ng.controller('instructorsController',
 
 								                          });
 							                          },
-							                          error        : function (err) {
-								                          FTSS.utils.log(err);
+							                          error        : function () {
+								                          utils.alert.error();
 							                          }
 						                          });
 					                   };
