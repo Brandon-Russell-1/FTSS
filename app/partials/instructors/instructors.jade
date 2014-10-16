@@ -1,6 +1,6 @@
 include ../__mixins
 
-- var columns = {'':10,Instructor:40, Unit:20, AFSC:10}
+- var columns = {'':10,Instructor:40, Unit:20}
 +tableHeader('Instructor', columns, 'instructors')
 
     td: +icon('flag')
@@ -14,7 +14,5 @@ include ../__mixins
             | {{row.InstructorName}}
 
     td: b {{row.Unit.LongName}}
-
-    td: b {{row.AFSC}}
 
     td: +actions(true, true, true, 'instructor')

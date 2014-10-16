@@ -77,7 +77,6 @@
 			'params': {
 				'$select': [
 					'UnitId',
-					'AFSC',
 					'InstructorName',
 					'InstructorEmail',
 					'Photo',

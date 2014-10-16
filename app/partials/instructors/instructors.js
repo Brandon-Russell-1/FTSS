@@ -14,13 +14,11 @@ FTSS.ng.controller('instructorsController',
 
 			                   'grouping': {
 				                   'Unit.Squadron': 'Squadron',
-				                   'Unit.LongName': 'Detachment',
-				                   'AFSC'         : 'AFSC'
+				                   'Unit.LongName': 'Detachment'
 			                   },
 
 			                   'sorting': {
-				                   'Name': 'Name',
-				                   'AFSC': 'AFSC'
+				                   'Name': 'Name'
 			                   },
 
 			                   'model'  : 'instructors',
