@@ -88,7 +88,7 @@
 		                           'baseURL'     : 'https://cs1.eis.af.mil/sites/FTSS/rebuild/_vti_bin/ListData.svc/',
 		                           'user'        : { 'url': 'https://cs1.eis.af.mil/sites/FTSS/rebuild/_vti_bin/UserGroup.asmx' },
 		                           'people'      : { 'url': 'https://cs1.eis.af.mil/_vti_bin/ListData.svc/UserInformationList' },
-		                           'cacheVersion': '2014.10.03'
+		                           'cacheVersion': '2014.10.15'
 
 	                           } : {
 
