@@ -368,32 +368,9 @@
 	 * @param {object} $parent
 	 * @returns {int}
 	 */
-	var measureString = function(str, $parent) {
-		if (!str) {
-			return 0;
-		}
-	
-		var $test = $('<test>').css({
-			position: 'absolute',
-			top: -99999,
-			left: -99999,
-			width: 'auto',
-			padding: 0,
-			whiteSpace: 'pre'
-		}).text(str).appendTo('body');
-	
-		transferStyles($parent, $test, [
-			'letterSpacing',
-			'fontSize',
-			'fontFamily',
-			'fontWeight',
-			'textTransform'
-		]);
-	
-		var width = $test.width();
-		$test.remove();
-	
-		return width;
+	var measureString = function(str) {
+
+		return str.length * 9;
 	};
 	
 	/**
@@ -577,7 +554,7 @@
 	
 			$wrapper          = $('<div>').addClass(settings.wrapperClass).addClass(classes).addClass(inputMode);
 			$control          = $('<div>').addClass(settings.inputClass).addClass('items').appendTo($wrapper);
-			$control_input    = $('<input type="text" autocomplete="off" />').appendTo($control).attr('tabindex', tab_index);
+			$control_input = $('<input type="text" autocomplete="off" />').appendTo($control).attr('tabindex',	tab_index);
 			$dropdown_parent  = $(settings.dropdownParent || $wrapper);
 			$dropdown         = $('<div>').addClass(settings.dropdownClass).addClass(inputMode).hide().appendTo($dropdown_parent);
 			$dropdown_content = $('<div>').addClass(settings.dropdownContentClass).appendTo($dropdown);
@@ -718,33 +695,33 @@
 			}
 	
 		},
-	
+
 		/**
 		 * Sets up default rendering functions.
 		 */
-		setupTemplates: function() {
+		setupTemplates: function () {
 			var self = this;
 			var field_label = self.settings.labelField;
 			var field_optgroup = self.settings.optgroupLabelField;
-	
+
 			var templates = {
-				'optgroup': function(data) {
+				'optgroup'       : function (data) {
 					return '<div class="optgroup">' + data.html + '</div>';
 				},
-				'optgroup_header': function(data, escape) {
+				'optgroup_header': function (data, escape) {
 					return '<div class="optgroup-header">' + escape(data[field_optgroup]) + '</div>';
 				},
-				'option': function(data, escape) {
-					return '<div class="option">' + escape(data[field_label]) + '</div>';
+				'option'         : function (data) {
+					return '<div class="option">' + data[field_label] + '</div>';
 				},
-				'item': function(data, escape) {
-					return '<div class="item">' + escape(data[field_label]) + '</div>';
+				'item'           : function (data) {
+					return '<div class="item">' + data[field_label] + '</div>';
 				},
-				'option_create': function(data, escape) {
+				'option_create'  : function (data, escape) {
 					return '<div class="create">Add <strong>' + escape(data.input) + '</strong>&hellip;</div>';
 				}
 			};
-	
+
 			self.settings.render = $.extend({}, templates, self.settings.render);
 		},
 	
@@ -754,6 +731,8 @@
 		 */
 		setupCallbacks: function() {
 			var key, fn, callbacks = {
+				'selected'      : 'onSelect',
+				'enterkey'      : 'onEnter',
 				'initialize'     : 'onInitialize',
 				'change'         : 'onChange',
 				'item_add'       : 'onItemAdd',
@@ -918,8 +897,12 @@
 					e.preventDefault();
 					return;
 				case KEY_RETURN:
+					self.trigger('enterkey', self.getValue());
+
 					if (self.isOpen && self.$activeOption) {
 						self.onOptionSelect({currentTarget: self.$activeOption});
+						self.refreshOptions();
+
 					}
 					e.preventDefault();
 					return;
@@ -1086,6 +1069,10 @@
 					if (!self.settings.hideSelected && e.type && /mouse/.test(e.type)) {
 						self.setActiveOption(self.getOption(value));
 					}
+
+					self.$dropdown_content[0].scrollTop = 0;
+
+					self.trigger('selected', value);
 				}
 			}
 		},
@@ -1233,7 +1220,7 @@
 			}
 	
 			// ensure control has focus
-			self.hideInput();
+			//self.hideInput();
 			if (!this.isFocused) {
 				self.focus();
 			}
@@ -1421,7 +1408,20 @@
 	
 			return result;
 		},
-	
+
+		refreshSelected: function () {
+
+			var self = this, i, n;
+
+			self.$dropdown_content.find('.selected').removeClass('selected');
+
+			for (i = 0, n = self.items.length; i < n; i++) {
+				self.getOption(self.items[i]).addClass('selected');
+			}
+
+		},
+
+
 		/**
 		 * Refreshes the list of available options shown
 		 * in the autocomplete dropdown menu.
@@ -1441,7 +1441,9 @@
 			var results           = self.search(query);
 			var $dropdown_content = self.$dropdown_content;
 			var active_before     = self.$activeOption && hash_key(self.$activeOption.attr('data-value'));
-	
+
+			self.$wrapper.removeClass('single multi').addClass(self.settings.mode);
+
 			// build markup
 			n = results.items.length;
 			if (typeof self.settings.maxOptions === 'number') {
@@ -1497,8 +1499,8 @@
 					html.push(groups[optgroup].join(''));
 				}
 			}
-	
-			$dropdown_content.html(html.join(''));
+
+			$dropdown_content[0].innerHTML = html.join('');
 	
 			// highlight matching terms inline
 			if (self.settings.highlight && results.query.length && results.tokens.length) {
@@ -1793,19 +1795,18 @@
 					self.refreshState();
 				}
 	
-				if (self.isSetup) {
+				if (self.isSetup && !self.isPending) {
 					$options = self.$dropdown_content.find('[data-selectable]');
 	
 					// update menu / remove the option (if this is not one item being added as part of series)
-					if (!self.isPending) {
 						$option = self.getOption(value);
 						value_next = self.getAdjacentOption($option, 1).attr('data-value');
-						self.refreshOptions(self.isFocused && inputMode !== 'single');
+						self.refreshSelected();
+						//self.refreshOptions(self.isFocused && inputMode !== 'single');
 						if (value_next) {
 							self.setActiveOption(self.getOption(value_next));
 						}
-					}
-	
+
 					// hide the menu if the maximum number of items have been selected or no options are left
 					if (!$options.length || self.isFull()) {
 						self.close();
@@ -2157,18 +2158,21 @@
 				self.removeItem(values.pop());
 			}
 	
-			self.showInput();
-			self.positionDropdown();
-			self.refreshOptions(true);
+//			self.showInput();
+//			self.positionDropdown();
+//			self.refreshOptions(true);
+
 	
 			// select previous option
-			if (option_select) {
+			/*if (option_select) {
 				$option_select = self.getOption(option_select);
 				if ($option_select.length) {
 					self.setActiveOption($option_select);
 				}
-			}
-	
+			}*/
+
+			self.refreshSelected();
+
 			return true;
 		},
 	
