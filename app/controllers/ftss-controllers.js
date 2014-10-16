@@ -321,6 +321,8 @@ FTSS.controller = (function () {
 								// reference for our searchText
 								var text = $scope.searchText.$ || '';
 
+								_verify && _verify(text);
+
 								// Update our permalink for this custom view
 								$scope.fn.setPermaLink();
 
