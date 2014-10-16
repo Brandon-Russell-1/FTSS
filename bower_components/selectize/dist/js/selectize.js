@@ -372,73 +372,7 @@
 
 		return str.length * 9;
 	};
-	
-	/**
-	 * Sets up an input to grow horizontally as the user
-	 * types. If the value is changed manually, you can
-	 * trigger the "update" handler to resize:
-	 *
-	 * $input.trigger('update');
-	 *
-	 * @param {object} $input
-	 */
-	var autoGrow = function($input) {
-		var currentWidth = null;
-	
-		var update = function(e, options) {
-			var value, keyCode, printable, placeholder, width;
-			var shift, character, selection;
-			e = e || window.event || {};
-			options = options || {};
-	
-			if (e.metaKey || e.altKey) return;
-			if (!options.force && $input.data('grow') === false) return;
-	
-			value = $input.val();
-			if (e.type && e.type.toLowerCase() === 'keydown') {
-				keyCode = e.keyCode;
-				printable = (
-					(keyCode >= 97 && keyCode <= 122) || // a-z
-					(keyCode >= 65 && keyCode <= 90)  || // A-Z
-					(keyCode >= 48 && keyCode <= 57)  || // 0-9
-					keyCode === 32 // space
-				);
-	
-				if (keyCode === KEY_DELETE || keyCode === KEY_BACKSPACE) {
-					selection = getSelection($input[0]);
-					if (selection.length) {
-						value = value.substring(0, selection.start) + value.substring(selection.start + selection.length);
-					} else if (keyCode === KEY_BACKSPACE && selection.start) {
-						value = value.substring(0, selection.start - 1) + value.substring(selection.start + 1);
-					} else if (keyCode === KEY_DELETE && typeof selection.start !== 'undefined') {
-						value = value.substring(0, selection.start) + value.substring(selection.start + 1);
-					}
-				} else if (printable) {
-					shift = e.shiftKey;
-					character = String.fromCharCode(e.keyCode);
-					if (shift) character = character.toUpperCase();
-					else character = character.toLowerCase();
-					value += character;
-				}
-			}
-	
-			placeholder = $input.attr('placeholder');
-			if (!value && placeholder) {
-				value = placeholder;
-			}
-	
-			width = measureString(value, $input) + 4;
-			if (width !== currentWidth) {
-				currentWidth = width;
-				$input.width(width);
-				$input.triggerHandler('resize');
-			}
-		};
-	
-		$input.on('keydown keyup update blur', update);
-		update();
-	};
-	
+
 	var Selectize = function($input, settings) {
 		var key, i, n, dir, input, self = this;
 		input = $input[0];
@@ -542,8 +476,6 @@
 			var $dropdown_content;
 			var $dropdown_parent;
 			var inputMode;
-			var timeout_blur;
-			var timeout_focus;
 			var tab_index;
 			var classes;
 			var classes_plugins;
@@ -598,8 +530,7 @@
 			$dropdown.on('mouseenter', '[data-selectable]', function() { return self.onOptionHover.apply(self, arguments); });
 			$dropdown.on('mousedown', '[data-selectable]', function() { return self.onOptionSelect.apply(self, arguments); });
 			watchChildEvent($control, 'mousedown', '*:not(input)', function() { return self.onItemSelect.apply(self, arguments); });
-			autoGrow($control_input);
-	
+
 			$control.on({
 				mousedown : function() { return self.onMouseDown.apply(self, arguments); },
 				click     : function() { return self.onClick.apply(self, arguments); }
@@ -610,7 +541,7 @@
 				keydown   : function() { return self.onKeyDown.apply(self, arguments); },
 				keyup     : function() { return self.onKeyUp.apply(self, arguments); },
 				keypress  : function() { return self.onKeyPress.apply(self, arguments); },
-				resize    : function() { self.positionDropdown.apply(self, []); },
+				//resize    : function() { self.positionDropdown.apply(self, []); },
 				blur      : function() { return self.onBlur.apply(self, arguments); },
 				focus     : function() { self.ignoreBlur = false; return self.onFocus.apply(self, arguments); },
 				paste     : function() { return self.onPaste.apply(self, arguments); }
@@ -2058,6 +1989,7 @@
 		 * position of the dropdown.
 		 */
 		positionDropdown: function() {
+
 			var $control = this.$control;
 			var offset = this.settings.dropdownParent === 'body' ? $control.offset() : $control.position();
 			offset.top += $control.outerHeight(true);
