@@ -149,7 +149,8 @@ a, a:hover {
     margin-left: 7%;
 }
 
-html#noAnimate body * {
+html#noAnimate .content *,
+html#noAnimate .modal-content * {
     -webkit-transition-property: none !important;
     -webkit-animation: none !important;
     -webkit-transform: none !important;
