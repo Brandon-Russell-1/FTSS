@@ -117,6 +117,10 @@
 
 		row.TTMSText = row.TTMS ? ' - ' + row.TTMS : '';
 
+		row.title = [row.Course.PDS,
+		             row.Course.Number,
+		             row.TTMS || 'Pending Class #'].join(' - ');
+
 		row.mailFTD = row.FTD.Email +
 		              '?subject=FTSS Class Inquiry for ' +
 		              row.Course.PDS +
