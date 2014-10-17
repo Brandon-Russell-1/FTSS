@@ -27,12 +27,21 @@ FTSS.ng.controller(
 
 				'model': 'scheduled',
 
+				'finalProcess': function(data) {
+
+					var calendar = $scope.schedule;
+
+					calendar.fullCalendar('removeEvents');
+
+					calendar.fullCalendar('addEventSource', _(data).toArray().flatten().value());
+
+				},
+
 				'edit': function (scope, isNew) {
 
 					if (isNew) {
 
 						scope.data.Host = 0;
-
 						scope.data.Other = 0;
 
 					}
@@ -66,6 +75,8 @@ FTSS.ng.controller(
 			});
 
 			$scope.request = utils.requestSeats($scope, $modal, SharePoint);
+
+			$scope.events = [[]];
 
 			self
 
