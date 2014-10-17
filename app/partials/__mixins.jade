@@ -98,6 +98,7 @@ mixin tableHeader(addNew, columns, instructions)
                     tbody
                         tr.middle.am-fade-and-scale(ng-repeat='row in group track by row.Id',
                         ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}',
+                        class='{{row.styles}}',
                         ng-dblclick='edit(false)',
                         id='row-{{row.Id}}')
                             once
