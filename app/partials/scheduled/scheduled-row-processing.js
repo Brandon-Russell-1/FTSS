@@ -109,6 +109,8 @@
 				row.openSeatsClass = 'warning';
 		}
 
+		row.className = row.openSeatsClass;
+
 		row.availability = {
 			'success': 'Open Seats',
 			'warning': 'No Open Seats',

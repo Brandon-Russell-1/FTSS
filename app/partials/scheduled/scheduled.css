@@ -6,3 +6,26 @@
     line-height: 2.5em;
     font-weight: 700;
 }
+
+
+.fc-event {
+    color: #000;
+}
+.fc-event.success {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border-color: #4cae4c;
+
+}
+
+.fc-event.warning {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+    border-color: #eea236;
+}
+
+.fc-event.danger {
+    backround-color: #f2dede;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
