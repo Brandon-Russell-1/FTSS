@@ -352,6 +352,8 @@ FTSS.controller = (function () {
 
 									.value();
 
+								opts.finalProcess && opts.finalProcess($scope.groups);
+
 								// Update the scope counter + overload indicator
 								$scope.counter($scope.count, $scope.count !== results.total);
 
