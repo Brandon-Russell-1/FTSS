@@ -48,3 +48,15 @@
 .btn-danger .approve {
     display: none;
 }
+
+#requests tr .approved,
+#requests tr .cancelled,
+#requests tr .denied {
+    display: none;
+}
+
+#requests tr.success .approved,
+#requests tr.danger .cancelled,
+#requests tr.warning .denied {
+    display: inline-block;
+}

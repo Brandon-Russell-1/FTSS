@@ -48,11 +48,21 @@ FTSS.ng.controller(
 
 							      var row = _.clone(group);
 
+							      if (row.Archived) {
+								      request[0] = 4;
+							      }
+
 							      if (request[0] > 1) {
 
 								      row.Archived = true;
 
 							      }
+
+							      row.styles = [
+								      'text-success success',
+								      'text-warning warning',
+								      'text-danger danger'
+							      ][request[0] - 2];
 
 							      row.Index = index;
 

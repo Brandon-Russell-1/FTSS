@@ -99,7 +99,7 @@ tr.archived td {
     padding: 1px 10px 1px 10px !important;
 }
 
-tr.archived:not(:hover) * {
+body:not(#requests) tr.archived:not(:hover) * {
     text-decoration: line-through;
     color: #bbb;
     font-weight: normal !important;
@@ -157,5 +157,5 @@ tr.archived photo, tr.archived .archiveExclude {
 }
 
 .table tr td {
-    visibility: top;
+    vertical-align: top;
 }
