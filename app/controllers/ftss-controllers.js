@@ -232,7 +232,6 @@ FTSS.controller = (function () {
 				// If this is a tagBox then we should call taghighlight as well
 				if (tagBox) {
 					utils.tagHighlight(data);
-					$scope.searchText.$ = '';
 				}
 
 				// Finally, send our data off to the post-processor
@@ -292,16 +291,6 @@ FTSS.controller = (function () {
 
 									.value()
 							);
-
-							// Try to set our searchText to the first word of the first tag from our tagBox
-							if (!tagBox && !$scope.searchText.$) {
-
-								try {
-									var val = FTSS.search.getValue().slice(0, 1);
-									$scope.searchText.$ = FTSS.search.options[val].data.text.split(' ')[0];
-								} catch (e) {}
-
-							}
 
 							// This will let us debounce our searches to speed up responsiveness
 							watcher = _.debounce(function (newVal, oldVal) {
