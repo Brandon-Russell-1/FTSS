@@ -70,7 +70,7 @@ FTSS.ng.controller(
 			});
 
 			$scope.request = function (row) {
-				
+
 				if ($scope.canRequest && row.openSeats > 0) {
 
 					var scope = $scope.$new();
@@ -161,6 +161,14 @@ FTSS.ng.controller(
 						      .then(function (row) {
 
 							            utils.cacheFiller(row);
+
+							            row.search = [
+								            row.ClassNotes,
+								            row.Course.text,
+								            row.Instructor.label,
+								            row.TTMS,
+								            row.FTD.text
+							            ].join(' ');
 
 							            switch (true) {
 								            case (row.openSeats > 0):
