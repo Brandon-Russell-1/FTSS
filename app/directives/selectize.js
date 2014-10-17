@@ -150,11 +150,10 @@
 				'persist'        : true,
 				'optgroupOrder'  : [
 					'Units',
+					'Hosts',
 					'AFSC',
 					'MDS',
-					'Instructors',
-					'MasterCourseList',
-					'Hosts'
+					'MasterCourseList'
 				],
 				'plugins'        : [
 					'optgroup_columns',
@@ -203,9 +202,7 @@
 									         'optgroup': group,
 									         'label'   : v.label || txt,
 									         'data'    : v,
-									         'search'  : JSON.stringify(v)
-										         .replace(/([,{]"\w+":)|([{}"])/gi, ' ')
-										         .toLowerCase()
+									         'search'  : (v.text || txt).toLowerCase()
 								         };
 
 							         })
@@ -216,7 +213,6 @@
 						    var headers = {
 							    'Units'           : 'FTD',
 							    'MasterCourseList': 'Course',
-							    'Instructors'     : 'Instructor',
 							    'Hosts'           : 'Host Unit'
 						    };
 
@@ -235,7 +231,6 @@
 							                options.MDS,
 							                options.MasterCourseList,
 							                options.Units,
-							                options.Instructors,
 							                options.Hosts);
 
 							    // Add the options to our searchBox

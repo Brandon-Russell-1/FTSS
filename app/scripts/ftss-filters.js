@@ -11,7 +11,6 @@
 			    'u': 'UnitId',
 			    'm': "Course/MDS",
 			    'a': "Course/AFSC",
-			    'i': 'InstructorId',
 			    'c': 'CourseId'
 		    },
 		    'requests'    : {
