@@ -22,7 +22,8 @@
 			'partials',
 			'angularFileUpload',
 			'ngAnimate',
-			'ngSanitize'
+			'ngSanitize',
+		    'ui.calendar'
 		]);
 
 	/*
