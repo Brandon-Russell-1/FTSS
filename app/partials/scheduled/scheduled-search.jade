@@ -1,0 +1,22 @@
+include ../__mixins
+include __scheduled-mixins
+
+.wrapped
+
+    +userInstructions('scheduled', true)
+
+    +grouping()
+
+        +classHeader()
+
+            .col-lg-8.pull-left
+
+                +classData(true)
+
+            .col-lg-2.pull-right.text-right
+
+                +seatStats()
+
+            .clearfix
+
+            +classActions(false)

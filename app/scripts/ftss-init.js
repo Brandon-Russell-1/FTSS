@@ -41,6 +41,7 @@
 						    'home',
 						    'requirements',
 						    'scheduled',
+						    'scheduled-ftd',
 						    'ttms',
 						    'requests',
 						    'instructors',

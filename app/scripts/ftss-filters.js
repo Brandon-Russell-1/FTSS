@@ -7,28 +7,32 @@
 	var filters = {},
 
 	    filterMaps = {
-		    'scheduled'   : {
+		    'scheduled'    : {
 			    'u': 'UnitId',
 			    'm': "Course/MDS",
 			    'a': "Course/AFSC",
 			    'c': 'CourseId'
 		    },
-		    'requests'    : {
+		    'scheduled-ftd': {
 			    'u': 'UnitId'
 		    },
-		    'requirements': {
+		    'requests'     : {
+			    'u': 'UnitId'
+		    },
+		    'requirements' : {
 			    'h': 'HostId',
 			    'u': 'UnitId'
 		    },
-		    'backlog'     : {
+		    'backlog'      : {
 			    'h': 'HostId'
 		    }
 	    },
 
 	    max = {
-		    'backlog'     : 1,
-		    'requirements': 1,
-		    'requests'    : 1
+		    'backlog'      : 1,
+		    'requirements' : 1,
+		    'requests'     : 1,
+		    'scheduled-ftd': 1
 	    };
 
 	filters.map = function () {
