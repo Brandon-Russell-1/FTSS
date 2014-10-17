@@ -54,6 +54,10 @@
     white-space: nowrap
 }
 
+.optgroup.count-1 {
+    width: 100%;
+}
+
 .optgroup {
     margin-top: -5px;
     background-color: #f5fafc !important;
