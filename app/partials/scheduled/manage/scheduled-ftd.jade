@@ -7,7 +7,7 @@ include ../__scheduled-mixins
 
     +userInstructions('scheduled-ftd', true)
 
-    div(ui-calendar, calendar='schedule', ng-model='events')
+    div(ui-calendar='uiConfig.calendar', calendar='schedule', ng-model='events')
 
     +grouping()
 

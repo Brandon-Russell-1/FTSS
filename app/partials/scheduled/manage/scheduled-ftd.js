@@ -27,13 +27,17 @@ FTSS.ng.controller(
 
 				'model': 'scheduled',
 
-				'finalProcess': function(data) {
+				'finalProcess': function (data) {
 
-					var calendar = $scope.schedule;
+					var events = [];
 
-					calendar.fullCalendar('removeEvents');
+					_(data).each(function (group) {
+						events = events.concat(group);
+					});
 
-					calendar.fullCalendar('addEventSource', _(data).toArray().flatten().value());
+					$scope.schedule.fullCalendar('removeEvents');
+
+					$scope.schedule.fullCalendar('addEventSource', events);
 
 				},
 
@@ -76,7 +80,32 @@ FTSS.ng.controller(
 
 			$scope.request = utils.requestSeats($scope, $modal, SharePoint);
 
-			$scope.events = [[]];
+			$scope.events = [
+				[]
+			];
+
+			/* config object */
+			$scope.uiConfig = {
+				calendar: {
+					height     : 600,
+					editable   : true,
+					weekends   : false,
+					header     : {
+						left  : 'title',
+						center: '',
+						right : 'today prev,next'
+					},
+					eventClick : function (event) {
+						$scope.edit.apply({'row': event});
+					},
+					eventDrop  : function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+						console.log(dayDelta);
+					},
+					eventResize: function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
+						console.log(dayDelta);
+					}
+				}
+			};
 
 			self
 
