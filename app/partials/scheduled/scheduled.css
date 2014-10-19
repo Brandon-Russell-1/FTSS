@@ -1,16 +1,16 @@
 #modalScheduledOpenSeats {
-    float:right!important;
-    width: 30%!important;
+    float: right !important;
+    width: 30% !important;
     text-align: right;
     font-style: italic;
     line-height: 2.5em;
     font-weight: 700;
 }
 
-
 .fc-event {
     color: #000;
 }
+
 .fc-event.success {
     background-color: #dff0d8;
     color: #3c763d;
@@ -28,4 +28,11 @@
     backround-color: #f2dede;
     background-color: #d9534f;
     border-color: #d43f3a;
+}
+
+input#ttms {
+    position: absolute;
+    width: 100px;
+    top: 2.5%;
+    right: 2.5%;
 }

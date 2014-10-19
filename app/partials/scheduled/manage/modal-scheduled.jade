@@ -4,6 +4,8 @@ form.form-horizontal(name='modal')
 
     +modalHeader('Build Class', "{{data.Course.Number}}")
 
+        input.pull-right.form-control#ttms(type='text', ng-model='data.TTMS', placeholder='Class #')
+
     .modal-body
 
         +formGroup('FTD', 'scheduled-edit-ftd')
@@ -41,7 +43,7 @@ form.form-horizontal(name='modal')
                 .input-group-addon.w15
                     +icon('calendar_range')
 
-                input.form-control.w45(ype='text', ng-model='data.Start', data-max-date='{{End}}', placeholder='Start Date', bs-datepicker='', required='required')
+                input.form-control.w45(type='text', ng-model='data.Start', data-max-date='{{End}}', placeholder='Start Date', bs-datepicker='', required='required')
 
                 input.form-control.w45.pull-right(type='text', ng-model='data.End', data-min-date='{{Start}}', placeholder='End Date', bs-datepicker='')
 
