@@ -79,6 +79,12 @@ FTSS.ng.controller(
 
 						      utils.cacheFiller(row);
 
+						      if (row.ClassNotes) {
+
+							      row.ClassNotes = 'FTD: ' + row.ClassNotes;
+
+						      }
+
 						      row.age = moment(row.Created).fromNow();
 
 						      row.location = row.FTD.LongName + ': ' + row.FTD.LCode;

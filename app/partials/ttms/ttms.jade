@@ -1,38 +1,32 @@
 include ../__mixins
 
-- var columns = {'Course':15, Submitted: 10, 'Start Date':10, 'End Date':10, 'Class Max':10, Notes:5}
+- var columns = {Created:10, Course: 15, Start:10, End:10, Max:5, Notes: 40}
 
 +tableHeader(false, columns, 'ttms')
 
-    td: span(hover='popover-priority'): +icon('asterisk')
+    td.italics.topFix {{row.age}}
 
-    td.bold {{row.Course.Number}}
+    td.bold.topFix {{row.Course.PDS}} - {{row.Course.Number}}
 
-    td.italics {{row.age}}
+    td.bold.topFix {{row.start}}
 
-    td.bold {{row.start}}
+    td.bold.topFix {{row.end}}
 
-    td.bold {{row.end}}
-
-    td.double
+    td.bigLetter
         .courseMax {{row.Course.Max}}
 
     td
 
-        span(ng-show='row.ClassNotes',
-            hover='FTD Notes',
-            content='{{row.ClassNotes}}<br>&nbsp;'
-            left)
+        p.form-control(contenteditable,
+                                    ng-model='row.J4Notes',
+                                    onEnter='addTTMS(row)',
+                                    placeholder='Type to leave notes for the FTD')
 
-            +icon('search')
+        | {{row.ClassNotes}}
 
     td
 
-        .col-lg-10
-            input.form-control.pull-right(ng-model='row.TTMS',
-                                            ng-blur='addTTMS(row)',
-                                            placeholder='Enter Class ID'
-                                            explain='Press enter or click the green button when done.',
-                                            top)
-        .col-lg-2
-            .btn.btn-small.btn-success.pull-right.white(ng-click='addTTMS(row)'): +icon('arrow-circle-right')
+        p.form-control.pull-right(contenteditable,
+                                    ng-model='row.TTMS',
+                                    onEnter='updateNotes(row)',
+                                    placeholder='Class #')
