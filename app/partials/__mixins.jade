@@ -90,9 +90,9 @@ mixin tableHeader(addNew, columns, instructions)
                 table.table.table-striped.table-expanded.table-hover.rollup
 
                     thead
-                        th.w5
+                        th.w5#flags
                         each width, label in columns
-                            th(class='w' + width)= label
+                            th(style='width:' + width + '%')= label
                         th.w10#action
 
                     tbody
@@ -166,6 +166,8 @@ mixin modalHeader(create, update)
                 +icon('edit')
                 | Update&nbsp;
                 =update
+
+        block
 
 
 mixin modalFooter(submitText, defaultShow)
