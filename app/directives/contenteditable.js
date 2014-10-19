@@ -24,7 +24,9 @@
 						return;
 					} // do nothing if no ng-model
 
-					var onEnter = attrs.hasOwnProperty('onenter');
+					var onEnter = attrs.hasOwnProperty('onenter'),
+
+					    placeholder = attrs.placeholder;
 
 					// Specify how UI should be updated
 					ngModel.$render = function () {
@@ -43,6 +45,36 @@
 					element.on('blur keyup change', function () {
 						scope.$apply(read);
 					});
+
+					if (placeholder) {
+
+						var setPlaceholder = function () {
+
+							if (!ngModel.$modelValue || !element.text()) {
+
+								element.text(placeholder);
+								element.addClass('placeholder');
+
+							}
+
+						};
+
+						element.on('focus', function () {
+
+							if (element.text() === placeholder) {
+
+								element.empty();
+								element.removeClass('placeholder');
+
+							}
+
+						});
+
+						element.on('blur', setPlaceholder);
+
+						setPlaceholder();
+
+					}
 
 					read(); // initialize
 
