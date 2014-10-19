@@ -75,9 +75,9 @@ utils.cacheFiller = function (row) {
 
 	row.Instructor = caches.Instructors[row.InstructorId] || {};
 
-	row.start = row.Start.toLocaleDateString();
+	row.startText = row.start = row.Start.toLocaleDateString();
 
-	row.end = row.End.toLocaleDateString();
+	row.endText = row.end = row.End.toLocaleDateString();
 
 
 	var seats;
