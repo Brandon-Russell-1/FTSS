@@ -22,11 +22,14 @@ include ../__mixins
                                     onEnter='addTTMS(row)',
                                     placeholder='Type to leave notes for the FTD')
 
-        | {{row.ClassNotes}}
+        p(ng-if='row.ClassNotes')
+            b FTD Notes:&nbsp;
+            | {{row.ClassNotes}}
 
     td
 
         p.form-control.pull-right(contenteditable,
                                     ng-model='row.TTMS',
-                                    onEnter='updateNotes(row)',
+                                    onEnter='inlineUpdate(row, "TTMS", true)',
+                                    blur,
                                     placeholder='Class #')
