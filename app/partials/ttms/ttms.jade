@@ -18,9 +18,10 @@ include ../__mixins
     td
 
         p.form-control(contenteditable,
-                                    ng-model='row.J4Notes',
-                                    onEnter='addTTMS(row)',
-                                    placeholder='Type to leave notes for the FTD')
+                        blur,
+                        ng-model='row.J4Notes',
+                        onEnter='inlineUpdate(row, "J4Notes", false)',
+                        placeholder='Type to leave notes for the FTD')
 
         p(ng-if='row.ClassNotes')
             b FTD Notes:&nbsp;
