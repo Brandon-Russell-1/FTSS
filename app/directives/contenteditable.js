@@ -50,18 +50,18 @@
 
 						var setPlaceholder = function () {
 
-							if (!ngModel.$modelValue || !element.text()) {
+							var model = utils.deepRead(scope, attrs.ngModel) || placeholder;
 
-								element.text(placeholder);
-								element.addClass('placeholder');
+							ngModel.$setViewValue(model);
+							ngModel.$render();
 
-							}
+							(model === placeholder) && element.addClass('placeholder');
 
 						};
 
 						element.on('focus', function () {
 
-							if (element.text() === placeholder) {
+							if (ngModel.$viewValue === placeholder) {
 
 								element.empty();
 								element.removeClass('placeholder');
@@ -76,15 +76,23 @@
 
 					}
 
+					if (attrs.hasOwnProperty('blur')) {
+						element.on('blur', function () {
+							if (ngModel.$viewValue && ngModel.$viewValue !== placeholder) {
+								scope.$eval(attrs.onenter);
+							}
+						});
+					}
+
 					read(); // initialize
 
 					// Write data to the model
 					function read() {
-						var txt = element.text().replace(/[^\w.,*?[\]()!=]/mg, ' ');
 
-						if (txt !== '') {
-							ngModel.$setViewValue(txt);
-						}
+						var txt = element.text().replace(/[^\w.#,*?[\]()!=]/mg, ' ');
+
+						txt && ngModel.$setViewValue(txt);
+
 					}
 				}
 			};

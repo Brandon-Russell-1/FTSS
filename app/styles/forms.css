@@ -152,10 +152,14 @@ input:focus::-webkit-input-placeholder {
     color: transparent;
 }
 
-input:-ms-input-placeholder,
 .placeholder {
+    color:#aaa!important;
+}
+
+input:-ms-input-placeholder,
+{
     color: #aaa !important;
-    background: red!important;
+    background: red !important;
 }
 
 .css-checkbox {
