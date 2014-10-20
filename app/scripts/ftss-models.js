@@ -102,6 +102,7 @@
 					'Other',
 					'Requests_JSON',
 					'ClassNotes',
+					'J4Notes',
 					'TTMS'
 				]
 			}
@@ -118,7 +119,8 @@
 					'CourseId',
 					'Start',
 					'End',
-					'ClassNotes'
+					'ClassNotes',
+					'J4Notes'
 				]
 			}
 
