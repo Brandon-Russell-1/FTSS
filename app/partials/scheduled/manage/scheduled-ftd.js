@@ -44,6 +44,23 @@ FTSS.ng.controller(
 
 				    'edit': function (scope, isNew) {
 
+					    var getDates = function () {
+
+						    return scope.data.Start && scope.data.End ?
+
+						           {
+							           'title'           : '***THIS COURSE***',
+							           'start'           : scope.data.Start,
+							           'end'             : scope.data.End,
+							           'className'       : 'success',
+							           'editable'        : true,
+							           'durationEditable': true
+						           }
+
+							    : null;
+
+					    };
+
 					    // If this is a new class, pre-fill the reserved seats with 0
 					    if (isNew) {
 
@@ -107,6 +124,8 @@ FTSS.ng.controller(
 									    // Exit lodash chain
 									    .value();
 
+								    result.push(getDates());
+
 								    // update the event source for the calendar
 								    scope.eventsInstructor[0] = result;
 
@@ -115,7 +134,7 @@ FTSS.ng.controller(
 						    } else {
 
 							    // Make sure we remove any old events
-							    scope.eventsInstructor[0] = [];
+							    scope.eventsInstructor[0] = [getDates()];
 
 						    }
 
