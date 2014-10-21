@@ -10,97 +10,175 @@ FTSS.ng.controller(
 		function ($scope, $modal, SharePoint) {
 
 			var self = FTSS.controller($scope, {
-				'sort' : 'Start',
-				'group': 'Course.MDS',
+				    'sort' : 'Start',
+				    'group': 'Course.MDS',
 
-				'grouping': {
-					'Course.MDS'  : 'MDS',
-					'Course.AFSC' : 'AFSC',
-					'availability': 'Open Seats'
-				},
+				    'grouping': {
+					    'Course.MDS'  : 'MDS',
+					    'Course.AFSC' : 'AFSC',
+					    'availability': 'Open Seats'
+				    },
 
-				'sorting': {
-					'Start'      : 'Start Date',
-					'course'     : 'Course',
-					'Course.AFSC': 'AFSC'
-				},
+				    'sorting': {
+					    'Start'      : 'Start Date',
+					    'course'     : 'Course',
+					    'Course.AFSC': 'AFSC'
+				    },
 
-				'model': 'scheduled',
+				    'model': 'scheduled',
 
-				'finalProcess': function (data) {
+				    'modalPlacement': 'wide',
 
-					var events = [];
+				    // We will be post-post-processing this data for the calendar (needs some special data
+				    'finalProcess'  : function (data) {
 
-					_(data).each(function (group) {
-						events = events.concat(group);
-					});
+					    var events = [];
 
-					$scope.schedule.fullCalendar('removeEvents');
+					    _(data).each(function (group) {
+						    events = events.concat(group);
+					    });
 
-					$scope.schedule.fullCalendar('addEventSource', events);
+					    $scope.events[0] = events;
 
-				},
+				    },
 
-				'edit': function (scope, isNew) {
+				    'edit': function (scope, isNew) {
 
-					if (isNew) {
+					    // If this is a new class, pre-fill the reserved seats with 0
+					    if (isNew) {
 
-						scope.data.Host = 0;
-						scope.data.Other = 0;
+						    scope.data.Host = 0;
+						    scope.data.Other = 0;
 
-					}
+					    }
 
-					scope.getOpenSeats = function () {
+					    // Some init settings for FullCalendar
+					    scope.uiConfigInstructor = {
+						    weekends: false,
+						    header  : {
+							    left  : 'title',
+							    center: '',
+							    right : 'today prev,next'
+						    }
+					    };
 
-						if (scope.data.CourseId) {
+					    // Setup uour empty calendar for FullCalendar
+					    scope.eventsInstructor = [];
 
-							var requests = _(scope.data.Requests_JSON).reduce(function (count, request) {
+					    // Monitors the InstructorId to load their teaching schedule
+					    scope.$watch('data.InstructorId', function (instructor) {
 
-								    // Only count seats pending (1) or approved (2) against total
-								    return  (request[0] < 3) ? count + request[1].length : count;
+						    // If we have selected an instructor, try to get their teaching schedule
+						    if (instructor) {
 
-							    }, 0),
+							    // Get a copy of the model
+							    var read = _.clone(FTSS.models.calendar);
 
-							    open = (caches.MasterCourseList[scope.data.CourseId].Max -
-							            (scope.data.Host || 0) -
-							            (scope.data.Other || 0) -
-							            requests);
+							    // Our SP filters
+							    read.params.$filter = [
 
-							switch (true) {
+								    // Only include this instructor
+									    '(InstructorId eq ' + instructor + ')',
 
-								case (open > 0):
-									return open + ' Open Seats';
+								    // Do not include archived courses
+									    '(Archived eq false)'
 
-								case (open < 0):
-									return 'Overbooked by ' + Math.abs(open);
+							    ].join(' and ');
 
-								default:
-									return 'Class Full';
+							    // Request the classes for this instructor from SP
+							    SharePoint.read(read).then(function (result) {
 
-							}
+								    // Convert our SP data into an array for FullCalendar
+								    result = _(result)
 
-						} else {
+									    // Perform some adjusments for Fullcalendar
+									    .each(function (row) {
 
-							return '';
+										          row.title = caches.MasterCourseList[row.CourseId].PDS;
+										          row.start = row.Start;
+										          row.end = row.End;
+										          row.className = 'info';
 
-						}
+									          })
 
-					};
+									    // FullCalendar needs an array
+									    .toArray()
 
-				}
+									    // Exit lodash chain
+									    .value();
 
-			});
+								    // update the event source for the calendar
+								    scope.eventsInstructor[0] = result;
 
+							    })
+
+						    } else {
+
+							    // Make sure we remove any old events
+							    scope.eventsInstructor[0] = [];
+
+						    }
+
+					    });
+
+					    /**
+					     * Get Open Seats, performs live counting of remaining seat openings in modals
+					     *
+					     * @returns {string}
+					     */
+					    scope.getOpenSeats = function () {
+
+						    // Only attempt this if a CourseID exists
+						    if (scope.data.CourseId) {
+
+							    var requests = _(scope.data.Requests_JSON).reduce(function (count, request) {
+
+								        // Only count seats pending (1) or approved (2) against total
+								        return  (request[0] < 3) ? count + request[1].length : count;
+
+							        }, 0),
+
+							        open = (caches.MasterCourseList[scope.data.CourseId].Max -
+							                (scope.data.Host || 0) -
+							                (scope.data.Other || 0) -
+							                requests);
+
+							    // Provide human-friendly seat availability counters
+							    switch (true) {
+
+								    case (open > 0):
+									    return open + ' Open Seats';
+
+								    case (open < 0):
+									    return 'Overbooked by ' + Math.abs(open);
+
+								    default:
+									    return 'Class Full';
+
+							    }
+
+						    } else {
+
+							    return '';
+
+						    }
+
+					    };
+
+				    }
+
+			    })
+				;
+
+			// Bind the seat request function
 			$scope.request = utils.requestSeats($scope, $modal, SharePoint);
 
-			$scope.events = [
-				[]
-			];
+			// Setup a blank calendar
+			$scope.events = [];
 
-			/* config object */
+			// FullCalendar initial settings
 			$scope.uiConfig = {
 				calendar: {
-					height     : 600,
 					editable   : true,
 					weekends   : false,
 					header     : {
@@ -126,8 +204,10 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
+					      // We can always request in this view
 					      $scope.canRequest = true;
 
+					      // Finish data binding and processing
 					      self.initialize(data).then(utils.processScheduledRow);
 
 				      });
