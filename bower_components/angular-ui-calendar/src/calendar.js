@@ -14,6 +14,7 @@ angular.module('ui.calendar', [])
 
       var sourceSerialId = 1,
           eventSerialId = 1,
+          sources = $scope.eventSources,
           extraEventSignature = $scope.calendarWatchEvent ? $scope.calendarWatchEvent : angular.noop,
 
           wrapFunctionWithScopeApply = function(functionToWrap){
@@ -25,8 +26,9 @@ angular.module('ui.calendar', [])
                       // In this way the function will be safely executed on the next digest.
 
                       var args = arguments;
+                      var _this = this;
                       $timeout(function(){
-                          functionToWrap.apply(this, args);
+                        functionToWrap.apply(_this, args);
                       });
                   };
               }
@@ -35,11 +37,11 @@ angular.module('ui.calendar', [])
           };
 
       this.eventsFingerprint = function(e) {
-        if (!e.__uiCalId) {
-          e.__uiCalId = eventSerialId++;
+        if (!e._id) {
+          e._id = eventSerialId++;
         }
         // This extracts all the information we need from the event. http://jsperf.com/angular-calendar-events-fingerprint/3
-        return "" + e.__uiCalId + (e.id || '') + (e.title || '') + (e.url || '') + (+e.start || '') + (+e.end || '') +
+        return "" + e._id + (e.id || '') + (e.title || '') + (e.url || '') + (+e.start || '') + (+e.end || '') +
           (e.allDay || '') + (e.className || '') + extraEventSignature(e) || '';
       };
 
@@ -50,8 +52,8 @@ angular.module('ui.calendar', [])
       this.allEvents = function() {
         // return sources.flatten(); but we don't have flatten
         var arraySources = [];
-        for (var i = 0, srcLen = $scope.eventSources.length; i < srcLen; i++) {
-          var source = $scope.eventSources[i];
+        for (var i = 0, srcLen = sources.length; i < srcLen; i++) {
+          var source = sources[i];
           if (angular.isArray(source)) {
             // event source as array
             arraySources.push(source);
@@ -189,19 +191,19 @@ angular.module('ui.calendar', [])
       controller: 'uiCalendarCtrl',
       link: function(scope, elm, attrs, controller) {
 
-        var sourcesChanged = false,
-            eventSourcesWatcher = controller.changeWatcher(scope.eventSources, controller.sourcesFingerprint),
+        var sources = scope.eventSources,
+            sourcesChanged = false,
+            eventSourcesWatcher = controller.changeWatcher(sources, controller.sourcesFingerprint),
             eventsWatcher = controller.changeWatcher(controller.allEvents, controller.eventsFingerprint),
             options = null;
 
         function getOptions(){
-
           var calendarSettings = attrs.uiCalendar ? scope.$parent.$eval(attrs.uiCalendar) : {},
               fullCalendarConfig;
 
           fullCalendarConfig = controller.getFullCalendarConfig(calendarSettings, uiCalendarConfig);
 
-          options = { eventSources: scope.eventSources };
+          options = { eventSources: sources };
           angular.extend(options, fullCalendarConfig);
 
           var options2 = {};
@@ -214,10 +216,13 @@ angular.module('ui.calendar', [])
         }
 
         scope.destroy = function(){
+          if(scope.calendar && scope.calendar.fullCalendar){
+            scope.calendar.fullCalendar('destroy');
+          }
           if(attrs.calendar) {
-            scope.calendar = scope.$parent[attrs.calendar] =  elm.html('');
+            scope.calendar = scope.$parent[attrs.calendar] =  $(elm).html('');
           } else {
-            scope.calendar = elm.html('');
+            scope.calendar = $(elm).html('');
           }
         };
 
@@ -226,8 +231,8 @@ angular.module('ui.calendar', [])
         };
 
         eventSourcesWatcher.onAdded = function(source) {
-          scope.calendar.fullCalendar('addEventSource', source);
-          sourcesChanged = true;
+            scope.calendar.fullCalendar('addEventSource', source);
+            sourcesChanged = true;
         };
 
         eventSourcesWatcher.onRemoved = function(source) {
@@ -240,21 +245,25 @@ angular.module('ui.calendar', [])
         };
 
         eventsWatcher.onRemoved = function(event) {
-          scope.calendar.fullCalendar('removeEvents', function(e) { return e === event; });
+          scope.calendar.fullCalendar('removeEvents', function(e) { 
+            return e._id === event._id;
+          });
         };
 
         eventsWatcher.onChanged = function(event) {
+          event._start = $.fullCalendar.moment(event.start);
+          event._end = $.fullCalendar.moment(event.end);
           scope.calendar.fullCalendar('updateEvent', event);
         };
 
         eventSourcesWatcher.subscribe(scope);
-     /*   eventsWatcher.subscribe(scope, function(newTokens, oldTokens) {
+        eventsWatcher.subscribe(scope, function(newTokens, oldTokens) {
           if (sourcesChanged === true) {
             sourcesChanged = false;
             // prevent incremental updates in this case
             return false;
           }
-        });*/
+        });
 
         scope.$watch(getOptions, function(newO,oldO){
             scope.destroy();
