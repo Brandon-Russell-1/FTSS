@@ -173,7 +173,7 @@ right {
 .multi .selected h5:before, .multi .optgroup:not(.mastercourselist) .selected:before, .single .selected:before {
     content: "\2713\00a0\00a0";
 }
-
+/*
 .wide .item * {
     background-color: transparent !important;
     color: #000 !important;
@@ -189,7 +189,7 @@ right {
 .wide .item em {
     display: inline !important;
     font-style: normal;
-}
+}*/
 
 .optgroup {
     float: left
