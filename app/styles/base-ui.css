@@ -162,3 +162,7 @@ html#noAnimate .modal-content * {
 label {
     cursor: inherit;
 }
+
+.wideText:not(.placeholder) {
+    letter-spacing: .05em;
+}

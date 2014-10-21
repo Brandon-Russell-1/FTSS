@@ -17,7 +17,7 @@ include ../__mixins
 
     td
 
-        p.form-control(contenteditable,
+        p.form-control.wideText(contenteditable,
                         blur,
                         ng-model='row.J4Notes',
                         onEnter='inlineUpdate(row, "J4Notes", false)',
@@ -25,11 +25,11 @@ include ../__mixins
 
         p(ng-if='row.ClassNotes')
             b FTD Notes:&nbsp;
-            | {{row.ClassNotes}}
+            span.italics {{row.ClassNotes}}
 
     td
 
-        p.form-control.pull-right(contenteditable,
+        p.form-control.pull-right.wideText(contenteditable,
                                     ng-model='row.TTMS',
                                     onEnter='inlineUpdate(row, "TTMS", true)',
                                     blur,
