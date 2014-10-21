@@ -109,6 +109,19 @@
 
 		},
 
+		'calendar': {
+
+			'source': 'Scheduled',
+			'params': {
+				'$select': [
+					'CourseId',
+					'Start',
+					'End'
+				]
+			}
+
+		},
+
 		'ttms': {
 
 			'source': 'Scheduled',
