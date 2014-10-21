@@ -8,65 +8,73 @@ form.form-horizontal(name='modal')
 
     .modal-body
 
-        +formGroup('FTD', 'scheduled-edit-ftd')
-            .input-group
-                .input-group-addon.w15
-                    +icon('building-o')
-                .input-group-selectize
-                    select(selectize='Units', bind='UnitId', remember='ftd')
-        br
+        .col-lg-6
 
-        +formGroup('Course', 'scheduled-edit-course')
-            .input-group
-                .input-group-addon.w15
-                    +icon('books')
-                .input-group-selectize
-                    select(selectize='MasterCourseList',
-                            bind='CourseId',
-                            watch='UnitId',
-                            watchList='Units.Courses')
-        br
+            +formGroup('FTD', 'scheduled-edit-ftd')
+                .input-group
+                    .input-group-addon.w15
+                        +icon('building-o')
+                    .input-group-selectize
+                        select(selectize='Units', bind='UnitId', remember='ftd')
+            br
 
-        +formGroup('Instructor', 'scheduled-edit-instructor')
-            .input-group
-                .input-group-addon.w15
-                    +icon('instructor')
-                .input-group-selectize
-                    select(selectize='Instructors',
-                            bind='InstructorId',
-                            watch='UnitId',
-                            watchList='Units.Instructors')
-        br
+            +formGroup('Course', 'scheduled-edit-course')
+                .input-group
+                    .input-group-addon.w15
+                        +icon('books')
+                    .input-group-selectize
+                        select(selectize='MasterCourseList',
+                        bind='CourseId',
+                        watch='UnitId',
+                        watchList='Units.Courses')
+            br
 
-        +formGroup('Dates', 'scheduled-edit-dates')
-            .input-group
-                .input-group-addon.w15
-                    +icon('calendar_range')
+            +formGroup('Instructor', 'scheduled-edit-instructor')
+                .input-group
+                    .input-group-addon.w15
+                        +icon('instructor')
+                    .input-group-selectize
+                        select(selectize='Instructors',
+                        bind='InstructorId',
+                        watch='UnitId',
+                        watchList='Units.Instructors')
 
-                input.form-control.w45(type='text', ng-model='data.Start', data-max-date='{{End}}', placeholder='Start Date', bs-datepicker='', required='required')
+            br
 
-                input.form-control.w45.pull-right(type='text', ng-model='data.End', data-min-date='{{Start}}', placeholder='End Date', bs-datepicker='')
+            +formGroup('Dates', 'scheduled-edit-dates')
+                .input-group
+                    .input-group-addon.w15
+                        +icon('calendar_range')
 
-        br
+                    input.form-control.w45(type='text', ng-model='data.Start', data-max-date='{{End}}', placeholder='Start Date', bs-datepicker='', required='required')
 
-        +formGroup('Notes', 'scheduled-edit-notes')
-            .input-group
-                textarea.form-control(type='text', ng-model='data.ClassNotes')
+                    input.form-control.w45.pull-right(type='text', ng-model='data.End', data-min-date='{{Start}}', placeholder='End Date', bs-datepicker='')
 
-        hr
+            br
 
-        +formGroup('Reserved', 'scheduled-edit-reserved')
-            .input-group.pull-left(style='width:30%!important')
-                input.form-control(ng-model='data.Host', type='number', min='0', required)
-                .input-group-addon Host
+            +formGroup('Reserved', 'scheduled-edit-reserved')
+                .input-group.pull-left(style='width:30%!important')
+                    input.form-control(ng-model='data.Host', type='number', min='0', required)
+                    .input-group-addon Host
 
-            .input-group.pull-left(style='width:30%!important;margin-left:5%')
-                input.form-control(ng-model='data.Other', type='number', min='0', required)
-                .input-group-addon Non-Host
+                .input-group.pull-left(style='width:30%!important;margin-left:5%')
+                    input.form-control(ng-model='data.Other', type='number', min='0', required)
+                    .input-group-addon Non-Host
 
-            #modalScheduledOpenSeats.input-group {{getOpenSeats()}}
+                #modalScheduledOpenSeats.input-group {{getOpenSeats()}}
+
+            .clearfix
+
+            br
+
+            +formGroup('Notes', 'scheduled-edit-notes')
+                .input-group
+                    textarea.form-control(type='text', ng-model='data.ClassNotes')
+
+        .col-lg-6
+
+            #instructorCalendar(ui-calendar='uiConfigInstructor', calendar='scheduleInstructor', ng-model='eventsInstructor')
 
         .clearfix
-
 
     +modalFooter()
