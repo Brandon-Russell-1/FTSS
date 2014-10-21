@@ -415,6 +415,7 @@ FTSS.controller = (function () {
 
 					// Create the angular-strap modal using this model's modal template
 					instance = $modal({
+						                  'placement'      : opts.modalPlacement || 'top',
 						                  'scope'          : scope,
 						                  'backdrop'       : 'static',
 						                  'contentTemplate': '/partials/modal-' + (opts.modal || opts.model) + '.html'
