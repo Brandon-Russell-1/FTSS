@@ -7,8 +7,24 @@
     font-weight: 700;
 }
 
+.modal .fc-event {
+    opacity: .7;
+}
+
 .fc-event {
     color: #000;
+}
+
+.fc-event.primary {
+    color: #428bca;
+    background-color: #428bca;
+    border-color: #428bca;
+}
+
+.fc-event.info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
 }
 
 .fc-event.success {
@@ -35,4 +51,8 @@ input#ttms {
     width: 100px;
     top: 2.5%;
     right: 2.5%;
+}
+
+#instructorCalendar {
+
 }
