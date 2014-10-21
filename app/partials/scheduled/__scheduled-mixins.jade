@@ -112,13 +112,21 @@ mixin classData(location)
                 td Hours
                 td {{row.Course.Hours}}
 
-mixin notes()
+mixin notes(j4)
 
     .col-lg-12
 
         br
 
         .italics {{row.ClassNotes}}
+
+        if (j4)
+
+            br
+
+            .wideText(ng-if='row.J4Notes')
+                b J4 Schedulers:&nbsp;
+                | {{row.J4Notes}}
 
 
 mixin classActions(edit)
