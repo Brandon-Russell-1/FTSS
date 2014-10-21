@@ -44,7 +44,13 @@ FTSS.ng.controller(
 						       'ftd'
 						      ]);
 
-					      self.initialize(data).then(utils.processScheduledRow);
+					      self.initialize(data).then(function(row) {
+
+						      utils.processScheduledRow(row);
+
+						      row.Archived = row.openSeats < 1;
+
+					      });
 
 				      });
 
