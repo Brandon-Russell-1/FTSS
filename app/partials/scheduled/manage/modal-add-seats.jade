@@ -1,0 +1,50 @@
+include ../../__mixins
+
+form.form-horizontal(name='modal')
+
+    .modal-header.caps
+        h3
+            +icon('plus-circle')
+            | {{data.Course.Number}} Seat Additions
+
+    #requestSeats.modal-body
+
+        p.lead
+            ng-pluralize(count='data.openSeats - data.Students.length',
+                            when='{1:"There is only one seat ", 0: "There are no more seats ", "other":"There are {} seats "}')
+            | available for the {{data.start}} class.
+        br
+
+        +formGroup('Host', 'scheduled-request-host')
+            .input-group
+                .input-group-addon.w15
+                    +icon('puzzle-piece')
+                .input-group-selectize
+                    select(selectize='Hosts', bind='HostId', remember='host')
+
+        +formGroup('Students', 'scheduled-request-students')
+            .input-group
+                .input-group-addon.w15
+                    +icon('student_hand')
+                .input-group-selectize
+                    select(selectize, bind='Students', multiple, max='{{data.openSeats}}', create)
+
+        br
+
+        div(explain='scheduled-request-notes', right)
+            h4
+                +icon('edit')
+                | Seat Comments
+            textarea.form-control(ng-model='data.Notes')
+
+        br
+
+        h4.pull-right(ng-show='data.Students.length > 0')
+            +icon('info-circle')
+            | You are adding
+            b(ng-pluralize, count='data.Students.length', when='{1:" one seat","other":" {} seats"}') .
+
+        .clearfix
+
+    +modalFooter('Add Students', '!data.HostId || data.Students.length < 1')
+

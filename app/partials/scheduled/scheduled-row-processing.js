@@ -9,7 +9,7 @@
 
 	utils.requestSeats = function ($scope, $modal, SharePoint) {
 
-		return function (row) {
+		return function (row, autoApprove) {
 
 			if ($scope.canRequest && row.openSeats > 0) {
 
@@ -24,7 +24,7 @@
 
 						'scope'          : scope,
 						'backdrop'       : 'static',
-						'contentTemplate': '/partials/modal-request-seats.html'
+						'contentTemplate': autoApprove ? '/partials/modal-add-seats.html' : '/partials/modal-request-seats.html'
 
 					}).destroy;
 

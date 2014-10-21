@@ -125,11 +125,11 @@ mixin classActions(edit)
 
         .pull-right.invert
 
-            .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-if='row.openSeats && canRequest')
-                span.btn-label: +icon('plus-circle')
-                | Request Seats
-
             if edit
+
+                .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row, true)', ng-if='row.openSeats')
+                    span.btn-label: +icon('plus-circle')
+                    | Add Students
 
                 .btn.btn-warning.btn-labeled.btn-muted(ng-click='edit(false)')
                     span.btn-label: +icon('edit')
@@ -141,5 +141,11 @@ mixin classActions(edit)
 
                     span.btn-label: +icon('trash_hide')
                     | Cancel Class
+
+            else
+
+                .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-if='row.openSeats && canRequest')
+                    span.btn-label: +icon('plus-circle')
+                    | Request Seats
 
         .clearfix
