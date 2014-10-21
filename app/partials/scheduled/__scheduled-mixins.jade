@@ -112,9 +112,13 @@ mixin classData(location)
                 td Hours
                 td {{row.Course.Hours}}
 
-    br
+mixin notes()
 
-    .italics {{row.ClassNotes}}
+    .col-lg-12
+
+        br
+
+        .italics {{row.ClassNotes}}
 
 
 mixin classActions(edit)
