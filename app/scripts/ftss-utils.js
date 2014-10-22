@@ -75,25 +75,27 @@ utils.cacheFiller = function (row) {
 
 	row.Instructor = caches.Instructors[row.InstructorId] || {};
 
-	row.startText = row.start = row.Start.toLocaleDateString();
+	row.startText = row.start = row.Start;
 
-	row.endText = row.end = row.End.toLocaleDateString();
+	row.end = row.End;
+
+	row.endText = moment(row.End).add(-1, 'minutes').format('D MMM YYYY');
 
 
 	var seats;
-try {
-	seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
-		memo[r[0]] += r[1].length;
-		return memo;
-	}, {'1': 0, '2': 0, '3': 0});
+	try {
+		seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
+			memo[r[0]] += r[1].length;
+			return memo;
+		}, {'1': 0, '2': 0, '3': 0});
 
-	row.approvedSeats = seats[2];
-	row.pendingSeats = seats[1];
-	row.deniedSeats = seats[3];
-	row.requestCount = seats[1] + seats[2] + seats[3];
+		row.approvedSeats = seats[2];
+		row.pendingSeats = seats[1];
+		row.deniedSeats = seats[3];
+		row.requestCount = seats[1] + seats[2] + seats[3];
 
-	row.openSeats = row.Course.Max - row.Host - row.Other - row.approvedSeats - row.pendingSeats;
-} catch(e) {debugger;}
+		row.openSeats = row.Course.Max - row.Host - row.Other - row.approvedSeats - row.pendingSeats;
+	} catch (e) {debugger;}
 }
 
 /**
