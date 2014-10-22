@@ -198,20 +198,21 @@ FTSS.ng.controller(
 			// FullCalendar initial settings
 			$scope.uiConfig = {
 				calendar: {
-					editable   : true,
-					weekends   : false,
-					header     : {
-						left  : 'title',
-						center: '',
-						right : 'today prev,next'
+					'header'        : {
+						'left'  : 'prev,next today',
+						'center': 'title',
+						'right' : 'month,agendaWeek'
 					},
-					eventClick : function (event) {
+					'editable'      : true,
+					'weekends'      : false,
+					'allDayDefault' : true,
+					eventClick      : function (event) {
 						$scope.edit.apply({'row': event});
 					},
-					eventDrop  : function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+					eventDrop       : function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
 						console.log(dayDelta);
 					},
-					eventResize: function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
+					eventResize     : function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
 						console.log(dayDelta);
 					}
 				}
