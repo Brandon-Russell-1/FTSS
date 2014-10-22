@@ -1,11 +1,3 @@
-#modalScheduledOpenSeats {
-    float: right !important;
-    width: 30% !important;
-    text-align: right;
-    font-style: italic;
-    line-height: 2.5em;
-    font-weight: 700;
-}
 
 .modal .fc-event {
     opacity: .7;
@@ -46,13 +38,35 @@
     border-color: #d43f3a;
 }
 
-input#ttms {
-    position: absolute;
-    width: 100px;
-    top: 2.5%;
-    right: 2.5%;
+.modal .fc-event.success {
+    text-align: center;
+    font-size: 1.25em;
 }
 
-#instructorCalendar {
+.addEvent .fc-day-number:hover {
+    cursor: pointer;
+    margin-top: -.25em;
+    padding: 0;
+    color: #4cae4c !important;
+    font-size: 4.75em;
+    top: 0;
+    right: 0;
+    z-index: 999;
+    line-height: .85em;
+}
 
+.fc-time-grid-container {
+    display: none
+}
+
+.wrapped .fc {
+    margin-top: 5px;
+}
+
+.wrapped .fc-axis:first-child {
+    display: none;
+}
+
+.wrapped.addNew .fc-toolbar .fc-right {
+    margin-right: 40px;
 }
