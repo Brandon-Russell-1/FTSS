@@ -1,0 +1,19 @@
+#modalScheduledOpenSeats {
+    float: right !important;
+    width: 30% !important;
+    text-align: right;
+    font-style: italic;
+    line-height: 2.5em;
+    font-weight: 700;
+}
+
+input#ttms {
+    position: absolute;
+    width: 100px;
+    top: 2.5%;
+    right: 2.5%;
+}
+
+#instructorCalendar {
+
+}

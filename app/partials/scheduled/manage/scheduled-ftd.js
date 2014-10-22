@@ -46,20 +46,32 @@ FTSS.ng.controller(
 
 					    var getDates = function () {
 
-						    return scope.data.Start && scope.data.End ?
+						        return scope.data.Start && scope.data.End ?
 
-						           {
-							           'title'           : '***THIS COURSE***',
-							           'start'           : scope.data.Start,
-							           'end'             : scope.data.End,
-							           'className'       : 'success',
-							           'editable'        : true,
-							           'durationEditable': true
-						           }
+						               {
+							               'title'           : '***THIS COURSE***',
+							               'start'           : scope.data.Start,
+							               'end'             : scope.data.End,
+							               'className'       : 'success',
+							               'editable'        : true,
+							               'durationEditable': true,
+							               'allDay'          : true
+						               }
 
-							    : null;
+							        : null;
 
-					    };
+					        },
+
+					        update = function (event) {
+
+						        var format = 'D MMM YYYY';
+
+						        scope.data.Start = event.start.format(format);
+						        scope.data.End = event.end.format(format);
+
+						        scope.modal.$setDirty();
+
+					        };
 
 					    // If this is a new class, pre-fill the reserved seats with 0
 					    if (isNew) {
@@ -71,13 +83,49 @@ FTSS.ng.controller(
 
 					    // Some init settings for FullCalendar
 					    scope.uiConfigInstructor = {
-						    weekends: false,
-						    header  : {
-							    left  : 'title',
-							    center: '',
-							    right : 'today prev,next'
+
+						    'weekends'      : false,
+						    'allDayDefault' : true,
+						    'header'        : {
+							    'left'  : 'title',
+							    'center': '',
+							    'right' : 'today prev,next'
+						    },
+
+						    'eventResize': update,
+
+						    'eventDrop': update,
+
+						    'dayClick': function (start) {
+
+							    if (!scope.data.Start && scope.data.CourseId) {
+
+								    var days = caches.MasterCourseList[scope.data.CourseId].Days,
+								        end = start.clone();
+
+								    while (days > 0) {
+
+									    if (end.isoWeekday() !== 6 && end.isoWeekday() !== 7) {
+										    days -= 1;
+									    }
+
+									    end.add(1, 'days');
+
+								    }
+
+								    scope.data.Start = start.toISOString();
+								    scope.data.End = end.toISOString();
+
+								    scope.eventsInstructor[0] = [getDates()];
+
+							    }
+
 						    }
 					    };
+
+					    if (scope.data.Start) {
+						    scope.uiConfigInstructor.defaultDate = scope.data.Start;
+					    }
 
 					    // Setup uour empty calendar for FullCalendar
 					    scope.eventsInstructor = [];
@@ -124,7 +172,7 @@ FTSS.ng.controller(
 									    // Exit lodash chain
 									    .value();
 
-								    result.push(getDates());
+								    getDates() && result.push(getDates());
 
 								    // update the event source for the calendar
 								    scope.eventsInstructor[0] = result;
@@ -133,8 +181,10 @@ FTSS.ng.controller(
 
 						    } else {
 
+							    var thisClass = getDates();
+
 							    // Make sure we remove any old events
-							    scope.eventsInstructor[0] = [getDates()];
+							    scope.eventsInstructor[0] = thisClass ? [thisClass] : [];
 
 						    }
 
@@ -203,7 +253,6 @@ FTSS.ng.controller(
 						'center': 'title',
 						'right' : 'month,agendaWeek'
 					},
-					'editable'      : true,
 					'weekends'      : false,
 					'allDayDefault' : true,
 					eventClick      : function (event) {

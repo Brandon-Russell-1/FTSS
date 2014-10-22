@@ -26,7 +26,8 @@ form.form-horizontal(name='modal')
                         select(selectize='MasterCourseList',
                         bind='CourseId',
                         watch='UnitId',
-                        watchList='Units.Courses')
+                        watchList='Units.Courses',
+                        remember='course')
             br
 
             +formGroup('Instructor', 'scheduled-edit-instructor')
@@ -38,17 +39,6 @@ form.form-horizontal(name='modal')
                         bind='InstructorId',
                         watch='UnitId',
                         watchList='Units.Instructors')
-
-            br
-
-            +formGroup('Dates', 'scheduled-edit-dates')
-                .input-group
-                    .input-group-addon.w15
-                        +icon('calendar_range')
-
-                    input.form-control.w45(type='text', ng-model='data.Start', data-max-date='{{End}}', placeholder='Start Date', bs-datepicker='', required='required')
-
-                    input.form-control.w45.pull-right(type='text', ng-model='data.End', data-min-date='{{Start}}', placeholder='End Date', bs-datepicker='')
 
             br
 
@@ -69,11 +59,15 @@ form.form-horizontal(name='modal')
 
             +formGroup('Notes', 'scheduled-edit-notes')
                 .input-group
-                    textarea.form-control(type='text', ng-model='data.ClassNotes')
+                    textarea.form-control(type='text', ng-model='data.ClassNotes', style='height:150px')
 
-        .col-lg-6
+        .col-lg-6(ng-class='{addEvent:!data.Start && data.CourseId}')
 
             #instructorCalendar(ui-calendar='uiConfigInstructor', calendar='scheduleInstructor', ng-model='eventsInstructor')
+
+            .italics.text-info.text-center.
+                Click on a day to choose the start date, adjust the start/stop by dragging or resizing
+                the green class in the calendar above.
 
         .clearfix
 
