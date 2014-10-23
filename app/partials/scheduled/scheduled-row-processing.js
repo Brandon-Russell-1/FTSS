@@ -7,6 +7,49 @@
 
 	"use strict";
 
+	var statusMap = [
+		    '',
+		    'Pending',
+		    'Approved',
+		    'Denied'
+	    ],
+
+	    statusClass = [
+		    '',
+		    'info',
+		    'success',
+		    'danger'
+	    ];
+
+	utils.requestEncode = function (request) {
+
+
+	};
+
+	utils.requestDecode = function (requests) {
+
+		return _.map(requests, function (request) {
+
+			return {
+
+				'unit': caches.Hosts[request[3]],
+
+				'status': statusMap[request[0]],
+
+				'statusClass': statusClass[request[0]],
+
+				'notes': request[2],
+
+				'response': request[4],
+
+				'students': request[1]
+
+			}
+
+		});
+
+	};
+
 	utils.requestSeats = function ($scope, $modal, SharePoint) {
 
 		return function (row, autoApprove) {
@@ -119,9 +162,11 @@
 
 		row.TTMSText = row.TTMS ? ' - ' + row.TTMS : '';
 
-		row.title = [row.Course.PDS,
-		             row.Course.Number,
-		             row.TTMS || 'Pending Class #'].join(' - ');
+		row.title = [
+			row.Course.PDS,
+			row.Course.Number,
+			row.TTMS || 'Pending Class #'
+		].join(' - ');
 
 		row.mailFTD = row.FTD.Email +
 		              '?subject=FTSS Class Inquiry for ' +
