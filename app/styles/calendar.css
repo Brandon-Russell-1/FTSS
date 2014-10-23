@@ -43,6 +43,10 @@
     font-size: 1.25em;
 }
 
+.modal .fc-toolbar h2 {
+    font-size: 1.2em;
+}
+
 .addEvent .fc-day-number:hover {
     cursor: pointer;
     margin-top: -.25em;
