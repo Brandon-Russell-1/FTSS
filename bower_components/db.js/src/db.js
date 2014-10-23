@@ -178,7 +178,6 @@
         };
 
         this.update = function( table ) {
-
             if ( closed ) {
                 throw 'Database has been closed';
             }

@@ -1,4 +1,6 @@
 'use strict';
+// bower install angular#^1.2 --save; bower install angular-animate#^1.2 angular-i18n#^1.2 angular-mocks#^1.2 angular-route#^1.2 angular-sanitize#^1.2 angular-scenario#^1.2 --save-dev
+// bower install angular#^1.3 --save; bower install angular-animate#^1.3 angular-i18n#^1.3 angular-mocks#^1.3 angular-route#^1.3 angular-sanitize#^1.3 angular-scenario#^1.3 --save-dev
 
 var gulp = require('gulp');
 var path = require('path');
@@ -31,6 +33,9 @@ var docs = {
   scripts: 'scripts/**/*.js',
   images: 'images/{,*/}*.{jpg,png,svg}',
   styles: 'styles/*.less',
+  watch: {
+    styles: 'styles/**/*.less'
+  }
 };
 
 var ports = {
@@ -97,20 +102,30 @@ gulp.task('open:pages', function(){
 
 // WATCH
 //
+
 var watch = require('gulp-watch');
 gulp.task('watch:docs', function() {
-  watch({glob: path.join(docs.cwd, docs.scripts)}).pipe(connect.reload());
-  watch({glob: path.join(docs.cwd, 'styles/**/*.less')}, ['styles:docs']);
-  watch({glob: [path.join(docs.cwd, docs.index), path.join(docs.cwd, docs.views)]}).pipe(connect.reload());
+  watch(docs.scripts, {cwd: docs.cwd}, function(files) {
+    return files.pipe(connect.reload());
+  });
+  watch(docs.watch.styles, {cwd: docs.cwd}, function(files) {
+    return gulp.start('styles:docs');
+  });
+  watch([docs.index, docs.views], {cwd: docs.cwd}, function(files) {
+    return files.pipe(connect.reload());
+  });
 });
 gulp.task('watch:dev', function() {
-  watch({glob: [path.join(src.cwd, src.index), path.join(src.cwd, src.scripts)]}).pipe(connect.reload());
+  watch(src.scripts, {cwd: src.cwd}, function(files) {
+    return files.pipe(connect.reload());
+  });
 });
 
 
 // SCRIPTS
 //
 var uglify = require('gulp-uglify');
+var ngAnnotate = require('gulp-ng-annotate');
 var ngmin = require('gulp-ngmin');
 var concat = require('gulp-concat-util');
 var sourcemaps = require('gulp-sourcemaps');
@@ -121,7 +136,7 @@ gulp.task('scripts:dist', function(foo) {
     // Build unified package
     gulp.src([src.index, src.scripts], {cwd: src.cwd})
       .pipe(sourcemaps.init())
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(concat(pkg.name + '.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
       .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n'))
       .pipe(concat.footer('\n})(window, document);\n'))
@@ -136,7 +151,7 @@ gulp.task('scripts:dist', function(foo) {
     // Build individual modules
     gulp.src(src.scripts, {cwd: src.cwd})
       .pipe(sourcemaps.init())
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(rename(function(path){ path.dirname = ''; })) // flatten
       .pipe(concat.header(banner))
       .pipe(gulp.dest(path.join(src.dist, 'modules')))
@@ -198,7 +213,7 @@ gulp.task('templates:dist', function() {
     gulp.src(src.templates, {cwd: src.cwd})
       .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
       .pipe(ngtemplate({module: createModuleName}))
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(concat(pkg.name + '.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
       .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
       .pipe(concat.footer('\n\n})(window, document);\n'))
@@ -213,7 +228,7 @@ gulp.task('templates:dist', function() {
     gulp.src(src.templates, {cwd: src.cwd})
       .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
       .pipe(ngtemplate({module: createModuleName}))
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(rename(function(path){ path.dirname = ''; })) // flatten
       .pipe(concat.header(banner))
       .pipe(gulp.dest(path.join(src.dist, 'modules')))
@@ -239,7 +254,7 @@ gulp.task('templates:pages', function() {
     gulp.src(['views/sidebar.html', 'views/partials/*.html'], {cwd: docs.cwd, base: docs.cwd})
       .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
       .pipe(ngtemplate({module: 'mgcrea.ngStrapDocs'}))
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(concat('docs.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
       .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
       .pipe(concat.footer('\n\n})(window, document);\n'))
@@ -253,7 +268,7 @@ gulp.task('templates:pages', function() {
     gulp.src('*/docs/*.tpl.demo.html', {cwd: src.cwd})
       .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
       .pipe(ngtemplate({module: 'mgcrea.ngStrapDocs'}))
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(concat('demo.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
       .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
       .pipe(concat.footer('\n\n})(window, document);\n'))
@@ -268,7 +283,7 @@ gulp.task('templates:pages', function() {
     gulp.src(src.templates, {cwd: src.cwd})
       .pipe(htmlmin({removeComments: true, collapseWhitespace: true}))
       .pipe(ngtemplate({module: createModuleName}))
-      .pipe(ngmin())
+      .pipe(ngAnnotate())
       .pipe(concat(pkg.name + '.tpl.js', {process: function(src) { return '// Source: ' + path.basename(this.path) + '\n' + (src.trim() + '\n').replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1'); }}))
       .pipe(concat.header('(function(window, document, undefined) {\n\'use strict\';\n\n'))
       .pipe(concat.footer('\n\n})(window, document);\n'))
@@ -373,7 +388,6 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter(stylish));
 });
 var karma = require('karma').server;
-var coveralls = require('gulp-coveralls');
 gulp.task('karma:unit', ['templates:test'], function() {
   karma.start({
     configFile: path.join(__dirname, 'test/karma.conf.js'),
@@ -405,21 +419,33 @@ gulp.task('karma:travis', ['templates:test'], function() {
     singleRun: true
   }, function(code) {
     gutil.log('Karma has exited with ' + code);
-    gulp.src('test/coverage/**/lcov.info')
-      .pipe(coveralls())
-      .on('end', function() {
-        process.exit(code);
-      });
+    process.exit(code);
+    // gulp.src('test/coverage/**/lcov.info')
+    //   .pipe(coveralls())
+    //   .on('end', function() {
+    //     process.exit(code);
+    //   });
   });
-
 });
-
+gulp.task('karma:travis~1.2.0', ['templates:test'], function() {
+  karma.start({
+    configFile: path.join(__dirname, 'test/~1.2.0/karma.conf.js'),
+    browsers: ['PhantomJS'],
+    reporters: ['dots'],
+    singleRun: true
+  }, function(code) {
+    gutil.log('Karma has exited with ' + code);
+    process.exit(code);
+  });
+});
 
 // COPY
 //
 gulp.task('copy:pages', function() {
   gulp.src(['favicon.ico', docs.images], {cwd: docs.cwd, base: docs.cwd})
     .pipe(gulp.dest(docs.dist));
+  gulp.src('**/*.js', {cwd: src.dist, base: src.dist})
+    .pipe(gulp.dest(path.join(docs.dist, src.dist)));
 });
 
 
@@ -441,6 +467,6 @@ gulp.task('pages', function() {
   runSequence('clean:pages', 'styles:docs', 'views:pages', ['templates:pages', 'scripts:pages', 'copy:pages']);
 });
 gulp.task('serve', function() {
-  runSequence('clean:tmp', ['styles:docs', 'connect:docs'], ['open:docs', 'watch:docs']); // , 'watch:dev'
+  runSequence('clean:tmp', ['styles:docs', 'connect:docs'], ['open:docs', 'watch:docs', 'watch:dev']);
 });
 gulp.task('serve:pages', ['connect:pages', 'open:pages']);

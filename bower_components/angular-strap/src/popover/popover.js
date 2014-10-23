@@ -44,7 +44,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
   })
 
-  .directive('bsPopover', function($window, $location, $sce, $popover) {
+  .directive('bsPopover', function($window, $sce, $popover) {
 
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
 
@@ -84,7 +84,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
         // Visibility binding support
         attr.bsShow && scope.$watch(attr.bsShow, function(newValue, oldValue) {
           if(!popover || !angular.isDefined(newValue)) return;
-          if(angular.isString(newValue)) newValue = newValue.match(',?(popover),?');
+          if(angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
           newValue === true ? popover.show() : popover.hide();
         });
 
@@ -93,7 +93,7 @@ angular.module('mgcrea.ngStrap.popover', ['mgcrea.ngStrap.tooltip'])
 
         // Garbage collection
         scope.$on('$destroy', function() {
-          popover.destroy();
+          if (popover) popover.destroy();
           options = null;
           popover = null;
         });
