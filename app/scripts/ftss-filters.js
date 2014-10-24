@@ -9,8 +9,6 @@
 	    filterMaps = {
 		    'scheduled'    : {
 			    'u': 'UnitId',
-			    'm': "Course/MDS",
-			    'a': "Course/AFSC",
 			    'c': 'CourseId'
 		    },
 		    'scheduled-ftd': {
@@ -98,40 +96,24 @@
 
 		try {
 
-			var maps = filters.map(), filter =
-				[
-				];
+			var maps = filters.map(),
+
+			    filter = [];
 
 			if (tags) {
 
 				_.each(maps, function (map, key) {
 
-					var isString = (key === 'm' || key === 'a'),
-
-					    fTemp = [];
+					var fTemp = [];
 
 					_.each(tags[key], function (tag) {
 
-						if (isString) {
-
-							fTemp.push(
-								[
-									map,
-									" eq '",
-									tag.trim(),
-									"'"
-								].join(''));
-
-						} else {
-
-							fTemp.push(
-								[
-									map,
-									'eq',
-									tag
-								].join(' '));
-
-						}
+						fTemp.push(
+							[
+								map,
+								'eq',
+								tag
+							].join(' '));
 
 					});
 
