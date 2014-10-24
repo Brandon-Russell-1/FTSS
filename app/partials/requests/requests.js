@@ -72,7 +72,7 @@ FTSS.ng.controller(
 							                                 'HostId'
 							                                ], request);
 
-							      row.request.Host = caches.Hosts[row.request.HostId];
+							      row.request.Host = caches.Hosts[row.request.HostId] || {'Text': 'Invalid Host'};
 
 							      utils.cacheFiller(row);
 
