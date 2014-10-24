@@ -29,7 +29,7 @@ FTSS.ng.controller(
 
 				    'modalPlacement': 'wide',
 
-				    // We will be post-post-processing this data for the calendar (needs some special data
+				    // We will be post-post-processing this data for the calendar (needs some special data)
 				    'finalProcess'  : function (data) {
 
 					    var events = [];
@@ -39,6 +39,10 @@ FTSS.ng.controller(
 					    });
 
 					    $scope.events[0] = events;
+
+					    setTimeout(function () {
+						    $scope.schedule.fullCalendar('render');
+					    }, 100);
 
 				    },
 
@@ -84,12 +88,16 @@ FTSS.ng.controller(
 					    // Some init settings for FullCalendar
 					    scope.uiConfigInstructor = {
 
-						    'weekends'      : false,
-						    'allDayDefault' : true,
-						    'header'        : {
+						    'weekends'     : false,
+						    'allDayDefault': true,
+						    'header'       : {
 							    'left'  : 'title',
 							    'center': '',
 							    'right' : 'today prev,next'
+						    },
+
+						    'buttonText': {
+							    today:    'Go to Today'
 						    },
 
 						    'eventResize': update,
@@ -234,6 +242,8 @@ FTSS.ng.controller(
 
 					    };
 
+					    scope.data.requests = utils.requestDecode(scope.data.Requests_JSON);
+
 				    }
 
 			    })
@@ -248,21 +258,21 @@ FTSS.ng.controller(
 			// FullCalendar initial settings
 			$scope.uiConfig = {
 				calendar: {
-					'header'        : {
+					'header'       : {
 						'left'  : 'prev,next today',
 						'center': 'title',
-						'right' : 'month,agendaWeek'
+						'right' : 'month,basicWeek'
 					},
-					'weekends'      : false,
-					'allDayDefault' : true,
-					eventClick      : function (event) {
+					'defaultView'  : 'basicWeek',
+					'weekends'     : false,
+					'allDayDefault': true,
+					'buttonText': {
+						today:    'Show Today',
+						month:    'Monthly',
+						week:     'Weekly'
+					},
+					eventClick     : function (event) {
 						$scope.edit.apply({'row': event});
-					},
-					eventDrop       : function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-						console.log(dayDelta);
-					},
-					eventResize     : function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
-						console.log(dayDelta);
 					}
 				}
 			};
