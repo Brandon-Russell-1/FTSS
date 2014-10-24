@@ -248,3 +248,19 @@ right {
 #fakeSearchButton:hover *  {
     fill: #777;
 }
+
+.option .mask-img {
+    margin: 5px;
+    max-width: 75px;
+    max-height: 75px;
+    float: left;
+}
+
+.item .mask-img {
+    display: none;
+}
+
+.option .mask-img + span {
+    line-height: 85px;
+    margin-left: 15px;
+}
