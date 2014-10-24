@@ -74,3 +74,11 @@
 .wrapped.addNew .fc-toolbar .fc-right {
     margin-right: 40px;
 }
+
+.wrapped .fc-view-container {
+    min-height: 75px;
+}
+
+.fc-week.fc-widget-content {
+    height:auto!important;
+}
