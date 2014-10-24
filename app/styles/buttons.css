@@ -147,3 +147,21 @@ traverse * {
 .btn-dark svg.icon {
     fill:#fff!important;
 }
+
+.checkbox {
+    box-shadow:none!important;
+}
+
+.checkbox .css-label {
+    width:20px;
+    height:20px;
+}
+
+.checkbox .yes {
+    background-position: 0 -20px;
+}
+
+.checkbox:not(.active) .yes,
+.checkbox.active .no{
+    display: none;
+}
