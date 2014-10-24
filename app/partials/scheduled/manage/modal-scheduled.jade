@@ -61,13 +61,41 @@ form.form-horizontal(name='modal')
                 .input-group
                     textarea.form-control(type='text', ng-model='data.ClassNotes', style='height:150px')
 
-        .col-lg-6(ng-class='{addEvent:!data.Start && data.CourseId}')
+        .col-lg-6(bs-tabs)
 
-            #instructorCalendar(ui-calendar='uiConfigInstructor', calendar='scheduleInstructor', ng-model='eventsInstructor')
+            div(ng-class='{addEvent:!data.Start && data.CourseId}', bs-pane, title='Calendar')
 
-            .italics.text-info.text-center.
-                Click on a day to choose the start date, adjust the start/stop by dragging or resizing
-                the green class in the calendar above.
+                br
+
+                #instructorCalendar(ui-calendar='uiConfigInstructor', calendar='scheduleInstructor', ng-model='eventsInstructor')
+
+                .italics.text-info.text-center.
+                    Click on a day to choose the start date, adjust the start/stop by dragging or resizing
+                    the green class in the calendar above.
+
+            div(bs-pane, title='Students')
+
+                br
+
+                .well.well-sm(ng-repeat='request in data.requests')
+
+                    .bold.border-bottom(class='text-{{request.statusClass}}')
+                        | {{request.status}} ({{request.students.length}})
+                        .pull-right {{request.unit.Text}}
+
+                    dl.dl-horizontal
+                        dt Student(s)
+                        dd(ng-repeat='student in request.students') {{student}}
+
+                        dt Notes
+                        dd.italics {{request.notes}}
+
+                        dt Response
+                        dd.wideText {{request.response}}
+
+                    .clearfix
+
+
 
         .clearfix
 
