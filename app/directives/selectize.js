@@ -459,63 +459,6 @@
 				}
 			};
 
-		},
-
-		'people': function (scope, SharePoint, field) {
-
-			return {
-				'delimiter'   : '+',
-				'loadThrottle': 500,
-				'labelField'  : 'label',
-				'valueField'  : 'Name',
-				'sortField'   : 'Name',
-				'searchField' : 'Name',
-				'persist'     : false,
-				'create'      : true,
-				'plugins'     : [
-					'remove_button'
-				],
-				'onChange'    : function (val) {
-
-					var self = this;
-
-					timeout(function () {
-
-						scope.data[field + 'Name'] = val;
-						scope.data[field + 'Email'] = (self.options[val] || {}).WorkEMail || '';
-
-					});
-
-				},
-				'load'        : function (query, callback) {
-
-					var test = query.split(',')[1];
-
-					// Don't start searching until after the dot
-					if (test && test.length > 3) {
-
-						SharePoint
-
-							.people(query)
-
-							.then(function (data) {
-
-								      _(data).each(function (d) {
-									      d.label = '<div><h5>' +
-									                d.Name +
-									                '</h5><small>' +
-									                d.WorkEMail +
-									                '</small></div>';
-								      });
-
-								      callback(data);
-
-							      });
-
-					}
-
-				}
-			};
 		}
 
 	};
