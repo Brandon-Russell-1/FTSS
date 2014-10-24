@@ -20,12 +20,10 @@
 			'params': {
 				'$select': [
 					'PDS',
-					'MDS',
 					'Days',
 					'Hours',
 					'Min',
 					'Max',
-					'AFSC',
 					'Title',
 					'Number',
 					'IMDS',
