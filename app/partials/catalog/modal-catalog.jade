@@ -16,30 +16,32 @@ form.form-horizontal(name='modal')
                     .input-group-addon(style='width:55%') PDS
                     input.form-control(ng-model='data.PDS', type='text', required)
 
-            .col-lg-5(explain='catalog-mds', top)
-                .input-group
-                    .input-group-addon MDS
-                    .input-group-selectize
-                        select(selectize='MDS', bind='MDS', required, create)
-
-            .col-lg-4(explain='catalog-afsc', right)
-                .input-group
-                    .input-group-addon AFSC
-                    .input-group-selectize
-                        select(selectize='AFSC', bind='AFSC', required, create)
-
-        .clearfix(style='height:1em')
-
-        .row
-            .col-lg-8(explain='catalog-number', left)
+            .col-lg-9(explain='catalog-number', right)
                 .input-group
                     .input-group-addon Number
                     input.form-control(ng-model='data.Number', type='text', required)
 
-            .col-lg-4(explain='catalog-imds', right)
+
+        .clearfix(style='height:1em')
+
+        .row
+
+            .col-lg-3
+                .input-group(hover='catalog-priority', left)
+                    .input-group-addon Priority
+                    .btn.checkbox(ng-model='data.Priority', bs-checkbox)
+                        .yes.css-label
+                        .no.css-label
+
+            .col-lg-4(explain='catalog-imds', left)
                 .input-group
                     .input-group-addon IMDS
                     input.form-control(ng-model='data.IMDS', type='text')
+
+            .col-lg-5(explain='catalog-g081', right)
+                .input-group
+                    .input-group-addon G081
+                    input.form-control(ng-model='data.G081', type='text')
 
         .clearfix(style='height:1em')
 
@@ -85,10 +87,6 @@ form.form-horizontal(name='modal')
         br
         br
 
-        .col-lg-4.pull-right
-            +toggleBox('data.Priority', ' Priority', 'catalog-priority')
 
-        br
-        br
 
     +modalFooter()

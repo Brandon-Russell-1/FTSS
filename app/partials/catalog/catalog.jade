@@ -1,6 +1,6 @@
 include ../__mixins
 
-- var columns = {Course:40, 'IMDS/G081':10, MDS:10, AFSC:10, Length:15}
+- var columns = {Course:40, IMDS:10, G081:10, Length:15}
 +tableHeader('Course', columns, 'catalog')
 
     td
@@ -27,13 +27,9 @@ include ../__mixins
         br
         span.peek {{row.Title}}
 
-    td {{row.IMDS}} {{row.G081}}
+    td {{row.IMDS}}
 
-    td
-        b {{row.MDS}}
-
-    td
-        b {{row.AFSC}}
+    td {{row.G081}}
 
     td
         | Days:&nbsp;
