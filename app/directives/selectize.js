@@ -151,8 +151,6 @@
 				'optgroupOrder'  : [
 					'Units',
 					'Hosts',
-					'AFSC',
-					'MDS',
 					'MasterCourseList'
 				],
 				'plugins'        : [
@@ -167,7 +165,7 @@
 
 					var count = 0,
 
-					    CACHE_COUNT = 6,
+					    CACHE_COUNT = 4,
 
 					    // Because of some funky async + closures we need to store a copy of this for action
 					    that = this,
@@ -177,17 +175,14 @@
 						    // Add the dataset to the caches object for global access
 						    caches[group] = data;
 
-						    // create the serachBox value of type:Id for eventual filter mapping
-						    var id = group.toLowerCase().charAt(0) + ':';
+						    // create the searchBox value of type:Id for eventual filter mapping
+						    // .replace('m', 'c') is a really bad hack but needed to not break course lookups :-/
+						    var id = group.toLowerCase().charAt(0).replace('m', 'c') + ':';
 
 						    options[group] = _.chain(data)
 
 							    // Run the reject Archived operation a second time as some lists will place in caches but not selectize
-							    .reject(function (d) {
-
-								            return (d.Archived === true);
-
-							            })
+							    .reject('Archived')
 
 							    .map(function (v) {
 
@@ -227,9 +222,7 @@
 
 							    var tagBoxOpts = []
 
-								    .concat(options.AFSC,
-							                options.MDS,
-							                options.MasterCourseList,
+								    .concat(options.MasterCourseList,
 							                options.Units,
 							                options.Hosts);
 
@@ -264,7 +257,8 @@
 							    // Call completion now
 							    scope.fn.doInitPage();
 
-							    $('.hide').removeClass('hide');
+							    // This shows the page contents for anything still hiding...
+							    $('#pageActions .hide').removeClass('hide');
 
 						    }
 
@@ -275,12 +269,6 @@
 						.read(FTSS.models.catalog)
 
 						.then(function (response) {
-
-							      // Pull unique AFSC list from MCL & copy to Caches
-							      loaded(_(response).pluck('AFSC').uniq().compact().value(), 'AFSC');
-
-							      // Pull unqiue MDS list from MCL & copy to Caches
-							      loaded(_(response).pluck('MDS').uniq().compact().value(), 'MDS');
 
 							      // Pull the unique IMDS course codes into the cache
 							      caches.imds = {};
