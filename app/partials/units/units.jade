@@ -1,6 +1,6 @@
 include ../__mixins
 
-- var columns = {'': 15, Unit:10, Base:15, Details:15, Email:30}
+- var columns = {'': 15, Unit:10, Base:15, Email:40}
 +tableHeader(false, columns, 'units')
 
     td: +icon('flag')
@@ -10,19 +10,6 @@ include ../__mixins
     td.bigLetter {{row.Det}}
 
     td: b {{row.Base}}
-
-    td
-        p(ng-if='row.Courses.length',
-                hover='There are {{row.Courses.length}} courses taught at Det {{row.Det}}:',
-                content='<dl class="dl-horizontal">{{row.CoursesHover}}</dl>', style='padding:5px')
-            +icon('books')
-            | {{row.Courses.length}} Courses
-
-        p(ng-if='row.Instructors',
-                hover='There are {{row.Instructors.length}} instructors assigned to Det {{row.Det}}:',
-                content='{{row.InstructorsList}}', left, style='padding:5px')
-            +icon('instructor')
-            | {{row.InstructorsCount}} Instructors
 
     td.lowercase
         a(href='mailto:{{row.Email}}?subject=FTSS', tabindex='-1') {{row.Email}}
