@@ -12,10 +12,10 @@ FTSS.ng.controller(
 			var self = FTSS.controller($scope, {
 
 				'sort' : 'Det',
-				'group': 'Squadron',
+				'group': 'LongName',
 
 				'grouping': {
-					'Squadron': 'Squadron'
+					'LongName': 'Squadron'
 				},
 
 				'sorting': {

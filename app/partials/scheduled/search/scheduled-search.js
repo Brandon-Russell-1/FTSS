@@ -11,20 +11,17 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 				'sort' : 'Start',
-				'group': 'Course.MDS',
+				'group': 'course',
 
 				'grouping': {
-					'Course.MDS'  : 'MDS',
-					'unit'        : 'Unit',
-					'Course.AFSC' : 'AFSC',
-					'availability': 'Open Seats'
+					'unit'  : 'Unit',
+					'course': 'Course'
 				},
 
 				'sorting': {
-					'Start'      : 'Start Date',
-					'course'     : 'Course',
-					'unit'       : 'Unit',
-					'Course.AFSC': 'AFSC'
+					'Start' : 'Start Date',
+					'course': 'Course',
+					'unit'  : 'Unit'
 				},
 
 				'model': 'scheduled'
@@ -44,7 +41,7 @@ FTSS.ng.controller(
 						       'ftd'
 						      ]);
 
-					      self.initialize(data).then(function(row) {
+					      self.initialize(data).then(function (row) {
 
 						      utils.processScheduledRow(row);
 
