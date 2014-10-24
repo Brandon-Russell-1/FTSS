@@ -433,8 +433,22 @@
 
 							      loaded(response, 'Instructors', function (val) {
 
-								      val.label = val.InstructorName &&
-								                  val.InstructorName.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
+								      val.label = val.Photo ?
+
+								                  [
+									                  '<div class="mask-img circle">',
+									                  '<img src="',
+									                  FTSS.photoURL,
+									                  '_t/',
+									                  val.Photo,
+									                  '_jpg.jpg" /></div><span>',
+									                  val.InstructorName,
+									                  '</span>'
+								                  ]
+									                  .join('')
+
+									      :
+								                  val.InstructorName;
 
 								      return  val.InstructorName;
 
