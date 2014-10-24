@@ -4,7 +4,7 @@ form.form-horizontal(name='modal')
 
     traverse
 
-    +modalHeader('New FTD Instructor', "{{data.InstructorName | firstName}}'s Profile")
+    +modalHeader('New FTD Instructor', "{{data.InstructorName}}'s Profile")
 
     .modal-body(ng-file-drop='onFileSelect($files)')
 
