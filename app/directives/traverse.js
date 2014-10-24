@@ -39,7 +39,7 @@
 									var rows, row, pointer;
 
 									// Array of all tr's on the page (with a scope)
-									rows = $('tr.ng-scope').removeClass('modal-selected');
+									rows = $('tr.traverse').removeClass('modal-selected');
 
 									// The currently selected row
 									row = $('#row-' + scope.data.Id);
@@ -72,7 +72,7 @@
 							// Watch for the destruction of this element and then remove .modal-selected class
 							$el.on("$destroy", function () {
 								view.removeClass('hasModal');
-								$('tr.ng-scope').removeClass('modal-selected');
+								$('tr.traverse').removeClass('modal-selected');
 							});
 
 						} else {
