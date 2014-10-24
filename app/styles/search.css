@@ -54,8 +54,16 @@
     white-space: nowrap
 }
 
+.optgroup.unit {
+    width: 200px;
+}
+
+.optgroup.mastercourselist {
+    width: calc(98% - 225px);
+}
+
 .optgroup.count-1 {
-    width: 100%;
+    width: 100% !important;
 }
 
 .optgroup {
@@ -63,10 +71,6 @@
     background-color: #f5fafc !important;
     background-image: linear-gradient(to right, #edf5f7, #fff);
     border-left: 1px solid #ddd;
-}
-
-.optgroup.afsc .option, .optgroup.mds .option {
-    font-weight: 800;
 }
 
 #tagBox .selectize-input .item, .truncate {
@@ -110,6 +114,10 @@
     background: #555;
     margin-top: 2px !important;
     color: #fff;
+}
+
+.item.matched div {
+    display: inline-block;
 }
 
 .multi .item.matched:before {
@@ -173,6 +181,7 @@ right {
 .multi .selected h5:before, .multi .optgroup:not(.mastercourselist) .selected:before, .single .selected:before {
     content: "\2713\00a0\00a0";
 }
+
 /*
 .wide .item * {
     background-color: transparent !important;
@@ -207,7 +216,7 @@ right {
 
 #searchContainer #tagBox .item,
 #searchContainer #tagBox input {
-    margin: 5px 2px 0!important;
+    margin: 5px 2px 0 !important;
 
 }
 
@@ -235,17 +244,17 @@ right {
 }
 
 #fakeSearchButton {
-    margin: 1px!important;
-    border: none!important;
+    margin: 1px !important;
+    border: none !important;
     position: absolute;
-    left:calc(55% + 49px);
+    left: calc(55% + 49px);
     height: 32px;
-    padding-top:3px;
+    padding-top: 3px;
     border-radius: 0 6px 6px 0;
     z-index: 100;
 }
 
-#fakeSearchButton:hover *  {
+#fakeSearchButton:hover * {
     fill: #777;
 }
 
