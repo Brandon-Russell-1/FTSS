@@ -19,7 +19,9 @@
 		    'info',
 		    'success',
 		    'danger'
-	    ];
+	    ],
+
+	    lastWeek = moment().add(-1, 'weeks');
 
 	utils.requestEncode = function (request) {
 
@@ -167,6 +169,11 @@
 			row.Course.Number,
 			row.TTMS || 'Pending Class #'
 		].join(' - ');
+
+		row.sMoment = moment(row.Start);
+		row.eMoment = moment(row.End);
+
+		row.Archived = row.Archived || row.eMoment.isBefore(lastWeek);
 
 		row.mailFTD = row.FTD.Email +
 		              '?subject=FTSS Class Inquiry for ' +
