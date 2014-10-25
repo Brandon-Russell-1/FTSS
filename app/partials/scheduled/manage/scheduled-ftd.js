@@ -46,7 +46,7 @@ FTSS.ng.controller(
 
 					    months = {};
 
-					    $scope.resrouceDayCount = -1;
+					    $scope.resourceDayCount = -1;
 					    $scope.resourceDays = '';
 					    $scope.resourceEvents = [];
 
