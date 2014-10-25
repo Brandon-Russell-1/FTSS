@@ -81,22 +81,19 @@ utils.cacheFiller = function (row) {
 
 	row.endText = moment(row.End).add(-1, 'minutes').format('D MMM YYYY');
 
+	var seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
+		memo[r[0]] += r[1].length;
+		return memo;
+	}, {'1': 0, '2': 0, '3': 0});
 
-	var seats;
-	try {
-		seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
-			memo[r[0]] += r[1].length;
-			return memo;
-		}, {'1': 0, '2': 0, '3': 0});
+	row.approvedSeats = seats[2];
+	row.pendingSeats = seats[1];
+	row.deniedSeats = seats[3];
+	row.requestCount = seats[1] + seats[2] + seats[3];
 
-		row.approvedSeats = seats[2];
-		row.pendingSeats = seats[1];
-		row.deniedSeats = seats[3];
-		row.requestCount = seats[1] + seats[2] + seats[3];
+	row.openSeats = row.Course.Max - row.Host - row.Other - row.approvedSeats - row.pendingSeats;
 
-		row.openSeats = row.Course.Max - row.Host - row.Other - row.approvedSeats - row.pendingSeats;
-	} catch (e) {debugger;}
-}
+};
 
 /**
  * A simple watch destroyer for when we know we don't need all those dirty checks
