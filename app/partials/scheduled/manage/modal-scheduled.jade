@@ -99,4 +99,13 @@ form.form-horizontal(name='modal')
 
         .clearfix
 
+        .btn.btn-danger.btn-labeled.btn-muted.pull-right(bs-popover,
+                                        placement='left',
+                                        template='/partials/popover-cancel-class.html')
+
+                    span.btn-label: +icon('trash_hide')
+                    | Cancel Class
+
+        .clearfix
+
     +modalFooter()
