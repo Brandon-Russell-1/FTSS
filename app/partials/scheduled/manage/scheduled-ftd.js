@@ -42,13 +42,13 @@ FTSS.ng.controller(
 					    });
 
 					    min = moment(Math.min.apply(Math, _.pluck(events, 'sMoment'))).add(-4, 'days');
-
 					    max = moment(Math.max.apply(Math, _.pluck(events, 'eMoment'))).add(4, 'days');
 
 					    months = {};
-					    $scope.resourceDays = '<th>Course</th>';
-					    $scope.resourceEvents = [];
 
+					    $scope.resrouceDayCount = -1;
+					    $scope.resourceDays = '';
+					    $scope.resourceEvents = [];
 
 					    _(events).each(function (event) {
 
@@ -56,14 +56,7 @@ FTSS.ng.controller(
 
 						        first = true;
 
-						    event.html = [
-
-							    '<td>',
-							    event.Course.PDS,
-							    ' - ',
-							    event.Course.Number,
-							    '</td>'
-						    ].join('');
+						    event.html = '';
 
 						    while (filler < max) {
 
@@ -102,6 +95,8 @@ FTSS.ng.controller(
 					    while (min < max) {
 
 						    var month = min.add(1, 'days').format('MMM YYYY');
+
+						    $scope.resourceDayCount++;
 
 						    if (!months[month]) {
 

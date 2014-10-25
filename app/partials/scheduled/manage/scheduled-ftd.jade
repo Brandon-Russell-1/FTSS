@@ -19,6 +19,8 @@ include ../__scheduled-mixins
         tbody
 
             tr.event(ng-repeat-start='event in events', ng-bind-html='event.html', ng-dblclick='event.edit()')
+            tr.details(ng-repeat-end)
+                td(col-span='{{resourceDayCount}}')
 
 //
     +grouping()
