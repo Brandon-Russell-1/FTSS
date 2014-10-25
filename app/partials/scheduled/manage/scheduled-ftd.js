@@ -89,6 +89,10 @@ FTSS.ng.controller(
 
 							    event.html += '<td class="' + tdClass + '">' + text + '</td>';
 
+							    event.edit = function () {
+								    $scope.edit.apply({'row': event});
+							    };
+
 						    }
 
 
