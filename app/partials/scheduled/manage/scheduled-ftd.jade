@@ -7,8 +7,23 @@ include ../__scheduled-mixins
 
     +userInstructions('scheduled-ftd', true)
 
-    div(ui-calendar='uiConfig.calendar', calendar='schedule', ng-model='events')
+    // div(ui-calendar='uiConfig.calendar', calendar='schedule', ng-model='events')
 
+    table#resourceView.table.table-bordered.table-hover
+
+        thead
+            tr
+
+                th
+                th.month(ng-repeat='month in resourceMonths', colspan='{{month.colspan}}') {{month.month}}
+
+            tr.days(ng-bind-html='resourceDays')
+
+        tbody
+
+            tr.event(ng-repeat='event in events', ng-bind-html='event.html')
+
+//
     +grouping()
 
         +classHeader(false)

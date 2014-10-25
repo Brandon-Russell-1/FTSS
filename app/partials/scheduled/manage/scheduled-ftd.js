@@ -14,14 +14,14 @@ FTSS.ng.controller(
 				    'group': 'Month',
 
 				    'grouping': {
-					    'Course'  : 'Course',
-					    'Month' : 'Month',
+					    'Course'      : 'Course',
+					    'Month'       : 'Month',
 					    'availability': 'Open Seats'
 				    },
 
 				    'sorting': {
-					    'Start'      : 'Start Date',
-					    'course'     : 'Course'
+					    'Start' : 'Start Date',
+					    'course': 'Course'
 				    },
 
 				    'model': 'scheduled',
@@ -31,17 +31,108 @@ FTSS.ng.controller(
 				    // We will be post-post-processing this data for the calendar (needs some special data)
 				    'finalProcess'  : function (data) {
 
-					    var events = [];
+					    var events = [], min, max, months,
+
+					        weekend = function (day) {
+						        return (day.isoWeekday() > 5) ? 'weekend' : '';
+					        };
 
 					    _(data).each(function (group) {
 						    events = events.concat(group);
 					    });
 
-					    $scope.events[0] = events;
+					    min = moment(Math.min.apply(Math, _.pluck(events, 'sMoment'))).add(-4, 'days');
 
-					    setTimeout(function () {
-						    $scope.schedule.fullCalendar('render');
-					    }, 100);
+					    max = moment(Math.max.apply(Math, _.pluck(events, 'eMoment'))).add(4, 'days');
+
+					    months = {};
+					    $scope.resourceDays = '<th>Course</th>';
+					    $scope.resourceEvents = [];
+
+
+					    _(events).each(function (event) {
+
+						    var filler = min.clone(),
+
+						        first = true;
+
+						    event.html = [
+
+							    '<td>',
+							    event.Course.PDS,
+							    ' - ',
+							    event.Course.Number,
+							    '</td>'
+						    ].join('');
+
+						    while (filler < max) {
+
+							    filler.add(1, 'days');
+
+							    var text = '',
+
+							        tdClass = weekend(filler);
+
+							    if (filler >= event.sMoment && filler < event.eMoment) {
+
+								    tdClass += ' mark';
+
+								    if (first) {
+
+									    text = event.Instructor.label || '<span>No Instructor</span>';
+
+									    first = false
+
+								    }
+
+							    }
+
+							    event.html += '<td class="' + tdClass + '">' + text + '</td>';
+
+						    }
+
+
+					    });
+
+
+					    while (min < max) {
+
+						    var month = min.add(1, 'days').format('MMM YYYY');
+
+						    if (!months[month]) {
+
+							    months[month] = {
+								    'month'  : month,
+								    'sort'   : parseInt(min.format('M')),
+								    'colspan': 0
+							    };
+
+						    }
+
+						    months[month].colspan++;
+
+						    $scope.resourceDays += [
+
+							    '<th class="',
+							    weekend(min),
+							    '">',
+							    min.format('D'),
+							    '<br>',
+							    min.format('dd'),
+							    '</th>'
+
+						    ].join('');
+
+					    }
+
+					    $scope.resourceMonths = _.sortBy(months, 'sort');
+					    $scope.events = events;
+
+
+					    /*
+					     setTimeout(function () {
+					     $scope.schedule.fullCalendar('render');
+					     }, 100);*/
 
 				    },
 
@@ -96,7 +187,7 @@ FTSS.ng.controller(
 						    },
 
 						    'buttonText': {
-							    today:    'Go to Today'
+							    today: 'Go to Today'
 						    },
 
 						    'eventResize': update,
@@ -265,10 +356,10 @@ FTSS.ng.controller(
 					'defaultView'  : 'basicWeek',
 					'weekends'     : false,
 					'allDayDefault': true,
-					'buttonText': {
-						today:    'Show Today',
-						month:    'Monthly',
-						week:     'Weekly'
+					'buttonText'   : {
+						today: 'Show Today',
+						month: 'Monthly',
+						week : 'Weekly'
 					},
 					eventClick     : function (event) {
 						$scope.edit.apply({'row': event});
