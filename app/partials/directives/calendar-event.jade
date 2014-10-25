@@ -1,0 +1,44 @@
+fake
+
+    | {{Instructor.label}}
+
+    .details
+
+        .container
+
+            h5.border-bottom
+                b {{Course.PDS}} - {{Course.Number}}
+                b.pull-right {{startText}} - {{endText}}
+
+            .clearfix
+
+            dl.dl-horizontal.col-lg-4
+                dt Min
+                dd {{Course.Min}}
+
+                dt Max
+                dd {{Course.Max}}
+
+            dl.dl-horizontal.col-lg-4
+                dt Host
+                dd {{Host}}
+
+                dt Non-host
+                dd {{Other}}
+
+            dl.dl-horizontal.col-lg-4
+
+                dt Approved
+                dd {{approvedSeats}}
+
+                dt Pending
+                dd {{pendingSeats}}
+
+            .clearfix
+
+            b FTD Notes
+            p {{ClassNotes}}
+
+            b J4 Notes
+            p {{J4Notes}}
+

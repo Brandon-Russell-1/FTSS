@@ -7,7 +7,8 @@ FTSS.ng.controller(
 		'$scope',
 		'$modal',
 		'SharePoint',
-		function ($scope, $modal, SharePoint) {
+		'$templateCache',
+		function ($scope, $modal, SharePoint, $templateCache) {
 
 			var self = FTSS.controller($scope, {
 				    'sort' : 'Start',
@@ -72,7 +73,7 @@ FTSS.ng.controller(
 
 								    if (first) {
 
-									    text = event.Instructor.label || '<span>No Instructor</span>';
+									    text = _.template($templateCache.get('/partials/calendar-event.html'), event);
 
 									    first = false
 

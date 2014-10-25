@@ -141,13 +141,6 @@ mixin classActions(edit)
                     span.btn-label: +icon('edit')
                     | Edit Class
 
-                .btn.btn-danger.btn-labeled.btn-muted(bs-popover,
-                                                        placement='left',
-                                                        template='/partials/popover-cancel-class.html')
-
-                    span.btn-label: +icon('trash_hide')
-                    | Cancel Class
-
             else
 
                 .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-if='row.openSeats && canRequest')
