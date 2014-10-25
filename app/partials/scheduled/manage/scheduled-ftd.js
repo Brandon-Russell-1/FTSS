@@ -201,7 +201,7 @@ FTSS.ng.controller(
 
 								    while (days > 0) {
 
-									    if (end.isoWeekday() !== 6 && end.isoWeekday() !== 7) {
+									    if (end.isoWeekday() < 6) {
 										    days -= 1;
 									    }
 
