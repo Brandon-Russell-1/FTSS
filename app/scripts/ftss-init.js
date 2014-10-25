@@ -23,7 +23,7 @@
 			'angularFileUpload',
 			'ngAnimate',
 			'ngSanitize',
-		    'ui.calendar'
+			'ui.calendar'
 		]);
 
 	/*
@@ -50,7 +50,7 @@
 						    'units',
 						    'backlog',
 						    'hosts',
-					        'admin'
+						    'admin'
 					    ];
 
 				while (routes.length) {
@@ -99,6 +99,8 @@
 		                           'people' : { 'url': 'http://virtualpc/_vti_bin/ListData.svc/UserInformationList' }
 
 	                           });
+
+	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
 	FTSS.people = {};
 	FTSS.utils = {};
