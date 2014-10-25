@@ -128,12 +128,6 @@ FTSS.ng.controller(
 					    $scope.resourceMonths = _.sortBy(months, 'sort');
 					    $scope.events = events;
 
-
-					    /*
-					     setTimeout(function () {
-					     $scope.schedule.fullCalendar('render');
-					     }, 100);*/
-
 				    },
 
 				    'edit': function (scope, isNew) {
@@ -341,31 +335,6 @@ FTSS.ng.controller(
 
 			// Bind the seat request function
 			$scope.request = utils.requestSeats($scope, $modal, SharePoint);
-
-			// Setup a blank calendar
-			$scope.events = [];
-
-			// FullCalendar initial settings
-			$scope.uiConfig = {
-				calendar: {
-					'header'       : {
-						'left'  : 'prev,next today',
-						'center': 'title',
-						'right' : 'month,basicWeek'
-					},
-					'defaultView'  : 'basicWeek',
-					'weekends'     : false,
-					'allDayDefault': true,
-					'buttonText'   : {
-						today: 'Show Today',
-						month: 'Monthly',
-						week : 'Weekly'
-					},
-					eventClick     : function (event) {
-						$scope.edit.apply({'row': event});
-					}
-				}
-			};
 
 			self
 
