@@ -421,22 +421,22 @@
 
 							      loaded(response, 'Instructors', function (val) {
 
+								      val.PhotoThumb = val.Photo ? [
+
+									      '<div class="mask-img circle">',
+									      '<img src="',
+									      FTSS.photoURL,
+									      '_t/',
+									      val.Photo,
+									      '_jpg.jpg" /></div>'
+
+								      ].join('') : '';
+
 								      val.label = val.Photo ?
 
-								                  [
-									                  '<div class="mask-img circle">',
-									                  '<img src="',
-									                  FTSS.photoURL,
-									                  '_t/',
-									                  val.Photo,
-									                  '_jpg.jpg" /></div><span>',
-									                  val.InstructorName,
-									                  '</span>'
-								                  ]
-									                  .join('')
+								                  val.PhotoThumb + '<span>' + val.InstructorName + '</span>'
 
-									      :
-								                  val.InstructorName;
+									      : val.InstructorName;
 
 								      return  val.InstructorName;
 
