@@ -12,21 +12,31 @@ fake
 
             .clearfix
 
-            dl.dl-horizontal.col-lg-4
+            .wideText {{Course.Title}}
+
+            br
+
+            b Seats
+
+            .clearfix
+
+            .col-lg-3.double(class='text-{{openSeatsClass}}') {{openSeats}} Open
+
+            dl.dl-horizontal.col-lg-3
                 dt Min
                 dd {{Course.Min}}
 
                 dt Max
                 dd {{Course.Max}}
 
-            dl.dl-horizontal.col-lg-4
+            dl.dl-horizontal.col-lg-3
                 dt Host
                 dd {{Host}}
 
                 dt Non-host
                 dd {{Other}}
 
-            dl.dl-horizontal.col-lg-4
+            dl.dl-horizontal.col-lg-3
 
                 dt Approved
                 dd {{approvedSeats}}

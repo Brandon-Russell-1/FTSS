@@ -178,10 +178,9 @@
     margin-left: 25px;
     margin-top: 34px;
     color: #333 !important;
-    background-color: rgba(255, 255, 255, .85);
+    background-color: rgba(255, 255, 255, .9);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    border-top: none !important;
     width: 500px;
     max-height: 0;
     overflow: hidden;
@@ -207,10 +206,18 @@
 
 #resourceView .mark dt {
     width: 75px;
+    font-weight: 400;
+    font-style: italic;
 }
 
 #resourceView .mark dd {
     margin-left: 85px;
+    font-weight: 700;
+}
+
+#resourceView .double {
+    line-height: 1.85em;
+    font-variant: small-caps;
 }
 
 /*
