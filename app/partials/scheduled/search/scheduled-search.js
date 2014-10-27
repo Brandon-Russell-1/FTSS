@@ -11,16 +11,15 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 				'sort' : 'Start',
-				'group': 'course',
+				'group': 'Course.Number',
 
 				'grouping': {
 					'unit'  : 'Unit',
-					'course': 'Course'
+					'Course.Number': 'Course'
 				},
 
 				'sorting': {
 					'Start' : 'Start Date',
-					'course': 'Course',
 					'unit'  : 'Unit'
 				},
 
