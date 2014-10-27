@@ -219,34 +219,3 @@
     line-height: 1.85em;
     font-variant: small-caps;
 }
-
-/*
-
-#resourceView {
-    overflow-x: scroll;
-}
-
-#resourceView .dates {
-    margin-left: 200px;
-}
-
-#resourceView .events {
-    width: 200px;
-}
-
-#resourceView .title {
-    text-align: center;
-}
-
-#resourceView .month,
-#resourceView .day {
-    float: left;
-    text-align: center;
-}
-
-#resourceView .day {
-    width:20px;
-}
-
-#resourceView .day:nth-child(even) {
-}*/
