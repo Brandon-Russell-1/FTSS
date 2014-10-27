@@ -17,3 +17,9 @@ input#ttms {
 .noStudents .nav {
     display: none;
 }
+
+td#notes {
+    white-space: normal;
+    font-weight: normal;
+    line-height: 1.5em;
+}

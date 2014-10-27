@@ -27,7 +27,7 @@
     border-radius: 0;
 }
 
-#tagBox .selectize-dropdown-content {
+.selectize-dropdown-content {
     max-height: 500px;
 }
 
