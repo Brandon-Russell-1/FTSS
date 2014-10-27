@@ -1,13 +1,11 @@
 include ../__mixins
 
-- var columns = {'': 15, 'Host Unit':20, 'Local FTD':20, Email:30}
+- var columns = {'Host Unit':20, 'Local FTD':20, Email:30}
 +tableHeader('Host Unit', columns, 'hosts')
 
-    td: +icon('flag')
+    td
 
-    td: +googleMap(true)
-
-    td: b {{row.Unit}}
+    td.bold {{row.Unit}}
 
     td {{row.det.LongName}}
 
