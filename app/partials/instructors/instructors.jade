@@ -1,6 +1,6 @@
 include ../__mixins
 
-- var columns = {'':10,Instructor:40, Unit:20}
+- var columns = {'':10,Instructor:30, Email:40}
 +tableHeader('Instructor', columns, 'instructors')
 
     td: +icon('flag')
@@ -13,6 +13,6 @@ include ../__mixins
             span.archiveOnly  ***ARCHIVED INSTRUCTOR***&nbsp;
             | {{row.InstructorName}}
 
-    td: b {{row.Unit.LongName}}
+    td: b {{row.Instructor.InstructorEmail}}
 
     td: +actions(true, true, true, 'instructor')
