@@ -42,8 +42,8 @@ FTSS.ng.controller(
 						    events = events.concat(group);
 					    });
 
-					    min = moment(Math.min.apply(Math, _.pluck(events, 'sMoment'))).add(-4, 'days');
-					    max = moment(Math.max.apply(Math, _.pluck(events, 'eMoment'))).add(4, 'days');
+					    min = moment(Math.min.apply(Math, _.pluck(events, 'sMoment'))).add(-3, 'days');
+					    max = moment(Math.max.apply(Math, _.pluck(events, 'eMoment'))).add(3, 'days');
 
 					    months = {};
 
