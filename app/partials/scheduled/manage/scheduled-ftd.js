@@ -100,7 +100,7 @@ FTSS.ng.controller(
 
 							    months[month] = {
 								    'month'  : month,
-								    'sort'   : parseInt(min.format('M')),
+								    'sort'   : parseInt(min.format('YYYYMM')),
 								    'colspan': 0
 							    };
 
