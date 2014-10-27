@@ -10,56 +10,50 @@ form.form-horizontal(name='modal')
 
         .col-lg-6
 
-            +formGroup('FTD', 'scheduled-edit-ftd')
+            +formGroup('FTD')
                 .input-group
                     .input-group-addon.w15
                         +icon('building-o')
-                    .input-group-selectize
+                    .input-group-selectize(explain='scheduled-edit-ftd', right)
                         select(selectize='Units', bind='UnitId', remember='ftd')
-            br
 
-            +formGroup('Course', 'scheduled-edit-course')
+            +formGroup('Course')
                 .input-group
                     .input-group-addon.w15
                         +icon('books')
-                    .input-group-selectize
+                    .input-group-selectize(explain='scheduled-edit-course', right)
                         select(selectize='MasterCourseList',
                         bind='CourseId',
                         watch='UnitId',
                         watchList='Units.Courses',
                         remember='course')
-            br
 
-            +formGroup('Instructor', 'scheduled-edit-instructor')
+            +formGroup('Instructor')
                 .input-group
                     .input-group-addon.w15
                         +icon('instructor')
-                    .input-group-selectize
+                    .input-group-selectize(explain='scheduled-edit-instructor', right)
                         select(selectize='Instructors',
                         bind='InstructorId',
                         watch='UnitId',
                         watchList='Units.Instructors')
 
-            br
-
-            +formGroup('Reserved', 'scheduled-edit-reserved')
+            +formGroup('Reserved')
                 .input-group.pull-left(style='width:30%!important')
-                    input.form-control(ng-model='data.Host', type='number', min='0', required)
+                    input.form-control(ng-model='data.Host', type='number', min='0', required, explain='scheduled-edit-reserved', top)
                     .input-group-addon Host
 
                 .input-group.pull-left(style='width:30%!important;margin-left:5%')
-                    input.form-control(ng-model='data.Other', type='number', min='0', required)
+                    input.form-control(ng-model='data.Other', type='number', min='0', required, explain='scheduled-edit-reserved', top)
                     .input-group-addon Non-Host
 
                 #modalScheduledOpenSeats.input-group {{getOpenSeats()}}
 
             .clearfix
 
-            br
-
-            +formGroup('Notes', 'scheduled-edit-notes')
+            +formGroup('Notes')
                 .input-group
-                    textarea.form-control(type='text', ng-model='data.ClassNotes', style='height:150px')
+                    textarea.form-control(type='text', ng-model='data.ClassNotes', style='height:150px', explain='scheduled-edit-notes', right)
 
         .col-lg-6(bs-tabs)
 
