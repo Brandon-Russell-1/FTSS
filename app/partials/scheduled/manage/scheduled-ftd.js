@@ -187,7 +187,7 @@ FTSS.ng.controller(
 
 						    'dayClick': function (start) {
 
-							    if (!scope.data.Start && scope.data.CourseId) {
+							    if (scope.data.CourseId) {
 
 								    var days = caches.MasterCourseList[scope.data.CourseId].Days,
 								        end = start.clone();
@@ -204,6 +204,8 @@ FTSS.ng.controller(
 
 								    scope.data.Start = start.toISOString();
 								    scope.data.End = end.toISOString();
+
+								    scope.modal.$setDirty();
 
 								    scope.eventsInstructor[0] = [getDates()];
 

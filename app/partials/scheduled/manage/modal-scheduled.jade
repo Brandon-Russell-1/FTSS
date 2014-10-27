@@ -57,7 +57,7 @@ form.form-horizontal(name='modal')
 
         .col-lg-6(bs-tabs, ng-class='{noStudents:!data.students}')
 
-            div(ng-class='{addEvent:!data.Start && data.CourseId}', bs-pane, title='Calendar')
+            div(ng-class='{addEvent:data.CourseId}', bs-pane, title='Calendar')
 
                 br
 
