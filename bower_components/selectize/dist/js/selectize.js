@@ -2373,7 +2373,7 @@
 		persist: true,
 		diacritics: false,
 		create: false,
-		createOnBlur: false,
+		createOnBlur: true,
 		createFilter: null,
 		highlight: true,
 		openOnFocus: true,
