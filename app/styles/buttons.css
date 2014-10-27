@@ -1,14 +1,14 @@
 .btn.add-button {
     z-index: 99;
     top: 110px;
-    position: fixed!important;
+    position: fixed !important;
     left: calc(100% - 45px);
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
 }
 
 .btn.add-button:hover {
-    position: fixed!important;
+    position: fixed !important;
     right: 0;
     left: auto;
 }
@@ -24,7 +24,7 @@
 
 /* work around for ng-animate lameness */
 .ng-hide-add-active.btn, .ng-hide-remove.btn {
-    display: inline-block!important;
+    display: inline-block !important;
 }
 
 .btn-labeled {
@@ -35,10 +35,11 @@
 .btn-labeled .text {
     position: relative;
     padding: 6px 0;
-    top:4px;
+    top: 4px;
     left: -10px;
     font-size: 1.25em;
 }
+
 .btn-group .text {
     background-color: #fff;
     color: #285e8e;
@@ -62,12 +63,12 @@
 
 .btn {
     transition: background 750ms ease;
-    margin:1px!important;
+    margin: 1px !important;
 }
 
 .btn:hover:not(.btn-link) {
-    border:1px solid #999;
-    margin:0!important;
+    border: 1px solid #999;
+    margin: 0 !important;
 }
 
 .btn-group .btn {
@@ -75,16 +76,16 @@
 }
 
 .support {
-    cursor: pointer!important;
+    cursor: pointer !important;
     opacity: .6;
-    margin-top:.5em;
+    margin-top: .5em;
     font-size: 1.25em;
     transition: 500ms ease;
 }
 
 .support:hover, .support:hover * {
     opacity: 1;
-    cursor:pointer!important;
+    cursor: pointer !important;
 }
 
 .support svg {
@@ -107,20 +108,21 @@ body.collapsed #toggleExpand .icon.expand,
 }
 
 traverse * {
-    color:#333!important;
-    text-decoration: none!important;
-    outline:none!important;
+    color: #333 !important;
+    text-decoration: none !important;
+    outline: none !important;
 }
 
 .btn {
-    border:none;
+    border: none;
 }
 
 .table-hover tbody tr .btn-muted, .well .btn-muted {
     transition: opacity 500ms ease;
 }
 
-.table-hover tbody tr:not(:hover) .btn-muted, .well:not(:hover) .btn-muted {
+.table-hover tbody tr:not(:hover) .btn-muted,
+.well:not(:hover) .btn-muted{
     color: #111;
     background-color: transparent;
     opacity: .2;
@@ -132,11 +134,11 @@ traverse * {
 }
 
 .btn:hover svg {
-    fill:#000!important;
+    fill: #000 !important;
 }
 
 .white label svg.icon {
-    fill:#fff!important;
+    fill: #fff !important;
 }
 
 .btn-dark {
@@ -145,16 +147,16 @@ traverse * {
 }
 
 .btn-dark svg.icon {
-    fill:#fff!important;
+    fill: #fff !important;
 }
 
 .checkbox {
-    box-shadow:none!important;
+    box-shadow: none !important;
 }
 
 .checkbox .css-label {
-    width:20px;
-    height:20px;
+    width: 20px;
+    height: 20px;
 }
 
 .checkbox .yes {
@@ -162,6 +164,6 @@ traverse * {
 }
 
 .checkbox:not(.active) .yes,
-.checkbox.active .no{
+.checkbox.active .no {
     display: none;
 }
