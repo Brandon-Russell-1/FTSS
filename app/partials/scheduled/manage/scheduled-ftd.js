@@ -47,7 +47,6 @@ FTSS.ng.controller(
 
 					    months = {};
 
-					    $scope.resourceDayCount = -1;
 					    $scope.resourceDays = '';
 					    $scope.resourceEvents = [];
 
@@ -96,8 +95,6 @@ FTSS.ng.controller(
 					    while (min < max) {
 
 						    var month = min.add(1, 'days').format('MMM YYYY');
-
-						    $scope.resourceDayCount++;
 
 						    if (!months[month]) {
 
