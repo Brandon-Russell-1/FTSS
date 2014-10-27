@@ -1,6 +1,6 @@
 include ../__mixins
 
-- var columns = {'Class #':10, 'Start Date':10, Unit:10, Allocated:10, Open:10, Requested:10}
+- var columns = {'Class #':10, 'Start Date':10, Unit:15, Open:10, Requested:10, Notes: 30}
 
 +tableHeader(false, columns, 'requests')
 
@@ -16,11 +16,15 @@ include ../__mixins
 
     td {{row.request.Host.Unit}}
 
-    td.double {{row.Course.Max - row.openSeats}}
-
     td.double {{row.openSeats}}
 
     td.double {{row.request.Students.length}}
+
+    td
+        p(ng-if='row.request.Notes')
+
+            span.italics {{row.request.Notes}}
+
 
     td
         .pull-right
