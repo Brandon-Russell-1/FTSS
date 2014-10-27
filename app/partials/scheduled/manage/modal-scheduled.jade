@@ -55,7 +55,7 @@ form.form-horizontal(name='modal')
                 .input-group
                     textarea.form-control(type='text', ng-model='data.ClassNotes', style='height:150px', explain='scheduled-edit-notes', right)
 
-        .col-lg-6(bs-tabs)
+        .col-lg-6(bs-tabs, ng-class='{noStudents:!data.students}')
 
             div(ng-class='{addEvent:!data.Start && data.CourseId}', bs-pane, title='Calendar')
 
