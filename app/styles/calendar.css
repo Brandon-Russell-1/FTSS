@@ -83,6 +83,11 @@
     height: auto !important;
 }
 
+/*
+
+ Resource view
+
+*/
 #resourceView {
     width: 100%;
     overflow: hidden;
@@ -125,15 +130,7 @@
     background-color: #fff !important;
 }
 
-/*
-#resourceView tr:hover + .spacer td {
-    height: 100px;
-}*/
-
-/*
-#resourceView .spacer td,
-*/
-#resourceView .mark,
+#resourceView tr td,
 #resourceView .mark * {
     transition: ease 250ms all 500ms;
 }
@@ -148,8 +145,13 @@
     margin-top: -10px;
 }
 
+#resourceView tr:hover td {
+    border-color: #777;
+    background-color: #777 !important;
+}
+
 #resourceView tr:hover .mark {
-    background-color: #4cae4c;
+    background-color: #4cae4c !important;
 }
 
 #resourceView tr:hover .mark .mask-img {
@@ -157,11 +159,19 @@
     height: 100px;
     margin-top: -35px;
     margin-left: -85px;
+    z-index: 50;
 }
 
 #resourceView tr:hover .mark span {
-    margin-left: 25px;
     letter-spacing: .1em;
+}
+
+#resourceView tr:hover .mark .pds {
+    opacity: 0;
+}
+
+#resourceView tr:hover .mark .instructor {
+    margin-left: 25px;
 }
 
 #resourceView .mark .details,
@@ -175,8 +185,12 @@
     color: #fff;
 }
 
+#resourceView .mark span.instructor {
+    margin-left: 85px;
+}
+
 #resourceView .mark .details {
-    margin-left: 25px;
+    margin-left: 15px;
     margin-top: 34px;
     color: #333 !important;
     background-color: rgba(255, 255, 255, .9);
