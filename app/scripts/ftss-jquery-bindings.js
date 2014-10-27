@@ -114,25 +114,19 @@
 
 				content = popover.icon(content);
 
-				_([
-					  'left',
-					  'right',
-					  'top',
-					  'bottom'
-				  ])
-
-					.each(function (p) {
-						      if ($el[0].hasAttribute(p)) {
-							      placement = p;
-						      }
-					      });
+				placement = $el.attr('placement') ||
+				            $el[0].hasAttribute('left') && 'left' ||
+				            $el[0].hasAttribute('right') && 'right' ||
+				            $el[0].hasAttribute('top') && 'top' ||
+				            $el[0].hasAttribute('botom') && 'botom' ||
+				            'auto';
 
 				$el.popover({
 					            'trigger'  : 'manual',
 					            'html'     : true,
 					            'title'    : title,
 					            'content'  : content,
-					            'placement': placement || 'auto',
+					            'placement': placement,
 					            'container': 'body'
 				            });
 

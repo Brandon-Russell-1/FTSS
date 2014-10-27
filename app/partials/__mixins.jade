@@ -194,9 +194,9 @@ mixin modalFooter(submitText, defaultShow)
         .btn.btn-default(ng-click='close()') Cancel
 
 
-mixin formGroup(label,explain)
+mixin formGroup(label,explain, placement)
 
-    .form-group(explain=explain, left)
+    .form-group(explain=explain, placement=placement||'left')
         label.col-lg-2.control-label= label
         .col-lg-9
             block
@@ -208,27 +208,20 @@ mixin formGroupTail(model, type, required, helper)
         .helper= helper
 
 
-mixin formGroupText(label, model, type, required, helper, explain)
+mixin formGroupText(label, model, type, required, helper, explain, placement)
 
-    +formGroup(label, explain)
+    +formGroup(label, explain, placement)
         +formGroupTail(model, type, required, helper)
 
 
-mixin formGroupIcon(label, model, type, required, helper, explain, ico)
+mixin formGroupIcon(label, model, type, required, helper, explain, ico, placement)
 
-    +formGroup(label, explain)
+    +formGroup(label, explain, placement)
         .input-group
             .input-group-addon.w15
                 +icon(ico)
             +formGroupTail(model, type, required, helper)
 
-
-mixin peoplePicker(field)
-
-    +formGroup('Name', 'people-picker')
-        select(selectize='people', field=field, placeholder='Type a name to search...')
-        #loading.hide(style='position: absolute;right: -1.5em; margin-top: -2.75em;')
-            spinner(size='2em')
 
 mixin confirmPopover(className, title, text, action)
 
