@@ -133,14 +133,6 @@
 
 		utils.cacheFiller(row);
 
-		row.search = [
-			row.ClassNotes,
-			row.Course.text,
-			row.Instructor.label,
-			row.TTMS,
-			row.FTD.text
-		].join(' ');
-
 		switch (true) {
 			case (row.openSeats > 0):
 				row.openSeatsClass = 'success';
@@ -172,6 +164,16 @@
 
 		row.sMoment = moment(row.Start);
 		row.eMoment = moment(row.End);
+
+
+		row.search = [
+			row.ClassNotes,
+			row.Course.text,
+			row.Instructor.InstructorName || 'needs instructor',
+			row.TTMS,
+			row.FTD.text,
+			row.sMoment.format('MMMM')
+		].join(' ');
 
 		row.Archived = row.Archived || row.eMoment.isBefore(lastWeek);
 
