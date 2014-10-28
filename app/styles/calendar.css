@@ -47,16 +47,19 @@
     font-size: 1.2em;
 }
 
+.addEvent .fc-day-number {
+    transition: ease 250ms all 300ms;
+}
+
 .addEvent .fc-day-number:hover {
     cursor: pointer;
-    margin-top: -.25em;
+    margin-top: -.5em;
     padding: 0;
     color: #4cae4c !important;
     font-size: 4.75em;
     top: 0;
     right: 0;
     z-index: 999;
-    line-height: .85em;
 }
 
 .fc-time-grid-container {
