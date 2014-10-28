@@ -274,7 +274,7 @@ FTSS.ng.controller(
 					     *
 					     * @returns {string}
 					     */
-					    scope.getOpenSeats = function () {
+					    scope.getOpenSeats = function (countOnly) {
 
 						    // Only attempt this if a CourseID exists
 						    if (scope.data.CourseId) {
@@ -290,6 +290,10 @@ FTSS.ng.controller(
 							                (scope.data.Host || 0) -
 							                (scope.data.Other || 0) -
 							                requests);
+
+							    if(countOnly) {
+								    return open;
+							    }
 
 							    // Provide human-friendly seat availability counters
 							    switch (true) {
