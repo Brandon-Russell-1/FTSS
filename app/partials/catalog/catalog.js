@@ -10,18 +10,14 @@ FTSS.ng.controller(
 			var self = FTSS.controller($scope, {
 
 				'sort' : 'PDS',
-				'group': 'AFSC',
+				'group': 'MDS',
 
 				'grouping': {
-					'MDS' : 'MDS',
-					'AFSC': 'AFSC'
+					'MDS' : 'MDS'
 				},
 
 				'sorting': {
-					'PDS'  : 'Course',
-					'MDS'  : 'MDS',
-					'AFSC' : 'AFSC',
-					'Hours': 'Length'
+					'PDS': 'Course'
 				},
 
 				'model': 'catalog'
@@ -39,6 +35,8 @@ FTSS.ng.controller(
 						      .initialize(data)
 
 						      .then(function (d) {
+
+							            d.MDS = d.Title.split(' ')[0];
 
 							            d.Units = [];
 
