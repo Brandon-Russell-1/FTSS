@@ -407,6 +407,9 @@ FTSS.controller = (function () {
 					// Bind close to instance.destroy to remove this modal
 					scope.close = instance.destroy;
 
+					// Allow archiving within an edit modal
+					scope.archive = actions.archive;
+
 					// Bind the submit action with a destroy callback
 					if (opts.submit) {
 
@@ -443,7 +446,10 @@ FTSS.controller = (function () {
 			 */
 			'archive': function () {
 
-				var data = this.row;
+				// Allow handling modal archives
+				var close = this.close || false,
+
+				    data = this.row || this.data;
 
 				// Double check that this model can actually perform this action
 				if (data && data.hasOwnProperty('Archived')) {
@@ -459,6 +465,9 @@ FTSS.controller = (function () {
 
 						// HTTP 204 is the status given for a successful update, there will be no body
 						if (resp.status === 204) {
+
+							// If this is a modal, lets close it too
+							close && close();
 
 							utils.alert.update();
 
