@@ -100,7 +100,7 @@ form.form-horizontal(name='modal')
 
         .btn.btn-danger.btn-labeled.white(bs-popover,
                                         placement='right',
-                                        ng-if='!createData',
+                                        ng-if='!createData && !data.Archived',
                                         template='/partials/popover-cancel-class.html')
 
                     span.btn-label: +icon('trash_hide')
