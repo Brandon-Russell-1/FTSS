@@ -55,7 +55,11 @@ form.form-horizontal(name='modal')
                 .input-group
                     textarea.form-control(type='text', ng-model='data.ClassNotes', style='height:150px', explain='scheduled-edit-notes', right)
 
-        .col-lg-6(bs-tabs, ng-class='{noStudents:!data.students}')
+            +formGroup('J4 Notes')
+                #j4notes.input-group.italics {{data.J4Notes}}
+
+
+        .col-lg-6(bs-tabs)
 
             div(ng-class='{addEvent:data.CourseId}', bs-pane, title='Calendar')
 
@@ -67,7 +71,7 @@ form.form-horizontal(name='modal')
                     Click on a day to choose the start date, adjust the start/stop by dragging or resizing
                     the green class in the calendar above.
 
-            div(bs-pane, title='Students', ng-if='data.students')
+            div(bs-pane, title='Students')
 
                 br
 
@@ -91,7 +95,7 @@ form.form-horizontal(name='modal')
 
         .clearfix
 
-        .btn.btn-danger.btn-labeled.white.btn-muted(bs-popover,
+        .btn.btn-danger.btn-labeled.white(bs-popover,
                                         placement='right',
                                         ng-if='!createData',
                                         template='/partials/popover-cancel-class.html')

@@ -23,3 +23,8 @@ td#notes {
     font-weight: normal;
     line-height: 1.5em;
 }
+
+.modal #j4notes {
+    margin-top: 6px;
+    color: #777;
+}
