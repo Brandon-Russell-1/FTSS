@@ -120,30 +120,39 @@
 
 		'appInit': function (scope, SharePoint) {
 
-			var doSearch = function (val) {
+			var sVal,
 
-				if (val && val.length > 0) {
+			    doSearch = function (val) {
 
-					var tags = FTSS.tags = {};
+				    // This causes our explain hover to go away and the field to lose focus (feels more natural)
+				    FTSS.search.$control.blur();
 
-					_.each(val, function (v) {
+				    // Perform our search if it is valid and unique
+				    if (val && val.length > 0 && val !== sVal) {
 
-						var split = v.split(':');
+					    var tags = FTSS.tags = {};
 
-						tags[split[0]] = tags[split[0]] || [];
+					    // Keep track of our last search value to prevent duplicate searches
+					    sVal = val;
 
-						tags[split[0]].push(Number(split[1]) || split[1]);
+					    _.each(val, function (v) {
 
-						scope.fn.setPermaLink();
-						scope.fn.doNavigate();
+						    var split = v.split(':');
 
-					});
+						    tags[split[0]] = tags[split[0]] || [];
 
-				}
+						    tags[split[0]].push(Number(split[1]) || split[1]);
 
-				FTSS.search.$control.find('.item').addClass('processed');
+						    scope.fn.setPermaLink();
+						    scope.fn.doNavigate();
 
-			};
+					    });
+
+				    }
+
+				    FTSS.search.$control.find('.item').addClass('processed');
+
+			    };
 
 			return {
 				'valueField'     : 'id',
@@ -157,14 +166,21 @@
 					'optgroup_columns',
 					'remove_button'
 				],
+				// If the users presses, enter we are assuming they wanted to do a search
 				'onEnter'        : doSearch,
+
+				// Try to do a search on dropdown close too (we have a fake button for this as a user hint)
 				'onDropdownClose': function () {
 					doSearch(this.getValue());
 				},
+
+				// The primrary initiazlier for the searchbox, performs async operations with ng-SharePoint
 				'onInitialize'   : function () {
 
+					// Async counter
 					var count = 0,
 
+					    // Final count for our async operations to complete the process
 					    CACHE_COUNT = 4,
 
 					    // Because of some funky async + closures we need to store a copy of this for action
@@ -310,17 +326,15 @@
 								      /**
 								       * Generates string format for full-text search
 								       *
-								       * "U2I / J4AMP2A6X6 A41B / U-2S ELECTRICAL AND ENVIRONMENTAL SYSTEMS / U-2 / 2A6X6"
+								       * "U2I J4AMP2A6X6 A41B U-2S ELECTRICAL AND ENVIRONMENTAL SYSTEMS"
 								       *
 								       * @type {*|string}
 								       */
 								      v.text = [
 									      v.PDS,
 									      v.Number,
-									      v.Title,
-									      v.MDS,
-									      v.AFSC
-								      ].join(' / ');
+									      v.Title
+								      ].join(' ');
 
 								      return v.text;
 							      });
@@ -344,15 +358,14 @@
 								      /**
 								       * Generates string for label full-text search
 								       *
-								       * "Nellis 213 372 TRS 372trsdet13.pro@nellis.af.mil"
+								       * "Nellis 213 372 TRS"
 								       *
 								       * @type {*|string}
 								       */
 								      v.text = [
 									      v.Base,
 									      v.Det,
-									      v.Squadron,
-									      v.Email
+									      v.Squadron
 								      ].join(' ');
 
 								      /**
