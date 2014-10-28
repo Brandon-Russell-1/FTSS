@@ -1,109 +1,100 @@
 /*global caches, FTSS, utils, PRODUCTION */
 
-FTSS.ng.controller('instructorsController',
+FTSS.ng.controller(
+	'instructorsController',
 
-                   [
-	                   '$scope',
-	                   '$timeout',
-	                   function ($scope, $timeout) {
+	[
+		'$scope',
+		'$timeout',
+		function ($scope, $timeout) {
 
-		                   var self = FTSS.controller($scope, {
+			var self = FTSS.controller($scope, {
 
-			                   'sort' : 'Name',
-			                   'group': 'Unit.LongName',
+				'sort' : 'Name',
+				'group': 'Unit.LongName',
+				'model': 'instructors',
 
-			                   'grouping': {
-				                   'Unit.Squadron': 'Squadron',
-				                   'Unit.LongName': 'Detachment'
-			                   },
+				'edit': function (scope) {
 
-			                   'sorting': {
-				                   'Name': 'Name'
-			                   },
+					scope.onFileSelect = function ($files) {
 
-			                   'model'  : 'instructors',
+						var reader = new FileReader();
 
-			                   'edit': function (scope) {
+						scope.submitted = true;
 
-				                   scope.onFileSelect = function ($files) {
+						reader.onload = function (result) {
 
-					                   var reader = new FileReader();
+							var rawBuffer = result.target.result,
 
-					                   scope.submitted = true;
+							    rand = utils.generateUUID(),
 
-					                   reader.onload = function (result) {
+							    url = (PRODUCTION ?
 
-						                   var rawBuffer = result.target.result,
+							           'https://cs1.eis.af.mil/sites/FTSS/rebuild' :
 
-						                       rand = utils.generateUUID(),
+							           'http://virtualpc/dev') + '/_vti_bin/ListData.svc/Bios',
 
-						                       url = (PRODUCTION ?
+							    slug = (PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' : '/dev/Bios/');
 
-						                              'https://cs1.eis.af.mil/sites/FTSS/rebuild' :
+							$.ajax({
+								       'url'        : url,
+								       'type'       : 'POST',
+								       'data'       : rawBuffer,
+								       'processData': false,
+								       'contentType': 'multipart/form-data',
+								       'headers'    : {
+									       'accept': "application/json;odata=verbose",
+									       'slug'  : slug + rand + '.jpg'
+								       },
+								       'success'    : function () {
+									       $timeout(function () {
 
-						                              'http://virtualpc/dev') + '/_vti_bin/ListData.svc/Bios',
+										       scope.data.Photo = rand;
+										       scope.modal.$setDirty();
 
-						                       slug = (PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' : '/dev/Bios/');
+										       scope.submitted = false;
 
-						                   $.ajax({
-							                          'url'        : url,
-							                          'type'       : 'POST',
-							                          'data'       : rawBuffer,
-							                          'processData': false,
-							                          'contentType': 'multipart/form-data',
-							                          'headers'    : {
-								                          'accept': "application/json;odata=verbose",
-								                          'slug'  : slug + rand + '.jpg'
-							                          },
-							                          'success'    : function () {
-								                          $timeout(function () {
+									       });
+								       },
+								       error        : function () {
+									       utils.alert.error();
+								       }
+							       });
+						};
 
-									                          scope.data.Photo = rand;
-									                          scope.modal.$setDirty();
+						reader.readAsArrayBuffer($files[0]);
 
-									                          scope.submitted = false;
+					};
 
-								                          });
-							                          },
-							                          error        : function () {
-								                          utils.alert.error();
-							                          }
-						                          });
-					                   };
+				}
 
-					                   reader.readAsArrayBuffer($files[0]);
-
-				                   };
-
-			                   }
-
-		                   });
+			});
 
 
-		                   self
+			self
 
-			                   .bind()
+				.bind()
 
-			                   .then(function (data) {
+				.then(function (data) {
 
-				                         self
+					      self
 
-					                         .initialize(data)
+						      .initialize(data)
 
-					                         .then(function (d) {
+						      .then(function (d) {
 
-						                               d.Unit = caches.Units[d.UnitId];
+							            d.Unit = caches.Units[d.UnitId];
 
-						                               d.firstName = (
-							                               (d.InstructorName || '')
-								                               .match(/[a-z]+,\s([a-z]+)/i) || []
-							                               )
-							                               .slice(1, 1);
+							            d.firstName = (
+								            (d.InstructorName || '')
+									            .match(/[a-z]+,\s([a-z]+)/i) || []
+								            )
+								            .slice(1, 1);
 
-					                               });
+						            });
 
 
-			                         });
+				      });
 
-	                   }
-                   ]);
+		}
+	]);
