@@ -11,15 +11,6 @@ FTSS.ng.controller(
 
 				'sort' : 'PDS',
 				'group': 'MDS',
-
-				'grouping': {
-					'MDS' : 'MDS'
-				},
-
-				'sorting': {
-					'PDS': 'Course'
-				},
-
 				'model': 'catalog'
 
 			});

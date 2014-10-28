@@ -9,23 +9,8 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				'roles': [
-					'mtf',
-					'ftd'
-				],
-
 				'sort' : 'Unit',
 				'group': 'det.LongName',
-
-				'grouping': {
-					'det.LongName': 'FTD'
-				},
-
-				'sorting': {
-					'Unit'        : 'Unit',
-					'det.LongName': 'FTD'
-				},
-
 				'model': 'hosts'
 
 			});

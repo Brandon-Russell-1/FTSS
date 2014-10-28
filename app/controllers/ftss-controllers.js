@@ -34,15 +34,6 @@ FTSS.controller = (function () {
 
 		var model, process, actions;
 
-		// We'll just make opts.grouping mandatory, we'll use an int here for perf reasons later on
-		opts.grouping[0] = 'None';
-
-		// Specify the groupBy parameter
-		$scope.$parent.grouping = opts.grouping;
-
-		// Specify the sortBy parameter
-		$scope.$parent.sorting = opts.sorting || false;
-
 		actions = {
 
 			// Enable access to $scope externally
@@ -222,13 +213,6 @@ FTSS.controller = (function () {
 				// If there is a defined data processor, then execute it against the data as well
 				process && _(data).each(process);
 
-				var g = $scope.groupBy,
-				    s = $scope.sortBy;
-
-				// (re)bind our groupBy & sortBy values
-				g.$ = $scope.grouping.hasOwnProperty(g.$) ? g.$ : opts.group;
-				s.$ = $scope.sorting && $scope.sorting.hasOwnProperty(s.$) ? s.$ : opts.group;
-
 				// If this is a tagBox then we should call taghighlight as well
 				if (tagBox) {
 					utils.tagHighlight(data);
@@ -339,15 +323,15 @@ FTSS.controller = (function () {
 
 									// Run sortBy first on our mapped data
 									.sortBy(function (srt) {
-										        return utils.deepRead(srt, $scope.sortBy.$);
+										        return utils.deepRead(srt, opts.sort || false);
 									        })
 
 									// Group the data by the given property
 									.groupBy(function (gp) {
 										         $scope.count++;
-										         return $scope.groupBy.$ ?
-										                utils.deepRead(gp, $scope.groupBy.$) ||
-										                '* No Grouping Data Found' : false;
+										         return opts.group ?
+										                utils.deepRead(gp, opts.group) ||
+										                '' : false;
 									         })
 
 									.value();
@@ -366,9 +350,8 @@ FTSS.controller = (function () {
 									// De-register the watcher if it exists
 									(FTSS.searchWatch || Function)();
 
-									// Create a watcher that monitors our searchText, groupBy & sortBy for changes
-									FTSS.searchWatch = $scope.$watchCollection('[searchText.$,groupBy.$,sortBy.$]',
-									                                           watcher);
+									// Create a watcher that monitors our searchText for changes
+									FTSS.searchWatch = $scope.$watch('searchText.$', watcher);
 
 									// De-register the watcher if it exists
 									(FTSS.archiveWatch || Function)();

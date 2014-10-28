@@ -11,22 +11,10 @@ FTSS.ng.controller(
 		function ($scope, $modal, SharePoint, $templateCache) {
 
 			var self = FTSS.controller($scope, {
+
 				    'sort' : 'Start',
 				    'group': 'Month',
-
-				    'grouping': {
-					    'Course'      : 'Course',
-					    'Month'       : 'Month',
-					    'availability': 'Open Seats'
-				    },
-
-				    'sorting': {
-					    'Start' : 'Start Date',
-					    'course': 'Course'
-				    },
-
 				    'model': 'scheduled',
-
 				    'modalPlacement': 'wide',
 
 				    // We will be post-post-processing this data for the calendar (needs some special data)

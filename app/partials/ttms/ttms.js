@@ -10,20 +10,8 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				    'sort' : 'age',
+				    'sort' : 'Created',
 				    'group': 'location',
-
-				    'grouping': {
-					    'location': 'Location'
-				    },
-
-				    'sorting': {
-
-					    'Start': 'Start Date',
-					    'age'  : 'Age'
-
-				    },
-
 				    'model' : 'ttms',
 
 				    // We only want classes with requests

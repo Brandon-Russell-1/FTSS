@@ -12,17 +12,7 @@ FTSS.ng.controller(
 			var self = FTSS.controller($scope, {
 
 				'sort' : 'Det',
-				'group': 'LongName',
-
-				'grouping': {
-					'LongName': 'Squadron'
-				},
-
-				'sorting': {
-					'Base': 'Base',
-					'Det' : 'Detachment'
-				},
-
+				'group': 'Squadron',
 				'model': 'units',
 
 				edit: function () {

@@ -12,19 +12,6 @@ FTSS.ng.controller(
 
 				'sort' : 'Start',
 				'group': 'Course.Number',
-
-				'grouping': {
-					'Course.Number': 'Course'
-				},
-
-				'sorting': {
-
-					'Start'                  : 'Start Date',
-					'request.Students.length': '# Requested',
-					'request.Host.Unit'      : 'Unit'
-
-				},
-
 				'model' : 'scheduled',
 
 				// We only want classes with requests

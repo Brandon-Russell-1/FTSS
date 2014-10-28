@@ -50,8 +50,6 @@
 
 						var view = {
 
-							'g': $scope.groupBy.$,
-							's': $scope.sortBy.$,
 							'c': $scope.wellCollapse,
 							'a': $scope.showArchive,
 							'S': $scope.searchText.$
@@ -282,8 +280,6 @@
 					$scope.count = '-';
 					$scope.overload = false;
 					$scope.filter = false;
-					$scope.sortBy = {};
-					$scope.groupBy = {};
 					$scope.searchText = {};
 
 					FTSS.selectizeInstances = {};
@@ -297,8 +293,6 @@
 
 					$scope.permaLink = _fn.getPage() !== 'home' && $routeParams.link || '';
 
-					$scope.sortBy.$ = prefs.s || '';
-					$scope.groupBy.$ = prefs.g || '';
 					$scope.searchText.$ = $scope.searchText.$ || prefs.S || '';
 					$scope.showArchive = prefs.a || false;
 					$scope.wellCollapse = prefs.c || false;
