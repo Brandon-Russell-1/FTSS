@@ -13,19 +13,6 @@ FTSS.ng.controller(
 
 				    'sort' : 'course.PDS',
 				    'group': 'course.MDS',
-
-				    'grouping': {
-					    'course.MDS' : 'MDS',
-					    'priority'   : 'Priority',
-					    'course.AFSC': 'AFSC'
-				    },
-
-				    'sorting': {
-					    'course.PDS'         : 'PDS',
-					    'days'               : 'Wait Time',
-					    'requirements.length': '# Requirements'
-				    },
-
 				    'modal': 'backlog',
 
 				    // We bind this controller to the requirement's stats for 898 building & tracking existing requests
@@ -421,8 +408,6 @@ FTSS.ng.controller(
 				// Wrap in $timeout() to notify Angular's digest cycle of the change
 				$timeout(function () {
 
-					var courses = {};
-
 					$scope.old = {};
 					$scope.history = {};
 
@@ -448,106 +433,6 @@ FTSS.ng.controller(
 						});
 
 					});
-
-
-					/* $scope.filter causes a page navigation action (updates the page URL for bit.ly/bookmark stuff) so we'll
-					 * we'll just keep a copy of it in the FTSS object for now...
-					 *
-					 * @todo this is a really dumb hack that should be refactored.
-					 */
-					if ($scope.$parent.temp898) {
-
-						// Read the host object from our dropdown selection
-						$scope.host = FTSS.search.options[FTSS.search.getValue()].data || {};
-
-						// Using the host.FTD property (if it exists) add the ftd object
-						$scope.ftd = $scope.host.FTD ? caches.Units[$scope.host.FTD] : false;
-
-						// Iterate over all the requirements
-						_(parseText($scope.$parent.temp898)).each(function (c, k) {
-
-							// This should always work--but just in case, get our course data from the course catalog
-							var course = _.findWhere(caches.MasterCourseList, {'IMDS': k}) || {};
-
-							// If it's valid, add the course to the courses object
-							if (course.Id) {
-
-								courses[course.Id] = {
-									'requirements': c,
-									'course'      : course,
-									'priority'    : course.priority,
-									'Priority'      : course.priority ? 'Priority Course(s)' : 'Regular Course(s)',
-									'listFTD'     : []
-								};
-
-							}
-
-						});
-
-						// This will loop over each FTD and add then add itself to any courses in our list
-						_(caches.Units).each(function (u) {
-
-							var unit = angular.copy(u);
-
-							_(unit.Courses_JSON).each(function (c) {
-
-								var course = courses[c];
-
-								if (course) {
-
-									// Local if the host's FTD is requested
-									course.local = ($scope.ftd.Id === unit.Id);
-
-									// Add the unit to the list of available FTDs for this course
-									course.listFTD.push(unit);
-
-									if (course.local) {
-
-										// For local, set the distance text to Local and distanceInt to 0 for sorting
-										unit.distance = 'Local';
-										unit.distanceInt = 0;
-
-									} else {
-
-										// Not local so attempt to do our Cartesian calculation for a distance estimate
-										var d = utils.distanceCalc($scope.host.Location, unit.Location) || 'unknown';
-
-										// If the results aren't valid, just set distanceInt to past the Sun--yes, overkill?
-										unit.distanceInt = parseInt(d, 10) || 99999999;
-
-										// we can't just use toLocale() thanks to our favorite browser (IE)...grrrr
-										unit.distance = utils.prettyNumber(d);
-										/*
-										 if (!counted) {
-										 counted = true;
-										 $scope.totals.reqsTDY++;
-										 }*/
-									}
-
-								}
-
-							});
-
-						});
-
-					}
-
-					self
-
-						// Send the generated data through the controller init function
-						.initialize(courses)
-
-						.then(function (d) {
-
-							      // Sort the available FTDs by distance (closest first)
-							      d.listFTD = _.sortBy(d.listFTD, 'distanceInt');
-
-							      d.requirements = _.sortBy(d.requirements, 'date');
-
-							      // Pre-check our closest FTD if available
-							      d.detRequest = d.listFTD[0] || false;
-
-						      });
 
 				});
 
@@ -638,9 +523,109 @@ FTSS.ng.controller(
 
 			FTSS.pasteAction = function (text) {
 
-				$scope.$parent.temp898 = text;
+				/* $scope.filter causes a page navigation action (updates the page URL for bit.ly/bookmark stuff) so we'll
+				 * we'll just keep a copy of it in the FTSS object for now...
+				 *
+				 * @todo this is a really dumb hack that should be refactored.
+				 */
+				if (text) {
 
-				self.reload();
+					var courses = {};
+
+					// Read the host object from our dropdown selection
+					$scope.host = FTSS.search.options[FTSS.search.getValue()].data || {};
+
+					// Using the host.FTD property (if it exists) add the ftd object
+					$scope.ftd = $scope.host.FTD ? caches.Units[$scope.host.FTD] : false;
+
+					// Iterate over all the requirements
+					_(parseText(text)).each(function (c, k) {
+
+						// This should always work--but just in case, get our course data from the course catalog
+						var course = _.findWhere(caches.MasterCourseList, {'IMDS': k}) || {};
+
+						// If it's valid, add the course to the courses object
+						if (course.Id) {
+
+							courses[course.Id] = {
+								'MDS'         : course.Title.split(' ')[0],
+								'Id'          : course.Id,
+								'requirements': c,
+								'course'      : course,
+								'priority'    : course.priority,
+								'Priority'    : course.priority ? 'Priority Course(s)' : 'Regular Course(s)',
+								'listFTD'     : []
+							};
+
+						}
+
+					});
+
+					// This will loop over each FTD and add then add itself to any courses in our list
+					_(caches.Units).each(function (u) {
+
+						var unit = angular.copy(u);
+
+						_(unit.Courses_JSON).each(function (c) {
+
+							var course = courses[c];
+
+							if (course) {
+
+								// Local if the host's FTD is requested
+								course.local = ($scope.ftd.Id === unit.Id);
+
+								// Add the unit to the list of available FTDs for this course
+								course.listFTD.push(unit);
+
+								if (course.local) {
+
+									// For local, set the distance text to Local and distanceInt to 0 for sorting
+									unit.distance = 'Local';
+									unit.distanceInt = 0;
+
+								} else {
+
+									// Not local so attempt to do our Cartesian calculation for a distance estimate
+									var d = utils.distanceCalc($scope.host.Location, unit.Location) || 'unknown';
+
+									// If the results aren't valid, just set distanceInt to past the Sun--yes, overkill?
+									unit.distanceInt = parseInt(d, 10) || 99999999;
+
+									// we can't just use toLocale() thanks to our favorite browser (IE)...grrrr
+									unit.distance = utils.prettyNumber(d);
+									/*
+									 if (!counted) {
+									 counted = true;
+									 $scope.totals.reqsTDY++;
+									 }*/
+								}
+
+							}
+
+						});
+
+					});
+
+				}
+
+				self
+
+					// Send the generated data through the controller init function
+					.initialize(courses)
+
+					.then(function (d) {
+
+						      // Sort the available FTDs by distance (closest first)
+						      d.listFTD = _.sortBy(d.listFTD, 'distanceInt');
+
+						      d.requirements = _.sortBy(d.requirements, 'date');
+
+						      // Pre-check our closest FTD if available
+						      d.detRequest = d.listFTD[0] || false;
+
+					      });
+
 
 				/*      $scope.totals.pctStudents =
 				 Math.floor($scope.totals.students / $scope.totals.allStudents * 100);
