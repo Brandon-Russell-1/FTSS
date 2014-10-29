@@ -238,7 +238,6 @@
     border: 1px solid #5bc0de !important;
     background-color: #fff !important;
     border-radius: 3px;
-    transition: width 500ms ease;
 }
 
 .selectize-input > input {
@@ -264,7 +263,7 @@
     float: left;
     width: 20px !important;
     cursor: pointer;
-    padding-left: 25px !important;
+    padding-left: 5px !important;
 }
 
 .selectize-input > input:focus {

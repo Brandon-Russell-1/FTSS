@@ -19,7 +19,7 @@
     "url": "git://github.com/brianreavis/selectize.js.git"
   },
   "main": [
-    "dist/css/selectize.bootstrap3.css",
+    "dist/css/selectize.css",
     "dist/js/selectize.js"
   ],
   "ignore": [
