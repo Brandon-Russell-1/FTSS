@@ -75,10 +75,10 @@ utils.cacheFiller = function (row) {
 
 	row.Instructor = caches.Instructors[row.InstructorId] || {};
 
-	row.startText = row.start = row.Start;
-
+	row.start = row.Start;
 	row.end = row.End;
 
+	row.startText = moment(row.Start).format('D MMM YYYY');
 	row.endText = moment(row.End).add(-1, 'minutes').format('D MMM YYYY');
 
 	var seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
