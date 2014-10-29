@@ -7,16 +7,127 @@ include ../__scheduled-mixins
 
     +grouping()
 
-        +classHeader()
+        .well(ng-repeat='row in group track by row.Id',
+        ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}')
 
-            .col-lg-8.pull-left
+            h4
 
-                +classData(true)
+                span.archiveOnly ***ARCHIVED CLASS***
+
+                span.archiveExclude(class='btn btn-{{row.openSeatsClass}} availSeats(disabled="")',
+                ng-click='request(row)') {{row.openSeats}} Open
+
+                span(style='letter-spacing: .1em')
+
+                    span &nbsp;{{row.Course.PDS}} -&nbsp;
+
+                    a(href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{row.Course.Number}}',
+                        target='_blank') {{row.Course.Number}}
+
+                    span.italics {{row.TTMSText}}
+
+                    span.rollupOnly &nbsp;@ {{row.FTD.LongName}}
+
+                    span.pull-right
+                        | {{row.startText}} - {{row.endText}}
+                        +icon('calendar_range')
+
+            hr.rollup
+
+            .rollup
+
+                .col-lg-8.pull-left
+
+                    table.table.table-split
+
+                        thead: tr: th.truncate(colspan='3') {{row.Course.Title}}
+
+                        tbody
+
+                            tr(ng-if='row.Instructor.Photo')
+                                td(rowspan='8', colspan='1', style='border-right: none;width:185px;padding-top: 20px')
+                                    photo.img-rounded(size='150px', shape='rectangle', data='row.Instructor')
+
+                            tr
+                                td Location
+                                td
+                                    a(href='https://www.google.com/maps/@{{row.FTD.Location | nospace}},15z',
+                                        target='_blank',
+                                        hover="<img style='width:400px;height:300px' src='{{row.map}}'/>")
+
+                                        | {{row.FTD.LongName}}
+
+                                    a.no-border.pull-right(href='mailto:{{row.mailFTD}}',
+                                    hover='Contact the FTD about this class.')
+                                        +icon('envelope')
+
+
+                            tr(ng-if='row.Instructor.InstructorName')
+                                td Instructor
+                                td {{row.Instructor.InstructorName}}
+                                    a.no-border.pull-right(href='mailto:{{row.mailInstructor}}',
+                                                            ng-if='row.mailInstructor',
+                                                            hover='Contact the instructor about this course.')
+                                        +icon('envelope')
+                            tr
+                                td Days
+                                td {{row.Course.Days}}
+                            tr
+                                td Hours
+                                td {{row.Course.Hours}}
+
+                            tr
+
+                                td Notes
+                                td#notes {{row.ClassNotes}}
+
 
             .col-lg-2.pull-right.text-right
 
-                +seatStats()
+                    table.table.table-split
+
+                        thead: tr: th.text-right(colspan='2') TRAINING SEATS
+
+                        tbody
+                            tr(hover='scheduled-seats-host', left, ng-if='row.Host')
+                                td Host
+                                td.text-center {{row.Host}}
+
+                            tr(hover='scheduled-seats-non-host', left, ng-if='row.Other')
+                                td Non-host
+                                td.text-center {{row.Other}}
+
+                            tr(ng-if='row.approvedSeats', left, hover='scheduled-seats-approved')
+                                td Approved
+                                td.text-center {{row.approvedSeats}}
+
+                            tr.italics(ng-if='row.pendingSeats', hover='scheduled-seats-pending', left)
+                                td Pending
+                                td.text-center {{row.pendingSeats}}
+
+                            tr(style='border-top:2px solid;')
+                                td Minimum
+                                td.text-center {{row.Course.Min}}
+
+                            tr
+                                td Maximum
+                                td.text-center {{row.Course.Max}}
+
+                            tr(style='border-top:2px solid;')
+                                td Available
+                                td.text-center {{row.openSeats}}
+
 
             .clearfix
 
-            +classActions(false)
+            .requestActions.archiveExclude
+
+                hr
+
+                .pull-right.invert
+
+                        .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-if='row.openSeats && canRequest')
+                            span.btn-label: +icon('plus-circle')
+                            | Request Seats
+
+                .clearfix
