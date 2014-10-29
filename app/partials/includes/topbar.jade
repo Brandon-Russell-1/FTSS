@@ -13,11 +13,12 @@ header.navbar.navbar-inverse
 
         li
             .support(bs-popover,
+                        left,
                         ng-click='fn.doMakeBitly()',
                         animation='am-flip-x',
                         hover='topbar-share',
                         content-template='/partials/bitly.html',
-                        placement='bottom-right',
+                        data-placement='bottom-right',
                         container='body',
                         no-arrow)
                 +icon('share')
@@ -25,9 +26,10 @@ header.navbar.navbar-inverse
         li
             .support(tabindex='-1',
                         bs-popover,
+                        left,
                         container='body',
                         content-template='/partials/user-settings.html',
-                        placement='bottom-right',
+                        data-placement='bottom-right',
                         animation='am-flip-x',
                         hover='topbar-settings',
                         no-arrow)
@@ -35,7 +37,8 @@ header.navbar.navbar-inverse
 
         li
             .support(data-content-template='/partials/support.html',
-                        placement='left',
+                        left,
+                        data-placement='left',
                         bs-aside='aside',
                         container='body',
                         animation='am-slide-left',

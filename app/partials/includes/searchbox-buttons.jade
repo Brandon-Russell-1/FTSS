@@ -2,10 +2,10 @@ include ../__mixins
 
 #searchButtons.no-pad.pull-right(style='width:100px')
 
-    span#toggleExpand(ng-click='fn.doToggleCollapse()', hover='button-collapse', class='btn btn-default')
+    span#toggleExpand(ng-click='fn.doToggleCollapse()', hover='button-collapse', class='btn btn-default', left)
         +icon('expand')
         +icon('collapse')
 
-    span#toggleArchive(ng-click='fn.doToggleArchive()', hover='button-archive', class='btn btn-default', no-arrow)
+    span#toggleArchive(ng-click='fn.doToggleArchive()', hover='button-archive', class='btn btn-default', left)
         +icon('trash_hide')
         +icon('trash_show')
