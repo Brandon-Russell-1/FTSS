@@ -28,9 +28,6 @@ exports.config =
       joinTo:
         'css/app.css': /^(app|vendor|bower_components)/
       order :
-        before: [
-          'vendor/selectize.css'
-        ]
         after : [
           'app/styles/theme.css',
           'app/styles/roles.css'
