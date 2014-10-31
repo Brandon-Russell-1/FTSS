@@ -39,6 +39,8 @@ mixin panelGroup(ico, title, type)
 
                 p(user-message='home-intro')
 
+                br
+
                 #homeInstructions
                     h5.border-bottom.role.mtf.ftd.approvers Requirements
 
@@ -50,17 +52,23 @@ mixin panelGroup(ico, title, type)
                         .col-lg-3: +miniLink('requirements', 'agree', '898 Response')
                         .col-lg-9(user-message='navigation-898-response')
 
-
                     h5.border-bottom Classes
 
-                    .row
-                        .col-lg-3: +miniLink('scheduled', 'calendar_range', 'View Scheduled')
+                    .row.role.ftd
+                        .col-lg-3: +miniLink('scheduled-ftd', 'calendar_range', 'Manage')
+                        .col-lg-9(user-message='navigation-view-scheduled')
+
+                    .row.role.schedulers
+                        .col-lg-3: +miniLink('ttms', 'hash', 'Need Class IDs')
                         .col-lg-9(user-message='navigation-view-scheduled')
 
                     .row.role.ftd
                         .col-lg-3: +miniLink('requests', 'download', 'Manage Requests')
                         .col-lg-9(user-message='navigation-manage-requests')
 
+                    .row
+                        .col-lg-3: +miniLink('scheduled', 'search', 'View Scheduled')
+                        .col-lg-9(user-message='navigation-view-scheduled')
 
                     h5.border-bottom.role.ftd.mtf.curriculum Manage FTSS
 
@@ -80,9 +88,7 @@ mixin panelGroup(ico, title, type)
                         .col-lg-3: +miniLink('hosts', 'puzzle-piece', 'Host Units')
                         .col-lg-9(user-message='navigation-host-units')
 
-                hr
-
-                p#homeFooter(user-message='home-footer')
+                    br
 
         .col-lg-3
 
