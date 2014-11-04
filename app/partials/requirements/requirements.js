@@ -224,9 +224,7 @@ FTSS.ng.controller(
 
 				if (row.ActiveProp) {
 
-					SharePoint.user(row);
-
-					send[row.ActiveProp] = (approve ? '' : 'NO:') + row.user.Name;
+					send[row.ActiveProp] = (approve ? '' : 'NO:') + SharePoint.user().name;
 
 					// Call sharePoint.update() with our data and handle the success/failure response
 					SharePoint.update(send).then(function (resp) {
