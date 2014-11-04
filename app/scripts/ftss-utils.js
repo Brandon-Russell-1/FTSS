@@ -120,21 +120,30 @@ utils.ignore = (function () {
 
 }());
 
-utils.masterReset = function () {
 
-	try {
+// Grab some angular variables for use later on
+FTSS.ng.run(
+	[
+		'SharePoint',
+		function (SharePoint) {
 
-		window.sessionStorage.clear();
-		window.localStorage.clear();
-		window.indexedDB.deleteDatabase('angularSharePoint');
+			utils.masterReset = function () {
 
-	} catch (e) {
+				try {
 
-	}
+					window.sessionStorage.clear();
+					window.localStorage.clear();
+					SharePoint._flushCache();
 
-	location.reload();
+				} catch (e) {
 
-};
+				}
+
+			};
+
+		}
+	]);
+
 
 utils.watchCount = function (log) {
 	var root = angular.element(document.getElementsByTagName('body'));
