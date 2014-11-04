@@ -1,11 +1,13 @@
+
 .popover {
-    max-width: 50%;
+    max-width: 60%;
     z-index: 9999 !important
 }
 
+/*
 .modal-open .popover {
     max-width: 28%;
-}
+}*/
 
 .popover h3 {
     font-weight: 800;
@@ -37,7 +39,7 @@
 }
 
 .popover.frozen {
-    border:2px solid #428bca;
+    border: 2px solid #428bca;
 }
 
 .popover.frozen .arrow {
