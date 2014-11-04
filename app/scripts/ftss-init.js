@@ -84,21 +84,23 @@
 			}
 		]);
 
-	FTSS.ng.value('SP_CONFIG', PRODUCTION ?
-	                           {
+	FTSS.ng.value('SP_CONFIG',
 
-		                           'baseURL'     : 'https://cs1.eis.af.mil/sites/FTSS/rebuild/_vti_bin/ListData.svc/',
-		                           'user'        : { 'url': 'https://cs1.eis.af.mil/sites/FTSS/rebuild/_vti_bin/UserGroup.asmx' },
-		                           'people'      : { 'url': 'https://cs1.eis.af.mil/_vti_bin/ListData.svc/UserInformationList' },
-		                           'cacheVersion': '2014.10.24'
+	              PRODUCTION ?
 
-	                           } : {
+	              {
 
-		                           'baseURL': 'http://virtualpc/dev/_vti_bin/ListData.svc/',
-		                           'user'   : { 'url': 'http://virtualpc/_vti_bin/UserGroup.asmx' },
-		                           'people' : { 'url': 'http://virtualpc/_vti_bin/ListData.svc/UserInformationList' }
+		              'baseURL'     : 'https://cs1.eis.af.mil/sites/FTSS/rebuild/_vti_bin/ListData.svc/',
+		              'user'        : { 'url': 'https://cs1.eis.af.mil/sites/FTSS/rebuild/_vti_bin/UserGroup.asmx' },
+		              'cacheVersion': 5
 
-	                           });
+	              } : {
+
+		              'baseURL'     : 'http://virtualpc/dev/_vti_bin/ListData.svc/',
+		              'user'        : { 'url': 'http://virtualpc/_vti_bin/UserGroup.asmx' },
+		              'cacheVersion': 5
+
+	              });
 
 	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
