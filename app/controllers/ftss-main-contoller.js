@@ -48,18 +48,24 @@
 					 */
 					'setPermaLink': function () {
 
-						var view = {
+						var view = {};
 
-							'c': $scope.wellCollapse,
-							'a': $scope.showArchive,
-							'S': $scope.searchText.$
+						if ($scope.wellCollapse) {
+							view.c = $scope.wellCollapse;
+						}
 
-						};
+						if ($scope.showArchive) {
+							view.a = $scope.showArchive;
+						}
+
+						if ($scope.searchText.$) {
+							view.S = $scope.searchText.$;
+						}
 
 						$scope.permaLink = [
 
 								FTSS.tags && btoa(JSON.stringify(FTSS.tags)) || '',
-								btoa(JSON.stringify(view)) || ''
+								!_.isEmpty(view) && btoa(JSON.stringify(view)) || ''
 
 						].join('/');
 
@@ -89,15 +95,6 @@
 								].join('/'));
 						});
 
-					},
-
-					/**
-					 * This is the callback for the searchbox reset button, clears out the search params
-					 */
-					'doResetSearch': function () {
-						FTSS.search.clear();
-						$scope.searchText.$ = '';
-						FTSS.search.refreshOptions(false);
 					},
 
 					/**
@@ -192,7 +189,20 @@
 
 								$scope.singleTag = FTSS.search.settings.maxItems < 2;
 
-								var pending = $scope.permaLink && JSON.parse(atob($scope.permaLink));
+								var pending = $scope.permaLink && JSON.parse(atob($scope.permaLink)),
+
+								    validFilters = FTSS.filters.map(),
+
+								    /**
+								     * Handles pages with tagbox but no valid selected filters
+								     */
+								    emptyFinish = function () {
+
+									    _fn.setLoaded();
+									    FTSS.search.focus();
+									    FTSS.search.$control_input.focus();
+
+								    };
 
 								if (pending) {
 
@@ -202,19 +212,17 @@
 
 									_.each(pending, function (filterItems, filterGroup) {
 
-										_.each(filterItems, function (filter) {
+										if (validFilters.hasOwnProperty(filterGroup)) {
 
-											var valid = true;
-
-											if (valid) {
+											_.each(filterItems, function (filter) {
 
 												tagMap[filterGroup] = tagMap[filterGroup] || [];
 												tagMap[filterGroup].push(filter);
 												valMap.push(filterGroup + ':' + filter);
 
-											}
+											});
 
-										});
+										}
 
 									});
 
@@ -231,19 +239,17 @@
 
 											FTSS.search.$control.find('.item').addClass('processed');
 
+										} else {
+
+											emptyFinish();
+
 										}
 
 									});
 
 								} else {
 
-									if ($scope.tagBox) {
-
-										_fn.setLoaded();
-										FTSS.search.focus();
-										FTSS.search.$control_input.focus();
-									}
-
+									emptyFinish();
 								}
 
 							} else {
