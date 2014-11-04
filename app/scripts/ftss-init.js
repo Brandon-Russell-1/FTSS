@@ -102,7 +102,6 @@
 
 	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
-	FTSS.people = {};
 	FTSS.utils = {};
 
 	FTSS.photoURL = PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' : 'http://virtualpc/dev/Bios/';
