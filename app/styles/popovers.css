@@ -1,13 +1,12 @@
 
 .popover {
-    max-width: 60%;
+    max-width: 40%;
     z-index: 9999 !important
 }
 
-/*
 .modal-open .popover {
     max-width: 28%;
-}*/
+}
 
 .popover h3 {
     font-weight: 800;
