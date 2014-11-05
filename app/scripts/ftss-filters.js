@@ -23,6 +23,9 @@
 		    },
 		    'backlog'      : {
 			    'h': 'HostId'
+		    },
+		    'manage-ftd'   : {
+			    'u': 'UnitId'
 		    }
 	    },
 
@@ -30,7 +33,8 @@
 		    'backlog'      : 1,
 		    'requirements' : 1,
 		    'requests'     : 1,
-		    'scheduled-ftd': 1
+		    'scheduled-ftd': 1,
+		    'manage-ftd'   : 1
 	    };
 
 	filters.map = function () {

@@ -45,9 +45,8 @@
 						    'scheduled-ftd',
 						    'ttms',
 						    'requests',
-						    'instructors',
 						    'catalog',
-						    'units',
+						    'manage-ftd',
 						    'backlog',
 						    'hosts',
 						    'admin'

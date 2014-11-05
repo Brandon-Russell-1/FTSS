@@ -29,7 +29,7 @@
 		],
 		'instructors': ['ftd'],
 		'catalog'    : ['curriculum'],
-		'units'      : ['ftd'],
+		'manage-ftd' : ['ftd'],
 		'backlog'    : ['approvers',
 		                'mtf',
 		                'ftd'
