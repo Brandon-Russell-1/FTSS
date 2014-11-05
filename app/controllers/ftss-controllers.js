@@ -490,6 +490,70 @@ FTSS.controller = (function () {
 
 			},
 
+			'_postCRUD': function(data, callback) {
+
+				// Mark the data as updated for the <updated> directive
+				data.updated = true;
+
+				// Copy the updated back to the original dataset
+				actions.data[data.Id] = angular.copy(data);
+
+				// Call actions.process() to reprocess the data by our controllers
+				actions.process();
+
+				// If there is a callback, then fire it
+				callback && callback();
+
+			},
+
+			'_create': function (send, callback) {
+
+				SharePoint.create(send).then(function (resp) {
+
+					if (resp.status === 201) {
+
+						// Notify user of success
+						utils.alert.create();
+
+						// Perform final CRUD operations
+						actions._postCRUD(resp.data, callback);
+
+					}
+
+				}, utils.alert.error);
+
+			},
+
+			'_update': function (scope, send, callback) {
+
+				// Call sharePoint.update() with our data and handle the success/failure response
+				SharePoint.update(send).then(function (resp) {
+
+					scope.submitted = false;
+
+					// HTTP 204 is the status given for a successful update, there will be no body
+					if (resp.status === 204) {
+
+						// Notify user of success
+						utils.alert.update();
+
+						// Update the etag so we can rewrite this data again during the session if we want
+						scope.data.__metadata.etag = resp.headers('etag');
+
+						// Perform final CRUD operations
+						actions._postCRUD(scope.data, callback);
+
+					} else {
+
+						utils.alert.error('unknown update failure');
+
+					}
+
+				}, utils.alert.error);
+
+
+			},
+
 			/**
 			 * Performs our update to the SP model.  Sends only changes to the server for efficiency and handles update response
 			 *
@@ -502,7 +566,7 @@ FTSS.controller = (function () {
 
 				return function (eventData) {
 
-					var old, fields, send = {};
+					var old, fields, send = {}, complete;
 
 					if (scope.modal.$dirty) {
 
@@ -543,54 +607,17 @@ FTSS.controller = (function () {
 						send.cache = model.cache;
 						send.__metadata = scope.data.__metadata || model.source;
 
+						complete = function () {
+							callback(eventData, true);
+						};
+
 						if (isNew) {
 
-							SharePoint.create(send).then(function (resp) {
-
-								if (resp.status === 201) {
-
-									utils.alert.create();
-
-									callback(eventData, true);
-									actions.reload();
-
-								}
-
-							}, utils.alert.error);
+							actions._create(send, complete);
 
 						} else {
 
-							// Call sharePoint.update() with our data and handle the success/failure response
-							SharePoint.update(send).then(function (resp) {
-
-								scope.submitted = false;
-
-								// HTTP 204 is the status given for a successful update, there will be no body
-								if (resp.status === 204) {
-
-									utils.alert.update();
-
-									// Update the etag so we can rewrite this data again during the session if we want
-									scope.data.__metadata.etag = resp.headers('etag');
-
-									// Mark the data as updated for the <updated> directive
-									scope.data.updated = true;
-
-									// Copy the updated back to the original dataset
-									actions.data[scope.data.Id] = angular.copy(scope.data);
-
-									// Call actions.process() to reprocess the data by our controllers
-									actions.process();
-
-									callback(eventData, true);
-
-								} else {
-
-									utils.alert.error('unknown update issue');
-
-								}
-
-							}, utils.alert.error);
+							actions._update(scope, send, complete);
 
 						}
 
