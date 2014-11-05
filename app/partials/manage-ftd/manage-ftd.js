@@ -5,8 +5,7 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		'SharePoint',
-		function ($scope, SharePoint) {
+		function ($scope) {
 
 			$scope.pageLimit = 50;
 
