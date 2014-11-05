@@ -191,14 +191,14 @@ mixin modalFooter(submitText, defaultShow)
             else
                 span.text &nbsp;Submit
 
-        .btn.btn-default(ng-click='close()') Cancel
+        #cancel.btn.btn-default(ng-click='close()') Cancel
 
 
 mixin formGroup(label,explain, placement)
 
     .form-group(explain=explain, placement=placement||'left')
         label.col-lg-2.control-label= label
-        .col-lg-9
+        .col-lg-10
             block
 
 mixin formGroupTail(model, type, required, helper)
