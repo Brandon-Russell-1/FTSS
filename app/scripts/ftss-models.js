@@ -46,8 +46,7 @@
 					'Phone',
 					'Location',
 					'LCode',
-					'Courses_JSON',
-					'Thumb'
+					'Courses_JSON'
 				]
 			}
 
