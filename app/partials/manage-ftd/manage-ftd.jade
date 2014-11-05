@@ -14,7 +14,7 @@ form#embed(name='modal').col-lg-6
             .input-group-addon.w15
                 +icon('envelope')
             input.form-control(ng-model='data.Email', type='email')
-            .helper 'Please enter a valid email address.'
+            .helper Please enter a valid email address.
 
     br
 
@@ -34,13 +34,16 @@ form#embed(name='modal').col-lg-6
     +modalFooter('Save Changes')
 
 
-.wrapped.col-lg-6#rightScroll
+#rightScroll.wrapped.col-lg-6.addNew
 
-        h3 Instructors
+        .text-info.info(ng-if='!groups')
+            +userInstructions('manage-ftd-no-instructors')
 
         div(ng-repeat='(header, group) in groups')
 
-            table.table.table-striped.table-expanded.table-hover.rollup
+            h3 Instructors
+
+            table.table.table-striped.table-expanded.table-hover
 
                 tbody
 
