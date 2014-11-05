@@ -2007,8 +2007,8 @@
 		 */
 		clear: function() {
 			var self = this;
-	
-			if (!self.items.length) return;
+
+			//if (!self.items.length) return;
 			self.$control.children(':not(input)').remove();
 			self.items = [];
 			self.lastQuery = null;
