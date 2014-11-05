@@ -48,33 +48,39 @@
 	 */
 	filters.$refresh = (function () {
 
-		var options, userOptions;
+		var options, userOptions, lastFilter;
 
 		// return the real function for filters.$refresh now that we have today cached in a closure
 		return function () {
 
 			var page = FTSS._fn.getPage();
 
-			// create a cloned backup of our options & userOptions before we change them up
-			options = options || _.clone(FTSS.search.options);
-			userOptions = userOptions || _.clone(FTSS.search.userOptions);
-
-			// empty the options--how wild is that!?@!
-			FTSS.search.options = {};
-			FTSS.search.userOptions = {};
-
 			// Temporary list of valid filter keys for this page
 			var validFilters = _.keys(filterMaps[page]);
 
-			// Add everything else back in that is a valid filter for this page
-			_(userOptions).each(function (opt, key) {
+			if (validFilters.join() !== lastFilter) {
 
-				if (_.contains(validFilters, key.charAt(0))) {
-					FTSS.search.options[key] = _.clone(options[key]);
-					FTSS.search.userOptions[key] = _.clone(userOptions[key]);
-				}
+				lastFilter = validFilters.join();
 
-			});
+				// create a cloned backup of our options & userOptions before we change them up
+				options = options || _.clone(FTSS.search.options);
+				userOptions = userOptions || _.clone(FTSS.search.userOptions);
+
+				// empty the options--how wild is that!?@!
+				FTSS.search.options = {};
+				FTSS.search.userOptions = {};
+
+				// Add everything else back in that is a valid filter for this page
+				_(userOptions).each(function (opt, key) {
+
+					if (_.contains(validFilters, key.charAt(0))) {
+						FTSS.search.options[key] = _.clone(options[key]);
+						FTSS.search.userOptions[key] = _.clone(userOptions[key]);
+					}
+
+				});
+
+			}
 
 			var settings = FTSS.search.settings;
 
