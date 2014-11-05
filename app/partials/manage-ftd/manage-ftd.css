@@ -1,0 +1,25 @@
+#rightScroll {
+    left: 50%;
+}
+
+#rightScroll tr td:first-child {
+    border-left: 1px solid #ccc!important;
+}
+
+#rightScroll tr {
+    border-right: 1px solid #ccc;
+}
+
+#rightScroll h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#manage-ftd #embed #cancel {
+    display: none;
+}
+
+#manage-ftd #embed .modal-footer {
+    border-top: none;
+    padding-right: 0;
+}

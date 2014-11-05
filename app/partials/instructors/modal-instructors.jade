@@ -16,14 +16,6 @@ form.form-horizontal(name='modal')
 
             +formGroupIcon('Email', 'data.InstructorEmail', 'email', false, 'Make sure you enter a valid email address.', 'instructors-email', 'envelope')
 
-            +formGroup('FTD', 'instructors-unit')
-                .input-group
-                    .input-group-addon.w15
-                        +icon('building-o')
-                    .input-group-selectize
-                        select(selectize='Units', bind='UnitId', remember='ftd', required)
-
-
         br
 
         .center-block.drag-target(style='width:175px', hover='instructors-photo', left)

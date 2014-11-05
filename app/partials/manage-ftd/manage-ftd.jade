@@ -1,0 +1,65 @@
+include ../__mixins
+
++addButton('Add Instructor')
+
+form#embed(name='modal').col-lg-6
+
+    br
+
+    +userInstructions('units', true)
+
+    .form-horizontal
+
+        .input-group(explain='units-email', right)
+            .input-group-addon.w15
+                +icon('envelope')
+            input.form-control(ng-model='data.Email', type='email')
+            .helper 'Please enter a valid email address.'
+
+    br
+
+    h4
+        b Courses Taught
+        .pull-right {{data.Courses_JSON.length}}
+
+    .pds(explain='units-courses', right)
+        select(selectize='MasterCourseList', bind='Courses_JSON', multiple)
+
+    .text-info.info.italics.pull-right
+        +icon('info-circle')
+        | You can paste a list of PDS course codes to update this list faster
+
+    .clearfix
+
+    +modalFooter('Save Changes')
+
+
+.wrapped.col-lg-6#rightScroll
+
+        h3 Instructors
+
+        div(ng-repeat='(header, group) in groups')
+
+            table.table.table-striped.table-expanded.table-hover.rollup
+
+                tbody
+
+                    tr.middle.am-fade-and-scale.traverse(ng-repeat='row in group track by row.Id',
+                                                        ng-class='{archived:row.Archived}',
+                                                        ng-dblclick='edit(false)',
+                                                        id='row-{{row.Id}}')
+
+                        td.cleanPhoto(class='{{running(row)}}'): photo(size='75px', data='row')
+
+                        td
+                            span.archiveOnly  ***ARCHIVED INSTRUCTOR***&nbsp;
+                            b {{row.InstructorName}}
+
+                            br
+
+                            .italics {{row.InstructorEmail}}
+
+                        td: +actions(true, true, true, 'instructor')
+
+
+
