@@ -91,14 +91,18 @@
 
 						// Check to see if remember is enabled for this field
 						if (opts.remember) {
-
 							remember = localStorage['FTSS-selectize-' + opts.remember];
+						}
+
+						// Try to add options again if they weren't loaded before
+						if (!opts.watch && options[opts.select]) {
+							self.addOption(options[opts.select]);
 						}
 
 						loaded = remember;
 
 						// Set the value based on the current model
-						self.setValue(scope.data[opts.field] || remember);
+						self.setValue(utils.deepRead(scope, 'data.' + opts.field) || remember);
 
 						self.refreshOptions(false);
 
@@ -433,6 +437,11 @@
 						.then(function (response) {
 
 							      loaded(response, 'Instructors', function (val) {
+
+								      // Fix for stupid SP bug--I hate SP
+								      val.InstructorEmail = val.InstructorEmail ?
+								                            val.InstructorEmail.replace('mailto:', '') :
+								                            '';
 
 								      val.PhotoThumb = val.Photo ? [
 
