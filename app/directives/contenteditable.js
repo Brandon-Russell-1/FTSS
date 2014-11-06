@@ -26,7 +26,15 @@
 
 					var onEnter = attrs.hasOwnProperty('onenter'),
 
-					    placeholder = attrs.placeholder;
+					    placeholder = attrs.placeholder,
+
+					    original = utils.deepRead(scope, attrs.ngModel),
+
+					    run = function () {
+
+						    (original !== ngModel.$viewValue) && scope.$eval(attrs.onenter);
+
+					    };
 
 					// Specify how UI should be updated
 					ngModel.$render = function () {
@@ -35,7 +43,7 @@
 
 					element.on('keydown', function (e) {
 						if (onEnter && e.which === 13) {
-							scope.$eval(attrs.onenter);
+							run();
 							e.preventDefault();
 							e.stopImmediatePropagation();
 						}
@@ -79,7 +87,7 @@
 					if (attrs.hasOwnProperty('blur')) {
 						element.on('blur', function () {
 							if (ngModel.$viewValue && ngModel.$viewValue !== placeholder) {
-								scope.$eval(attrs.onenter);
+								run();
 							}
 						});
 					}
@@ -89,7 +97,7 @@
 					// Write data to the model
 					function read() {
 
-						var txt = element.text().replace(/[^\w.#,*?[\]()!=]/mg, ' ');
+						var txt = element.text().replace(/[^\w.#,*?@[\]()!=]/mg, ' ');
 
 						txt && ngModel.$setViewValue(txt);
 
