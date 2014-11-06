@@ -490,7 +490,7 @@ FTSS.controller = (function () {
 
 			},
 
-			'_postCRUD': function(data, callback) {
+			'_postCRUD': function (data, callback) {
 
 				// Mark the data as updated for the <updated> directive
 				data.updated = true;
@@ -526,6 +526,8 @@ FTSS.controller = (function () {
 
 			'_update': function (scope, send, callback) {
 
+				var data = scope.data || scope;
+
 				// Call sharePoint.update() with our data and handle the success/failure response
 				SharePoint.update(send).then(function (resp) {
 
@@ -538,10 +540,10 @@ FTSS.controller = (function () {
 						utils.alert.update();
 
 						// Update the etag so we can rewrite this data again during the session if we want
-						scope.data.__metadata.etag = resp.headers('etag');
+						data.__metadata.etag = resp.headers('etag');
 
 						// Perform final CRUD operations
-						actions._postCRUD(scope.data, callback);
+						actions._postCRUD(data, callback);
 
 					} else {
 
@@ -551,6 +553,21 @@ FTSS.controller = (function () {
 
 				}, utils.alert.error);
 
+
+			},
+
+			'inlineUpdate': function (field, callback) {
+
+				var scope = this.row,
+
+				    send = {
+					    'cache'     : true,
+					    '__metadata': scope.__metadata
+				    };
+
+				send[field] = scope[field];
+
+				actions._update(scope, send, callback);
 
 			},
 
