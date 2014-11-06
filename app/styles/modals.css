@@ -25,7 +25,7 @@
 }
 
 .modal-dialog .selectize-input:not(.has-items) input {
-    width: 97%!important;
+    width: 97% !important;
 }
 
 .modal-dialog .well {
@@ -59,19 +59,4 @@
     border-bottom: 1px solid #ccc;
     margin-bottom: 5px;
     padding-bottom: 4px;
-}
-
-
-#googleModalMap {
-    position: absolute;
-    right: -425px;
-    border: 1px solid rgba(0, 0, 0, .2);
-    border-radius: 6px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
-    width:400px;
-    height:300px;
-}
-
-#googleModalMap:hover {
-    border:3px dotted #428bca;
 }

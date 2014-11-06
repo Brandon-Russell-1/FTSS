@@ -1,6 +1,7 @@
 .italics {
     font-style: italic;
 }
+
 .label, .badge {
     font-size: 90%;
     font-weight: lighter
@@ -73,12 +74,6 @@
 
 #sort-group-search {
     margin-bottom: 25px;
-}
-
-.modal-dialog input:focus {
-    background-color: #f3f7f8;
-    color: #3a87ad;
-    font-weight: 800;
 }
 
 .double {
