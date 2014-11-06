@@ -47,22 +47,27 @@ form#embed(name='modal').col-lg-6
 
                 tbody
 
-                    tr.middle.am-fade-and-scale.traverse(ng-repeat='row in group track by row.Id',
+                    tr.middle.am-slide-right(ng-repeat='row in group track by row.Id',
                                                         ng-class='{archived:row.Archived}',
-                                                        ng-dblclick='edit(false)',
-                                                        id='row-{{row.Id}}')
+                                                        ng-file-drop='onFileSelect($files)')
 
                         td.cleanPhoto(class='{{running(row)}}'): photo(size='75px', data='row')
 
                         td
                             span.archiveOnly  ***ARCHIVED INSTRUCTOR***&nbsp;
-                            b {{row.InstructorName}}
+                            b.form-control(contenteditable,
+                                            blur,
+                                            ng-model='row.InstructorName',
+                                            onEnter='inlineUpdate("InstructorName")',
+                                            placeholder='name')
 
-                            br
+                            .form-control(contenteditable,
+                                            blur,
+                                            ng-model='row.InstructorEmail',
+                                            onEnter='inlineUpdate("InstructorEmail")',
+                                            placeholder='email')
 
-                            .italics {{row.InstructorEmail}}
-
-                        td: +actions(true, true, true, 'instructor')
+                        td.w5: +actions(true, false, true, 'instructor')
 
 
 

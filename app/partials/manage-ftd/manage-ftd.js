@@ -60,13 +60,15 @@ FTSS.ng.controller(
 
 			};
 
+			$scope.inlineUpdate = self.inlineUpdate;
+
 			self.bind('filter').then(function (data) {
 
 				var UnitId = parseInt(FTSS.search.getValue().pop().split(':').pop());
 
 				$scope.data = caches.Units[UnitId];
 
-				self.initialize(data).then(function(row) {
+				self.initialize(data).then(function (row) {
 
 					row.InstructorEmail = row.InstructorEmail ?
 					                      row.InstructorEmail.replace('mailto:', '') :
