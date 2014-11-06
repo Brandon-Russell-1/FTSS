@@ -5,7 +5,8 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		function ($scope) {
+		'$timeout',
+		function ($scope, $timeout) {
 
 			$scope.pageLimit = 50;
 
@@ -43,6 +44,59 @@ FTSS.ng.controller(
 				});
 
 				collection.length && FTSS.selectizeInstances.Courses_JSON.setValue(collection);
+
+			};
+
+			$scope.onFileSelect = function ($files) {
+
+				var reader = new FileReader(),
+
+				    scope = this;
+
+				$timeout(function () {
+					scope.row.submitted = true;
+				});
+
+				reader.onload = function (result) {
+
+					var rawBuffer = result.target.result,
+
+					    rand = utils.generateUUID(),
+
+					    url = (PRODUCTION ?
+
+					           'https://cs1.eis.af.mil/sites/FTSS/rebuild' :
+
+					           'http://virtualpc/dev') + '/_vti_bin/ListData.svc/Bios',
+
+					    slug = (PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' : '/dev/Bios/');
+
+					$.ajax({
+						       'url'        : url,
+						       'type'       : 'POST',
+						       'data'       : rawBuffer,
+						       'processData': false,
+						       'contentType': 'multipart/form-data',
+						       'headers'    : {
+							       'accept': "application/json;odata=verbose",
+							       'slug'  : slug + rand + '.jpg'
+						       },
+						       'success'    : function () {
+
+							       scope.row.Photo = rand;
+
+							       self.inlineUpdate.call(scope, 'Photo', function () {
+								       scope.row.submitted = false;
+							       });
+
+						       },
+						       error        : function () {
+							       utils.alert.error();
+						       }
+					       });
+				};
+
+				reader.readAsArrayBuffer($files[0]);
 
 			};
 

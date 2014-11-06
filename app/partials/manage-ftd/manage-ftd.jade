@@ -51,7 +51,9 @@ form#embed(name='modal').col-lg-6
                                                         ng-class='{archived:row.Archived}',
                                                         ng-file-drop='onFileSelect($files)')
 
-                        td.cleanPhoto(class='{{running(row)}}'): photo(size='75px', data='row')
+                        td.cleanPhoto(class='{{running(row)}}', ng-class='{submitting:row.submitted}')
+                            .sending: spinner(size='6em')
+                            photo(size='75px', data='row', watch)
 
                         td
                             span.archiveOnly  ***ARCHIVED INSTRUCTOR***&nbsp;

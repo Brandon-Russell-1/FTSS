@@ -28,3 +28,9 @@
     width: 100px;
     padding-left: 25px!important;
 }
+
+#manage-ftd td:not(.submitting) .sending,
+#manage-ftd td.submitting photo {
+    transition:none!important;
+    display: none!important;
+}
