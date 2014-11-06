@@ -18,10 +18,10 @@ include ../__mixins
     td
 
         p.form-control.wideText(contenteditable,
-                        blur,
-                        ng-model='row.J4Notes',
-                        onEnter='inlineUpdate(row, "J4Notes", false)',
-                        placeholder='Type to leave notes for the FTD')
+                                blur,
+                                ng-model='row.J4Notes',
+                                onEnter='inlineUpdate("J4Notes", false)',
+                                placeholder='Type to leave notes for the FTD')
 
         p(ng-if='row.ClassNotes')
             b FTD Notes:&nbsp;
@@ -30,7 +30,7 @@ include ../__mixins
     td
 
         p.form-control.pull-right.wideText(contenteditable,
-                                    ng-model='row.TTMS',
-                                    onEnter='inlineUpdate(row, "TTMS", true)',
-                                    blur,
-                                    placeholder='Class #')
+                                            ng-model='row.TTMS',
+                                            onEnter='inlineUpdate("TTMS", true)',
+                                            blur,
+                                            placeholder='Class #')
