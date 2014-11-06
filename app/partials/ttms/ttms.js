@@ -10,56 +10,26 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				    'sort' : 'Created',
-				    'group': 'location',
-				    'model' : 'ttms',
+				'sort'  : 'Created',
+				'group' : 'location',
+				'model' : 'ttms',
 
-				    // We only want classes with requests
-				    'filter': "TTMS eq null and Archived eq false"
+				// We only want classes with requests
+				'filter': "TTMS eq null and Archived eq false"
 
-			    });
+			});
 
-			    $scope.inlineUpdate = function (row, field, setArchive) {
+			$scope.inlineUpdate = function (field, setArchive) {
 
-				    if (_.isEmpty(row[field])) {
-					    return;
-				    }
+				self.inlineUpdate.call(this, field, function (data) {
 
-				    var send = {
-					    'cache'     : true,
-					    '__metadata': row.__metadata
-				    };
+					if (setArchive) {
+						data.Archived = true;
+					}
 
-				    send[field] = row[field];
+				});
 
-				    // Call sharePoint.update() with our data and handle the success/failure response
-				    SharePoint
-
-					    .update(send)
-
-					    .then(function (resp) {
-
-						          // HTTP 204 is the status given for a successful update, there will be no body
-						          if (resp.status === 204) {
-
-							          utils.alert.update();
-
-							          if (setArchive) {
-								          row.Archived = true;
-							          }
-
-							          self.process();
-
-						          } else {
-
-							          utils.alert.error('Please try again later.');
-
-						          }
-
-					          });
-
-
-			    };
+			};
 
 			self
 
