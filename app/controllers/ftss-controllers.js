@@ -498,11 +498,11 @@ FTSS.controller = (function () {
 				// Copy the updated back to the original dataset
 				actions.data[data.Id] = angular.copy(data);
 
+				// If there is a callback, then fire it
+				callback && callback(data);
+
 				// Call actions.process() to reprocess the data by our controllers
 				actions.process();
-
-				// If there is a callback, then fire it
-				callback && callback();
 
 			},
 
