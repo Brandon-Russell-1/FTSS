@@ -7,8 +7,6 @@ include ../__scheduled-mixins
 
     +userInstructions('scheduled-ftd', true)
 
-    // div(ui-calendar='uiConfig.calendar', calendar='schedule', ng-model='events')
-
     table#resourceView.table.table-bordered.table-hover
 
         thead
@@ -20,22 +18,3 @@ include ../__scheduled-mixins
 
             tr.event(ng-repeat-start='event in events', ng-bind-html='event.html', ng-dblclick='event.edit()')
             tr.spacer(ng-repeat-end): td
-
-//
-    +grouping()
-
-        +classHeader(false)
-
-            .col-lg-8.pull-left
-
-                +classData(false)
-
-            .col-lg-2.pull-right.text-right
-
-                +seatStats()
-
-            +notes(true)
-
-            .clearfix
-
-            +classActions(true)
