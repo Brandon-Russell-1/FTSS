@@ -52,11 +52,11 @@
 
 	};
 
-	utils.requestSeats = function ($scope, $modal, SharePoint) {
+	utils.requestSeats = function ($scope, $modal, self) {
 
-		return function (row, autoApprove) {
+		return function (row) {
 
-			if ($scope.canRequest && row.openSeats > 0) {
+			if ($scope.canRequest && row.openSeats > 0 || $scope.autoApprove) {
 
 				var scope = $scope.$new();
 
@@ -69,7 +69,7 @@
 
 						'scope'          : scope,
 						'backdrop'       : 'static',
-						'contentTemplate': autoApprove ? '/partials/modal-add-seats.html' : '/partials/modal-request-seats.html'
+						'contentTemplate': '/partials/modal-request-seats.html'
 
 					}).destroy;
 
@@ -79,7 +79,7 @@
 
 					row.Requests_JSON.push([
 						                       // Status
-						                       1,
+						                       scope.autoApprove ? 2 : 1,
 
 						                       // Students Array
 						                       scope.data.Students,
@@ -91,37 +91,13 @@
 						                       scope.data.HostId
 					                       ]);
 
-					// Call sharePoint.update() with our data and handle the success/failure response
-					SharePoint.update({
+					self._update(scope, {
 
-						                  'cache'        : true,
-						                  '__metadata'   : row.__metadata,
-						                  'Requests_JSON': row.Requests_JSON
+						'cache'        : true,
+						'__metadata'   : row.__metadata,
+						'Requests_JSON': row.Requests_JSON
 
-					                  })
-
-						.then(function (resp) {
-
-							      scope.submitted = false;
-
-							      // HTTP 204 is the status given for a successful update, there will be no body
-							      if (resp.status === 204) {
-
-								      utils.alert.create();
-
-								      self.process();
-
-								      scope.close();
-
-								      utils.alert.create();
-
-							      } else {
-
-								      utils.alert.error('unknown update issue');
-
-							      }
-
-						      });
+					}, scope.close);
 
 				};
 			}
