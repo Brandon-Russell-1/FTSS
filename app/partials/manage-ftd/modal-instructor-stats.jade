@@ -2,6 +2,12 @@ include ../__mixins
 
 form.form-horizontal(name='modal')
 
+    .modal-header.caps
+
+        h3
+            +icon('graph_pie')
+            | {{data.InstructorName}}'s Stats
+
     .modal-body
 
         table.table.table-striped
