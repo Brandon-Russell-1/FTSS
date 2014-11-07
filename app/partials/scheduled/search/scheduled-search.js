@@ -17,7 +17,7 @@ FTSS.ng.controller(
 
 			});
 
-			$scope.request = utils.requestSeats($scope, $modal, SharePoint);
+			$scope.request = utils.requestSeats($scope, $modal, self);
 
 			self
 
@@ -25,9 +25,15 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
+					      $scope.autoApprove = $scope.hasRole
+					      (['ftd',
+					        'scheduler'
+					       ]);
+
 					      $scope.canRequest = $scope.hasRole(
 						      ['mtf',
-						       'ftd'
+						       'ftd',
+						       'scheduler'
 						      ]);
 
 					      self.initialize(data).then(function (row) {
