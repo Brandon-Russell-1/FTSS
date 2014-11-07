@@ -58,12 +58,16 @@ include ../__mixins
                     tr.middle.am-slide-right(ng-repeat='row in group track by row.Id',
                                                         ng-class='{archived:row.Archived}',
                                                         ng-file-drop='onFileSelect($files)')
+
                         td.drag-target(class='{{running(row)}}', ng-class='{submitting:row.submitted}')
+
                             .sending: spinner(size='6em')
-                            photo(size='75px', data='row', watch, force)
+                            photo(size='75px', data='row', watch)
 
                         td
+
                             span.archiveOnly  ***ARCHIVED INSTRUCTOR***&nbsp;
+
                             b.form-control(contenteditable,
                                             blur,
                                             ng-model='row.InstructorName',
@@ -77,6 +81,5 @@ include ../__mixins
                                             placeholder='email')
 
                         td.w5: +actions(true, false, true, 'instructor')
-
 
 
