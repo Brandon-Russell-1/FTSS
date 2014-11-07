@@ -6,7 +6,8 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'$timeout',
-		function ($scope, $timeout) {
+		'SharePoint',
+		function ($scope, $timeout, SharePoint) {
 
 			$scope.pageLimit = 50;
 
@@ -15,13 +16,24 @@ FTSS.ng.controller(
 				'sort' : 'InstructorName',
 				'model': 'instructors',
 
-				'edit': function (scope, create) {
+				'modal'    : 'instructor-stats',
+				'edit'     : function (scope) {
 
-					if (create) {
+					// Get a copy of the model
+					var read = _.clone(FTSS.models.stats);
 
-						scope.data.UnitId = $scope.data.Id;
+					// Only include this instructor
+					read.params.$filter = '(InstructorId eq ' + scope.data.Id + ')';
 
-					}
+					// Request the classes for this instructor from SP
+					SharePoint.read(read).then(function (results) {
+
+						_(results).each(utils.cacheFiller);
+
+						scope.stats = results;
+
+					});
+
 
 				}
 
@@ -100,21 +112,13 @@ FTSS.ng.controller(
 
 			};
 
-			//$scope.submit = self.update($scope, false, false, FTSS.models.units);
-			$scope.submit = function () {
+			$scope.inlineUpdate = self.inlineUpdate;
 
-				send = {
-					'cache'       : true,
-					'__metadata'  : $scope.data.__metadata,
-					'Courses_JSON': $scope.data.Courses_JSON,
-					'Email'       : $scope.data.Email
-				};
+			$scope.stats = function () {
 
-				self._update($scope, send, $scope.modal.$setPristine);
+				$scope.edit.apply(this);
 
 			};
-
-			$scope.inlineUpdate = self.inlineUpdate;
 
 			self.bind('filter').then(function (data) {
 
