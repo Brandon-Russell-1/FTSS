@@ -54,11 +54,20 @@
 
 								}
 
-								// Flip the $dirty flag on this modal
-								modal.$setDirty();
+								// Optional inline updates
+								if (opts.inline && scope.inlineUpdate) {
 
-								// Add ng-dirty class manually as we aren't really a ngForm control
-								self.$control.addClass('ng-dirty');
+									scope.inlineUpdate.call(scope, opts.field);
+
+								} else {
+
+									// Flip the $dirty flag on this modal
+									modal.$setDirty();
+
+									// Add ng-dirty class manually as we aren't really a ngForm control
+									self.$control.addClass('ng-dirty');
+
+								}
 
 								// Make sure we add the value to the list if it's new
 								if (opts.create && val && options[opts.select]) {
@@ -495,6 +504,7 @@
 						if (attrs.bind) {
 
 							opts = builder(scope, {
+								'inline'  : attrs.hasOwnProperty('inline'),
 								'remember': attrs.remember,
 								'watch'   : attrs.watch,
 								'select'  : attrs.selectize,
