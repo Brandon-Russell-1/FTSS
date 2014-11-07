@@ -1,0 +1,28 @@
+include ../__mixins
+
+form.form-horizontal(name='modal')
+
+    .modal-body
+
+        table.table.table-striped
+
+            thead
+
+                tr
+
+                    th PDS
+                    td TTMS
+                    td Dates
+                    td Students
+
+            tbody
+
+                tr(ng-repeat='stat in stats')
+
+                    td {{stat.Course.PDS}}
+                    td {{stat.TTMS}}
+                    td {{stat.startText}} - {{stat.endText}}
+                    td {{stat.allocatedSeats}}
+
+
+    +modalFooter()
