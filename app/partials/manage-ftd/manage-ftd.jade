@@ -50,10 +50,9 @@ form#embed(name='modal').col-lg-6
                     tr.middle.am-slide-right(ng-repeat='row in group track by row.Id',
                                                         ng-class='{archived:row.Archived}',
                                                         ng-file-drop='onFileSelect($files)')
-
-                        td.cleanPhoto(class='{{running(row)}}', ng-class='{submitting:row.submitted}')
+                        td.drag-target(class='{{running(row)}}', ng-class='{submitting:row.submitted}')
                             .sending: spinner(size='6em')
-                            photo(size='75px', data='row', watch)
+                            photo(size='75px', data='row', watch, force)
 
                         td
                             span.archiveOnly  ***ARCHIVED INSTRUCTOR***&nbsp;
