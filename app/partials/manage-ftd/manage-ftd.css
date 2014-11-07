@@ -38,4 +38,6 @@
 #manage-ftd td.submitting photo {
     transition:none!important;
     display: none!important;
+#manage-ftd .item a {
+    border-bottom: none;
 }

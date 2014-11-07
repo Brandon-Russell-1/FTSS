@@ -55,21 +55,6 @@ time-ago {
     font-style: italic;
 }
 
-.datepicker {
-    min-width: 200px!important;
-}
-
-.datepicker table {
-    table-layout: auto;
-}
-
-.datepicker tr :nth-child(6), .datepicker tr :nth-child(7) {
-    display: none;
-}
-.datepicker .btn[disabled] {
-    color:#aaaaaa;
-}
-
 .modal-header, .modal-body, .modal-footer {
     z-index: 999;
 }
@@ -89,7 +74,7 @@ time-ago {
     color: #fff !important;
     position: absolute;
     font-size: 200px;
-    cursor: pointer!important;
+    cursor: pointer !important;
 }
 
 .withMap .leftBigTraverse, .withMap .rightBigTraverse {
@@ -140,5 +125,5 @@ time-ago {
 }
 
 .loading + #loading {
-    display: block!important;
+    display: block !important;
 }
