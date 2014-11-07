@@ -123,7 +123,7 @@ mixin googleMap(small, thumb)
 mixin actions(view, edit, archive, label)
     div.pull-right
         if view
-            span.btn.btn-sm.btn-info.btn-muted.no-archive(ng-click='view()', hover='View ' + label + ' Stats', left)
+            span.btn.btn-sm.btn-info.btn-muted.no-archive(ng-click='stats()', hover='View ' + label + ' Stats', left)
                 +icon('graph_pie')
 
         if edit
@@ -131,7 +131,11 @@ mixin actions(view, edit, archive, label)
                 +icon('edit')
 
         if archive
-            span.btn.btn-sm.btn-danger.btn-muted.no-archive(ng-click='archive()', hover='Archive ' + label, left)
+            span.btn.btn-sm.btn-danger.btn-muted.no-archive(
+                bs-popover,
+                placement='left',
+                template='/partials/popover-archive-' + label +'.html')
+
                 +icon('trash_hide')
 
             span.btn.btn-sm.btn-success.btn-muted.archive(ng-click='archive()', hover='Restore ' + label, left)
