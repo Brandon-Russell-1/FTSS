@@ -2,36 +2,44 @@ include ../__mixins
 
 +addButton('Add Instructor')
 
-form#embed(name='modal').col-lg-6
+#embed.col-lg-6
 
     br
 
     +userInstructions('units', true)
 
-    .form-horizontal
-
-        .input-group(explain='units-email', right)
-            .input-group-addon.w15
-                +icon('envelope')
-            input.form-control(ng-model='data.Email', type='email')
-            .helper Please enter a valid email address.
-
-    br
-
-    h4
-        b Courses Taught
-        .pull-right {{data.Courses_JSON.length}}
+    h3 {{data.Courses_JSON.length}} Courses Taught
 
     .pds(explain='units-courses', right)
-        select(selectize='MasterCourseList', bind='Courses_JSON', multiple)
+        select(selectize='MasterCourseList', bind='Courses_JSON', multiple, inline)
 
     .text-info.info.italics.pull-right
         +icon('info-circle')
         | You can paste a list of PDS course codes to update this list faster
 
-    .clearfix
+    br
+    br
+    br
 
-    +modalFooter('Save Changes')
+    .row.form-horizontal
+
+        .col-lg-8
+            .input-group(explain='units-email', right)
+                .input-group-addon.w15: +icon('envelope')
+                input.form-control(ng-model='data.Email',
+                                    type='email',
+                                    ng-model-onblur,
+                                    ng-change='inlineUpdate("Email")')
+
+        .col-lg-4
+            .input-group(explain='units-phone', right)
+                .input-group-addon.w15: +icon('phone')
+                input.form-control(ng-model='data.Phone',
+                                    type='text',
+                                    ng-model-onblur,
+                                    ng-change='inlineUpdate("Phone")')
+
+    .clearfix
 
 
 #rightScroll.wrapped.col-lg-6.addNew
@@ -41,7 +49,7 @@ form#embed(name='modal').col-lg-6
 
         div(ng-repeat='(header, group) in groups')
 
-            h3 Instructors
+            h3 {{group.length}} Instructors
 
             table.table.table-striped.table-expanded.table-hover
 
