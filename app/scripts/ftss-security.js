@@ -42,9 +42,6 @@
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
-		// Load our user data into FTSS
-		SharePoint.user($scope);
-
 		// Setup a watch for the user.groups to wait for the SOAP callback of group memberships
 		var groupWatch = $scope.$watch('user.groups', function (groups) {
 
@@ -120,6 +117,9 @@
 			}
 
 		});
+
+		// Load our user data into FTSS
+		SharePoint.user($scope);
 
 	};
 

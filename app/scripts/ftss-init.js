@@ -95,6 +95,7 @@
 
 	              } : {
 
+		              'offline'     : true,
 		              'baseURL'     : 'http://virtualpc/dev/_vti_bin/ListData.svc/',
 		              'user'        : { 'url': 'http://virtualpc/_vti_bin/UserGroup.asmx' },
 		              'cacheVersion': 5
