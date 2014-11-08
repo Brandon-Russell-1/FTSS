@@ -490,7 +490,7 @@ FTSS.controller = (function () {
 
 			},
 
-			'_postCRUD': function (data, callback) {
+			'_postCRUD': function (data, callback, noProcess) {
 
 				// Mark the data as updated for the <updated> directive
 				data.updated = true;
@@ -502,11 +502,11 @@ FTSS.controller = (function () {
 				callback && callback(data);
 
 				// Call actions.process() to reprocess the data by our controllers
-				actions.process();
+				!noProcess && actions.process();
 
 			},
 
-			'_create': function (send, callback) {
+			'_create': function (send, callback, noProcess) {
 
 				SharePoint.create(send).then(function (resp) {
 
@@ -516,7 +516,7 @@ FTSS.controller = (function () {
 						utils.alert.create();
 
 						// Perform final CRUD operations
-						actions._postCRUD(resp.data, callback);
+						actions._postCRUD(resp.data, callback, noProcess);
 
 					}
 
@@ -524,7 +524,7 @@ FTSS.controller = (function () {
 
 			},
 
-			'_update': function (scope, send, callback) {
+			'_update': function (scope, send, callback, noProcess) {
 
 				var data = scope.data || scope;
 
@@ -543,7 +543,7 @@ FTSS.controller = (function () {
 						data.__metadata.etag = resp.headers('etag');
 
 						// Perform final CRUD operations
-						actions._postCRUD(data, callback);
+						actions._postCRUD(data, callback, noProcess);
 
 					} else {
 
@@ -567,7 +567,7 @@ FTSS.controller = (function () {
 
 				send[field] = scope[field];
 
-				actions._update(scope, send, callback);
+				actions._update(scope, send, callback, true);
 
 			},
 
