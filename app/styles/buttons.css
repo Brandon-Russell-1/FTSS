@@ -1,4 +1,4 @@
-.btn.add-button {
+.add-button {
     z-index: 99;
     top: 110px;
     position: fixed !important;
@@ -7,7 +7,7 @@
     border-top-right-radius: 0;
 }
 
-.btn.add-button:hover {
+.add-button:hover {
     position: fixed !important;
     right: 0;
     left: auto;
