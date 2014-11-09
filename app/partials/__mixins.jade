@@ -23,28 +23,20 @@ mixin pageHead()
 
             block
 
-
+//- icon mixin to create our SVG icons
 mixin icon(tag, viewbox)
+
+    //- wrap in a labl to give a little more CSS flexibility
     label(class='lbl-' + tag, attributes)
+
+        //- specify a viewbox to override for odd-formatted icons
         if viewbox
             svg.icon(class=tag + ' icon-' + tag, viewBox=viewbox)
                 use(xlink:href='#icon-' + tag)
+
         else
             svg.icon(class=tag + ' icon-' + tag, viewBox='0 0 32 32')
                 use(xlink:href='#icon-' + tag)
-
-
-
-mixin toggleBox(model, title, hover)
-    .switch-wrapper
-        label.switch-light.switch-android(hover=hover, right)
-            input(ng-model=model, type='checkbox')
-            span
-                if title
-                    em= title
-                span &#x2717;
-                span &#x2713;
-            a
 
 
 mixin link(page, tag, name, roles)
@@ -69,8 +61,11 @@ mixin grouping()
             block
 
 
-mixin addButton(text)
-    .add-button.btn.btn-labeled.btn-success(ng-click='edit(true)')
+mixin addButton(text, action)
+
+    -action= action || 'edit(true)'
+
+    .add-button.btn.btn-labeled.btn-success(ng-click=action)
         span.btn-label.white
             +icon('plus-circle')
         span.text  &nbsp;
@@ -177,6 +172,8 @@ mixin modalHeader(create, update)
 mixin modalFooter(submitText, defaultShow)
 
     .modal-footer
+
+        block
 
         .sending(ng-show='submitted')
 
