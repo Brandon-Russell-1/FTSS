@@ -7,7 +7,8 @@ FTSS.ng.controller(
 		'$scope',
 		'$timeout',
 		'SharePoint',
-		function ($scope, $timeout, SharePoint) {
+		'SP_CONFIG',
+		function ($scope, $timeout, SharePoint, SP_CONFIG) {
 
 			$scope.pageLimit = 50;
 
@@ -16,24 +17,54 @@ FTSS.ng.controller(
 				'sort' : 'InstructorName',
 				'model': 'instructors',
 
-				'modal'    : 'instructor-stats',
-				'edit'     : function (scope) {
+				'modal': 'instructor-stats',
+				'edit' : function (scope) {
 
 					// Get a copy of the model
-					var read = _.clone(FTSS.models.stats);
+					var read = _.clone(FTSS.models.stats),
 
-					// Only include this instructor
-					read.params.$filter = '(InstructorId eq ' + scope.data.Id + ')';
+					    fetchStats = function (id) {
 
-					// Request the classes for this instructor from SP
-					SharePoint.read(read).then(function (results) {
+						    // Only do this for a valid entry
+						    if (id) {
 
-						_(results).each(utils.cacheFiller);
+							    // Only include this instructor
+							    read.params.$filter = '(InstructorId eq ' + id + ')';
 
-						scope.stats = results;
+							    // Request the classes for this instructor from SP
+							    SharePoint.read(read).then(function (results) {
 
-					});
+								    // Fill all the data relationships
+								    _(results).each(utils.cacheFiller);
 
+								    // for aggregate instructor stats
+								    scope.stats = {
+									    'Instructor Hours': 0,
+									    'Classes Taught'  : 0,
+									    'Total Students' : 0
+								    };
+
+								    // add the data back to the scope
+								    scope.history = results;
+
+								    _(results).each(function (course) {
+
+									    scope.stats['Classes Taught']++;
+
+									    scope.stats['Instructor Hours'] += course.Course.Hours;
+
+									    scope.stats['Total Students'] += course.allocatedSeats;
+
+								    })
+
+							    });
+
+						    }
+
+					    };
+
+					// Watch data.Id, this allows us to flip through instructors with the traverse directive
+					scope.$watch('data.Id', fetchStats);
 
 				}
 

@@ -2,6 +2,8 @@ include ../__mixins
 
 form.form-horizontal(name='modal')
 
+    traverse
+
     .modal-header.caps
 
         h3
@@ -9,6 +11,23 @@ form.form-horizontal(name='modal')
             | {{data.InstructorName}}'s Stats
 
     .modal-body
+
+        .row
+
+            .col-lg-4
+                photo.img-rounded(size='150px', shape='rectangle', data='data', watch, force)
+
+
+            .col-lg-8
+
+                table.table.table-split
+
+                    tr(ng-repeat='(title, stat) in stats')
+
+                        td {{title}}
+                        td.bold {{stat}}
+
+        br
 
         table.table.table-striped
 
@@ -23,12 +42,12 @@ form.form-horizontal(name='modal')
 
             tbody
 
-                tr(ng-repeat='stat in stats')
+                tr(ng-repeat='course in history')
 
-                    td {{stat.Course.PDS}}
-                    td {{stat.TTMS}}
-                    td {{stat.startText}} - {{stat.endText}}
-                    td {{stat.allocatedSeats}}
+                    td {{course.Course.PDS}}
+                    td {{course.TTMS}}
+                    td {{course.startText}} - {{course.endText}}
+                    td {{course.allocatedSeats}}
 
 
     +modalFooter()
