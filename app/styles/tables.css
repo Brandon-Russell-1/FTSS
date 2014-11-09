@@ -106,11 +106,11 @@ body:not(#requests) tr.archived:not(:hover) * {
 }
 
 tr.archived .btn.archive {
-    visibility: visible;
+    display: inline-block!important;
 }
 
 tr.archived .btn.no-archive, .btn.archive {
-    visibility: hidden;
+    display: none!important;
 }
 
 tr.thin td {
