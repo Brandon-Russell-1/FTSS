@@ -55,6 +55,8 @@
 
 				    };
 
+				$el.prev().data('update', linker);
+
 				if ($attrs.hasOwnProperty('watch')) {
 					$scope.$watch($attrs.data, linker);
 					$scope.$watch($attrs.data + '.Photo', linker);
