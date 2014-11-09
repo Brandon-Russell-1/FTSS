@@ -5,12 +5,16 @@
     left: calc(100% - 45px);
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
+    right: 0;
 }
 
 .add-button:hover {
-    position: fixed !important;
     right: 0;
     left: auto;
+}
+
+.add-button > .btn-label {
+    float: left;
 }
 
 .btn-label {
@@ -23,7 +27,8 @@
 }
 
 /* work around for ng-animate lameness */
-.ng-hide-add-active.btn, .ng-hide-remove.btn {
+.ng-hide-add-active.btn,
+.ng-hide-remove.btn {
     display: inline-block !important;
 }
 
@@ -122,7 +127,7 @@ traverse * {
 }
 
 .table-hover tbody tr:not(:hover) .btn-muted,
-.well:not(:hover) .btn-muted{
+.well:not(:hover) .btn-muted {
     color: #111;
     background-color: transparent;
     opacity: .2;
