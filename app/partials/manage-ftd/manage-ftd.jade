@@ -1,6 +1,42 @@
 include ../__mixins
 
-+addButton('Add Instructor')
+div(ng-class='{addNew:addNew}')
+
+    +addButton('Add Instructor', 'addInstructor()')
+
+    #add-aside.add-button(ng-file-drop='onFileSelect($files)')
+
+        form(name='modal')
+
+            +userInstructions('add-instructor')
+
+            .col-lg-9.form-horizontal
+
+                +formGroupText('Instructor',
+                                'row.InstructorName',
+                                'text',
+                                true,
+                                'You must enter a name',
+                                'instructors-name')
+
+                +formGroupText('Email',
+                                'row.InstructorEmail',
+                                'email',
+                                false,
+                                'Please enter a valid email address',
+                                'instructors-email')
+
+            .col-lg-3
+                .drag-target(hover='instructors-photo', left)
+                    .sending(id='spinner'): spinner(size='7em')
+                    photo.img-rounded(size='100px', data='row', watch, force)
+
+            .clearfix
+
+            br
+
+            +modalFooter()
+
 
 #embed.col-lg-7(ng-show='data')
 
@@ -47,38 +83,38 @@ include ../__mixins
         .text-info.info(ng-if='!groups')
             +userInstructions('manage-ftd-no-instructors')
 
-        div(ng-repeat='(header, group) in groups')
+        h3 {{groups.false.length}} Instructors
 
-            h3 {{group.length}} Instructors
+        table.table.table-striped.table-expanded.table-hover
 
-            table.table.table-striped.table-expanded.table-hover
+            tbody
 
-                tbody
+                tr.am-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
+                                    ng-class='{archived:row.Archived}',
+                                    ng-file-drop='onFileSelect($files)',
+                                    ng-dblclick='stats()',
+                                    id='row-{{row.Id}}')
 
-                    tr.middle.am-slide-right(ng-repeat='row in group track by row.Id',
-                                                        ng-class='{archived:row.Archived}',
-                                                        ng-file-drop='onFileSelect($files)')
+                    td.drag-target
 
-                        td.drag-target(class='{{running(row)}}', ng-class='{submitting:row.submitted}')
+                        .sending(id='spinner{{row.Id}}'): spinner(size='6em')
+                        photo(size='75px', data='row', watch)
 
-                            .sending: spinner(size='6em')
-                            photo(size='75px', data='row', watch)
+                    td
 
-                        td
+                        span.archiveOnly  ***ARCHIVED INSTRUCTOR***
+                        br.archiveOnly
 
-                            span.archiveOnly  ***ARCHIVED INSTRUCTOR***&nbsp;
+                        b.form-control(contenteditable,
+                                        blur,
+                                        ng-model='row.InstructorName',
+                                        onEnter='inlineUpdate("InstructorName")',
+                                        placeholder='Instructor, i.e. SSgt John Doe')
 
-                            b.form-control(contenteditable,
-                                            blur,
-                                            ng-model='row.InstructorName',
-                                            onEnter='inlineUpdate("InstructorName")',
-                                            placeholder='name')
+                        .form-control(contenteditable,
+                                        blur,
+                                        ng-model='row.InstructorEmail',
+                                        onEnter='inlineUpdate("InstructorEmail")',
+                                        placeholder='(Optional) Email address')
 
-                            .form-control(contenteditable,
-                                            blur,
-                                            ng-model='row.InstructorEmail',
-                                            onEnter='inlineUpdate("InstructorEmail")',
-                                            placeholder='email')
-
-                        td.w5: +actions(true, false, true, 'instructor')
-
+                    td.w5: +actions(true, false, true, 'instructor')

@@ -34,10 +34,14 @@
     padding-left: 25px !important;
 }
 
-#manage-ftd td:not(.submitting) .sending,
-#manage-ftd td.submitting photo {
+#manage-ftd .sending:not(.submitting),
+#manage-ftd .submitting + photo {
     transition: none !important;
     display: none !important;
+}
+
+#manage-ftd #add-aside.dragover .mask-img {
+    background-size: 100px;
 }
 
 #manage-ftd .mask-img.invalid {
@@ -47,4 +51,49 @@
 
 #manage-ftd .item a {
     border-bottom: none;
+}
+
+#manage-ftd td > .pull-right > .btn {
+    display: block;
+}
+
+#manage-ftd #add-aside,
+#manage-ftd .add-button {
+    transition: ease all 1s;
+}
+
+#manage-ftd #add-aside {
+    left: 100%;
+    width: 43.75% !important;
+    padding: 1%;
+    background: #fff;
+    border: 1px solid #4cae4c;
+}
+
+#manage-ftd #embed,
+#manage-ftd #rightScroll {
+    transition: ease opacity 1s;
+}
+
+#manage-ftd .addNew + #embed,
+#manage-ftd .addNew + #embed + #rightScroll {
+    opacity: .1;
+}
+
+#manage-ftd .addNew #add-aside {
+    left: 56.25% !important;
+}
+
+#manage-ftd .add-button:hover {
+    right: 0;
+    left: calc(100% - 175px);
+}
+
+#manage-ftd .addNew .add-button {
+    right: 43% !important;
+    left: calc(56.25% - 45px) !important;
+}
+
+#manage-ftd .modal-footer {
+    padding: 2px 0 0 0;
 }

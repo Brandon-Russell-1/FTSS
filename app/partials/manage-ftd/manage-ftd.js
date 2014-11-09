@@ -151,6 +151,18 @@ FTSS.ng.controller(
 
 			};
 
+			$scope.addInstructor = function () {
+
+				$scope.addNew = true;
+				$scope.row = {};
+
+				$scope.close = function () {
+					$scope.row = {};
+					$scope.addNew = false;
+				}
+
+			};
+
 			self.bind('filter').then(function (data) {
 
 				var UnitId = parseInt(FTSS.search.getValue().pop().split(':').pop());
