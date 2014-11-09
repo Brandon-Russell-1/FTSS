@@ -2,7 +2,7 @@ include ../__mixins
 
 +addButton('Add Instructor')
 
-#embed.col-lg-6
+#embed.col-lg-7(ng-show='data')
 
     br
 
@@ -42,7 +42,7 @@ include ../__mixins
     .clearfix
 
 
-#rightScroll.wrapped.col-lg-6.addNew
+#rightScroll.wrapped.col-lg-5.addNew
 
         .text-info.info(ng-if='!groups')
             +userInstructions('manage-ftd-no-instructors')
@@ -81,5 +81,4 @@ include ../__mixins
                                             placeholder='email')
 
                         td.w5: +actions(true, false, true, 'instructor')
-
 
