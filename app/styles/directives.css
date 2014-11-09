@@ -74,8 +74,17 @@ time-ago {
     cursor: pointer !important;
 }
 
-.withMap .leftBigTraverse, .withMap .rightBigTraverse {
-    top: 300px;
+.modal-footer .leftBigTraverse,
+.modal-footer .rightBigTraverse {
+    opacity: 1;
+    font-size: 20px;
+    bottom: -5px;
+    top: auto;
+}
+
+.modal-footer .leftBigTraverse *,
+.modal-footer .rightBigTraverse * {
+    fill: #555;
 }
 
 .leftBigTraverse {
@@ -84,6 +93,14 @@ time-ago {
 
 .rightBigTraverse {
     right: -400px;
+}
+
+.modal-footer .leftBigTraverse {
+    left: -5px;
+}
+
+.modal-footer .rightBigTraverse {
+    left: 30px;
 }
 
 .spinner img {
