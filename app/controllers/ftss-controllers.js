@@ -502,7 +502,7 @@ FTSS.controller = (function () {
 				callback && callback(data);
 
 				// Call actions.process() to reprocess the data by our controllers
-				!noProcess && actions.process();
+				!noProcess && $timeout(actions.process);
 
 			},
 
