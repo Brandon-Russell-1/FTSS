@@ -70,6 +70,7 @@ FTSS.ng.controller(
 
 			});
 
+			// This allows us to copy & paste lists of PDS codes for an FTD
 			FTSS.pasteAction = function (text) {
 
 				var match = text.toUpperCase().match(/(\w+)/g),
@@ -90,52 +91,62 @@ FTSS.ng.controller(
 
 			};
 
+			// This handles our drag & drop photo operations
 			$scope.onFileSelect = function ($files) {
 
 				var reader = new FileReader(),
 
-				    scope = this;
+				    // Get a reference to item's scope
+				    scope = this,
 
-				$timeout(function () {
-					scope.row.submitted = true;
-				});
+				    // Angular is super-dumb about ng-repeat updates so we'll just break the rules and use jQuery...
+				    spinner = $('#spinner' + (scope.row.Id || ''));
+
+				// Use jquery to turn on the upload spinner
+				spinner.addClass('submitting');
 
 				reader.onload = function (result) {
 
-					var rawBuffer = result.target.result,
+					var // Get the file buffer
+					    rawBuffer = result.target.result,
 
-					    rand = utils.generateUUID(),
-
-					    url = (PRODUCTION ?
-
-					           'https://cs1.eis.af.mil/sites/FTSS/rebuild' :
-
-					           'http://virtualpc/dev') + '/_vti_bin/ListData.svc/Bios',
-
-					    slug = (PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' : '/dev/Bios/');
+					    // Create a random file anem
+					    rand = utils.generateUUID();
 
 					$.ajax({
-						       'url'        : url,
+						       'url'        : SP_CONFIG.baseURL + 'Bios',
 						       'type'       : 'POST',
 						       'data'       : rawBuffer,
 						       'processData': false,
 						       'contentType': 'multipart/form-data',
 						       'headers'    : {
 							       'accept': "application/json;odata=verbose",
-							       'slug'  : slug + rand + '.jpg'
+							       'slug'  : FTSS.photoURL + rand + '.jpg'
 						       },
 						       'success'    : function () {
 
+							       // When complete, remove the spinner and refresh the photo directive
+							       var finish = function () {
+
+								       spinner.removeClass('submitting');
+								       spinner.data().update();
+
+							       };
+
+							       // Add the new photo URL back to the scope
 							       scope.row.Photo = rand;
 
-							       self.inlineUpdate.call(scope, 'Photo', function () {
-								       scope.row.submitted = false;
-							       });
+							       // If this an existing item, call inlineUpdate();
+							       if (scope.row.Id) {
+
+								       self.inlineUpdate.call(scope, 'Photo', finish);
+
+							       } else {
+								       finish();
+							       }
 
 						       },
-						       error        : function () {
-							       utils.alert.error();
-						       }
+						       error        : utils.alert.error
 					       });
 				};
 
@@ -143,10 +154,13 @@ FTSS.ng.controller(
 
 			};
 
+			// Bind inlineUpdate to the scope
 			$scope.inlineUpdate = self.inlineUpdate;
 
+			// We use $scope.edit's modal function to show instructor stats
 			$scope.stats = function () {
 
+				// We have to pass our context to $scope.edit for the instructor stats
 				$scope.edit.apply(this);
 
 			};
