@@ -12,9 +12,9 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				    'sort' : 'Start',
-				    'group': 'Month',
-				    'model': 'scheduled',
+				    'sort'          : 'Start',
+				    'group'         : 'Month',
+				    'model'         : 'scheduled',
 				    'modalPlacement': 'wide',
 
 				    // We will be post-post-processing this data for the calendar (needs some special data)
@@ -291,7 +291,7 @@ FTSS.ng.controller(
 							                (scope.data.Other || 0) -
 							                requests);
 
-							    if(countOnly) {
+							    if (countOnly) {
 								    return open;
 							    }
 
