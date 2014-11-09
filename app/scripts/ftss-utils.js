@@ -78,8 +78,11 @@ utils.cacheFiller = function (row) {
 	row.start = row.Start;
 	row.end = row.End;
 
-	row.startText = moment(row.Start).format('D MMM YYYY');
-	row.endText = moment(row.End).add(-1, 'minutes').format('D MMM YYYY');
+	row.startMoment = moment(row.Start);
+	row.endMoment = moment(row.End).add(-1, 'minutes');
+
+	row.startText = row.startMoment.format('D MMM YYYY');
+	row.endText = row.endMoment.format('D MMM YYYY');
 
 	var seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
 		memo[r[0]] += r[1].length;
