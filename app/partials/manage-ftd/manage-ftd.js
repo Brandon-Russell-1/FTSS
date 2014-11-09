@@ -23,6 +23,10 @@ FTSS.ng.controller(
 					// Get a copy of the model
 					var read = _.clone(FTSS.models.stats),
 
+					    today = moment().add(7, 'days'),
+
+					    yearStart = moment().add(-1, 'years'),
+
 					    fetchStats = function (id) {
 
 						    // Only do this for a valid entry
@@ -41,21 +45,35 @@ FTSS.ng.controller(
 								    scope.stats = {
 									    'Instructor Hours': 0,
 									    'Classes Taught'  : 0,
-									    'Total Students' : 0
+									    'Total Students'  : 0
 								    };
+
+								    scope.annualHours = 0;
 
 								    // add the data back to the scope
 								    scope.history = results;
 
 								    _(results).each(function (course) {
 
+									    // Tally all courses taught
 									    scope.stats['Classes Taught']++;
 
+									    // Tally instructor hours
 									    scope.stats['Instructor Hours'] += course.Course.Hours;
 
+									    // Tally all students taught
 									    scope.stats['Total Students'] += course.allocatedSeats;
 
-								    })
+									    // If course was taught in the last year, count hours for annualHours
+									    if (course.startMoment > yearStart && course.startMoment < today) {
+
+										    scope.annualHours += course.Course.Hours;
+
+									    }
+								    });
+
+								    // A rough estimate of instructor time utilization
+								    scope.annualEffectiveness = Math.floor(scope.annualHours / 19.2);
 
 							    });
 
