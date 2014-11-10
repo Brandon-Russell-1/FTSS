@@ -516,7 +516,7 @@ FTSS.controller = (function () {
 						utils.alert.create();
 
 						// Perform final CRUD operations
-						actions._postCRUD(resp.data, callback, noProcess);
+						actions._postCRUD(resp.data.d || resp.data, callback, noProcess);
 
 					}
 
