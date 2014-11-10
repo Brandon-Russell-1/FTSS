@@ -122,8 +122,6 @@
 
 					scope.$watch('data.Id', setup);
 
-					setup();
-
 				}
 			});
 
