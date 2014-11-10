@@ -12,7 +12,7 @@ form.form-horizontal(name='modal')
         p.lead
             ng-pluralize(count='data.openSeats - data.Students.length',
                             when='{1:"There is only one seat ", 0: "There are no more seats ", "other":"There are {} seats "}')
-            | available for the {{data.start}} class.
+            | available for the {{data.startText}} class.
         br
 
         +formGroup('Host', 'scheduled-request-host')
@@ -34,7 +34,7 @@ form.form-horizontal(name='modal')
         div(explain='scheduled-request-notes', right)
             h4
                 +icon('edit')
-                | Request Comments
+                | Comments
             textarea.form-control(ng-model='data.Notes')
 
         br
@@ -45,6 +45,8 @@ form.form-horizontal(name='modal')
             b(ng-pluralize, count='data.Students.length', when='{1:" one seat","other":" {} seats"}') .
 
         .clearfix
+
+        .alert.alert-info(ng-if='autoApprove') These students will be automatically approved because you have either Scheduler or FTD roles in FTSS.
 
     +modalFooter('Submit Request', '!data.HostId || data.Students.length < 1')
 
