@@ -117,6 +117,7 @@ FTSS.ng.controller(
 
 				    'edit': function (scope, isNew) {
 
+					    // Only add valid date-ranges to FC
 					    var getDates = function () {
 
 						        return scope.data.Start && scope.data.End ?
@@ -202,6 +203,7 @@ FTSS.ng.controller(
 						    }
 					    };
 
+					    // Set the default calendar location if this is an existing class
 					    if (scope.data.Start) {
 						    scope.uiConfigInstructor.defaultDate = scope.data.Start;
 					    }
@@ -215,48 +217,26 @@ FTSS.ng.controller(
 						    // If we have selected an instructor, try to get their teaching schedule
 						    if (instructor) {
 
-							    // Get a copy of the model
-							    var read = _.clone(FTSS.models.calendar);
+							    // Filter out only classes taught by this instructor
+							    var schedule = _.filter($scope.rawSchedule, {'InstructorId': instructor}),
 
-							    // Our SP filters
-							    read.params.$filter = [
+							        // Produce the array that FullCalendar expects
+							        result = _.map(schedule, function (row) {
 
-								    // Only include this instructor
-									    '(InstructorId eq ' + instructor + ')',
+								        return {
+									        'title'    : caches.MasterCourseList[row.CourseId].PDS,
+									        'start'    : row.Start,
+									        'end'      : row.End,
+									        'className': 'info'
+								        }
 
-								    // Do not include archived courses
-									    '(Archived eq false)'
+							        });
 
-							    ].join(' and ');
+							    // Only add valid dates otherwise FullCalendar will just implode....
+							    getDates() && result.push(getDates());
 
-							    // Request the classes for this instructor from SP
-							    SharePoint.read(read).then(function (result) {
-
-								    // Convert our SP data into an array for FullCalendar
-								    result = _(result)
-
-									    // Perform some adjusments for Fullcalendar
-									    .each(function (row) {
-
-										          row.title = caches.MasterCourseList[row.CourseId].PDS;
-										          row.start = row.Start;
-										          row.end = row.End;
-										          row.className = 'info';
-
-									          })
-
-									    // FullCalendar needs an array
-									    .toArray()
-
-									    // Exit lodash chain
-									    .value();
-
-								    getDates() && result.push(getDates());
-
-								    // update the event source for the calendar
-								    scope.eventsInstructor[0] = result;
-
-							    })
+							    // update the event source for the calendar
+							    scope.eventsInstructor[0] = result;
 
 						    } else {
 
@@ -332,6 +312,8 @@ FTSS.ng.controller(
 				.bind('filter')
 
 				.then(function (data) {
+
+					      $scope.rawSchedule = angular.copy(data);
 
 					      // We can always request in this view
 					      $scope.canRequest = true;
