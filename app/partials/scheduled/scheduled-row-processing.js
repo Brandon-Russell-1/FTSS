@@ -77,19 +77,20 @@
 
 					row.Requests_JSON = row.Requests_JSON || [];
 
-					row.Requests_JSON.push([
-						                       // Status
-						                       scope.autoApprove ? 2 : 1,
+					row.Requests_JSON.push(
+						[
+							// Status
+							scope.autoApprove ? 2 : 1,
 
-						                       // Students Array
-						                       scope.data.Students,
+							// Students Array
+							scope.data.Students,
 
-						                       // Notes
-						                       scope.data.Notes,
+							// Notes
+							scope.data.Notes,
 
-						                       // Host ID
-						                       scope.data.HostId
-					                       ]);
+							// Host ID
+							scope.data.HostId
+						]);
 
 					self._update(scope, {
 
@@ -140,7 +141,6 @@
 
 		row.sMoment = moment(row.Start);
 		row.eMoment = moment(row.End);
-
 
 		row.search = [
 			row.ClassNotes,

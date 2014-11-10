@@ -12,10 +12,7 @@ FTSS.ng.controller(
 
 				'sort' : 'Start',
 				'group': 'Course.Number',
-				'model' : 'scheduled',
-
-				// We only want classes with requests
-				'filter': 'Requests_JSON ne null'
+				'model': 'scheduled'
 
 			});
 
