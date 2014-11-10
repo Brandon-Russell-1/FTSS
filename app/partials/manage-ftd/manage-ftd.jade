@@ -83,48 +83,50 @@ div(ng-class='{addNew:addNew}')
         .text-info.info(ng-if='!groups')
             +userInstructions('manage-ftd-no-instructors')
 
-        h3 {{groups.false.length}} Instructors
+        div(ng-if='groups')
 
-        table.table.table-striped.table-expanded.table-hover
+            h3 {{groups.false.length}} Instructors
 
-            tbody
+            table.table.table-striped.table-expanded.table-hover
 
-                tr.am-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
-                                    ng-class='{archived:row.Archived}',
-                                    ng-file-drop='onFileSelect($files)',
-                                    ng-dblclick='stats()',
-                                    id='row-{{row.Id}}')
+                tbody
 
-                    td.drag-target
+                    tr.am-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
+                                        ng-class='{archived:row.Archived}',
+                                        ng-file-drop='onFileSelect($files)',
+                                        ng-dblclick='stats()',
+                                        id='row-{{row.Id}}')
 
-                        .sending(id='spinner{{row.Id}}'): spinner(size='6em')
-                        photo(size='75px', data='row', watch)
+                        td.drag-target
 
-                    td
+                            .sending(id='spinner{{row.Id}}'): spinner(size='6em')
+                            photo(size='75px', data='row', watch)
 
-                        span.archiveOnly  ***ARCHIVED INSTRUCTOR***
-                        br.archiveOnly
+                        td
 
-                        .rollupContainer
-                            b.form-control(contenteditable,
-                                            blur,
-                                            ng-model='row.InstructorName',
-                                            onEnter='inlineUpdate("InstructorName")',
-                                            placeholder='Instructor, i.e. SSgt John Doe')
+                            span.archiveOnly  ***ARCHIVED INSTRUCTOR***
+                            br.archiveOnly
 
-                            .form-control(contenteditable,
-                                            blur,
-                                            ng-model='row.InstructorEmail',
-                                            onEnter='inlineUpdate("InstructorEmail")',
-                                            placeholder='(Optional) Email address')
+                            .rollupContainer
+                                b.form-control(contenteditable,
+                                                blur,
+                                                ng-model='row.InstructorName',
+                                                onEnter='inlineUpdate("InstructorName")',
+                                                placeholder='Instructor, i.e. SSgt John Doe')
 
-                        br
+                                .form-control(contenteditable,
+                                                blur,
+                                                ng-model='row.InstructorEmail',
+                                                onEnter='inlineUpdate("InstructorEmail")',
+                                                placeholder='(Optional) Email address')
 
-                        .chartMonths(ng-bind-html='row.chart | trust_html')
+                            br
 
-                        .clearfix
+                            .chartMonths(ng-bind-html='row.chart | trust_html')
 
-                        .pull-left.btn-success(style='width:{{row.annualEffectiveness}}%') &nbsp;
-                        .pull-left.italics.text-success &nbsp;{{row.annualHours}} hours/yr
+                            .clearfix
 
-                    td.w5: +actions(true, false, true, 'instructor')
+                            .pull-left.btn-success(style='width:{{row.annualEffectiveness}}%') &nbsp;
+                            .pull-left.italics.text-success &nbsp;{{row.annualHours}} hours/yr
+
+                        td.w5: +actions(true, false, true, 'instructor')
