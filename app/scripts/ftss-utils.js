@@ -70,7 +70,7 @@ utils.cacheFiller = function (row) {
 	}
 
 	if (row.HostId) {
-		row.Host = caches.Hosts[row.HostId];
+		row.HostUnit = caches.Hosts[row.HostId];
 	}
 
 	row.Instructor = caches.Instructors[row.InstructorId] || {};
