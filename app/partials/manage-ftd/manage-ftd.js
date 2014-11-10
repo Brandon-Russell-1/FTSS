@@ -16,75 +16,7 @@ FTSS.ng.controller(
 
 				'sort' : 'InstructorName',
 				'model': 'instructors',
-
-				'modal': 'instructor-stats',
-				'edit' : function (scope) {
-
-					// Get a copy of the model
-					var read = _.clone(FTSS.models.stats),
-
-					    today = moment().add(7, 'days'),
-
-					    yearStart = moment().add(-1, 'years'),
-
-					    fetchStats = function (id) {
-
-						    // Only do this for a valid entry
-						    if (id) {
-
-							    // Only include this instructor
-							    read.params.$filter = '(InstructorId eq ' + id + ')';
-
-							    // Request the classes for this instructor from SP
-							    SharePoint.read(read).then(function (results) {
-
-								    // Fill all the data relationships
-								    _(results).each(utils.cacheFiller);
-
-								    // for aggregate instructor stats
-								    scope.stats = {
-									    'Instructor Hours': 0,
-									    'Classes Taught'  : 0,
-									    'Total Students'  : 0
-								    };
-
-								    scope.annualHours = 0;
-
-								    // add the data back to the scope
-								    scope.history = results;
-
-								    _(results).each(function (course) {
-
-									    // Tally all courses taught
-									    scope.stats['Classes Taught']++;
-
-									    // Tally instructor hours
-									    scope.stats['Instructor Hours'] += course.Course.Hours;
-
-									    // Tally all students taught
-									    scope.stats['Total Students'] += course.allocatedSeats;
-
-									    // If course was taught in the last year, count hours for annualHours
-									    if (course.startMoment > yearStart && course.startMoment < today) {
-
-										    scope.annualHours += course.Course.Hours;
-
-									    }
-								    });
-
-								    // A rough estimate of instructor time utilization
-								    scope.annualEffectiveness = Math.floor(scope.annualHours / 19.2);
-
-							    });
-
-						    }
-
-					    };
-
-					// Watch data.Id, this allows us to flip through instructors with the traverse directive
-					scope.$watch('data.Id', fetchStats);
-
-				}
+				'modal': 'instructor-stats'
 
 			});
 
@@ -197,16 +129,106 @@ FTSS.ng.controller(
 
 			self.bind('filter').then(function (data) {
 
-				var UnitId = parseInt(FTSS.search.getValue().pop().split(':').pop());
+				var UnitId = parseInt(FTSS.search.getValue().pop().split(':').pop()),
+
+				    read = _.clone(FTSS.models.scheduled),
+
+				    today = moment().add(7, 'days'),
+
+				    yearStart = moment().add(-1, 'years');
 
 				$scope.data = caches.Units[UnitId];
 
-				self.initialize(data).then(function (row) {
+				// Only include this instructor
+				read.params.$filter = '(UnitId eq ' + UnitId + ')';
 
-					row.InstructorEmail = row.InstructorEmail ?
-					                      row.InstructorEmail.replace('mailto:', '') :
-					                      '';
+				// Request the classes for this instructor from SP
+				SharePoint.read(read).then(function (results) {
 
+					var stats = _(results)
+
+						// Load the cache data for every row (this one is a little expensive)
+						.each(utils.cacheFiller)
+
+						// Group the data by InstructorID
+						.groupBy('InstructorId')
+
+						// Return the chained value output from lodash
+						.value();
+
+					// Complete the controller initialization
+					self.initialize(data).then(function (row) {
+
+						var stat = stats[row.Id],
+
+						    chart = [];
+
+						// for aggregate instructor stats
+						row.stats = {
+							'Instructor Hours': 0,
+							'Classes Taught'  : 0,
+							'Total Students'  : 0
+						};
+
+						row.annualHours = 0;
+
+						// add the data back to the scope
+						row.history = stat;
+
+						while (chart.length < 12) {
+							chart.push(0);
+						}
+
+						_(stat).each(function (course) {
+
+							// Tally all courses taught
+							row.stats['Classes Taught']++;
+
+							// Tally instructor hours
+							row.stats['Instructor Hours'] += course.Course.Hours;
+
+							// Tally all students taught
+							row.stats['Total Students'] += course.allocatedSeats;
+
+							// If course was taught in the last year, count hours for annualHours
+							if (course.startMoment > yearStart && course.startMoment < today) {
+
+								chart[course.startMoment.month()] += course.Course.Hours;
+
+								row.annualHours += course.Course.Hours;
+
+							}
+						});
+
+						(function () {
+
+							var max = _.max(chart),
+
+							    months = 'Jan.Feb.Mar.Apr.May.Jun.Jul.Aug.Sep.Oct.Nov.Dec'.split('.');
+
+							row.chart = '';
+
+							_(chart).each(function (item, index) {
+
+								var pct = item ? Math.round((item / max) * 100) : 0;
+
+								row.chart += '<b><em style="height:' + pct + '%">&nbsp;</em>' +
+
+								             '<i>' + months[index] + '</i></b>';
+
+
+							});
+
+						}());
+
+						// A rough estimate of instructor time utilization
+						row.annualEffectiveness = Math.floor(row.annualHours / 19.2);
+
+						row.InstructorEmail = row.InstructorEmail ?
+						                      row.InstructorEmail.replace('mailto:', '') :
+						                      '';
+
+					});
 
 				});
 

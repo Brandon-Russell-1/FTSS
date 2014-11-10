@@ -78,7 +78,7 @@ div(ng-class='{addNew:addNew}')
     .clearfix
 
 
-#rightScroll.wrapped.col-lg-5.addNew
+#rightScroll.wrapped.col-lg-5.addNew(class='{{wellCollapse}}')
 
         .text-info.info(ng-if='!groups')
             +userInstructions('manage-ftd-no-instructors')
@@ -105,16 +105,26 @@ div(ng-class='{addNew:addNew}')
                         span.archiveOnly  ***ARCHIVED INSTRUCTOR***
                         br.archiveOnly
 
-                        b.form-control(contenteditable,
-                                        blur,
-                                        ng-model='row.InstructorName',
-                                        onEnter='inlineUpdate("InstructorName")',
-                                        placeholder='Instructor, i.e. SSgt John Doe')
+                        .rollupContainer
+                            b.form-control(contenteditable,
+                                            blur,
+                                            ng-model='row.InstructorName',
+                                            onEnter='inlineUpdate("InstructorName")',
+                                            placeholder='Instructor, i.e. SSgt John Doe')
 
-                        .form-control(contenteditable,
-                                        blur,
-                                        ng-model='row.InstructorEmail',
-                                        onEnter='inlineUpdate("InstructorEmail")',
-                                        placeholder='(Optional) Email address')
+                            .form-control(contenteditable,
+                                            blur,
+                                            ng-model='row.InstructorEmail',
+                                            onEnter='inlineUpdate("InstructorEmail")',
+                                            placeholder='(Optional) Email address')
+
+                        br
+
+                        .chartMonths(ng-bind-html='row.chart | trust_html')
+
+                        .clearfix
+
+                        .pull-left.btn-success(style='width:{{row.annualEffectiveness}}%') &nbsp;
+                        .pull-left.italics.text-success &nbsp;{{row.annualHours}} hours/yr
 
                     td.w5: +actions(true, false, true, 'instructor')

@@ -97,3 +97,47 @@
 #manage-ftd .modal-footer {
     padding: 2px 0 0 0;
 }
+
+#manage-ftd td .text-success {
+    line-height: 19px;
+}
+
+#manage-ftd tr:hover .chartMonths i {
+    color: #aaa;
+}
+
+#manage-ftd .chartMonths em {
+    border-bottom: 1px solid #46b8da;
+    background: #46b8da;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+}
+
+#manage-ftd .chartMonths i {
+    background: none;
+    color: transparent;
+    font-size: .65em;
+    line-height: 55px;
+}
+
+#manage-ftd .chartMonths b {
+    font-weight: 400;
+    position: relative;
+    height: 20px;
+    line-height: 20px;
+    float: left;
+    margin-left: 2%;
+    width: 6%;
+    text-align: center;
+}
+
+#manage-ftd .chartMonths {
+    height: 25px;
+    width: 100%;
+}
+
+#manage-ftd .chartMonths + .clearfix {
+    height: 13px;
+}
