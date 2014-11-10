@@ -22,14 +22,14 @@ form.form-horizontal(name='modal')
 
                 table.table.table-split
 
-                    tr(ng-repeat='(title, stat) in stats')
+                    tr(ng-repeat='(title, stat) in data.stats')
 
                         td {{title}}
                         td.bold {{stat}}
 
                 .text-center
-                    .lead.strong(style='margin-bottom:0') {{annualEffectiveness}}% Annual Instructor Utilization
-                    .small.italics {{annualHours}} hours out of 48 weeks
+                    .lead.strong(style='margin-bottom:0') {{data.annualEffectiveness}}% Annual Instructor Utilization
+                    .small.italics {{data.annualHours}} hours out of 48 weeks
 
         br
 
@@ -46,7 +46,7 @@ form.form-horizontal(name='modal')
 
             tbody
 
-                tr(ng-repeat='course in history')
+                tr(ng-repeat='course in data.history')
 
                     td {{course.Course.PDS}}
                     td {{course.TTMS}}
