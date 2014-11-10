@@ -104,6 +104,18 @@ FTSS.ng.controller(
 
 			};
 
+			$scope.submit = function() {
+
+				var send = $scope.row;
+
+				send.UnitId = $scope.data.Id;
+				send.cache = true;
+				send.__metadata = 'Instructors';
+
+				self._create(send, $scope.close);
+
+			};
+
 			// Bind inlineUpdate to the scope
 			$scope.inlineUpdate = self.inlineUpdate;
 
@@ -121,7 +133,6 @@ FTSS.ng.controller(
 				$scope.row = {};
 
 				$scope.close = function () {
-					$scope.row = {};
 					$scope.addNew = false;
 				}
 
