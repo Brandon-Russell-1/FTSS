@@ -59,7 +59,7 @@
 
 #manage-ftd #add-aside,
 #manage-ftd .add-button {
-    transition: ease all 1s;
+    transition: ease all 300ms;
 }
 
 #manage-ftd #add-aside {
@@ -72,7 +72,7 @@
 
 #manage-ftd #embed,
 #manage-ftd #rightScroll {
-    transition: ease opacity 1s;
+    transition: ease opacity 500ms;
 }
 
 #manage-ftd .addNew + #embed,
