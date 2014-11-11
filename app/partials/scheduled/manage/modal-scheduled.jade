@@ -36,7 +36,8 @@ form.form-horizontal(name='modal')
                         select(selectize='Instructors',
                         bind='InstructorId',
                         watch='UnitId',
-                        watchList='Units.Instructors')
+                        watchList='Units.Instructors',
+                        remember='instructor')
 
             +formGroup('Reserved')
                 .input-group.pull-left(style='width:30%!important')
