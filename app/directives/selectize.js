@@ -40,7 +40,7 @@
 
 							var oldVal = scope.data[opts.field],
 
-							    newVal = (val && val.map && !isNaN(val[0]) ? val.map(Number) : Number(val)) || val;
+							    newVal = (val && val.map && !isNaN(val[0]) ? val.map(Number) : Number(val)) || val || null;
 
 							// Update the field with the value(s)
 							if (oldVal !== newVal) {
