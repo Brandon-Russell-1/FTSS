@@ -1,13 +1,14 @@
 include partials/__mixins
 
-- base = 'https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/development/'
+- build = '1.0.0'
+- base = 'https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/live/'
 - base = ''
 
 +pageHead
 
-        link(rel='stylesheet', href=base + 'css/app.css')
+        link(rel='stylesheet', href=base + 'css/app.css?v=' + build)
 
-        script(src=base + 'js/vendor.js')
+        script(src=base + 'js/vendor.js?v=' + build)
 
     body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}} {{roleClasses}}')
 
@@ -19,5 +20,5 @@ include partials/__mixins
 
         #spinner: +icon('refresh', '0 0 27 32')
 
-        script(src=base + 'js/partials.js')
-        script(src=base + 'js/app.js')
+        script(src=base + 'js/partials.js?v=' + build)
+        script(src=base + 'js/app.js?v=' + build)

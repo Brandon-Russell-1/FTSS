@@ -136,7 +136,7 @@
 
 							page = encodeURIComponent(
 								[
-									'https://cs1.eis.af.mil/sites/FTSS/dev.html#',
+									'https://cs1.eis.af.mil/sites/FTSS#',
 									pg,
 									permaLink
 								].join('/'));

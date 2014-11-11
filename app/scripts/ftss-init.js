@@ -89,16 +89,16 @@
 
 	              {
 
-		              'baseURL'     : 'https://cs1.eis.af.mil/sites/FTSS/rebuild/_vti_bin/ListData.svc/',
-		              'user'        : { 'url': 'https://cs1.eis.af.mil/sites/FTSS/rebuild/_vti_bin/UserGroup.asmx' },
-		              'cacheVersion': 5
+		              'baseURL'     : 'https://cs1.eis.af.mil/sites/FTSS/live/_vti_bin/ListData.svc/',
+		              'user'        : { 'url': 'https://cs1.eis.af.mil/sites/FTSS/live/_vti_bin/UserGroup.asmx' },
+		              'cacheVersion': 10
 
 	              } : {
 
 		              'offline'     : false,
 		              'baseURL'     : 'http://virtualpc/dev/_vti_bin/ListData.svc/',
 		              'user'        : { 'url': 'http://virtualpc/_vti_bin/UserGroup.asmx' },
-		              'cacheVersion': 5
+		              'cacheVersion': 10
 
 	              });
 
@@ -106,7 +106,7 @@
 
 	FTSS.utils = {};
 
-	FTSS.photoURL = PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/rebuild/Bios/' : 'http://virtualpc/dev/Bios/';
+	FTSS.photoURL = PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/live/Bios/' : 'http://virtualpc/dev/Bios/';
 
 	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {
 
