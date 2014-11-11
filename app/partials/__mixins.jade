@@ -51,14 +51,12 @@ mixin link(page, tag, name, roles)
 
 
 mixin grouping()
-    div(class='{{wellCollapse}}')
+    div(ng-repeat='(header, group) in groups')
 
-        div(ng-repeat='(header, group) in groups')
-
-            h3(ng-if='header', style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
-                | {{header}}
-                span.pull-right {{group.length}}
-            block
+        h3(ng-if='header', style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
+            | {{header}}
+            span.pull-right {{group.length}}
+        block
 
 
 mixin addButton(text, action)
