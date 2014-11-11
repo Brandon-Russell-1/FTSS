@@ -94,7 +94,7 @@
     left: calc(56.25% - 45px) !important;
 }
 
-#manage-ftd .modal-footer {
+#manage-ftd #add-aside .modal-footer {
     padding: 2px 0 0 0;
 }
 
