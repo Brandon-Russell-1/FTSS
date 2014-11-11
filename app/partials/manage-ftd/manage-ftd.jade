@@ -126,7 +126,7 @@ div(ng-class='{addNew:addNew}')
 
                             .clearfix
 
-                            .pull-left.btn-success(style='width:{{row.annualEffectiveness}}%') &nbsp;
+                            .pull-left.btn-success(ng-style='{width:row.annualEffectiveness+"%"}') &nbsp;
                             .pull-left.italics.text-success &nbsp;{{row.annualHours}} hours/yr
 
                         td.w5: +actions(true, false, true, 'instructor')
