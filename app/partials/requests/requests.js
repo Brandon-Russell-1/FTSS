@@ -113,6 +113,28 @@ FTSS.ng.controller(
 								            // HTTP 204 is the status given for a successful update, there will be no body
 								            if (resp.status === 204) {
 
+									            if (row.request.Host.Email) {
+
+										            utils.sendEmail(
+											            {
+												            'to': row.request.Host.Email,
+
+												            'subject': 'FTD Seat Request Response for ' +
+												                       row.Course.PDS,
+
+												            'body': 'Seat request for class ' +
+												                    (row.TTMS || 'starting on ' + row.startText) +
+												                    {'2': ' Approved', '3': ' Denied'}[status] +
+												                    '\n\n' +
+												                    row.request.Students.join('\n') +
+												                    '\n\n' +
+												                    (response ? 'FTD: ' + response : '')
+											            }
+										            )
+										            ;
+
+									            }
+
 									            utils.alert.update();
 
 									            row.Archived = true;
@@ -126,13 +148,16 @@ FTSS.ng.controller(
 
 									            self.process();
 
-								            } else {
+								            }
+								            else {
 
 									            utils.alert.error('Please try again later.');
 
 								            }
 
-							            });
+							            }
+						      )
+						      ;
 
 					      };
 
@@ -142,4 +167,5 @@ FTSS.ng.controller(
 				      });
 
 		}
-	]);
+	])
+;
