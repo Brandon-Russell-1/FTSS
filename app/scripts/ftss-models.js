@@ -201,7 +201,8 @@
 					'Staff',
 					'Comment',
 					'Created',
-					'CreatedBy/Name'
+					'CreatedBy/Name',
+					'CreatedBy/WorkEMail'
 				]
 			}
 
