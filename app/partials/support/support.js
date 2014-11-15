@@ -46,12 +46,37 @@
 						'__metadata': 'Support',
 						'cache'     : true,
 						'Page'      : page,
-						'Staff'     : false,
+						'Staff'     : $scope.hasRole('admin'),
 						'Comment'   : comment ? comment.writeReply : $scope.askQuestion
 					};
 
 					if (comment) {
+
 						send.Thread = comment.Id;
+
+						// Send the email notification to the user with the reply
+						utils.sendEmail(
+							{
+								'to'     : comment.CreatedBy.WorkEMail,
+								'subject': 'Help Page Reply',
+								'body'   : $scope.user.name +
+								           ' replied to your question or comment:\n\n' +
+								           comment.writeReply
+							}
+						);
+
+					} else {
+
+						utils.sendEmail(
+							{
+								'to'     : '372trs.trg.ftss@us.af.mil',
+								'subject': 'FTSS Support Question: ' + $scope.askQuestion.substring(0, 15) + '...',
+								'body'   : $scope.user.name +
+								           ' asked the following question on the ' +
+								           page + ' page:\n\n' + $scope.askQuestion
+							}
+						);
+
 					}
 
 					send.Comment && SharePoint.create(send).then(update, utils.alert.error);
