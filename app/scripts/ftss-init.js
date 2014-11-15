@@ -74,12 +74,6 @@
 					'animation': 'am-fade-and-scale'
 				});
 
-				angular.extend($datepickerProvider.defaults, {
-					'dateFormat': 'd MMM yyyy',
-					'startWeek' : 1,
-					'autoclose' : true
-				});
-
 			}
 		]);
 
