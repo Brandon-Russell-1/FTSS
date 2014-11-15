@@ -81,8 +81,8 @@
 
 								.each(function (d) {
 
-									      // Get the time from now with the GMT offset of the CS3 servers (-5)
-									      d.TimeAgo = moment(d.Created).add('h', 5).fromNow();
+									      // Get the time from now with the GMT offset of the CS1 servers (-6)
+									      d.TimeAgo = moment(d.Created).add('h', 6).fromNow();
 
 									      if (d.Thread < 1) {
 										      d.replies = [];
