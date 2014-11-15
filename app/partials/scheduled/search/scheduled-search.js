@@ -29,13 +29,13 @@ FTSS.ng.controller(
 
 					      $scope.autoApprove = $scope.hasRole
 					      (['ftd',
-					        'scheduler'
+					        'scheduling'
 					       ]);
 
 					      $scope.canRequest = $scope.hasRole(
 						      ['mtf',
 						       'ftd',
-						       'scheduler'
+						       'scheduling'
 						      ]);
 
 					      self.initialize(data).then(function (row) {

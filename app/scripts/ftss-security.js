@@ -16,13 +16,6 @@
 		                 'ftd'
 		],
 
-		'scheduled': [ 'approvers',
-		               'ftd',
-		               'curriculum',
-		               'mtf',
-		               'guest'
-		],
-
 		'requests'   : ['approvers',
 		                'mtf',
 		                'ftd'
@@ -36,6 +29,9 @@
 		],
 		'hosts'      : ['mtf',
 		                'ftd'
+		],
+		'ttms'       : [
+			'scheduling'
 		]
 
 	};
@@ -100,9 +96,9 @@
 
 				                      function () {
 
-					                      var page = authorizationMatrix[_fn.getPage()] || groups;
+					                      var page = authorizationMatrix[_fn.getPage()];
 
-					                      $scope.abort = _.intersection(page, groups).length < 1;
+					                      $scope.abort = page ? (_.intersection(page, groups).length < 1) : false;
 
 					                      return !$scope.abort;
 
