@@ -106,36 +106,6 @@
 
 		},
 
-		'calendar': {
-
-			'source': 'Scheduled',
-			'params': {
-				'$select': [
-					'CourseId',
-					'Start',
-					'End'
-				]
-			}
-
-		},
-
-		'stats': {
-
-			'source': 'Scheduled',
-			'params': {
-				'$select': [
-					'CourseId',
-					'TTMS',
-					'Start',
-					'End',
-					'Host',
-					'Other',
-					'Requests_JSON'
-				]
-			}
-
-		},
-
 		'ttms': {
 
 			'source': 'Scheduled',
@@ -207,7 +177,6 @@
 			}
 
 		},
-
 
 		'updates': {
 
