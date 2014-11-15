@@ -48,24 +48,10 @@
 					 */
 					'setPermaLink': function () {
 
-						var view = {};
-
-						if ($scope.wellCollapse) {
-							view.c = $scope.wellCollapse;
-						}
-
-						if ($scope.showArchive) {
-							view.a = $scope.showArchive;
-						}
-
-						if ($scope.searchText.$) {
-							view.S = $scope.searchText.$;
-						}
-
 						$scope.permaLink = [
 
-								FTSS.tags && btoa(JSON.stringify(FTSS.tags)) || '',
-								!_.isEmpty(view) && btoa(JSON.stringify(view)) || ''
+							FTSS.tags ? btoa(JSON.stringify(FTSS.tags)) : '',
+							$scope.searchText.$ ? btoa($scope.searchText.$) : ''
 
 						].join('/');
 
@@ -111,7 +97,6 @@
 						$scope.showArchive = $scope.showArchive ? '' : 'archived';
 					},
 
-
 					/**
 					 * Bitly url generator--just because we can.  This will automatically use the 1.usa.gov domain
 					 * as that's what usa.gov uses.  If it doesn't work, then it returns the long url instead
@@ -150,16 +135,15 @@
 								'&callback=JSON_CALLBACK'
 							].join('');
 
-							return $http({
-								             'method': 'jsonp',
-								             'url'   : url
-							             })
+							return $http(
+								{
+									'method': 'jsonp',
+									'url'   : url
+								})
 
 								.then(function (data) {
 
-									      $scope.bitlyResponse =
-
-									      localStorage[cacheLink] =
+									      $scope.bitlyResponse = localStorage[cacheLink] =
 
 									      ((data.status === 200) ? data.data.data.url : page).split('://')[1];
 
@@ -266,6 +250,7 @@
 
 				};
 
+				// Setup our SP group-based security
 				FTSS.security(SharePoint, $scope, _fn);
 
 				/**
@@ -276,17 +261,22 @@
 					// Fire our page listener for Google Analytics
 					window.ga && window.ga('send', 'pageview', { page: $location.path() });
 
+					// Start the loadig feedback
 					utils.loading(true);
 
+					// This allows the scope to know about the tagBox
 					if (FTSS.search) {
 						$scope.noSearch = false;
 					}
 
+					// Reset some basic view settings
 					$scope.pageLimit = FTSS.prefs.limit;
 					$scope.count = '-';
 					$scope.overload = false;
 					$scope.filter = false;
 					$scope.searchText = {};
+					$scope.showArchive = false;
+					$scope.wellCollapse = false;
 
 					FTSS.selectizeInstances = {};
 					FTSS.pasteAction = false;
@@ -295,13 +285,14 @@
 
 				$scope.$on('$routeChangeSuccess', function () {
 
-					var prefs = $routeParams.view ? JSON.parse(atob($routeParams.view)) : {};
+					// The second parameter of the URL is a search
+					var search = $routeParams.search ? JSON.parse(atob($routeParams.search)) : false;
 
+					// Calculate the page/link portion of the permaLink
 					$scope.permaLink = _fn.getPage() !== 'home' && $routeParams.link || '';
 
-					$scope.searchText.$ = $scope.searchText.$ || prefs.S || '';
-					$scope.showArchive = prefs.a || false;
-					$scope.wellCollapse = prefs.c || false;
+					// Allow search to come from URl
+					$scope.searchText.$ = search || '';
 
 				});
 
