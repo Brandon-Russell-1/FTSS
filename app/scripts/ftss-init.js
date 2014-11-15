@@ -107,7 +107,7 @@
 
 	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {
 
-		'limit': 35,
+		'limit': 50,
 
 		'animate': true,
 
