@@ -1,19 +1,18 @@
 include ../__mixins
 
-- var columns = {Created:10, Course: 15, Start:10, End:10, Max:5, Notes: 40}
+- var columns = {Created:10, Location: 20, Start:10, End:10, Notes: 40}
 
 +tableHeader(false, columns, 'ttms')
 
     td.italics.topFix {{row.age}}
 
-    td.bold.topFix {{row.Course.PDS}} - {{row.Course.Number}}
+    td.topFix
+        b {{row.FTD.LCode}}:&nbsp;
+        span {{row.FTD.LongName}}
 
-    td.bold.topFix {{row.start}}
+    td.bold.topFix {{row.startText}}
 
-    td.bold.topFix {{row.end}}
-
-    td.bigLetter
-        .courseMax {{row.Course.Max}}
+    td.bold.topFix {{row.endText}}
 
     td
 

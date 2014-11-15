@@ -10,8 +10,8 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				'sort'  : 'Created',
-				'group' : 'location',
+				'sort'  : 'startInt',
+				'group' : 'course',
 				'model' : 'ttms',
 
 				// We only want classes with requests
@@ -45,7 +45,23 @@ FTSS.ng.controller(
 
 						      row.age = moment(row.Created).fromNow();
 
-						      row.location = row.FTD.LongName + ': ' + row.FTD.LCode;
+						      row.startInt = moment(row.Start);
+
+						      row.search = [
+							      row.ClassNotes,
+							      row.Course.text,
+							      row.Instructor.InstructorName,
+							      row.FTD.text
+						      ].join(' ');
+
+						      row.course = [
+							      row.Course.PDS,
+							      ' - ',
+							      row.Course.Number,
+							      ' (Max: ',
+							      row.Course.Max,
+							      ')'
+						      ].join('');
 
 					      });
 
