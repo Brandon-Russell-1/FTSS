@@ -77,21 +77,24 @@
 			}
 		]);
 
+	var base = 'https://cs1.eis.af.mil/sites/FTSS/';
+
 	FTSS.ng.value('SP_CONFIG',
 
 	              PRODUCTION ?
 
 	              {
 
-		              'baseURL'     : 'https://cs1.eis.af.mil/sites/FTSS/live/_vti_bin/ListData.svc/',
-		              'user'        : { 'url': 'https://cs1.eis.af.mil/sites/FTSS/live/_vti_bin/UserGroup.asmx' },
+		              'offline'     : false,
+		              'baseURL'     : base + 'live/_vti_bin/ListData.svc/',
+		              'user'        : { 'url': base + 'live/_vti_bin/UserGroup.asmx' },
 		              'cacheVersion': 10
 
 	              } : {
 
 		              'offline'     : false,
-		              'baseURL'     : 'http://virtualpc/dev/_vti_bin/ListData.svc/',
-		              'user'        : { 'url': 'http://virtualpc/_vti_bin/UserGroup.asmx' },
+		              'baseURL'     : base + 'development/_vti_bin/ListData.svc/',
+		              'user'        : { 'url': base + 'development/_vti_bin/UserGroup.asmx' },
 		              'cacheVersion': 10
 
 	              });
@@ -100,7 +103,7 @@
 
 	FTSS.utils = {};
 
-	FTSS.photoURL = PRODUCTION ? 'https://cs1.eis.af.mil/sites/FTSS/live/Bios/' : 'http://virtualpc/dev/Bios/';
+	FTSS.photoURL = PRODUCTION ? base + 'live/Bios/' : base + 'development/Bios/';
 
 	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {
 
