@@ -11,11 +11,13 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				'sort' : 'Start',
-				'group': 'Course.Number',
-				'model': 'scheduled'
+				    'sort' : 'Start',
+				    'group': 'Course.Number',
+				    'model': 'scheduled'
 
-			});
+			    }),
+
+			    today = moment();
 
 			$scope.request = utils.requestSeats($scope, $modal, self);
 
@@ -40,7 +42,7 @@ FTSS.ng.controller(
 
 						      utils.processScheduledRow(row);
 
-						      row.Archived = row.openSeats < 1;
+						      row.Archived = row.openSeats < 1 || row.startMoment.diff(today,'days') < 0;
 
 					      });
 
