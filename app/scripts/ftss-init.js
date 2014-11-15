@@ -56,7 +56,7 @@
 
 					var route = routes.shift();
 
-					$routeProvider.when('/' + route + '/:link?/:view?', {
+					$routeProvider.when('/' + route + '/:link?/:search?', {
 
 						'templateUrl': '/partials/' + route + '.html',
 						'controller' : route + 'Controller'
