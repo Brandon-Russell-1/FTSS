@@ -94,8 +94,8 @@ mixin tableHeader(addNew, columns, instructions)
                         class='{{row.styles}}',
                         ng-dblclick='edit(false)',
                         id='row-{{row.Id}}')
-                            once
-                                block
+                            block
+                            unbind
 
 mixin googleMap(small, thumb)
     if small
