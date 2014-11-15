@@ -75,6 +75,24 @@
 
 				scope.submit = function () {
 
+					if (!$scope.autoApprove) {
+
+						// Send our email notification to the FTD
+						utils.sendEmail(
+							{
+								'to'     : row.FTD.Email,
+								'subject': 'New Seat Request for ' + row.Course.PDS,
+								'body'   : caches.Hosts[scope.data.HostId].Unit +
+								           ' has requested ' +
+								           scope.data.Students.length +
+								           ' seats for the class starting on ' +
+								           row.startText +
+								           '\n\n' + scope.data.Students.join('\n') +
+								           '\n\n' + scope.data.Notes
+							});
+
+					}
+
 					row.Requests_JSON = row.Requests_JSON || [];
 
 					row.Requests_JSON.push(
