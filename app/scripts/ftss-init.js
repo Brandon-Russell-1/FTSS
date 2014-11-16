@@ -88,16 +88,19 @@
 		              'offline'     : false,
 		              'baseURL'     : base + 'live/_vti_bin/ListData.svc/',
 		              'user'        : { 'url': base + 'live/_vti_bin/UserGroup.asmx' },
-		              'cacheVersion': 10
+		              'cacheVersion': 12
 
 	              } : {
 
 		              'offline'     : false,
 		              'baseURL'     : base + 'development/_vti_bin/ListData.svc/',
 		              'user'        : { 'url': base + 'development/_vti_bin/UserGroup.asmx' },
-		              'cacheVersion': 10
+		              'cacheVersion': 12
 
 	              });
+
+	prefetchData && prefetchData() && delete window.prefetchData;
+
 
 	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
