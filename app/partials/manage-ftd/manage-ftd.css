@@ -98,6 +98,11 @@
     padding: 2px 0 0 0;
 }
 
+#manage-ftd .modal .mask-img {
+    width: 175px;
+    height: 200px;
+}
+
 #manage-ftd td .text-success {
     line-height: 19px;
 }
