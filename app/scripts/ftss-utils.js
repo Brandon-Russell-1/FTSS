@@ -180,6 +180,26 @@
 			 };
 
 			 /**
+			  * Convert arrayBuffer to base64.
+			  *
+			  * http://stackoverflow.com/a/9458996
+			  *
+			  *
+			  * @param buffer
+			  * @returns {*|string}
+			  * @private
+			  */
+			 utils._arrayBufferToBase64 = function (buffer) {
+				 var binary = '';
+				 var bytes = new Uint8Array(buffer);
+				 var len = bytes.byteLength;
+				 for (var i = 0; i < len; i++) {
+					 binary += String.fromCharCode(bytes[ i ]);
+				 }
+				 return window.btoa(binary);
+			 };
+
+			 /**
 			  * Performs highlighting of matched search tags to allow users to see exactly what search terms had hits
 			  *
 			  * @param {Array} [data] - the data returned from SharePoint.read()
