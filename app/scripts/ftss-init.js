@@ -49,7 +49,8 @@
 						    'manage-ftd',
 						    'backlog',
 						    'hosts',
-						    'admin'
+						    'admin',
+					        'reset'
 					    ];
 
 				while (routes.length) {
@@ -92,7 +93,7 @@
 
 	              } : {
 
-		              'offline'     : false,
+		              'offline'     : true,
 		              'baseURL'     : base + 'development/_vti_bin/ListData.svc/',
 		              'user'        : { 'url': base + 'development/_vti_bin/UserGroup.asmx' },
 		              'cacheVersion': 12
@@ -100,7 +101,6 @@
 	              });
 
 	prefetchData && prefetchData() && delete window.prefetchData;
-
 
 	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 

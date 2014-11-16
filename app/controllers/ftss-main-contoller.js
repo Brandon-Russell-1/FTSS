@@ -259,6 +259,13 @@
 				 */
 				$scope.$on('$locationChangeStart', function () {
 
+					// This is a reset handler to flush cache/reset user settings
+					if (_fn.getPage() === 'reset') {
+						utils.masterReset();
+						$location.path('home');
+						window.location.reload();
+					}
+
 					// Fire our page listener for Google Analytics
 					window.ga && window.ga('send', 'pageview', { page: $location.path() });
 
