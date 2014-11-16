@@ -16,7 +16,9 @@ FTSS.ng.controller(
 
 				'sort' : 'InstructorName',
 				'model': 'instructors',
-				'modal': 'instructor-stats'
+				'modal': 'instructor-stats',
+
+				'noFilter': true
 
 			});
 
@@ -104,7 +106,7 @@ FTSS.ng.controller(
 
 			};
 
-			$scope.submit = function() {
+			$scope.submit = function () {
 
 				var send = $scope.row;
 
@@ -150,6 +152,8 @@ FTSS.ng.controller(
 
 				$scope.data = caches.Units[UnitId];
 
+				data = _.filter(data, {'UnitId': UnitId});
+
 				// Only include this instructor
 				read.params.$filter = '(UnitId eq ' + UnitId + ')';
 
@@ -173,6 +177,8 @@ FTSS.ng.controller(
 						var stat = stats[row.Id],
 
 						    chart = [];
+
+						row.search = row.InstructorName;
 
 						// for aggregate instructor stats
 						row.stats = {
