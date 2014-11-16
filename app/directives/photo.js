@@ -124,7 +124,11 @@
 									    '"><img /></div>'
 								    ].join(' ');
 
-								    data.Photo && getImageFromCache();
+								    if (data.Photo) {
+									    getImageFromCache();
+								    } else {
+									    force && $el.find('img').attr('src', noPhoto);
+								    }
 
 							    }
 
