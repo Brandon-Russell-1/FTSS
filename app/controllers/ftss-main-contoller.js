@@ -145,7 +145,8 @@
 
 									      $scope.bitlyResponse = localStorage[cacheLink] =
 
-									      ((data.status === 200) ? data.data.data.url : page).split('://')[1];
+									                             ((data.status ===
+									                               200) ? data.data.data.url : page).split('://')[1];
 
 								      });
 
@@ -159,7 +160,7 @@
 					 */
 					'doInitPage': function () {
 
-						if ($scope.user && $scope.user.groups && (FTSS.search || $scope.loaded)) {
+						if ($scope.isAuthorized && (FTSS.search || $scope.loaded)) {
 
 							if (!$scope.isAuthorized()) {
 
