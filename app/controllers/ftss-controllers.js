@@ -101,20 +101,22 @@ FTSS.controller = (function () {
 											}
 										} catch (e) {
 											callback && callback(data);
-
 										}
-
 									};
 
 									if (!opts.static) {
 
 										var filters = [];
 
-										opts.filter && filters.push(opts.filter);
+										if (!opts.noFilter) {
 
-										(prop === 'filter') && filters.push(watch);
+											opts.filter && filters.push(opts.filter);
 
-										model.params.$filter = filters.join(' and ');
+											(prop === 'filter') && filters.push(watch);
+
+											model.params.$filter = filters.join(' and ');
+
+										}
 
 										SharePoint
 
