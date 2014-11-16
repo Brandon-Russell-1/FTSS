@@ -38,84 +38,75 @@
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
-		// Setup a watch for the user.groups to wait for the SOAP callback of group memberships
-		var groupWatch = $scope.$watch('user.groups', function (groups) {
+		// Load our user data into FTSS
+		SharePoint.user($scope).then(function (user) {
 
-			// Only act if we have group memberships
-			if (groups) {
+			var groups = user.groups;
 
-				// Extract the name of any groups the user is a member of
-				groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
+			// Extract the name of any groups the user is a member of
+			groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
 
-				groups = groups.length ? groups : ['guest'];
+			groups = groups.length ? groups : ['guest'];
 
-				var isAdmin = groups.indexOf('admin') > -1;
+			var isAdmin = groups.indexOf('admin') > -1;
 
-				// Used to modify views based on roles
-				$scope.roleClasses = groups.join(' ');
+			// Used to modify views based on roles
+			$scope.roleClasses = groups.join(' ');
 
-				// This is the text that is displayed in the top-left corner of the app
-				$scope.roleText = groups.join(' • ')
-					.replace('mtf', 'MTF User')
-					.replace('ftd', 'FTD User')
-					.replace('curriculum', 'Curriculum Manager')
-					.replace('scheduling', 'J4 Scheduler')
-					.replace('approvers', 'Approver')
-					.replace('admin', 'Administrator')
-					.replace('guest', 'Visitor');
+			// This is the text that is displayed in the top-left corner of the app
+			$scope.roleText = groups.join(' • ')
+				.replace('mtf', 'MTF User')
+				.replace('ftd', 'FTD User')
+				.replace('curriculum', 'Curriculum Manager')
+				.replace('scheduling', 'J4 Scheduler')
+				.replace('approvers', 'Approver')
+				.replace('admin', 'Administrator')
+				.replace('guest', 'Visitor');
 
-				/**
-				 * Test for a particular user role
-				 *
-				 * @param roles
-				 * @returns {boolean}
-				 */
-				$scope.hasRole = function (roles) {
+			/**
+			 * Test for a particular user role
+			 *
+			 * @param roles
+			 * @returns {boolean}
+			 */
+			$scope.hasRole = function (roles) {
 
-					return isAdmin || _(roles.map ? roles : [roles]).any(function (role) {
+				return isAdmin || _(roles.map ? roles : [roles]).any(function (role) {
 
-						return groups.indexOf(role) > -1;
+					return groups.indexOf(role) > -1;
 
-					});
+				});
 
-				};
+			};
 
-				/**
-				 * Performs page validation check, this is a private function to help keep things a little more protected
-				 *
-				 * @private
-				 */
-				$scope.isAuthorized = groups.indexOf('admin') > -1 ?
+			/**
+			 * Performs page validation check, this is a private function to help keep things a little more protected
+			 *
+			 * @private
+			 */
+			$scope.isAuthorized = groups.indexOf('admin') > -1 ?
 
-				                      function () {
+			                      function () {
 
-					                      $scope.abort = false;
-					                      return true;
+				                      $scope.abort = false;
+				                      return true;
 
-				                      } :
+			                      } :
 
-				                      function () {
+			                      function () {
 
-					                      var page = authorizationMatrix[_fn.getPage()];
+				                      var page = authorizationMatrix[_fn.getPage()];
 
-					                      $scope.abort = page ? (_.intersection(page, groups).length < 1) : false;
+				                      $scope.abort = page ? (_.intersection(page, groups).length < 1) : false;
 
-					                      return !$scope.abort;
+				                      return !$scope.abort;
 
-				                      };
+			                      };
 
-				// Unbind our watcher
-				groupWatch();
-
-				// Call doInitPage() as this might be the last item in the async chain to complete
-				_fn.doInitPage();
-
-			}
+			// Call doInitPage() as this might be the last item in the async chain to complete
+			_fn.doInitPage();
 
 		});
-
-		// Load our user data into FTSS
-		SharePoint.user($scope);
 
 	};
 
