@@ -92,10 +92,14 @@ FTSS.controller = (function () {
 								actions.reload = function () {
 
 									var finalize = function (data) {
+										try {
+											if (JSON.stringify(data) !== last) {
 
-										if (JSON.stringify(data) !== last) {
+												last = JSON.stringify(data);
+												callback && callback(data);
 
-											last = JSON.stringify(data);
+											}
+										} catch (e) {
 											callback && callback(data);
 
 										}
