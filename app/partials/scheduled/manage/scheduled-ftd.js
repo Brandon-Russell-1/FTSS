@@ -13,82 +13,46 @@ FTSS.ng.controller(
 			var self = FTSS.controller($scope, {
 
 				    'sort'          : 'Start',
-				    'group'         : 'Month',
+				    'group'         : 'InstructorId',
 				    'model'         : 'scheduled',
 				    'modalPlacement': 'wide',
 
 				    // We will be post-post-processing this data for the calendar (needs some special data)
 				    'finalProcess'  : function (data) {
 
-					    var events = [], min, max, months,
+					    var events = [], min, minClone, max, months,
 
 					        weekend = function (day) {
 						        return (day.isoWeekday() > 5) ? 'weekend' : '';
 					        };
 
+					    // Make a flat copy of our data for date range detection
 					    _(data).each(function (group) {
 						    events = events.concat(group);
 					    });
 
+					    // Get the earliest start date, minus three days
 					    min = moment(Math.min.apply(Math, _.pluck(events, 'sMoment'))).add(-3, 'days');
+
+					    // Get the latest end date, plus three days
 					    max = moment(Math.max.apply(Math, _.pluck(events, 'eMoment'))).add(3, 'days');
 
-					    months = {};
 
+					    // Initialize our variables
+					    minClone = min.clone();
+					    months = {};
 					    $scope.resourceDays = '';
 					    $scope.resourceEvents = [];
 
-					    _(events).each(function (event) {
+					    while (minClone < max) {
 
-						    var filler = min.clone(),
-
-						        first = true;
-
-						    event.html = '';
-
-						    while (filler < max) {
-
-							    filler.add(1, 'days');
-
-							    var text = '',
-
-							        tdClass = weekend(filler);
-
-							    if (filler >= event.sMoment && filler < event.eMoment) {
-
-								    tdClass += ' mark';
-
-								    if (first) {
-
-									    text = _.template($templateCache.get('/partials/calendar-event.html'), event);
-
-									    first = false
-
-								    }
-
-							    }
-
-							    event.html += '<td class="' + tdClass + '">' + text + '</td>';
-
-							    event.edit = function () {
-								    $scope.edit.apply({'row': event});
-							    };
-
-						    }
-
-
-					    });
-
-
-					    while (min < max) {
-
-						    var month = min.add(1, 'days').format('MMM YYYY');
+						    var month = minClone.add(1, 'days').format('MMM YYYY');
 
 						    if (!months[month]) {
 
 							    months[month] = {
 								    'month'  : month,
-								    'sort'   : parseInt(min.format('YYYYMM')),
+								    'sort'   : parseInt(minClone.format('YYYYMM')),
 								    'colspan': 0
 							    };
 
@@ -99,22 +63,87 @@ FTSS.ng.controller(
 						    $scope.resourceDays += [
 
 							    '<th class="',
-							    weekend(min),
+							    weekend(minClone),
 							    '">',
-							    min.format('D'),
+							    minClone.format('D'),
 							    '<br>',
-							    min.format('dd'),
+							    minClone.format('dd'),
 							    '</th>'
 
 						    ].join('');
 
 					    }
 
+					    _(data).each(function (instructor) {
+
+						    // Iterate over each event
+						    _(instructor).each(function (event) {
+
+							    var filler = min.clone(),
+
+							        first = true,
+
+							        last = false,
+
+							        colspan = 0;
+
+							    event.html = '';
+
+							    while (filler < max) {
+
+								    filler.add(1, 'days');
+
+								    if (filler >= event.sMoment && filler < event.eMoment) {
+
+									    colspan++;
+
+									    if (first) {
+
+										    first = false;
+
+										    event.html += '<td class="' + weekend(filler) + ' mark" ';
+
+									    }
+
+								    } else {
+
+									    if (!first && !last) {
+
+										    last = true;
+
+										    event.html += [
+											    'colspan=', colspan, '>',
+											    _.template($templateCache.get('/partials/calendar-event.html'),
+											               event),
+											    '</td>'
+										    ].join('');
+
+									    }
+
+									    event.html += '<td class="' + weekend(filler) + '"></td>';
+
+								    }
+
+							    }
+
+							    event.edit = function () {
+								    $scope.edit.apply({'row': event});
+							    };
+
+						    });
+
+					    });
+
 					    $scope.resourceMonths = _.sortBy(months, 'sort');
 					    $scope.events = events;
 
 				    },
 
+				    /**
+				     * This is our modal dialog used for editing existing classes as well as building new classes
+				     * @param scope
+				     * @param isNew
+				     */
 				    'edit': function (scope, isNew) {
 
 					    // Only add valid date-ranges to FC
