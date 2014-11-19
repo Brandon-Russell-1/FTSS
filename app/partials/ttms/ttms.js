@@ -10,14 +10,16 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				'sort'  : 'startInt',
-				'group' : 'course',
-				'model' : 'ttms',
+				    'sort'  : 'startInt',
+				    'group' : 'course',
+				    'model' : 'ttms',
 
-				// We only want classes with requests
-				'filter': "TTMS eq null and Archived eq false"
+				    // We only want classes with requests
+				    'filter': "TTMS eq null and Archived eq false"
 
-			});
+			    }),
+
+			    today = moment();
 
 			$scope.inlineUpdate = function (field, setArchive) {
 
@@ -46,6 +48,11 @@ FTSS.ng.controller(
 						      row.age = moment(row.Created).fromNow();
 
 						      row.startInt = moment(row.Start);
+
+						      // Archive classes that have already started
+						      if (row.startMoment.diff(today, 'days') < 0) {
+							      row.Archived = true;
+						      }
 
 						      row.search = [
 							      row.ClassNotes,
