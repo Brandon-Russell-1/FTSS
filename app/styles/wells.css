@@ -4,10 +4,6 @@
     display: none!important;
 }
 
-.well.archived {
-    opacity: .75;
-}
-
 .well hr {
     border-color: #333
 }
