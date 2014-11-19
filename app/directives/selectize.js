@@ -199,6 +199,13 @@
 
 					    loaded = function (data, group, text) {
 
+						    // Destroy all archived data because it is completely useless to us...
+						    _(data).each(function (row, key) {
+
+							    row.Archived && delete data[key];
+
+						    });
+
 						    // Add the dataset to the caches object for global access
 						    caches[group] = data;
 
@@ -207,9 +214,6 @@
 						    var id = group.toLowerCase().charAt(0).replace('m', 'c') + ':';
 
 						    options[group] = _.chain(data)
-
-							    // Run the reject Archived operation a second time as some lists will place in caches but not selectize
-							    .reject('Archived')
 
 							    .map(function (v) {
 
