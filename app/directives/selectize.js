@@ -222,13 +222,15 @@
 								         Id = (v.Id || v);
 								         txt = text && text.call ? text(v) : v;
 
+								         v.search = (v.text || txt).toLowerCase();
+
 								         return {
 									         'Id'      : Id,
 									         'id'      : id + Id,
 									         'optgroup': group,
 									         'label'   : v.label || txt,
 									         'data'    : v,
-									         'search'  : (v.text || txt).toLowerCase()
+									         'search'  : v.search
 								         };
 
 							         })
