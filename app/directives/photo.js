@@ -29,14 +29,88 @@
 
 		db = event.target.result;
 
-	}
+	};
+
+
+	FTSS.ng.run(
+		['$http',
+		 function ($http) {
+
+			 var cachedImages = {};
+
+			 utils.fetchPhoto = function (url, callback) {
+
+				 if (cachedImages[url]) {
+					 callback(cachedImages[url]);
+					 return;
+				 }
+
+				 var photo = FTSS.photoURL + '_w/' + url + '_jpg.jpg',
+
+				     setImage = function (blob) {
+
+					     if (blob) {
+
+						     // Create and revoke ObjectURL
+						     var imgURL = 'data:image/jpeg;base64,' +
+						                  utils._arrayBufferToBase64(blob);
+
+						     cachedImages[url] = imgURL;
+						     callback(imgURL);
+
+					     } else {
+						     getImageFromWeb();
+					     }
+
+				     },
+
+				     getImageFromWeb = function () {
+
+					     $http(
+						     {
+
+							     url         : photo,
+							     method      : 'GET',
+							     responseType: 'arraybuffer'
+
+						     })
+
+						     .success(function (blob) {
+
+							              setImage(blob);
+
+							              db.transaction('images', 'readwrite')
+								              .objectStore('images')
+								              .put(blob, url);
+
+						              });
+
+				     };
+
+				 // Retrieve the file that was just stored
+				 db.transaction('images')
+					 .objectStore('images')
+					 .get(url)
+					 .onsuccess = function (event) {
+
+					 if (event.target.result) {
+						 setImage(event.target.result);
+					 } else {
+						 getImageFromWeb();
+					 }
+
+				 };
+
+			 };
+
+		 }
+		]);
 
 	FTSS.ng.directive(
 		'photo',
 
 		[
-			'$http',
-			function ($http) {
+			function () {
 
 				return {
 					'restrict': 'E',
@@ -53,69 +127,11 @@
 
 							    var data = utils.deepRead($scope, $attrs.data) || {};
 
+							    data = isNaN(data) ? data : caches.Instructors[data] || data;
+
 							    if (lastPhoto !== data.Photo) {
 
 								    lastPhoto = data.Photo;
-
-								    var photo = FTSS.photoURL + '_w/' + data.Photo + '_jpg.jpg',
-
-								        setImage = function (blob) {
-
-									        if (blob) {
-
-										        // Create and revoke ObjectURL
-										        var imgURL = 'data:image/jpeg;base64,' +
-										                     utils._arrayBufferToBase64(blob);
-
-										        $el.find('img').attr('src', imgURL);
-
-									        } else {
-										        getImageFromWeb();
-									        }
-
-								        },
-
-								        getImageFromCache = function () {
-
-									        // Retrieve the file that was just stored
-									        db.transaction('images')
-										        .objectStore('images')
-										        .get(data.Photo)
-										        .onsuccess = function (event) {
-
-										        if (event.target.result) {
-											        setImage(event.target.result);
-										        } else {
-											        $el.find('img').attr('src', noPhoto);
-										        }
-
-									        };
-
-								        },
-
-								        getImageFromWeb = function () {
-
-									        $http(
-										        {
-
-											        url         : photo,
-											        method      : 'GET',
-											        responseType: 'arraybuffer'
-
-										        })
-
-										        .success(function (blob) {
-
-											                 setImage(blob);
-
-											                 db.transaction('images', 'readwrite')
-												                 .objectStore('images')
-												                 .put(blob, data.Photo);
-
-
-										                 });
-
-								        };
 
 								    $el[0].innerHTML = [
 									    '<div class="mask-img',
@@ -125,7 +141,11 @@
 								    ].join(' ');
 
 								    if (data.Photo) {
-									    getImageFromCache();
+
+									    utils.fetchPhoto(data.Photo, function (imgURL) {
+										    $el.find('img').attr('src', imgURL);
+									    });
+
 								    } else {
 									    force && $el.find('img').attr('src', noPhoto);
 								    }
