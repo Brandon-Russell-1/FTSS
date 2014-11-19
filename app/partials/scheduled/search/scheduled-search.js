@@ -38,11 +38,15 @@ FTSS.ng.controller(
 						       'scheduling'
 						      ]);
 
-					      self.initialize(data).then(function (row) {
+					      self.initialize(data).then(function (row, key, collection) {
 
 						      utils.processScheduledRow(row);
 
-						      row.Archived = row.openSeats < 1 || row.startMoment.diff(today,'days') < 0;
+						      row.Archived = row.openSeats < 1;
+
+						      if (row.startMoment.diff(today, 'days') < 0) {
+							      delete collection[row.Id];
+						      }
 
 					      });
 
