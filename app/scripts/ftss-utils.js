@@ -150,7 +150,9 @@
 
 					 window.sessionStorage.clear();
 					 window.localStorage.clear();
-					 SharePoint._flushCache();
+					 SharePoint._flushCache(function() {
+						 console && console.log('Cache flush okay.');
+					 });
 
 				 } catch (e) {
 
