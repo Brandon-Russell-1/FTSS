@@ -1,7 +1,7 @@
 include ../../__mixins
 include ../__scheduled-mixins
 
-.wrapped.noAdd
+.wrapped.noAdd(ng-class='{autoApprove:autoApprove}')
 
     +userInstructions('scheduled', true)
 
@@ -12,10 +12,7 @@ include ../__scheduled-mixins
 
             h4
 
-                span.archiveOnly ***ARCHIVED CLASS***
-
-                span.archiveExclude(class='btn btn-{{row.openSeatsClass}} availSeats(disabled="")',
-                ng-click='request(row)') {{row.openSeats}} Open
+                span.archiveExclude.btn(class='btn-{{row.openSeatsClass}}', ng-click='request(row)') {{row.openSeats}} Open
 
                 span(style='letter-spacing: .1em')
 
@@ -126,7 +123,7 @@ include ../__scheduled-mixins
 
                 .pull-right.invert
 
-                        .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-if='row.openSeats && canRequest')
+                        .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-if='row.openSeats && canRequest || autoApprove')
                             span.btn-label: +icon('plus-circle')
                             | Request Seats
 
