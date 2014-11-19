@@ -40,7 +40,9 @@
 
 							var oldVal = scope.data[opts.field],
 
-							    newVal = (val && val.map && !isNaN(val[0]) ? val.map(Number) : Number(val)) || val || null;
+							    newVal = (val && val.map && !isNaN(val[0]) ? val.map(Number) : Number(val)) ||
+							             val ||
+							             null;
 
 							// Update the field with the value(s)
 							if (oldVal !== newVal) {
@@ -489,7 +491,7 @@
 
 					timeout(function () {
 
-						var opts;
+						var opts, selectize;
 
 						if (attrs.bind) {
 
@@ -547,9 +549,12 @@
 
 						}
 
-						var selectize = FTSS.selectizeInstances[opts.field] = $(element).selectize(opts)[0].selectize;
+						// Strange bug we need to look into later on, just try/catch for now...
+						try {
+							selectize = FTSS.selectizeInstances[opts.field] = $(element).selectize(opts)[0].selectize;
+						} catch (e) {}
 
-						scope.modal && scope.modal
+						selectize && scope.modal && scope.modal
 
 							.$addControl({
 								             '$setPristine': function () {
