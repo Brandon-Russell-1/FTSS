@@ -450,22 +450,7 @@
 								                            val.InstructorEmail.replace('mailto:', '') :
 								                            '';
 
-								      val.PhotoThumb = val.Photo ? [
-
-									      '<div class="mask-img circle">',
-									      '<img src="',
-									      FTSS.photoURL,
-									      '_t/',
-									      val.Photo,
-									      '_jpg.jpg" /></div>'
-
-								      ].join('') : '';
-
-								      val.label = val.Photo ?
-
-								                  val.PhotoThumb + '<span>' + val.InstructorName + '</span>'
-
-									      : val.InstructorName;
+								      val.label = val.InstructorName;
 
 								      return  val.InstructorName;
 
