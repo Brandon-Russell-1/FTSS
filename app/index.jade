@@ -5,9 +5,7 @@ include partials/__mixins
 
 +pageHead
 
-        link(rel='stylesheet', href=base + 'css/app.css?v=2014.11.15')
-
-        script(src=base + 'js/vendor.js?v=2014.11.15')
+        link(rel='stylesheet', href=base + 'css/app.css?v=2014.11.19')
 
     body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}} {{roleClasses}}')
 
@@ -15,9 +13,12 @@ include partials/__mixins
         img#bg2
         #bgText
 
+        div(style='position:absolute;background:#222;height:50px;width:100%;color:#fff;padding:15px') Please wait, setting up FTSS
+
         include partials/includes/content
 
         +spinner()
 
-        script(src=base + 'js/partials.js?v=2014.11.15')
-        script(src=base + 'js/app.js?v=2014.11.15')
+        script(src=base + 'js/vendor.js?v=2014.11.18')
+        script(src=base + 'js/partials.js?v=2014.11.19')
+        script(src=base + 'js/app.js?v=2014.11.19')
