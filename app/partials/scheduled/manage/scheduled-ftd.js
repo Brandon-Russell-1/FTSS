@@ -342,6 +342,7 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
+					      $scope.unit = angular.copy(caches.Units[parseInt($scope.filter.match(/\d+/)[0])]);
 					      $scope.rawSchedule = angular.copy(data);
 
 					      // We can always request in this view

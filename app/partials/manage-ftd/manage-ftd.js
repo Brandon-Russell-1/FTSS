@@ -27,7 +27,7 @@ FTSS.ng.controller(
 
 				var match = text.toUpperCase().match(/(\w+)/g),
 
-				    courses = _(caches.MasterCourseList),
+				    courses = _(angular.copy(caches.MasterCourseList)),
 
 				    collection = [];
 
@@ -150,14 +150,14 @@ FTSS.ng.controller(
 
 				    yearStart = moment().add(-1, 'years');
 
-				$scope.data = caches.Units[UnitId];
+				$scope.data = angular.copy(caches.Units[UnitId]);
 
-				data = _.filter(data, {'UnitId': UnitId});
+				data = angular.copy(_.filter(data, {'UnitId': UnitId}));
 
 				// Only include this instructor
 				read.params.$filter = '(UnitId eq ' + UnitId + ')';
 
-				// Request the classes for this instructor from SP
+				// Request the scheduled data for this unit
 				SharePoint.read(read).then(function (results) {
 
 					var stats = _(results)
