@@ -24,7 +24,7 @@
 			{
 				'labelField'  : opts.label || 'label',
 				'maxItems'    : 1,
-				'options'     : !opts.watch && options[opts.select] || null,
+				'options'     : (!opts.watch && scope.$parent[opts.select] || options[opts.select]) || null,
 				'plugins'     : opts.maxItems > 1 ? [
 					'remove_button'
 				] : null,
