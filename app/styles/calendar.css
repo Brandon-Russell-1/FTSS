@@ -169,16 +169,11 @@
     margin-top: -10px;
 }
 
-#resourceView tr:hover td {
-    border-color: #777;
-    background-color: #777 !important;
-}
-
-#resourceView tr:hover .mark {
+#resourceView .mark:hover {
     background-color: #4cae4c !important;
 }
 
-#resourceView tr:hover .mark .mask-img {
+#resourceView .mark:hover .mask-img {
     width: 100px;
     height: 100px;
     margin-top: -35px;
@@ -186,15 +181,19 @@
     z-index: 50;
 }
 
-#resourceView tr:hover .mark span {
+#resourceView .mark:hover span {
     letter-spacing: .1em;
 }
 
-#resourceView tr:hover .mark .pds {
+#resourceView .mark .pds {
+    font-weight: 800;
+}
+
+#resourceView .mark:Hover .pds {
     opacity: 0;
 }
 
-#resourceView tr:hover .mark .instructor {
+#resourceView .mark:hover .instructor {
     margin-left: 25px;
 }
 
@@ -233,7 +232,7 @@
     width: 100%;
 }
 
-#resourceView tr:hover .mark .details {
+#resourceView .mark:hover .details {
     border: 1px solid #4cae4c;
     z-index: 999;
     max-height: 80%;

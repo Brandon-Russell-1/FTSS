@@ -7,7 +7,7 @@ include ../__scheduled-mixins
 
     +userInstructions('scheduled-ftd', true)
 
-    table#resourceView.table.table-bordered.table-hover
+    table#resourceView.table.table-bordered
 
         thead
             tr: th.month(ng-repeat='month in resourceMonths', colspan='{{month.colspan}}') {{month.month}}
@@ -16,5 +16,5 @@ include ../__scheduled-mixins
 
         tbody
 
-            tr.event(ng-repeat-start='event in events', ng-bind-html='event.html', ng-dblclick='event.edit()')
+            tr.event(ng-repeat-start='i in instructors', ng-bind-html='i.html|trust_html', ng-click='i.edit()')
             tr.spacer(ng-repeat-end): td

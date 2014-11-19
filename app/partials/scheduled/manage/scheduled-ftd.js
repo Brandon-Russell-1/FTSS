@@ -12,22 +12,24 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				    'sort'          : 'Start',
-				    'group'         : 'InstructorId',
+				    'sort'          : 'startMoment',
+				    'group'         : 'Instructor.InstructorName',
 				    'model'         : 'scheduled',
 				    'modalPlacement': 'wide',
 
 				    // We will be post-post-processing this data for the calendar (needs some special data)
 				    'finalProcess'  : function (data) {
 
-					    var events = [], min, minClone, max, months,
+					    var events = [], min, minClone, max, months, dayBase,
 
+					        // Check if this is a weekend or not
 					        weekend = function (day) {
 						        return (day.isoWeekday() > 5) ? 'weekend' : '';
 					        };
 
 					    // Make a flat copy of our data for date range detection
-					    _(data).each(function (group) {
+					    _(data).each(function (group, index) {
+						    group
 						    events = events.concat(group);
 					    });
 
@@ -37,13 +39,16 @@ FTSS.ng.controller(
 					    // Get the latest end date, plus three days
 					    max = moment(Math.max.apply(Math, _.pluck(events, 'eMoment'))).add(3, 'days');
 
-
 					    // Initialize our variables
 					    minClone = min.clone();
 					    months = {};
 					    $scope.resourceDays = '';
 					    $scope.resourceEvents = [];
+					    $scope.instructors = [];
+					    $scope.photoCache = {};
+					    dayBase = [];
 
+					    // Create the list of days and months
 					    while (minClone < max) {
 
 						    var month = minClone.add(1, 'days').format('MMM YYYY');
@@ -59,6 +64,8 @@ FTSS.ng.controller(
 						    }
 
 						    months[month].colspan++;
+
+						    dayBase.push(weekend(minClone));
 
 						    $scope.resourceDays += [
 
@@ -76,66 +83,85 @@ FTSS.ng.controller(
 
 					    _(data).each(function (instructor) {
 
+						    instructor.html = '';
+
+						    var count = 0,
+
+						        filler = function (end) {
+
+							        while (count < end) {
+
+								        instructor.html += '<td class="' + dayBase[count++] + '"></td>';
+
+							        }
+
+						        },
+
+						        photo = instructor[0].Instructor.Photo,
+
+						        bioPhoto,
+
+						        // We have to juggle the async nature of these calls completely outside the $digest cycle
+						        fillImage = function (imgURL) {
+
+							        // Try to find the photos
+							        var $el = $('.' + photo),
+
+							            // Our html to replace the image with
+							            html = '<div class="mask-img circle">' +
+							                   '<img src="' + imgURL + '" /></div>';
+
+							        bioPhoto = html;
+
+							        $el.html(html);
+
+						        };
+
+						    photo && utils.fetchPhoto(photo, fillImage);
+
 						    // Iterate over each event
 						    _(instructor).each(function (event) {
 
-							    var filler = min.clone(),
+							    var start = event.sMoment.diff(min, 'days') - 1,
 
-							        first = true,
+							        colspan = event.eMoment.diff(event.sMoment, 'days');
 
-							        last = false,
+							    filler(start);
 
-							        colspan = 0;
+							    event.bioPhoto = bioPhoto;
 
-							    event.html = '';
+							    event.name = colspan > 5 ? event.Instructor.InstructorName : '';
 
-							    while (filler < max) {
+							    instructor.html += '<td class="mark" colspan="' + colspan + '" id="' + event.Id + '">' +
 
-								    filler.add(1, 'days');
+							                       _.template($templateCache.get('/partials/calendar-event.html'),
+							                                  event) +
+							                       '</td>';
 
-								    if (filler >= event.sMoment && filler < event.eMoment) {
-
-									    colspan++;
-
-									    if (first) {
-
-										    first = false;
-
-										    event.html += '<td class="' + weekend(filler) + ' mark" ';
-
-									    }
-
-								    } else {
-
-									    if (!first && !last) {
-
-										    last = true;
-
-										    event.html += [
-											    'colspan=', colspan, '>',
-											    _.template($templateCache.get('/partials/calendar-event.html'),
-											               event),
-											    '</td>'
-										    ].join('');
-
-									    }
-
-									    event.html += '<td class="' + weekend(filler) + '"></td>';
-
-								    }
-
-							    }
-
-							    event.edit = function () {
-								    $scope.edit.apply({'row': event});
-							    };
+							    count += colspan;
 
 						    });
 
+						    instructor.name = instructor[0].Instructor.InstructorName;
+
+						    instructor.edit = function () {
+
+							    // Dirty hack to get the current class without a million extra data binds
+							    var row = _.find(instructor, { Id: parseInt($('td.mark:hover').attr('id'))});
+
+							    row && $scope.edit.apply({'row': row});
+
+						    };
+
+						    filler(max.diff(min, 'days'));
+
+						    $scope.instructors.push(instructor);
+
 					    });
 
+					    // Sort by instructor name
+					    $scope.instructors = _.sortBy($scope.instructors, 'name');
 					    $scope.resourceMonths = _.sortBy(months, 'sort');
-					    $scope.events = events;
 
 				    },
 
@@ -179,6 +205,7 @@ FTSS.ng.controller(
 					    // If this is a new class, pre-fill the reserved seats with 0
 					    if (isNew) {
 
+						    scope.data.UnitId = $scope.unit.Id;
 						    scope.data.Host = 0;
 						    scope.data.Other = 0;
 
@@ -343,6 +370,11 @@ FTSS.ng.controller(
 				.then(function (data) {
 
 					      $scope.unit = angular.copy(caches.Units[parseInt($scope.filter.match(/\d+/)[0])]);
+
+					      $scope.coursesDropdown = $scope.unit.Courses;
+					      $scope.instructorDropdown = _.filter(angular.copy(caches.Instructors),
+					                                           {'UnitId': $scope.unit.Id});
+
 					      $scope.rawSchedule = angular.copy(data);
 
 					      // We can always request in this view
