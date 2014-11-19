@@ -133,6 +133,7 @@ mixin actions(view, edit, archive, label)
             span.btn.btn-sm.btn-danger.btn-muted.no-archive(
                 bs-popover,
                 placement='left',
+                container='body',
                 template='/partials/popover-archive-' + label +'.html')
 
                 +icon('trash_hide')
