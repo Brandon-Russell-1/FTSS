@@ -382,7 +382,8 @@
 								      v.text = [
 									      v.Base,
 									      v.Det,
-									      v.Squadron
+									      v.Squadron,
+									      v.LCode
 								      ].join(' ');
 
 								      /**
