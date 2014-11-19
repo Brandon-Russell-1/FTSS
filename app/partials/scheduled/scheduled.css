@@ -7,6 +7,14 @@
     font-weight: 700;
 }
 
+#scheduled-ftd .item em {
+    font-style: normal;
+}
+
+#scheduled-ftd .item small {
+    display: none;
+}
+
 input#ttms {
     position: absolute;
     width: 100px;
@@ -27,4 +35,12 @@ td#notes {
 .modal #j4notes {
     margin-top: 6px;
     color: #777;
+}
+
+.autoApprove .well.archived .btn.archiveExclude {
+    display: inline-block !important;
+}
+
+.autoApprove .well.archived .archiveExclude {
+    display: block !important;
 }

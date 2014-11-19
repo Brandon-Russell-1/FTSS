@@ -8,45 +8,43 @@ form.form-horizontal(name='modal')
 
     .modal-body
 
-        .col-lg-6
+        .col-lg-7
 
-            +formGroup('FTD')
-                .input-group
-                    .input-group-addon.w15
-                        +icon('building-o')
-                    .input-group-selectize(explain='scheduled-edit-ftd', right)
-                        select(selectize='Units', bind='UnitId', remember='ftd')
+            .col-lg-4
+                photo.img-rounded(size='135px', shape='rectangle', data='data.InstructorId', watch)
 
-            +formGroup('Course')
-                .input-group
-                    .input-group-addon.w15
-                        +icon('books')
-                    .input-group-selectize(explain='scheduled-edit-course', right)
-                        select(selectize='MasterCourseList',
-                        bind='CourseId',
-                        watch='UnitId',
-                        watchList='Units.Courses',
-                        remember='course')
+            .col-lg-8
 
-            +formGroup('Instructor')
-                .input-group
-                    .input-group-addon.w15
-                        +icon('instructor')
-                    .input-group-selectize(explain='scheduled-edit-instructor', right)
-                        select(selectize='Instructors',
-                        bind='InstructorId',
-                        watch='UnitId',
-                        watchList='Units.Instructors',
-                        remember='instructor')
+                .row
+                    +formGroup('Course')
+                        .input-group
+                            .input-group-addon.w15
+                                +icon('books')
+                            .input-group-selectize(explain='scheduled-edit-course', right)
+                                select(selectize='coursesDropdown',
+                                        bind='CourseId',
+                                        remember='course')
 
-            +formGroup('Reserved')
-                .input-group.pull-left(style='width:30%!important')
-                    input.form-control(ng-model='data.Host', type='number', min='0', required, explain='scheduled-edit-reserved', top)
-                    .input-group-addon Host
+                .row
+                    +formGroup('Instructor')
+                        .input-group
+                            .input-group-addon.w15
+                                +icon('instructor')
+                            .input-group-selectize(explain='scheduled-edit-instructor', right)
+                                select(selectize='instructorDropdown',
+                                        bind='InstructorId',
+                                        remember='instructor')
 
-                .input-group.pull-left(style='width:30%!important;margin-left:5%')
-                    input.form-control(ng-model='data.Other', type='number', min='0', required, explain='scheduled-edit-reserved', top)
-                    .input-group-addon Non-Host
+                .row
+                    +formGroup('Reserved')
+                        .input-group.pull-left.w40
+                            input.form-control(ng-model='data.Host', type='number', min='0', required, explain='scheduled-edit-reserved', top)
+                            .input-group-addon Host
+
+                        .input-group.pull-right.w40
+                            input.form-control(ng-model='data.Other', type='number', min='0', required, explain='scheduled-edit-reserved', top)
+                            .input-group-addon Non-Host
+
 
                 #modalScheduledOpenSeats.input-group {{getOpenSeats()}}
 
@@ -63,7 +61,7 @@ form.form-horizontal(name='modal')
                     #j4notes.input-group.italics {{data.J4Notes}}
 
 
-        .col-lg-6(bs-tabs)
+        .col-lg-5(bs-tabs)
 
             div(ng-class='{addEvent:data.CourseId}', bs-pane, title='Schedule')
 
