@@ -50,7 +50,7 @@
 						    'backlog',
 						    'hosts',
 						    'admin',
-					        'reset'
+						    'reset'
 					    ];
 
 				while (routes.length) {
@@ -89,14 +89,14 @@
 		              'offline'     : false,
 		              'baseURL'     : base + 'live/_vti_bin/ListData.svc/',
 		              'user'        : { 'url': base + 'live/_vti_bin/UserGroup.asmx' },
-		              'cacheVersion': 12
+		              'cacheVersion': 14
 
 	              } : {
 
-		              'offline'     : true,
+		              'offline'     : false,
 		              'baseURL'     : base + 'development/_vti_bin/ListData.svc/',
 		              'user'        : { 'url': base + 'development/_vti_bin/UserGroup.asmx' },
-		              'cacheVersion': 12
+		              'cacheVersion': 14
 
 	              });
 
