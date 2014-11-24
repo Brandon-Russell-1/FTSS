@@ -89,14 +89,14 @@
 		              'offline'     : false,
 		              'baseURL'     : base + 'live/_vti_bin/ListData.svc/',
 		              'user'        : { 'url': base + 'live/_vti_bin/UserGroup.asmx' },
-		              'cacheVersion': 14
+		              'cacheVersion': 15
 
 	              } : {
 
 		              'offline'     : false,
 		              'baseURL'     : base + 'development/_vti_bin/ListData.svc/',
 		              'user'        : { 'url': base + 'development/_vti_bin/UserGroup.asmx' },
-		              'cacheVersion': 14
+		              'cacheVersion': 15
 
 	              });
 
@@ -105,6 +105,8 @@
 	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
 	FTSS.utils = {};
+
+	FTSS.supportEmail = '372trs.trg.ftss@us.af.mil';
 
 	FTSS.photoURL = PRODUCTION ? base + 'live/Bios/' : base + 'development/Bios/';
 
