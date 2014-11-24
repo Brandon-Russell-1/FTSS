@@ -125,7 +125,7 @@
 							 '__metadata': 'Notifier',
 							 'To'        : send.to,
 							 'Subject'   : send.subject,
-							 'Body'      : '\n' + send.body + '\n\n\n\n' + 'http://1.usa.gov/1AVHnSU'
+							 'Body'      : '\n' + send.body + '\n\n\n\n' + 'http://go.usa.gov/HCAC'
 
 						 });
 
