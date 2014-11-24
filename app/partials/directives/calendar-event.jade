@@ -2,21 +2,25 @@ fake
 
     div(class='{{Instructor.Photo}}') {{bioPhoto}}
 
-    span.pds {{Course.PDS}}
-    span.instructor {{name}}
+    span.pds {{pds}}&nbsp;
+    span.instructor <i>{{ttms}}</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{name}}
 
     .details
 
         .container
 
             h5.border-bottom
-                b {{Course.PDS}} - {{Course.Number}}
+                b {{Course.PDS}} - {{Course.Number}}&nbsp;&nbsp;&nbsp;
+                i {{TTMS}}
                 b.pull-right {{startText}} - {{endText}}
 
             .clearfix
 
             .wideText {{Course.Title}}
 
+            i {{Instructor.InstructorName}}
+
+            br
             br
 
             b Seats

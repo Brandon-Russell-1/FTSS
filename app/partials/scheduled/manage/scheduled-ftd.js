@@ -132,7 +132,11 @@ FTSS.ng.controller(
 
 							    event.bioPhoto = bioPhoto;
 
-							    event.name = colspan > 5 ? event.Instructor.InstructorName : '';
+							    event.pds = colspan > 2 ? event.Course.PDS : '';
+
+							    event.ttms = event.TTMS && (colspan > 4) ? '#' + event.TTMS : '';
+
+							    event.name = colspan > 12 ? event.Instructor.InstructorName : '';
 
 							    instructor.html += '<td class="mark" colspan="' + colspan + '" id="' + event.Id + '">' +
 
