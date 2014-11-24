@@ -246,15 +246,15 @@
 
 					// This is a reset handler to flush cache/reset user settings
 					if (_fn.getPage() === 'reset') {
-						utils.masterReset();
-						$location.path('home');
-						window.location.reload();
+						$scope.ABORT = true;
+						setTimeout(utils.masterReset, 500);
+						return;
 					}
 
 					// Fire our page listener for Google Analytics
 					window.ga && window.ga('send', 'pageview', { page: $location.path() });
 
-					// Start the loadig feedback
+					// Start the loading feedback
 					utils.loading(true);
 
 					// This allows the scope to know about the tagBox

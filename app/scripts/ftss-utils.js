@@ -7,8 +7,8 @@
 		['$timeout',
 		 'SharePoint',
 		 '$alert',
-		 function ($timeout, SharePoint, $alert) {
-
+		 '$location',
+		 function ($timeout, SharePoint, $alert, $location) {
 
 			 /**
 			  * Performs nested property lookups without eval or switch(e.length), removed try {} catch(){}
@@ -144,17 +144,32 @@
 
 			 };
 
+			 /**
+			  * Destroys all local caches and resets the app
+			  */
 			 utils.masterReset = function () {
 
 				 try {
 
+					 // Clear the session storage used for DoD Consent tracking
 					 window.sessionStorage.clear();
+
+					 // Clear the local storage use for preferences/
 					 window.localStorage.clear();
-					 SharePoint._flushCache(function() {
+
+					 // Attempt to flush the IndexedDB cache as well
+					 SharePoint._flushCache(function () {
+
+						 window.location = '#home';
+						 window.location.reload(true);
+
 						 console && console.log('Cache flush okay.');
+
 					 });
 
 				 } catch (e) {
+
+					 utils.errorHandler(e);
 
 				 }
 			 };

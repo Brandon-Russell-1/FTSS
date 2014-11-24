@@ -493,6 +493,11 @@
 
 						var opts, selectize;
 
+						if (scope.ABORT) {
+							// Do not continue loading anything is ABORT is set
+							return false;
+						}
+
 						if (attrs.bind) {
 
 							opts = builder(scope, {
