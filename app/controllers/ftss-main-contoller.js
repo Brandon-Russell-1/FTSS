@@ -98,60 +98,45 @@
 					},
 
 					/**
-					 * Bitly url generator--just because we can.  This will automatically use the 1.usa.gov domain
-					 * as that's what usa.gov uses.  If it doesn't work, then it returns the long url instead
+					 * Generates short URLs using the USA.gov API for generating go.usa.gov links
+					 *
 					 */
 					'doMakeBitly': function () {
 
-						var permaLink = $scope.permaLink || '',
+						var page = encodeURIComponent(
+							[
+								'https://cs1.eis.af.mil/sites/FTSS#',
+								_fn.getPage(),
+								$scope.permaLink
+							].join('/'));
 
-						    pg = _fn.getPage(),
+						$scope.bitlyResponse = '';
 
-						    cacheLink = 'FTSS_bitly_' + pg + permaLink;
+						// Send our JSONP request to go.usa.gov using the FTSS apiKey
+						return $http(
+							{
 
-						var page, url;
+								'method': 'jsonp',
 
-						if (localStorage[cacheLink]) {
+								'url': [
+									'https://go.usa.gov/api/shorten.jsonp',
+									'?login=af-ftss',
+									'&apiKey=76856686bb86523732e316b4fd0d867a',
+									'&longUrl=',
+									page,
+									'&callback=JSON_CALLBACK'
+								].join('')
 
-							$scope.bitlyResponse = localStorage[cacheLink];
+							})
 
-						} else {
+							.then(function (response) {
 
-							$scope.bitlyResponse = '';
+								      $scope.bitlyResponse = ((response.status === 200) &&
 
-							page = encodeURIComponent(
-								[
-									'https://cs1.eis.af.mil/sites/FTSS#',
-									pg,
-									permaLink
-								].join('/'));
+								                              response.data.response.data.entry[0].short_url ||
+								                              page).split('://')[1];
 
-							url = [
-								'https://api-ssl.bitly.com/v3/shorten?',
-								'access_token=4d2a55cd24810f5e392f6d6c61b0b5d3663ef554',
-								'&formate=json',
-								'&longUrl=',
-								page,
-								'&callback=JSON_CALLBACK'
-							].join('');
-
-							return $http(
-								{
-									'method': 'jsonp',
-									'url'   : url
-								})
-
-								.then(function (data) {
-
-									      $scope.bitlyResponse = localStorage[cacheLink] =
-
-									                             ((data.status ===
-									                               200) ? data.data.data.url : page).split('://')[1];
-
-								      });
-
-						}
-
+							      });
 					},
 
 					/**
