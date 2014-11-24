@@ -9,45 +9,41 @@
 
 		['$scope',
 
-		 'SharePoint',
+		 function ($scope) {
 
-		 function ($scope, SharePoint) {
+			 /*SharePoint
 
-			 SharePoint
+			  .read(FTSS.models.updates)
 
-				 .read(FTSS.models.updates)
+			  .then(function (data) {
 
-				 .then(function (data) {
+			  $scope.updates = _(data)
 
-					       $scope.updates = _(data)
+			  .sortBy('Created')
 
-						       .sortBy('Created')
+			  .reverse()
 
-						       .reverse()
+			  .map(function (d) {
+			  d.date = moment(d.Created).format('ll');
+			  return d;
+			  })
 
-						       .map(function (d) {
-							            d.date = moment(d.Created).format('ll');
-							            return d;
-						            })
+			  .value();
 
-						       .value();
+			  });
+			  */
 
-				       });
+			 var complete = function (loaded) {
 
-			 $scope.$parent.$watch(
-				 'cleanSlate',
+				 if (loaded) {
+					 $scope.courseUpdates = _.filter(caches.MasterCourseList, 'updated');
 
-				 function (res) {
+					 utils.loading(false);
+				 }
 
-					 if (res) {
+			 };
 
-						 $scope.courseUpdates = _.filter(caches.MasterCourseList, 'updated');
-
-						 utils.loading(false);
-
-					 }
-
-				 });
+			 $scope.cleanSlate ? complete(true) : $scope.$parent.$watch('cleanSlate', complete);
 
 			 $scope.toggleSlides = true;
 
