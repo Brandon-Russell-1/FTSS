@@ -69,7 +69,7 @@
 
 						utils.sendEmail(
 							{
-								'to'     : '372trs.trg.ftss@us.af.mil',
+								'to'     : FTSS.supportEmail,
 								'subject': 'FTSS Support Question: ' + $scope.askQuestion.substring(0, 15) + '...',
 								'body'   : $scope.user.name +
 								           ' asked the following question on the ' +
