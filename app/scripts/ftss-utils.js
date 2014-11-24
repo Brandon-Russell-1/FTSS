@@ -159,6 +159,28 @@
 				 }
 			 };
 
+			 /**
+			  * Automatically uploads diagnostic info in the background when errors occur
+			  *
+			  * @param err
+			  */
+			 utils.errorHandler = function (err) {
+
+				 try {
+
+					 SharePoint.create(
+						 {
+
+							 '__metadata': 'ErrorLog',
+							 'Page'      : window.location.hash,
+							 'Stack'     : err.stack
+
+						 });
+
+				 } catch (e) {}
+
+			 };
+
 			 utils.watchCount = function (log) {
 				 var root = angular.element(document.getElementsByTagName('body'));
 				 var watchers = [];
