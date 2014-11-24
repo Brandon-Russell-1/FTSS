@@ -159,9 +159,9 @@
 
 								$scope.singleTag = FTSS.search.settings.maxItems < 2;
 
-								var pending = $scope.permaLink && JSON.parse(atob($scope.permaLink)),
+								var validFilters = FTSS.filters.map(),
 
-								    validFilters = FTSS.filters.map(),
+								    pending = $scope.permaLink && JSON.parse(atob($scope.permaLink)),
 
 								    /**
 								     * Handles pages with tagbox but no valid selected filters
@@ -173,6 +173,23 @@
 									    FTSS.search.$control_input.focus();
 
 								    };
+
+								if (!pending) {
+
+									var ftd = localStorage['FTSS-selectize-ftd'],
+									    host = localStorage['FTSS-selectize-host'];
+
+									pending = ftd || host ? {} : false;
+
+									if (ftd && validFilters.u) {
+										pending.u = [ftd];
+									}
+
+									if (host && validFilters.h) {
+										pending.h = [host];
+									}
+
+								}
 
 								if (pending) {
 
