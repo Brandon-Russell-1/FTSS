@@ -494,6 +494,13 @@ FTSS.controller = (function () {
 
 			},
 
+			/**
+			 * Low-level CRUD wrapper
+			 *
+			 * @param data
+			 * @param callback
+			 * @param noProcess
+			 */
 			'_postCRUD': function (data, callback, noProcess) {
 
 				// Mark the data as updated for the <updated> directive
@@ -510,6 +517,13 @@ FTSS.controller = (function () {
 
 			},
 
+			/**
+			 * Low-level Create wrapper
+			 *
+			 * @param send
+			 * @param callback
+			 * @param noProcess
+			 */
 			'_create': function (send, callback, noProcess) {
 
 				SharePoint.create(send).then(function (resp) {
@@ -528,6 +542,14 @@ FTSS.controller = (function () {
 
 			},
 
+			/**
+			 * Low-level Update wrapper
+			 *
+			 * @param scope
+			 * @param send
+			 * @param callback
+			 * @param noProcess
+			 */
 			'_update': function (scope, send, callback, noProcess) {
 
 				var data = scope.data || scope;
@@ -560,6 +582,12 @@ FTSS.controller = (function () {
 
 			},
 
+			/**
+			 * Inline update wrapper for items that should be updated after a change automatically
+			 *
+			 * @param field
+			 * @param callback
+			 */
 			'inlineUpdate': function (field, callback) {
 
 				var scope = this.row || this.data,
