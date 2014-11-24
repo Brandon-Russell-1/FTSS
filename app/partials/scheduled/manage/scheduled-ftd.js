@@ -10,6 +10,8 @@ FTSS.ng.controller(
 		'$templateCache',
 		function ($scope, $modal, SharePoint, $templateCache) {
 
+			$scope.pageLimit = 100;
+
 			var self = FTSS.controller($scope, {
 
 				    'sort'          : 'startMoment',
