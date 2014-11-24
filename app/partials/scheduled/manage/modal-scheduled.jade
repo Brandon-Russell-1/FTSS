@@ -46,7 +46,8 @@ form.form-horizontal(name='modal')
                             .input-group-selectize(explain='scheduled-edit-instructor', right)
                                 select(selectize='instructorDropdown',
                                         bind='InstructorId',
-                                        remember='instructor')
+                                        remember='instructor',
+                                        label='InstructorName')
 
                 .row
                     +formGroup('Reserved')

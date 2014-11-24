@@ -501,6 +501,7 @@
 						if (attrs.bind) {
 
 							opts = builder(scope, {
+								'label'   : attrs.label,
 								'inline'  : attrs.hasOwnProperty('inline'),
 								'remember': attrs.remember,
 								'watch'   : attrs.watch,
