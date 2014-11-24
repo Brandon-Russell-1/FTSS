@@ -2,9 +2,22 @@ include ../../__mixins
 
 form.form-horizontal(name='modal')
 
-    +modalHeader('Build Class', "{{data.Course.Number}}")
+    .modal-header.caps
+        h3(ng-show='createData')
+            +icon('plus-circle')
+            | Build Class
 
-        input.pull-right.form-control#ttms(type='text', ng-model='data.TTMS', placeholder='Class #')
+        h3(ng-hide='createData')
+            +icon('edit')
+
+            | Update&nbsp;
+
+            a#courseLink(
+                href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{data.Course.Number}}',
+                hover='Click to view this course in ETCA',
+                target='_blank') {{data.Course.Number}}
+
+            input.pull-right.form-control#ttms(type='text', ng-model='data.TTMS', placeholder='Class #')
 
     .modal-body
 

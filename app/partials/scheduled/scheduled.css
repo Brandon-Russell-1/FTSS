@@ -1,3 +1,11 @@
+#courseLink {
+    border-bottom: 1px dotted;
+}
+
+#courseLink:hover {
+    border-bottom: 1px solid;
+}
+
 #modalScheduledOpenSeats {
     float: right !important;
     width: 30% !important;
