@@ -21,7 +21,7 @@ mixin buildPage(base)
 
             |<!--[if IE]><meta http-equiv="refresh" content="0;URL='https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/development/legacy.html'"><![endif]-->
 
-            link(rel='stylesheet', href=base + 'css/app.css?v=2014.11.21')
+            link(rel='stylesheet', href=base + 'css/app.css?v=2014.11.25')
 
         body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}} {{roleClasses}}')
 
@@ -36,8 +36,8 @@ mixin buildPage(base)
             +spinner()
 
             script(src=base + 'js/vendor.js?v=2014.11.22')
-            script(src=base + 'js/partials.js?v=2014.11.21')
-            script(src=base + 'js/app.js?v=2014.11.22a')
+            script(src=base + 'js/partials.js?v=2014.11.25')
+            script(src=base + 'js/app.js?v=2014.11.25')
 
 //- icon mixin to create our SVG icons
 mixin icon(tag, viewbox)
@@ -101,23 +101,28 @@ mixin tableHeader(addNew, columns, instructions)
 
         +grouping()
 
-            .rollupContainer
-                table.table.table-striped.table-expanded.table-hover.rollup
+            +tableBody(columns)
+                block
 
-                    thead
-                        th.w5#flags
-                        each width, label in columns
-                            th(style='width:' + width + '%')= label
-                        th.w10#action
+mixin tableBody(columns)
+    .rollupContainer
 
-                    tbody
-                        tr.middle.am-fade-and-scale.traverse(ng-repeat='row in group track by row.Id',
-                        ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}',
-                        class='{{row.styles}}',
-                        ng-dblclick='edit(false)',
-                        id='row-{{row.Id}}')
-                            block
-                            unbind
+        table.table.table-striped.table-expanded.table-hover.rollup
+
+            thead
+                th.w5#flags
+                each width, label in columns
+                    th(style='width:' + width + '%')= label
+                th.w10#action
+
+            tbody
+                tr.middle.am-fade-and-scale.traverse(ng-repeat='row in group track by row.Id',
+                ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}',
+                class='{{row.styles}}',
+                ng-dblclick='edit(false)',
+                id='row-{{row.Id}}')
+                    block
+                    unbind
 
 mixin googleMap(small, thumb)
     if small
