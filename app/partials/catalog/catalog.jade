@@ -1,42 +1,53 @@
 include ../__mixins
 
-- var columns = {Course:40, IMDS:10, G081:10, Length:15}
-+tableHeader('Course', columns, 'catalog')
+#leftContainer
 
-    td
-        span(hover='This course was recently updated.')
-            +icon('flag')
-        span(hover='popover-priority')
-            +icon('asterisk')
+- var columns = {Course:100}
 
-    td(style='text-transform: uppercase')
+    div(ng-if='canEdit')
+        +addButton('Add Course')
 
-        b {{row.PDS}}
-        |&nbsp;-&nbsp;{{row.Number}}&nbsp;
+    .wrapped
 
-        span(ng-show='row.IMDS')
-            |(IMDS: {{row.IMDS}})
+        +userInstructions('catalog', true)
 
-        span.pull-right.archiveExclude(ng-show='row.Units',
-                        hover='{{row.PDS}} is taught by {{row.Units.length}} FTDs:',
-                        content='{{row.units}}',
-                        style='margin-right: 15px;')
-            +icon('instructor')
+        +grouping()
 
-        span.pull-right.archiveOnly(style='margin-right:10%') *** ARCHIVED COURSE ***
-        br
-        span.peek {{row.Title}}
+            .rollupContainer
 
-    td {{row.IMDS}}
+                table.table.table-striped.rollup
 
-    td {{row.G081}}
+                    thead: th Course
 
-    td
-        | Days:&nbsp;
-        b {{row.Days}}
-        br
-        span.peek
-            | Hours:&nbsp;
-            b {{row.Hours}}
+                    tbody
+                        tr.traverse(ng-repeat='row in group track by row.Id',
+                                            ng-class='{archived:row.Archived}',
+                                            ng-dblclick='canEdit && edit(false)',
+                                            id='row-{{row.Id}}')
 
-    td: +actions(false, true, true, 'course')
+
+                            td.uppercase
+
+                                .row
+
+                                    .col-lg-10
+
+                                        b {{row.PDS}}
+                                        |&nbsp;-&nbsp;
+                                        a(target='etca',
+                                            href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{row.Number}}')
+                                            | {{row.Number}}
+
+                                    .pull-right.archiveExclude(ng-show='row.Units',
+                                                hover='{{row.PDS}} is taught by {{row.Units.length}} FTDs:',
+                                                content='{{row.units}}',
+                                                left
+                                                style='margin-right: 15px;')
+                                                +icon('instructor')
+                                    .pull-right.archiveOnly(style='margin-right:10%') *** ARCHIVED COURSE ***
+
+                                .row
+                                    .col-lg-12.peek {{row.Title}}
+
+
+    iframe(name='etca', ng-if='count') {{FocusCourse}}'
