@@ -7,6 +7,9 @@ FTSS.ng.controller(
 		'$scope',
 		function ($scope) {
 
+			// Increase to 99 due to the simple binding
+			$scope.pageLimit = 99;
+
 			var self = FTSS.controller($scope, {
 
 				'sort' : 'PDS',
