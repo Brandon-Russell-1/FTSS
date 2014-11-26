@@ -21,9 +21,6 @@
 		                'ftd'
 		],
 		'instructors': ['ftd'],
-		'catalog'    : ['curriculum',
-		                'scheduling'
-		],
 		'manage-ftd' : ['ftd'],
 		'backlog'    : ['approvers',
 		                'mtf',
