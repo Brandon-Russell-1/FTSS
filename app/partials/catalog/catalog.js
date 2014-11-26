@@ -24,6 +24,13 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
+					      // Only permit special roles read/write access (still has server-level security)
+					      $scope.canEdit = $scope.hasRole(
+						      [
+							      'curriculum',
+							      'scheduling'
+						      ]);
+
 					      self
 
 						      .initialize(data)
