@@ -37,6 +37,12 @@ FTSS.ng.controller(
 
 						      .then(function (d) {
 
+							            d.search = [
+								            d.PDS,
+								            d.Number,
+								            d.Title
+							            ].join(' ');
+
 							            d.MDS = d.Title.split(' ')[0];
 
 							            d.Units = [];
