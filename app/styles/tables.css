@@ -136,7 +136,7 @@ tr.thin button {
 }
 tr.traverse:hover td:first-child,
 tr.modal-selected td:first-child {
-    border-left: #333 solid 35px;
+    /*border-left: #333 solid 35px;*/
 }
 
 [ng-repeat] .flag, [ng-repeat] .asterisk {
