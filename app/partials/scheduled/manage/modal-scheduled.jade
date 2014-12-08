@@ -19,7 +19,7 @@ form.form-horizontal(name='modal')
 
             input.pull-right.form-control#ttms(type='text', ng-model='data.TTMS', placeholder='Class #')
 
-    .modal-body
+    .modal-body(ng-class='{setUnavailable:(data.CourseId < 0)}')
 
         .col-lg-7
 
@@ -40,39 +40,60 @@ form.form-horizontal(name='modal')
 
                 .row
                     +formGroup('Instructor')
+
                         .input-group
                             .input-group-addon.w15
                                 +icon('instructor')
+
                             .input-group-selectize(explain='scheduled-edit-instructor', right)
+
                                 select(selectize='instructorDropdown',
                                         bind='InstructorId',
                                         remember='instructor',
                                         label='InstructorName')
 
-                .row
+                .row.hideSetUnavailable
                     +formGroup('Reserved')
+
                         .input-group.pull-left.w40
-                            input.form-control(ng-model='data.Host', type='number', min='0', required, explain='scheduled-edit-reserved', top)
+
+                            input.form-control(ng-model='data.Host',
+                                                type='number',
+                                                min='0',
+                                                required,
+                                                explain='scheduled-edit-reserved',
+                                                top)
                             .input-group-addon Host
 
                         .input-group.pull-right.w40
-                            input.form-control(ng-model='data.Other', type='number', min='0', required, explain='scheduled-edit-reserved', top)
+
+                            input.form-control(ng-model='data.Other',
+                                                type='number',
+                                                min='0',
+                                                required,
+                                                explain='scheduled-edit-reserved',
+                                                top)
                             .input-group-addon Non-Host
 
-
-                #modalScheduledOpenSeats.input-group {{getOpenSeats()}}
+                #modalScheduledOpenSeats.input-group.hideSetUnavailable {{getOpenSeats()}}
 
             .clearfix
 
-            hr(style='margin-top:5px')
+            .hideSetUnavailable
 
-            +formGroup('Notes')
-                .input-group
-                    textarea.form-control(type='text', ng-model='data.ClassNotes', style='height:150px', explain='scheduled-edit-notes', right)
+                hr(style='margin-top:5px')
 
-            div(ng-if='data.J4Notes')
-                +formGroup('J4 Notes')
-                    #j4notes.input-group.italics {{data.J4Notes}}
+                +formGroup('Notes')
+                    .input-group
+                        textarea.form-control(type='text',
+                                                ng-model='data.ClassNotes',
+                                                style='height:150px',
+                                                explain='scheduled-edit-notes',
+                                                right)
+
+                div(ng-if='data.J4Notes')
+                    +formGroup('J4 Notes')
+                        #j4notes.input-group.italics {{data.J4Notes}}
 
 
         .col-lg-5(bs-tabs)
@@ -87,7 +108,7 @@ form.form-horizontal(name='modal')
                     +icon('info-circle')
                     | Click on a day to choose the start date, drag or resize the course to update.
 
-            div(bs-pane, title='Students')
+            div.hideSetUnavailable(bs-pane, title='Students')
 
                 br
 
@@ -111,7 +132,7 @@ form.form-horizontal(name='modal')
 
         .clearfix
 
-        .btn.btn-danger.btn-labeled.white(bs-popover,
+        .btn.btn-danger.btn-labeled.white.hideSetUnavailable(bs-popover,
                                         placement='right',
                                         ng-if='!createData && !data.Archived',
                                         template='/partials/popover-cancel-class.html')

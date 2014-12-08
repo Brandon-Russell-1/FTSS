@@ -15,6 +15,11 @@
     font-weight: 700;
 }
 
+#scheduled-ftd .setUnavailable .hideSetUnavailable,
+#scheduled-ftd .setUnavailable .nav {
+    display: none;
+}
+
 #scheduled-ftd .item em {
     font-style: normal;
 }

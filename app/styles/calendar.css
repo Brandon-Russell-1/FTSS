@@ -149,6 +149,10 @@
     cursor: pointer;
 }
 
+#resourceView .unavailable {
+    background-color: #aaa;
+}
+
 #resourceView tr.spacer td {
     height: 0;
     background-color: #fff !important;

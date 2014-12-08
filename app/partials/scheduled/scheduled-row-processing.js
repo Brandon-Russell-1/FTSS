@@ -126,61 +126,64 @@
 
 	utils.processScheduledRow = function (row) {
 
-		utils.cacheFiller(row);
-
-		switch (true) {
-			case (row.openSeats > 0):
-				row.openSeatsClass = 'success';
-				break;
-
-			case(row.openSeats < 0):
-				row.openSeatsClass = 'danger';
-				break;
-
-			default:
-				row.openSeatsClass = 'warning';
-		}
-
-		row.className = row.openSeatsClass;
-
-		row.availability = {
-			'success': 'Open Seats',
-			'warning': 'No Open Seats',
-			'danger' : 'Seat Limit Exceeded'
-		}[row.openSeatsClass];
-
-		row.TTMSText = row.TTMS ? ' - ' + row.TTMS : '';
-
-		row.title = [
-			row.Course.PDS,
-			row.Course.Number,
-			row.TTMS || 'Pending Class #'
-		].join(' - ');
-
 		row.sMoment = moment(row.Start);
 		row.eMoment = moment(row.End);
 
-		row.search = [
-			row.ClassNotes,
-			row.Course.text,
-			row.Instructor.InstructorName || 'needs instructor',
-			row.TTMS,
-			row.FTD.text,
-			row.sMoment.format('MMMM')
-		].join(' ');
+		if (row.TTMS === '*') {
 
-		row.Archived = row.Archived || row.eMoment.isBefore(lastWeek);
+			row.className = 'ignore';
 
-		row.mailFTD = row.FTD.Email +
-		              '?subject=FTSS Class Inquiry for ' +
-		              row.Course.PDS +
-		              ' Class #' +
-		              row.TTMS;
+			row.Instructor = caches.Instructors[row.InstructorId] || {};
 
-		// This is the hover image for each FTD
-		row.map = 'https://maps.googleapis.com/maps/api/staticmap?' +
-		          'sensor=false&size=400x300&zoom=5&markers=color:red|' +
-		          row.FTD.Location.replace(/\s/g, '');
+			row.search = row.Instructor.InstructorName + ' unavailable';
+
+		} else {
+
+			utils.cacheFiller(row);
+
+			row.className = row.openSeats > 0 ? 'success' :
+
+			                row.openSeats < 0 ? 'danger' :
+
+			                'warning';
+
+			row.availability = {
+				'success': 'Open Seats',
+				'warning': 'No Open Seats',
+				'danger' : 'Seat Limit Exceeded'
+			}[row.className];
+
+			row.TTMSText = row.TTMS ? ' - ' + row.TTMS : '';
+
+			row.title = [
+				row.Course.PDS,
+				row.Course.Number,
+				row.TTMS || 'Pending Class #'
+			].join(' - ');
+
+			row.search = [
+				row.ClassNotes,
+				row.Course.text,
+				row.Instructor.InstructorName || 'needs instructor',
+				row.TTMS,
+				row.FTD.text,
+				row.sMoment.format('MMMM')
+			].join(' ');
+
+			row.Archived = row.Archived || row.eMoment.isBefore(lastWeek);
+
+			row.mailFTD = row.FTD.Email +
+			              '?subject=FTSS Class Inquiry for ' +
+			              row.Course.PDS +
+			              ' Class #' +
+			              row.TTMS;
+
+			// This is the hover image for each FTD
+			row.map = 'https://maps.googleapis.com/maps/api/staticmap?' +
+			          'sensor=false&size=400x300&zoom=5&markers=color:red|' +
+			          row.FTD.Location.replace(/\s/g, '');
+
+		}
 
 	};
 

@@ -31,7 +31,6 @@ FTSS.ng.controller(
 
 					    // Make a flat copy of our data for date range detection
 					    _(data).each(function (group, index) {
-						    group
 						    events = events.concat(group);
 					    });
 
@@ -126,23 +125,38 @@ FTSS.ng.controller(
 
 							    var start = event.sMoment.diff(min, 'days') - 1,
 
-							        colspan = event.eMoment.diff(event.sMoment, 'days');
+							        colspan = event.eMoment.diff(event.sMoment, 'days'),
+
+							        unavailable = event.TTMS === '*';
 
 							    filler(start);
 
-							    event.bioPhoto = bioPhoto;
+							    if (unavailable) {
 
-							    event.pds = colspan > 2 ? event.Course.PDS : '';
+								    instructor.html += '<td class="unavailable" colspan="' + colspan +
+								                       '" id="' + event.Id + '"></td>';
 
-							    event.ttms = event.TTMS && (colspan > 4) ? '#' + event.TTMS : '';
+							    } else {
 
-							    event.name = colspan > 12 ? event.Instructor.InstructorName : '';
+								    event.bioPhoto = bioPhoto;
 
-							    instructor.html += '<td class="mark" colspan="' + colspan + '" id="' + event.Id + '">' +
+								    event.pds = colspan > 2 ? event.Course.PDS : '';
 
-							                       _.template($templateCache.get('/partials/calendar-event.html'),
-							                                  event) +
-							                       '</td>';
+								    event.ttms = event.TTMS && (colspan > 4) ? '#' + event.TTMS : '';
+
+								    event.name = colspan > 12 ? event.Instructor.InstructorName : '';
+
+								    instructor.html += '<td class="mark" colspan="' +
+								                       colspan +
+								                       '" id="' +
+								                       event.Id +
+								                       '">' +
+
+								                       _.template($templateCache.get('/partials/calendar-event.html'),
+								                                  event) +
+								                       '</td>';
+
+							    }
 
 							    count += colspan;
 
@@ -153,7 +167,7 @@ FTSS.ng.controller(
 						    instructor.edit = function () {
 
 							    // Dirty hack to get the current class without a million extra data binds
-							    var row = _.find(instructor, { Id: parseInt($('td.mark:hover').attr('id'))});
+							    var row = _.find(instructor, { Id: parseInt($('td:hover').attr('id'))});
 
 							    row && $scope.edit.apply({'row': row});
 
@@ -171,6 +185,20 @@ FTSS.ng.controller(
 
 				    },
 
+				    'beforeSubmit': function (scope, isNew) {
+
+					    if (isNew && scope.data.CourseId < 0) {
+
+						    delete scope.data.Host;
+						    delete scope.data.Other;
+						    delete scope.data.CourseId;
+
+						    scope.data.TTMS = '*';
+
+					    }
+
+				    },
+
 				    /**
 				     * This is our modal dialog used for editing existing classes as well as building new classes
 				     * @param scope
@@ -181,10 +209,13 @@ FTSS.ng.controller(
 					    // Only add valid date-ranges to FC
 					    var getDates = function () {
 
+						        // Handle unique titles for leave/class
+						        var title = scope.data.CourseId < 0 ? 'UNAVAILABLE' : 'THIS COURSE';
+
 						        return scope.data.Start && scope.data.End ?
 
 						               {
-							               'title'           : '***THIS COURSE***',
+							               'title'           : title,
 							               'start'           : scope.data.Start,
 							               'end'             : scope.data.End,
 							               'className'       : 'success',
@@ -240,13 +271,15 @@ FTSS.ng.controller(
 
 							    if (scope.data.CourseId) {
 
-								    var days = caches.MasterCourseList[scope.data.CourseId].Days,
+								    var course = caches.MasterCourseList[scope.data.CourseId] ||
+								                 {'Days': 1},
+
 								        end = start.clone();
 
-								    while (days > 0) {
+								    while (course.Days > 0) {
 
 									    if (end.isoWeekday() < 6) {
-										    days -= 1;
+										    course.Days -= 1;
 									    }
 
 									    end.add(1, 'days');
@@ -286,7 +319,7 @@ FTSS.ng.controller(
 							        result = _.map(schedule, function (row) {
 
 								        return {
-									        'title'    : caches.MasterCourseList[row.CourseId].PDS,
+									        'title'    : row.CourseId ? caches.MasterCourseList[row.CourseId].PDS : 'UNAVAILABLE',
 									        'start'    : row.Start,
 									        'end'      : row.End,
 									        'className': 'info'
@@ -314,12 +347,12 @@ FTSS.ng.controller(
 					    /**
 					     * Get Open Seats, performs live counting of remaining seat openings in modals
 					     *
-					     * @returns {string}
+					     * @returns
 					     */
 					    scope.getOpenSeats = function (countOnly) {
 
 						    // Only attempt this if a CourseID exists
-						    if (scope.data.CourseId) {
+						    if (scope.data.CourseId > -1) {
 
 							    var requests = _(scope.data.Requests_JSON).reduce(function (count, request) {
 
@@ -333,23 +366,13 @@ FTSS.ng.controller(
 							                (scope.data.Other || 0) -
 							                requests);
 
-							    if (countOnly) {
-								    return open;
-							    }
+							    return countOnly ? open :
 
-							    // Provide human-friendly seat availability counters
-							    switch (true) {
+							           open < 0 ? 'Overbooked by ' + Math.abs(open) :
 
-								    case (open > 0):
-									    return open + ' Open Seats';
+							           open > 0 ? open + ' Open Seats' :
 
-								    case (open < 0):
-									    return 'Overbooked by ' + Math.abs(open);
-
-								    default:
-									    return 'Class Full';
-
-							    }
+							           'Class Full';
 
 						    } else {
 
@@ -375,13 +398,25 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
+					      // Load our unit data based on the dropdown
 					      $scope.unit = angular.copy(caches.Units[parseInt($scope.filter.match(/\d+/)[0])]);
 
+					      // Add our fake "instructor unavailable placeholder
+					      $scope.unit.Courses.unshift(
+						      {
+							      'Id'   : -1,
+							      'label': '<div><h5>*** Instructor Unavailable to Teach ***</h5></div>'
+						      });
+
+					      // Bind the unit.courses to coursesDropdown for selectize
 					      $scope.coursesDropdown = $scope.unit.Courses;
+
+					      // Bind the filtered instructor list for this unit
 					      $scope.instructorDropdown = _.filter(angular.copy(caches.Instructors),
 					                                           {'UnitId': $scope.unit.Id});
 
-					      $scope.rawSchedule = angular.copy(data);
+					      // Get a copy of the data into rawSchedule for showing in modal
+					      $scope.rawSchedule = _.reject(angular.copy(data), 'Archived');
 
 					      // We can always request in this view
 					      $scope.canRequest = true;

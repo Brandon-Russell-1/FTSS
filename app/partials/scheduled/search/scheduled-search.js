@@ -40,12 +40,19 @@ FTSS.ng.controller(
 
 					      self.initialize(data).then(function (row, key, collection) {
 
-						      utils.processScheduledRow(row);
+						      if (row.TTMS === '*') {
 
-						      row.Archived = row.openSeats < 1;
-
-						      if (row.startMoment.diff(today, 'days') < 0) {
 							      delete collection[row.Id];
+
+						      } else {
+
+							      utils.processScheduledRow(row);
+
+							      row.Archived = row.openSeats < 1;
+
+							      if (row.startMoment.diff(today, 'days') < 0) {
+								      delete collection[row.Id];
+							      }
 						      }
 
 					      });

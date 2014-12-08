@@ -7,7 +7,7 @@ mixin classHeader(location)
 
             span.archiveOnly ***ARCHIVED CLASS***
 
-            span.archiveExclude(class='btn btn-{{row.openSeatsClass}} availSeats(disabled="")',
+            span.archiveExclude(class='btn btn-{{row.className}} availSeats(disabled="")',
                                 ng-click='request(row)') {{row.openSeats}} Open
 
             span(style='letter-spacing: .1em')

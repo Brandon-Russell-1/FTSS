@@ -152,15 +152,19 @@ FTSS.ng.controller(
 
 				$scope.data = angular.copy(caches.Units[UnitId]);
 
+				// Only include instructors for this unit
 				data = angular.copy(_.filter(data, {'UnitId': UnitId}));
 
-				// Only include this instructor
+				// Only include this unit
 				read.params.$filter = '(UnitId eq ' + UnitId + ')';
 
 				// Request the scheduled data for this unit
 				SharePoint.read(read).then(function (results) {
 
 					var stats = _(results)
+
+						// Ignore our instructor unavailability
+						.reject({'TTMS': '*'})
 
 						// Load the cache data for every row (this one is a little expensive)
 						.each(utils.cacheFiller)
