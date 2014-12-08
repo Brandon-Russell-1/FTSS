@@ -419,7 +419,7 @@ FTSS.controller = (function () {
 
 						scope.submit = function () {
 
-							opts.submit(scope);
+							opts.submit(scope, isNew);
 
 						};
 
@@ -616,6 +616,8 @@ FTSS.controller = (function () {
 				return function (eventData) {
 
 					var old, fields, send = {}, complete;
+
+					opts.beforeSubmit && opts.beforeSubmit(scope, isNew);
 
 					if (scope.modal.$dirty) {
 
