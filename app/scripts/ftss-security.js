@@ -56,9 +56,9 @@
 
 			// This is the text that is displayed in the top-left corner of the app
 			$scope.roleText = groups.join(' • ')
-				.replace('mtf', 'MTF User')
-				.replace('ftd', 'FTD User')
-				.replace('curriculum', 'Curriculum Manager')
+				.replace('mtf', 'MTS/UTM')
+				.replace('ftd', 'FTD Scheduler/Production Supervisor')
+				.replace('curriculum', 'Training/Curriculum Manager')
 				.replace('scheduling', 'J4 Scheduler')
 				.replace('approvers', 'Approver')
 				.replace('admin', 'Administrator')
