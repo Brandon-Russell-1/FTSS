@@ -352,7 +352,7 @@ FTSS.ng.controller(
 					    scope.getOpenSeats = function (countOnly) {
 
 						    // Only attempt this if a CourseID exists
-						    if (scope.data.CourseId > -1) {
+						    if (scope.data.CourseId > 1) {
 
 							    var requests = _(scope.data.Requests_JSON).reduce(function (count, request) {
 
