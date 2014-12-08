@@ -16,20 +16,22 @@
 		                 'ftd'
 		],
 
-		'requests'   : ['approvers',
-		                'mtf',
-		                'ftd'
+		'requests'     : ['approvers',
+		                  'mtf',
+		                  'ftd'
 		],
-		'instructors': ['ftd'],
-		'manage-ftd' : ['ftd'],
-		'backlog'    : ['approvers',
-		                'mtf',
-		                'ftd'
+
+		'manage-ftd'   : ['ftd', 'scheduling'],
+		'scheduled-ftd': ['ftd', 'scheduling'],
+
+		'backlog'      : ['approvers',
+		                  'mtf',
+		                  'ftd'
 		],
-		'hosts'      : ['mtf',
-		                'ftd'
+		'hosts'        : ['mtf',
+		                  'ftd'
 		],
-		'ttms'       : [
+		'ttms'         : [
 			'scheduling'
 		]
 
