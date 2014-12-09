@@ -126,9 +126,6 @@
 
 	utils.processScheduledRow = function (row) {
 
-		row.sMoment = moment(row.Start);
-		row.eMoment = moment(row.End);
-
 		if (row.TTMS === '*') {
 
 			row.className = 'ignore';
@@ -136,6 +133,10 @@
 			row.Instructor = caches.Instructors[row.InstructorId] || {};
 
 			row.search = row.Instructor.InstructorName + ' unavailable';
+
+			row.startMoment = moment(row.Start);
+
+			row.endMoment = moment(row.End);
 
 		} else {
 
@@ -167,10 +168,10 @@
 				row.Instructor.InstructorName || 'needs instructor',
 				row.TTMS,
 				row.FTD.text,
-				row.sMoment.format('MMMM')
+				row.startMoment.format('MMMM')
 			].join(' ');
 
-			row.Archived = row.Archived || row.eMoment.isBefore(lastWeek);
+			row.Archived = row.Archived || row.endMoment.isBefore(lastWeek);
 
 			row.mailFTD = row.FTD.Email +
 			              '?subject=FTSS Class Inquiry for ' +
