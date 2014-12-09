@@ -25,9 +25,8 @@ mixin panelGroup(ico, title, type)
 
     .jumbotron('style="margin:-25px;padding:10px;padding-left:25px"')
         h1 Field Training Scheduling System
-        p The Air Force Field Training requirements & scheduling system
+        p The Air Force field training requirements & scheduling system
 
-    br
     br
     br
 
@@ -94,25 +93,14 @@ mixin panelGroup(ico, title, type)
 
         .col-lg-3
 
-            +panelGroup('flag', 'Course Updates', 'success')
+            div(ng-show='courseUpdates.length > 0')
 
-                em(style='font-size:1.3em', ng-show='courseUpdates.length < 1', user-message='home-no-course-updates')
+                +panelGroup('flag', 'Course Updates', 'success')
 
-                div(ng-repeat='course in courseUpdates')
-                    h4
-                        .pull-left {{course.PDS}} - {{course.Number}}
-                        .pull-right {{course.AFSC}}
+                    h4(ng-repeat='course in courseUpdates') {{course.PDS}} - {{course.Number}}
 
-                    .cleafix
-
-                    br
-
-                    .clearfix
-
-                    p {{course.Title}}
-
-//            #updates
-                +panelGroup('info-circle', 'Application Updates', 'warning')
+            #updates
+                +panelGroup('info-circle', 'FTSS Updates', 'warning')
                     blockquote.blockquote-reverse(ng-repeat='update in updates')
                         p(style='font-size:.85em') {{update.Update}}
                         footer {{update.date}}

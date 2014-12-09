@@ -9,29 +9,30 @@
 
 		['$scope',
 
-		 function ($scope) {
+		 'SharePoint',
 
-			 /*SharePoint
+		 function ($scope, SharePoint) {
 
-			  .read(FTSS.models.updates)
+			 SharePoint
 
-			  .then(function (data) {
+				 .read(FTSS.models.updates)
 
-			  $scope.updates = _(data)
+				 .then(function (data) {
 
-			  .sortBy('Created')
+					       $scope.updates = _(data)
 
-			  .reverse()
+						       .sortBy('Created')
 
-			  .map(function (d) {
-			  d.date = moment(d.Created).format('ll');
-			  return d;
-			  })
+						       .reverse()
 
-			  .value();
+						       .map(function (d) {
+							            d.date = moment(d.Created).fromNow();
+							            return d;
+						            })
 
-			  });
-			  */
+						       .value();
+
+				       });
 
 			 var complete = function (loaded) {
 
