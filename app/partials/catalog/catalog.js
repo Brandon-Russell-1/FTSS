@@ -58,6 +58,7 @@ FTSS.ng.controller(
 							            });
 
 							            if (d.Units) {
+								            d.search += d.Units.sort().join(' ');
 								            d.units = d.Units.sort().join('<br>');
 							            }
 
