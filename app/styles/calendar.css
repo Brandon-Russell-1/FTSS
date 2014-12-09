@@ -149,6 +149,10 @@
     cursor: pointer;
 }
 
+body.collapsed #resourceView .event .mark {
+    background-color: #46b8da!important;
+}
+
 #resourceView .event .mark.warning {
     background-color: #46b8da;
 }
@@ -279,6 +283,10 @@
 #resourceView .double {
     line-height: 1.85em;
     font-variant: small-caps;
+}
+
+body.collapsed #legend {
+    display: none;
 }
 
 #legend {
