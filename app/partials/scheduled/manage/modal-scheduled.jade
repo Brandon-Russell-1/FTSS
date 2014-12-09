@@ -1,6 +1,6 @@
 include ../../__mixins
 
-form.form-horizontal(name='modal')
+form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)}')
 
     .modal-header.caps
         h3(ng-show='createData')
@@ -17,9 +17,9 @@ form.form-horizontal(name='modal')
                 hover='Click to view this course in ETCA',
                 target='_blank') {{data.Course.Number}}
 
-            input.pull-right.form-control#ttms(type='text', ng-model='data.TTMS', placeholder='Class #')
+            input.pull-right.form-control.hideSetUnavailable#ttms(type='text', ng-model='data.TTMS', placeholder='Class #')
 
-    .modal-body(ng-class='{setUnavailable:(data.CourseId < 0)}')
+    .modal-body
 
         .col-lg-7
 
@@ -77,19 +77,20 @@ form.form-horizontal(name='modal')
 
                 #modalScheduledOpenSeats.input-group.hideSetUnavailable {{getOpenSeats()}}
 
+
             .clearfix
 
+            hr(style='margin-top:5px')
+
+            +formGroup('Notes')
+                .input-group
+                    textarea.form-control(type='text',
+                                            ng-model='data.ClassNotes',
+                                            style='height:150px',
+                                            explain='scheduled-edit-notes',
+                                            right)
+
             .hideSetUnavailable
-
-                hr(style='margin-top:5px')
-
-                +formGroup('Notes')
-                    .input-group
-                        textarea.form-control(type='text',
-                                                ng-model='data.ClassNotes',
-                                                style='height:150px',
-                                                explain='scheduled-edit-notes',
-                                                right)
 
                 div(ng-if='data.J4Notes')
                     +formGroup('J4 Notes')

@@ -127,7 +127,7 @@ FTSS.ng.controller(
 
 							        colspan = event.endMoment.diff(event.startMoment, 'days'),
 
-							        unavailable = event.TTMS === '*';
+							        unavailable = event.CourseId < 0;
 
 							    filler(start);
 

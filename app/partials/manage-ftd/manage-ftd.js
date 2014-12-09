@@ -164,7 +164,7 @@ FTSS.ng.controller(
 					var stats = _(results)
 
 						// Ignore our instructor unavailability
-						.reject({'TTMS': '*'})
+						.reject({'CourseId': null})
 
 						// Load the cache data for every row (this one is a little expensive)
 						.each(utils.cacheFiller)

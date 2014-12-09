@@ -40,7 +40,8 @@ FTSS.ng.controller(
 
 					      self.initialize(data).then(function (row, key, collection) {
 
-						      if (row.TTMS === '*') {
+						      // Delete if this class is cancelled or just unavailability
+						      if (!row.CourseId || row.Archived) {
 
 							      delete collection[row.Id];
 
@@ -50,6 +51,7 @@ FTSS.ng.controller(
 
 							      row.Archived = row.openSeats < 1;
 
+							      // Also delete if this is an old class
 							      if (row.startMoment.diff(today, 'days') < 0) {
 								      delete collection[row.Id];
 							      }

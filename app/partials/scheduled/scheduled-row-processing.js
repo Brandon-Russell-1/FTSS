@@ -126,7 +126,9 @@
 
 	utils.processScheduledRow = function (row) {
 
-		if (row.TTMS === '*') {
+		if (!row.CourseId) {
+
+			row.CourseId = -1;
 
 			row.className = 'ignore';
 
