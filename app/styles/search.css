@@ -1,5 +1,4 @@
 
-
 #searchContainer {
     left: 10px;
     right: 115px;
@@ -17,6 +16,18 @@
     height: 34px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+}
+
+#searchBox input:invalid {
+    background: none;
+    border-color: #ccc;
+}
+
+#searchBox input:valid {
+    border-color: #5bc0de !important;
+    background-color: #F2FCFF!important;
+    color: #46b8da !important;
+    font-weight: 800 !important;
 }
 
 .optgroup.mastercourselist .optgroup-header {
