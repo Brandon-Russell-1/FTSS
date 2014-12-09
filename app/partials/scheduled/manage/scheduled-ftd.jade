@@ -7,6 +7,19 @@ include ../__scheduled-mixins
 
     +userInstructions('scheduled-ftd', true)
 
+    #legend
+
+        .btn-success(hover='Classes with open seats', right)
+
+        .btn-primary(hover='Full classes', right)
+
+        .btn-warning(hover='Classes currently below student min', right)
+
+        .btn-danger(hover='Classes exceeding student max', right)
+
+        .unavailable(hover='Instructor unavailbility', right)
+
+
     table#resourceView.table.table-bordered
 
         thead

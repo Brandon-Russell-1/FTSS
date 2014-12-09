@@ -133,8 +133,10 @@ FTSS.ng.controller(
 
 							    if (unavailable) {
 
-								    instructor.html += '<td class="unavailable" colspan="' + colspan +
-								                       '" id="' + event.Id + '"></td>';
+								    instructor.html += '<td class="unavailable" colspan="' +
+								                       colspan + '" id="' + event.Id +
+								                       '"><div class="details italics">' + (event.ClassNotes || '') +
+								                       '</div></td>';
 
 							    } else {
 
@@ -146,7 +148,10 @@ FTSS.ng.controller(
 
 								    event.name = colspan > 12 ? event.Instructor.InstructorName : '';
 
-								    instructor.html += '<td class="mark" colspan="' +
+								    event.className = (event.allocatedSeats <
+								                       event.Course.Min) ? 'short' : event.className;
+
+								    instructor.html += '<td class="mark ' + event.className + '" colspan="' +
 								                       colspan +
 								                       '" id="' +
 								                       event.Id +
@@ -352,7 +357,7 @@ FTSS.ng.controller(
 					    scope.getOpenSeats = function (countOnly) {
 
 						    // Only attempt this if a CourseID exists
-						    if (scope.data.CourseId > 1) {
+						    if (scope.data.CourseId > 0) {
 
 							    var requests = _(scope.data.Requests_JSON).reduce(function (count, request) {
 

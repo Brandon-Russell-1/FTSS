@@ -142,14 +142,26 @@
 }
 
 #resourceView .event .mark {
-    background-color: #46b8da;
+    background-color: #4cae4c;
     border-left: 3px solid #555 !important;
     border-right: none !important;
     padding: 0px;
     cursor: pointer;
 }
 
-#resourceView .unavailable {
+#resourceView .event .mark.warning {
+    background-color: #46b8da;
+}
+
+#resourceView .event .mark.danger {
+    background-color: #d9534f;
+}
+
+#resourceView .event .mark.short {
+    background-color: #f0ad4e;
+}
+
+#resourceView .unavailable, #legend .unavailable {
     background-color: #aaa;
 }
 
@@ -174,7 +186,7 @@
 }
 
 #resourceView .mark:hover {
-    background-color: #4cae4c !important;
+    background-color: #333 !important;
 }
 
 #resourceView .mark:hover .mask-img {
@@ -267,4 +279,18 @@
 #resourceView .double {
     line-height: 1.85em;
     font-variant: small-caps;
+}
+
+#legend {
+    position: absolute;
+    left: 0;
+    top: 50px;
+}
+
+#legend div {
+    width: 10px;
+    height: 25px;
+    margin-bottom: 3px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
 }
