@@ -89,10 +89,10 @@
 				 row.end = row.End;
 
 				 row.startMoment = moment(row.Start);
-				 row.endMoment = moment(row.End).add(-1, 'minutes');
+				 row.endMoment = moment(row.End);
 
 				 row.startText = row.startMoment.format('D MMM YYYY');
-				 row.endText = row.endMoment.format('D MMM YYYY');
+				 row.endText = row.endMoment.clone().add(-1, 'minutes').format('D MMM YYYY');
 
 				 var seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
 					 memo[r[0]] += r[1].length;
@@ -106,7 +106,6 @@
 				 row.allocatedSeats = seats[2] + row.Host + row.Other;
 
 				 row.openSeats = row.Course.Max - row.allocatedSeats - row.pendingSeats;
-
 			 };
 
 			 /**
