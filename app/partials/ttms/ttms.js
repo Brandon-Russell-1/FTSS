@@ -26,19 +26,27 @@ FTSS.ng.controller(
 				self.inlineUpdate.call(this, field, function (data) {
 
 					if (setArchive) {
+
 						data.Archived = true;
+
 					} else {
 
-						// Send any notes back to the FTD through email
-						utils.sendEmail(
-							{
-								'to'     : data.FTD.Email,
-								'subject': 'J4 Scheduling Update for ' + data.Course.PDS,
-								'body'   : _.template('The following notes were left by Sheppard for the ' +
-								                      '{{Course.PDS}} class starting {{startText}}:' +
-								                      '\n\n{{J4Notes}}',
-								                      data)
-							});
+						// J4-specific request for internal messaging, prefix with '#' to not send an email, issue #12
+						if (data.J4Notes[0] !== '#') {
+
+							// Send any notes back to the FTD through email
+							utils.sendEmail(
+								{
+									'to'     : data.FTD.Email,
+									'subject': 'J4 Scheduling Update for ' + data.Course.PDS,
+									'body'   : _.template('The following notes were left by Sheppard for the ' +
+									                      '{{Course.PDS}} class starting {{startText}}:' +
+									                      '\n\n{{J4Notes}}',
+									                      data)
+								});
+
+						}
+
 					}
 				});
 

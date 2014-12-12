@@ -147,6 +147,10 @@ input:focus::-webkit-input-placeholder {
     color: transparent;
 }
 
+tr:not(:hover) .placeholder {
+    display: none;
+}
+
 .placeholder {
     color: #aaa !important;
 }

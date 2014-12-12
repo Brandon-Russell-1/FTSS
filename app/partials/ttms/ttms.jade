@@ -20,7 +20,7 @@ include ../__mixins
                                 blur,
                                 ng-model='row.J4Notes',
                                 onEnter='inlineUpdate("J4Notes", false)',
-                                placeholder='Type to leave notes for the FTD')
+                                placeholder='Type to leave notes for the FTD, prefix with # to not send an email')
 
         p(ng-if='row.ClassNotes')
             b FTD Notes:&nbsp;
