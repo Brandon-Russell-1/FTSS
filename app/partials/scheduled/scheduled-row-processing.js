@@ -126,7 +126,7 @@
 
 	utils.processScheduledRow = function (row) {
 
-		if (!row.CourseId) {
+		if (!row.CourseId || row.CourseId < 1) {
 
 			row.CourseId = -1;
 
