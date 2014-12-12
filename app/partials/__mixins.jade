@@ -21,7 +21,7 @@ mixin buildPage(base)
 
             |<!--[if IE]><meta http-equiv="refresh" content="0;URL='https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/development/legacy.html'"><![endif]-->
 
-            link(rel='stylesheet', href=base + 'css/app.css?v=2014.12.07')
+            link(rel='stylesheet', href=base + 'css/app.css?v=2014.12.08')
 
         body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}} {{roleClasses}}')
 
@@ -35,9 +35,9 @@ mixin buildPage(base)
 
             +spinner()
 
-            script(src=base + 'js/vendor.js?v=2014.12.07')
-            script(src=base + 'js/partials.js?v=2014.12.07')
-            script(src=base + 'js/app.js?v=2014.12.07')
+            script(src=base + 'js/vendor.js?v=2014.12.08')
+            script(src=base + 'js/partials.js?v=2014.12.08')
+            script(src=base + 'js/app.js?v=2014.12.08')
 
 //- icon mixin to create our SVG icons
 mixin icon(tag, viewbox)
