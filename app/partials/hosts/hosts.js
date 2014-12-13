@@ -27,7 +27,13 @@ FTSS.ng.controller(
 
 						      .then(function (d) {
 
-							            d.det = caches.Units[d.FTD];
+							            d.search = d.Unit;
+
+							            // Add the FTD data if this unit has one assigned
+							            if (d.FTD) {
+								            d.det = caches.Units[d.FTD];
+								            d.search += d.det.search;
+							            }
 
 						            });
 
