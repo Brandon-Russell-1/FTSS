@@ -116,13 +116,12 @@ mixin tableBody(columns)
                 th.w10#action
 
             tbody
-                tr.middle.am-fade-and-scale.traverse(ng-repeat='row in group track by row.Id',
+                tr.middle.am-fade-and-slide-top.traverse(ng-repeat='row in group track by row.Id',
                 ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}',
                 class='{{row.styles}}',
                 ng-dblclick='edit(false)',
                 id='row-{{row.Id}}')
                     block
-                    unbind
 
 mixin googleMap(small, thumb)
     if small
@@ -161,8 +160,6 @@ mixin actions(view, edit, archive, label)
 
             span.btn.btn-sm.btn-success.btn-muted.archive(ng-click='archive()', hover='Restore ' + label, left)
                 +icon('rotate-left')
-
-    unbind
 
 
 mixin userInstructions(text, ignore)

@@ -136,7 +136,6 @@ include ../__mixins
                         .lead *** No available FTD's found! ***
                         p: b Please verify {{row.course.PDS}} is the course required for the student(s) listed below:
                         p: ol: li(ng-repeat="r in row.requirements") {{r.name}}
-                        unbind
 
                     .row(ng-if='row.detRequest')
                         .col-lg-3
