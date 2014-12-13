@@ -142,7 +142,9 @@
 }
 
 #resourceView .event .mark {
-    background-color: #4cae4c;
+    background-color: #fff;
+    /*background-color: rgba(76, 174, 76, .7);*/
+    background: linear-gradient(to right, rgba(76, 174, 76, .95) 25%, rgba(76, 174, 76, .6) 100%);
     border-left: 3px solid #555 !important;
     border-right: none !important;
     padding: 0px;
@@ -150,23 +152,23 @@
 }
 
 body.collapsed #resourceView .event .mark {
-    background-color: #46b8da!important;
+    background: linear-gradient(to right, rgba(70, 184, 218, .95) 25%, rgba(70, 184, 218, .6) 100%);
 }
 
 #resourceView .event .mark.warning {
-    background-color: #46b8da;
+    background: linear-gradient(to right, rgba(70, 184, 218, .95) 25%, rgba(70, 184, 218, .6) 100%);
 }
 
 #resourceView .event .mark.danger {
-    background-color: #d9534f;
+    background: linear-gradient(to right, rgba(217, 83, 79, .95) 25%, rgba(217, 83, 79, .6) 100%);
 }
 
 #resourceView .event .mark.short {
-    background-color: #f0ad4e;
+    background: linear-gradient(to right, rgba(240, 173, 78, .95) 25%, rgba(240, 173, 78, .6) 100%);
 }
 
 #resourceView .unavailable, #legend .unavailable {
-    background-color: #aaa;
+    background: linear-gradient(to right, rgba(170, 170, 170, .95) 25%, rgba(170, 170, 170, .6) 100%);
 }
 
 #resourceView tr.spacer td {
@@ -190,7 +192,7 @@ body.collapsed #resourceView .event .mark {
 }
 
 #resourceView .mark:hover {
-    background-color: #333 !important;
+    background: linear-gradient(to right, rgba(50, 50, 50, .95) 25%, rgba(50, 50, 50, .6) 100%) !important;
 }
 
 #resourceView .mark:hover .mask-img {
