@@ -16,8 +16,8 @@
 }
 
 #scheduled-ftd .setUnavailable .hideSetUnavailable,
-#scheduled-ftd .setUnavailable .nav {
-    display: none;
+#scheduled-ftd .setUnavailable #rightPanel .nav {
+    visibility: hidden;
 }
 
 #scheduled-ftd .item em {
@@ -56,4 +56,16 @@ td#notes {
 
 .autoApprove .well.archived .archiveExclude {
     display: block !important;
+}
+
+.nav#shortcuts li {
+    float: right;
+    font-style: italic;
+}
+
+.nav#shortcuts li:first-child {
+    float: left;
+    line-height: 3em;
+    color: #aaa;
+    font-style: normal;
 }

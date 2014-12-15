@@ -152,23 +152,31 @@
 }
 
 body.collapsed #resourceView .event .mark {
-    background: linear-gradient(to right, rgba(70, 184, 218, .95) 25%, rgba(70, 184, 218, .6) 100%);
+    background: linear-gradient(to right, rgba(70, 184, 218, .95) 25%, rgba(70, 184, 218, .5) 100%);
 }
 
 #resourceView .event .mark.warning {
-    background: linear-gradient(to right, rgba(70, 184, 218, .95) 25%, rgba(70, 184, 218, .6) 100%);
+    background: linear-gradient(to right, rgba(70, 184, 218, .95) 25%, rgba(70, 184, 218, .5) 100%);
 }
 
 #resourceView .event .mark.danger {
-    background: linear-gradient(to right, rgba(217, 83, 79, .95) 25%, rgba(217, 83, 79, .6) 100%);
+    background: linear-gradient(to right, rgba(217, 83, 79, .95) 25%, rgba(217, 83, 79, .5) 100%);
 }
 
 #resourceView .event .mark.short {
-    background: linear-gradient(to right, rgba(240, 173, 78, .95) 25%, rgba(240, 173, 78, .6) 100%);
+    background: linear-gradient(to right, rgba(240, 173, 78, .95) 25%, rgba(240, 173, 78, .5) 100%);
 }
 
 #resourceView .unavailable, #legend .unavailable {
-    background: linear-gradient(to right, rgba(170, 170, 170, .95) 25%, rgba(170, 170, 170, .6) 100%);
+    background: linear-gradient(to right, rgba(170, 170, 170, .95) 25%, rgba(170, 170, 170, .5) 100%);
+}
+
+#resourceView .event .mark.trainingSession, #legend .trainingSession {
+    background: linear-gradient(to right, rgba(38, 179, 172, 0.94) 25%, rgba(38, 179, 172, .5) 100%);
+}
+
+#resourceView .event .mark.mtt {
+    background: linear-gradient(to right, rgba(157, 43, 255, 0.82) 25%, rgba(157, 43, 255, .5) 100%);
 }
 
 #resourceView tr.spacer td {
@@ -192,7 +200,7 @@ body.collapsed #resourceView .event .mark {
 }
 
 #resourceView .mark:hover {
-    background: linear-gradient(to right, rgba(50, 50, 50, .95) 25%, rgba(50, 50, 50, .6) 100%) !important;
+    background: linear-gradient(to right, rgba(50, 50, 50, .95) 25%, rgba(50, 50, 50, .5) 100%) !important;
 }
 
 #resourceView .mark:hover .mask-img {
@@ -201,10 +209,6 @@ body.collapsed #resourceView .event .mark {
     margin-top: -35px;
     margin-left: -85px;
     z-index: 50;
-}
-
-#resourceView .mark:hover span {
-    letter-spacing: .1em;
 }
 
 #resourceView .mark .pds {

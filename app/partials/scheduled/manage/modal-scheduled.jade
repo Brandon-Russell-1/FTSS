@@ -5,7 +5,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
     .modal-header.caps
         h3(ng-show='createData')
             +icon('plus-circle')
-            | Build Class
+            | Create Class / Unavailibility
 
         h3(ng-hide='createData')
             +icon('edit')
@@ -17,7 +17,12 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                 hover='Click to view this course in ETCA',
                 target='_blank') {{data.Course.Number}}
 
-            input.pull-right.form-control.hideSetUnavailable#ttms(type='text', ng-model='data.TTMS', placeholder='Class #')
+        input.pull-right.form-control.hideSetUnavailable#ttms(
+            type='text',
+            ng-model='data.TTMS',
+            placeholder='Class #',
+            explain='scheduled-edit-ttms',
+            left)
 
     .modal-body
 
@@ -27,6 +32,15 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                 photo.img-rounded(size='135px', shape='rectangle', data='data.InstructorId', watch)
 
             .col-lg-8
+
+                .row
+
+                    ul.nav.nav-tabs#shortcuts
+
+                        li Shortcuts
+                        li: a(ng-click='shortcut(2)') Training Session
+                        li: a(ng-click='shortcut(1)') Historical
+                        li: a(ng-click='shortcut(0)') Unavailable
 
                 .row
                     +formGroup('Course')
@@ -97,7 +111,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                         #j4notes.input-group.italics {{data.J4Notes}}
 
 
-        .col-lg-5(bs-tabs)
+        #rightPanel.col-lg-5(bs-tabs)
 
             div(ng-class='{addEvent:data.CourseId}', bs-pane, title='Schedule')
 

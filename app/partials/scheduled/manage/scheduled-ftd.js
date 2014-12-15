@@ -140,17 +140,28 @@ FTSS.ng.controller(
 
 							    } else {
 
+								    // Attempt to use cached bioPhoto
 								    event.bioPhoto = bioPhoto;
 
+								    // Trim the PDS if days are less than 2
 								    event.pds = colspan > 2 ? event.Course.PDS : '';
 
+								    // Trim the class # if days shorter than 4
 								    event.ttms = event.TTMS && (colspan > 4) ? '#' + event.TTMS : '';
 
+								    // Trim the instructor name if days are shorter than 12
 								    event.name = colspan > 12 ? event.Instructor.InstructorName : '';
 
+								    // Identify under-min seats
 								    event.className = (event.allocatedSeats <
 								                       event.Course.Min) ? 'short' : event.className;
 
+								    // Add trainingSession class if TTMS contains TS
+								    if (event.TTMS && event.TTMS.indexOf('TS') > -1) {
+									    event.className = 'trainingSession';
+								    }
+
+								    // Add our html to the event
 								    instructor.html += '<td class="mark ' + event.className + '" colspan="' +
 								                       colspan +
 								                       '" id="' +
@@ -163,6 +174,7 @@ FTSS.ng.controller(
 
 							    }
 
+							    // Increment the day counter
 							    count += colspan;
 
 						    });
@@ -389,6 +401,29 @@ FTSS.ng.controller(
 
 					    scope.data.requests = utils.requestDecode(scope.data.Requests_JSON);
 
+					    // Our shortcut helpers for building different types of classes
+					    scope.shortcut = function (shortcut) {
+
+						    switch (shortcut) {
+
+							    // Create a leave/tdy/cto unavailable date range
+							    case 0:
+								    FTSS.selectizeInstances.CourseId.setValue(-1);
+								    break;
+
+							    // Create historical data
+							    case 1:
+								    scope.data.TTMS = 'OLD';
+								    break;
+
+							    // Create a training session
+							    default:
+								    scope.data.TTMS = 'TS';
+
+
+						    }
+
+					    };
 				    }
 
 			    })
