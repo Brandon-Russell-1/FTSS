@@ -60,3 +60,15 @@
     margin-bottom: 5px;
     padding-bottom: 4px;
 }
+
+.withMap .leftBigTraverse, .withMap .rightBigTraverse {
+    top: 300px;
+}
+
+#googleModalMap {
+    position: absolute;
+    right: -425px;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+}
