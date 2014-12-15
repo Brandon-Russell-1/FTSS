@@ -116,7 +116,8 @@
 			  */
 			 utils.sendEmail = function (send) {
 
-				 if (send.to && send.subject && send.body) {
+				 // Only create this if this if it is valid and we are running in production mode
+				 if (PRODUCTION && send.to && send.subject && send.body) {
 
 					 SharePoint.create(
 						 {
