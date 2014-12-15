@@ -111,7 +111,6 @@
 			'source': 'Scheduled',
 			'params': {
 				'$select': [
-					'Created',
 					'UnitId',
 					'CourseId',
 					'Start',

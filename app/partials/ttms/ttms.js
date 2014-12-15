@@ -1,5 +1,4 @@
 /*global FTSS, angular, utils, moment, _ */
-
 FTSS.ng.controller(
 	'ttmsController',
 
@@ -10,7 +9,7 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				    'sort'  : 'startInt',
+				    'sort'  : 'startMoment',
 				    'group' : 'course',
 				    'model' : 'ttms',
 
@@ -35,15 +34,14 @@ FTSS.ng.controller(
 						if (data.J4Notes[0] !== '#') {
 
 							// Send any notes back to the FTD through email
-							utils.sendEmail(
-								{
-									'to'     : data.FTD.Email,
-									'subject': 'J4 Scheduling Update for ' + data.Course.PDS,
-									'body'   : _.template('The following notes were left by Sheppard for the ' +
-									                      '{{Course.PDS}} class starting {{startText}}:' +
-									                      '\n\n{{J4Notes}}',
-									                      data)
-								});
+							utils.sendEmail({
+								                'to'     : data.FTD.Email,
+								                'subject': 'J4 Scheduling Update for ' + data.Course.PDS,
+								                'body'   : _.template('The following notes were left by Sheppard for the ' +
+								                                      '{{Course.PDS}} class starting {{startText}}:' +
+								                                      '\n\n{{J4Notes}}',
+								                                      data)
+							                });
 
 						}
 
@@ -58,21 +56,23 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
+					      // We do not need an edit function for this view
 					      $scope.edit = angular.noop;
 
 					      self.initialize(data).then(function (row) {
 
+						      // Call cacheFiller to add extra cached data
 						      utils.cacheFiller(row);
 
-						      row.age = moment(row.Created).fromNow();
-
-						      row.startInt = moment(row.Start);
+						      // Track how many days until the class beings
+						      row.daysUntil = row.startMoment.diff(today, 'days');
 
 						      // Archive classes that have already started
-						      if (row.startMoment.diff(today, 'days') < 0) {
+						      if (row.daysUntil < 0) {
 							      row.Archived = true;
 						      }
 
+						      // Fix our search for this view
 						      row.search = [
 							      row.ClassNotes,
 							      row.Course.text,
@@ -80,6 +80,7 @@ FTSS.ng.controller(
 							      row.FTD.text
 						      ].join(' ');
 
+						      // This is the grouping header
 						      row.course = [
 							      row.Course.PDS,
 							      ' - ',
@@ -89,10 +90,20 @@ FTSS.ng.controller(
 							      ')'
 						      ].join('');
 
+						      // This will give visual cues if the class is starting soon
+						      if (-1 < row.daysUntil && row.daysUntil < 10) {
+
+							      // If very soon make it red, otherwise, make it yellow
+							      row.styles = (row.daysUntil < 3) ? 'danger text-danger' : 'warning text-warning';
+
+							      // Add some extra search terms to filter by upcoming classes
+							      row.search += ' soon late upcoming attention action';
+
+						      }
+
 					      });
 
 				      });
 
 		}
 	]);
-

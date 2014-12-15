@@ -1,10 +1,8 @@
 include ../__mixins
 
-- var columns = {Created:10, Location: 20, Start:10, End:10, Notes: 40}
+- var columns = {Location: 20, Start:10, End:10, Notes: 50}
 
 +tableHeader(false, columns, 'ttms')
-
-    td.italics.topFix {{row.age}}
 
     td.topFix
         b {{row.FTD.LCode}}:&nbsp;
