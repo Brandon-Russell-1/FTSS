@@ -1,9 +1,16 @@
+-versionCSS= '2014.12.14'
+-versionVendor= '2014.12.08'
+-versionPartials= '2014.12.14'
+-versionApp= '2014.12.14'
+
 mixin buildPage(base)
     doctype html
 
     html(lang='en', ng-app='FTSS')
 
         head
+
+            meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
 
             //
 
@@ -16,12 +23,13 @@ mixin buildPage(base)
                 jeffmccoy.mit-license.org
 
             meta(charset='utf-8')
-            meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
             title(ng-bind-template='FTSS {{page()}}')
 
             |<!--[if IE]><meta http-equiv="refresh" content="0;URL='https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/development/legacy.html'"><![endif]-->
 
-            link(rel='stylesheet', href=base + 'css/app.css?v=2014.12.08')
+            link(href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8Avb29AM3NzQCWlpYATExMAIqKigCzs7MA9/f3APz8/ADExMQAU1NTAOTk5ACGhoYAeHh4ABYWFgDx8fEA7u7uACkpKQDW1tYAMzMzADs7OwCurq4ApaWlANra2gBaWloABgYGAF9fXwBhYWEA+vr6AD8/PwDQ0NAAampqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAcKExcAAAAAAAAAAAAACAkFGwQFFhwAAAAAAAAAAA8RDhYMChkCAAAAAAAAAAAAEhUEDgYBAAAAAAAAAAAAEhoNAQkMGAYAAAAAAAAAAQ4RHQQNExQZDAAAAAAABxMUHRkMBg4RBA4CAAAAAAEEEQ4WAAACEw4EAwAAAAAMGRMSAAAAAA8aGRgHAAAeGRoPAAAAAAAAAAMZBQAIDRQBAAAAAAAAAAALCgoQBxoTCwAAAAAAAAAAHBgUFwAEHwAAAAAAAAAAAAAVDhAAHhcAAAAAAAAAAAAAEAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=", rel="icon", type="image/x-icon")
+
+            link(rel='stylesheet', href=base + 'css/app.css?v=' + versionCSS)
 
         body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}} {{roleClasses}}')
 
@@ -35,9 +43,9 @@ mixin buildPage(base)
 
             +spinner()
 
-            script(src=base + 'js/vendor.js?v=2014.12.08')
-            script(src=base + 'js/partials.js?v=2014.12.08')
-            script(src=base + 'js/app.js?v=2014.12.08')
+            script(src=base + 'js/vendor.js?v=' + versionVendor)
+            script(src=base + 'js/partials.js?v=' + versionPartials)
+            script(src=base + 'js/app.js?v=' + versionApp)
 
 //- icon mixin to create our SVG icons
 mixin icon(tag, viewbox)
@@ -164,7 +172,7 @@ mixin actions(view, edit, archive, label)
 
 mixin userInstructions(text, ignore)
     if ignore
-        .alert.alert-warning.alert-dismissable(ng-if= ignore ? 'showHelp' : 'true')
+        .alert.alert-warning.alert-dismissable(ng-if='showHelp')
             .close(data-dismiss='alert') &times;
             .pageMessage(user-message=text)
             if ignore
