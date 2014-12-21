@@ -4,8 +4,7 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		'SharePoint',
-		function ($scope, SharePoint) {
+		function ($scope) {
 
 			var self = FTSS.controller($scope, {
 
@@ -34,14 +33,15 @@ FTSS.ng.controller(
 						if (data.J4Notes[0] !== '#') {
 
 							// Send any notes back to the FTD through email
-							utils.sendEmail({
-								                'to'     : data.FTD.Email,
-								                'subject': 'J4 Scheduling Update for ' + data.Course.PDS,
-								                'body'   : _.template('The following notes were left by Sheppard for the ' +
-								                                      '{{Course.PDS}} class starting {{startText}}:' +
-								                                      '\n\n{{J4Notes}}',
-								                                      data)
-							                });
+							utils.sendEmail(
+								{
+									'to'     : data.FTD.Email,
+									'subject': 'J4 Scheduling Update for ' + data.Course.PDS,
+									'body'   : _.template('The following notes were left by Sheppard for the ' +
+									                      '{{Course.PDS}} class starting {{startText}}:' +
+									                      '\n\n{{J4Notes}}',
+									                      data)
+								});
 
 						}
 
