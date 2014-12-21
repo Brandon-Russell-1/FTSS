@@ -1,0 +1,164 @@
+.add-button {
+	z-index: 99;
+	top: 110px;
+	position: fixed !important;
+	left: ~"calc(100% - 45px)";
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+	right: 0;
+	& > .btn-label {
+		float: left;
+	}
+}
+
+.add-button:hover {
+	right: 0;
+	left: auto;
+}
+
+.btn-label {
+	background: rgba(0, 0, 0, 0.15);
+	border-radius: 3px 0 0 3px;
+	display: inline-block;
+	left: -12px;
+	padding: 6px 12px;
+	position: relative;
+}
+
+.ng-hide-add-active.btn, .ng-hide-remove.btn {
+	display: inline-block !important;
+}
+
+.btn-labeled {
+	padding-bottom: 0;
+	padding-top: 0;
+	.text {
+		position: relative;
+		padding: 6px 0;
+		top: 4px;
+		left: -10px;
+		font-size: 1.25em;
+	}
+}
+
+.btn-group {
+	.text {
+		background-color: #fff;
+		color: #285e8e;
+		font-weight: 800;
+	}
+	.text:hover {
+		cursor: default !important;
+	}
+	.btn {
+		margin-right: 0 !important;
+	}
+}
+
+.btn {
+	transition: background 750ms ease;
+	margin: 1px !important;
+	border: none;
+	.icon {
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+}
+
+.btn-inline {
+	padding: 0;
+	font-size: inherit;
+	background: none !important;
+}
+
+.btn:hover:not(.btn-link) {
+	border: 1px solid #999;
+	margin: 0 !important;
+}
+
+.support {
+	cursor: pointer !important;
+	opacity: .6;
+	margin-top: .5em;
+	font-size: 1.25em;
+	transition: 500ms ease;
+	svg {
+		stroke: #fff;
+		fill: #fff;
+	}
+}
+
+.support:hover, .support:hover * {
+	opacity: 1;
+	cursor: pointer !important;
+}
+
+#toggleArchive .icon.trash_hide, body.archived #toggleArchive .icon.trash_show, #toggleExpand .icon.expand, body.collapsed #toggleExpand .icon.collapse {
+	display: inline !important;
+}
+
+body.archived #toggleArchive .icon.trash_hide, #toggleArchive .icon.trash_show, body.collapsed #toggleExpand .icon.expand, #toggleExpand .icon.collapse {
+	display: none !important;
+}
+
+traverse {
+	* {
+		color: #333 !important;
+		text-decoration: none !important;
+		outline: none !important;
+	}
+}
+
+.table-hover tbody tr .btn-muted, .well .btn-muted {
+	transition: opacity 500ms ease;
+}
+
+.table-hover tbody tr:not(:hover) .btn-muted, .well:not(:hover) .btn-muted {
+	color: #111;
+	background-color: transparent;
+	opacity: .2;
+	transition: opacity 500ms ease;
+}
+
+#searchButtons {
+	svg.icon {
+		fill: #777;
+	}
+}
+
+.btn:hover {
+	svg {
+		fill: #000 !important;
+	}
+}
+
+.white {
+	label {
+		svg.icon {
+			fill: #fff !important;
+		}
+	}
+}
+
+.btn-dark {
+	background: #333;
+	color: #fff;
+	svg.icon {
+		fill: #fff !important;
+	}
+}
+
+.checkbox {
+	box-shadow: none !important;
+	.css-label {
+		width: 20px;
+		height: 20px;
+	}
+	.yes {
+		background-position: 0 -20px;
+	}
+}
+
+.checkbox:not(.active) .yes, .checkbox.active .no {
+	display: none;
+}

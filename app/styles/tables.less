@@ -1,0 +1,163 @@
+.table {
+	td {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.left {
+		text-align: left !important;
+	}
+	thead.slim {
+		visibility: hidden !important;
+		display: table-footer-group !important;
+	}
+	tr {
+		td {
+			vertical-align: top;
+		}
+	}
+}
+
+.table.table-split {
+	tr {
+		td:first-child {
+			text-align: right;
+			border-right: 1px solid rgb(221, 221, 221);
+			letter-spacing: .2em;
+			+ td {
+				font-weight: 700;
+			}
+		}
+	}
+}
+
+.no-border *,
+.no-border {
+	border: none !important;
+}
+
+.table-center {
+	* {
+		text-align: center;
+	}
+}
+
+.table-hover tbody tr:hover > td,
+.table-hover tbody tr:hover > th {
+	transition: background-color 200ms ease;
+	background-color: transparent;
+}
+
+.table-hover tbody tr:hover td {
+	transition: background-color 200ms ease;
+	background-color: #f5fafc;
+	color: #428bca;
+
+}
+
+.table-hover tbody tr:hover .lbl-instructor *,
+.table-hover tbody tr:hover .lbl-books * {
+	fill: #428bca !important;
+}
+
+.table-expanded tr td {
+	padding: 15px 10px 15px !important;
+}
+
+td .peek {
+	visibility: hidden;
+}
+
+tr:hover td .peek {
+	visibility: visible;
+}
+
+.table-tiny {
+	display: block;
+	line-height: 20px;
+	margin: -15px;
+	float: left;
+	width: 33%;
+	font-size: .85em;
+	th {
+		text-align: center;
+	}
+	td {
+		border-top: 1px solid rgb(221, 221, 221);
+		padding: 5px 13px;
+		text-align: center;
+		text-overflow: ellipsis;
+		vertical-align: top;
+		white-space: nowrap;
+	}
+}
+
+.middle {
+	td {
+		vertical-align: middle !important;
+	}
+}
+
+table {
+	th {
+		text-transform: uppercase;
+	}
+	thead.tableFloatingHeaderOriginal {
+		background: #fff;
+	}
+}
+
+tr.archived {
+	td {
+		padding: 1px 10px 1px 10px !important;
+	}
+	.btn.archive {
+		display: inline-block !important;
+	}
+}
+
+tr.archived .btn.no-archive, .btn.archive {
+	display: none !important;
+}
+
+tr.thin {
+	td {
+		padding: 5px !important;
+	}
+	button {
+		font-size: .5em !important;
+	}
+}
+
+.rollupContainer {
+	overflow: hidden;
+	max-height: 3000px;
+	opacity: 1;
+	transition: all 1s ease;
+	td:first-child {
+		text-align: center;
+	}
+}
+
+.collapsed .rollupContainer {
+	max-height: 0 !important;
+	overflow: hidden;
+	opacity: 0;
+	transition: all 500ms ease;
+}
+
+[ng-repeat] .flag,
+[ng-repeat] .asterisk {
+	display: none;
+}
+
+[ng-repeat].updated .flag,
+[ng-repeat].priority .asterisk {
+	display: block;
+	float: left;
+}
+
+tr.archived .photo,
+tr.archived .archiveExclude {
+	display: none;
+}

@@ -1,0 +1,61 @@
+.well:not(.archived) .archiveOnly, .well.archived .archiveExclude {
+	display: none !important;
+}
+
+.well {
+	hr {
+		border-color: #333;
+	}
+	a:hover {
+		border-bottom: 1px solid;
+		text-decoration: none;
+	}
+	a {
+		color: #555;
+		transition: color 500ms ease;
+	}
+	h4 {
+		text-transform: uppercase;
+	}
+	.input-group-addon {
+		background: #fafafa;
+	}
+}
+
+.well:not(.well-sm) {
+	font-size: 1.1em;
+	position: relative;
+	max-height: 10000px;
+	transition: all 500ms;
+}
+
+.collapsed {
+	.well {
+		max-height: 35px !important;
+		overflow: hidden;
+		margin-bottom: 5px;
+		padding: 0 15px;
+	}
+	h4 {
+		font-weight: 100;
+	}
+}
+
+.well .rollup, .collapsed .well .rollupOnly {
+	opacity: 1;
+	transition: opacity 500ms ease;
+}
+
+.collapsed .well .rollup, .well .rollupOnly, .well .icon-envelope {
+	opacity: 0;
+	transition: opacity 500ms ease;
+}
+
+.well:hover {
+	a {
+		color: #428bca;
+	}
+	.icon-envelope {
+		opacity: 1;
+	}
+}

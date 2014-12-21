@@ -1,0 +1,49 @@
+.popover {
+	max-width: 40%;
+	z-index: 9999 !important;
+	h3 {
+		font-weight: 800;
+	}
+	.icon {
+		float: left;
+		font-size: 2em;
+	}
+	example {
+		display: block;
+		margin-top: 4px;
+		font-size: .85em;
+		font-style: italic;
+	}
+}
+
+.modal-open {
+	.popover {
+		max-width: 28%;
+	}
+}
+
+.pop-div {
+	.popover-content {
+		max-height: 600px;
+		overflow-y: scroll;
+	}
+}
+
+.popover-content {
+	dd {
+		margin-bottom: 10px;
+	}
+}
+
+.popover.no-arrow {
+	.arrow {
+		display: none;
+	}
+}
+
+.popover.frozen {
+	border: 2px solid #428bca;
+	.arrow {
+		border-bottom-color: #428bca;
+	}
+}

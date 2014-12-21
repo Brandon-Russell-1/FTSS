@@ -1,0 +1,32 @@
+#stats {
+	position: absolute;
+	width: 50px;
+
+	.badge {
+		border-radius: 6px 0 0 6px;
+		background: #333;
+		font-size: 18.5px;
+		line-height: 1.55em;
+		text-align: center;
+		width: 100%;
+		padding-left: 10px;
+		span {
+			display: none;
+		}
+	}
+
+	.badge.overload {
+		background: #d58512;
+		span {
+			display: inline;
+		}
+	}
+}
+
+.ie10 {
+	#stats {
+		.badge {
+			line-height: 1.5em;
+		}
+	}
+}

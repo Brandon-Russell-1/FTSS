@@ -1,0 +1,69 @@
+#requirementsProgress {
+    position: absolute;
+    right: 1.5%;
+    right: 6em;
+    left: auto;
+    top: 1em;
+    .complete {
+        .badge:before {
+            content: '\2713';
+        }
+    }
+    .active {
+        .badge:before {
+            content: '-';
+        }
+    }
+}
+body.archived {
+    .well.denied {
+        display:block;
+    }
+}
+.well.denied {
+    display:none;
+    background: #f9eded;
+    color: #a94442;
+    .steps {
+        * {
+            background-color: transparent!important;
+        }
+        .chevron {
+            display: none;
+        }
+    }
+    .btnFake {
+        background-color: transparent;
+    }
+    * {
+        color: #a94442!important;
+        fill: #a94442;
+    }
+}
+.steps {
+    li {
+        label {
+            display: none;
+        }
+    }
+}
+.steps li.denied, .steps li.denied * {
+    color: #a94442;
+    fill: #a94442;
+}
+.steps li.complete label.lbl-check-square-o,.steps li.active label.lbl-wait,.steps li.denied label.lbl-times {
+    display: inline-block;
+}
+#requirements {
+    .modal-dialog {
+        width: 1040px;
+    }
+    .modal {
+        -webkit-transition-property: none !important;
+        -webkit-animation: none !important;
+        -webkit-transform: none !important;
+        transition-property: none !important;
+        transform: none !important;
+        animation: none !important;
+    }
+}
