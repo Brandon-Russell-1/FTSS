@@ -10,7 +10,7 @@
 	window.FTSS = {};
 	window.utils = {};
 	window.caches = {};
-	window.PRODUCTION = (location.hostname !== 'localhost' && location.hostname !== '10.211.55.2' && location.hostname !== 'virtualpc');
+	window.PRODUCTION = (location.pathname === '/app.html');
 
 	window.brunch = {
 		'auto-reload': {
