@@ -41,12 +41,12 @@
 		}
 	}
 	.row {
-		height: calc(100% - 200px);
+		height: ~'calc(100% - 200px)';
 	}
 	#updates {
 		.panel-body {
 			overflow-y: auto;
-			height: calc(100% - 50px);
+			height: ~'calc(100% - 50px)';
 		}
 	}
 	.wrapped.showContent {
@@ -85,8 +85,8 @@ body:not(#home) {
 	position: fixed;
 	top: 50px;
 	left: 177px;
-	min-width: calc(100% - 177px);
-	min-height: calc(100% - 50px);
+	min-width: ~'calc(100% - 177px)';
+	min-height: ~'calc(100% - 50px)';
 	z-index: -2;
 	opacity: .7;
 }
