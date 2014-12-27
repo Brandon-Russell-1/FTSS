@@ -25,7 +25,9 @@ FTSS.ng.controller(
 
 					if (setArchive) {
 
-						data.Archived = true;
+						self.data[data.Id].Archived = true;
+
+						self.process();
 
 					} else {
 
