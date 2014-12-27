@@ -35,10 +35,10 @@ FTSS.ng.controller(
 					    });
 
 					    // Get the earliest start date, minus three days
-					    min = moment(Math.min.apply(Math, _.pluck(events, 'startMoment'))).add(-3, 'days');
+					    min = moment(Math.min.apply(Math, _.pluck(events, 'startMoment'))).add(-1, 'days');
 
 					    // Get the latest end date, plus three days
-					    max = moment(Math.max.apply(Math, _.pluck(events, 'endMoment'))).add(3, 'days');
+					    max = moment(Math.max.apply(Math, _.pluck(events, 'endMoment'))).add(1, 'days');
 
 					    // Initialize our variables
 					    minClone = min.clone();
