@@ -12,7 +12,7 @@ form.form-horizontal(name='modal')
         p.lead
             ng-pluralize(count='data.openSeats - data.Students.length',
                             when='{1:"There is only one seat ", 0: "There are no more seats ", "other":"There are {} seats "}')
-            | available for the {{data.startText}} class.
+            | available for the {{data.dateRange}} class.
         br
 
         +formGroup('Host', 'scheduled-request-host')

@@ -1,6 +1,6 @@
 include ../__mixins
 
-- var columns = {Location: 20, Start:10, End:10, Notes: 50}
+- var columns = {Location: 20, Dates:20, Notes: 50}
 
 +tableHeader(false, columns, 'ttms')
 
@@ -8,9 +8,7 @@ include ../__mixins
         b {{row.FTD.LCode}}:&nbsp;
         span {{row.FTD.LongName}}
 
-    td.bold.topFix {{row.startText}}
-
-    td.bold.topFix {{row.endText}}
+    td.bold.topFix {{row.dateRange}}
 
     td
 

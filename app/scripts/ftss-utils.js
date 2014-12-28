@@ -90,9 +90,10 @@
 
 				 row.startMoment = moment(row.Start);
 				 row.endMoment = moment(row.End);
+				 row.dateRange = row.startMoment.format('D MMM YYYY') +
 
-				 row.startText = row.startMoment.format('D MMM YYYY');
-				 row.endText = row.endMoment.clone().add(-1, 'minutes').format('D MMM YYYY');
+				                 (row.Days > 0 ? ' - ' + row.endMoment.format('D MMM YYYY') : '');
+
 
 				 var seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
 					 memo[r[0]] += r[1].length;

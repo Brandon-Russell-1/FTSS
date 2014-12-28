@@ -123,7 +123,7 @@ FTSS.ng.controller(
 												                       row.Course.PDS,
 
 												            'body': 'Seat request for class ' +
-												                    (row.TTMS || 'starting on ' + row.startText) +
+												                    (row.TTMS || ' with dates of ' + row.dateRange) +
 												                    {'2': ' Approved', '3': ' Denied'}[status] +
 												                    '\n\n' +
 												                    row.request.Students.join('\n') +

@@ -83,12 +83,13 @@
 								'to'     : row.FTD.Email,
 								'subject': 'New Seat Request for ' + row.Course.PDS,
 								'body'   : caches.Hosts[scope.data.HostId].Unit +
-								           ' has requested ' +
-								           scope.data.Students.length +
-								           ' seats for the class starting on ' +
-								           row.startText +
-								           '\n\n' + scope.data.Students.join('\n') +
-								           '\n\n' + scope.data.Notes
+								         ' has requested ' +
+								         scope.data.Students.length +
+								         ' seats for the ' +
+								         row.dateRange +
+								         ' class:' +
+								         '\n\n' + scope.data.Students.join('\n') +
+								         '\n\n' + scope.data.Notes
 							});
 
 					}
