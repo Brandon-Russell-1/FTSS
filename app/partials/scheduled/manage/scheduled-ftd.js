@@ -184,7 +184,7 @@ FTSS.ng.controller(
 						    instructor.edit = function () {
 
 							    // Dirty hack to get the current class without a million extra data binds
-							    var row = _.find(instructor, { Id: parseInt($('td:hover').attr('id'))});
+							    var row = _.find(instructor, {Id: parseInt($('td:hover').attr('id'))});
 
 							    row && $scope.edit.apply({'row': row});
 
@@ -265,61 +265,6 @@ FTSS.ng.controller(
 
 					    }
 
-					    // Some init settings for FullCalendar
-					    scope.uiConfigInstructor = {
-
-						    'weekends'     : false,
-						    'allDayDefault': true,
-						    'header'       : {
-							    'left'  : 'title',
-							    'center': '',
-							    'right' : 'today prev,next'
-						    },
-
-						    'buttonText': {
-							    today: 'Go to Today'
-						    },
-
-						    'eventResize': update,
-
-						    'eventDrop': update,
-
-						    'dayClick': function (start) {
-
-							    if (scope.data.CourseId) {
-
-								    var course = caches.MasterCourseList[scope.data.CourseId] ||
-								                 {'Days': 1},
-
-								        end = start.clone();
-
-								    while (course.Days > 0) {
-
-									    if (end.isoWeekday() < 6) {
-										    course.Days -= 1;
-									    }
-
-									    end.add(1, 'days');
-
-								    }
-
-								    scope.data.Start = start.toISOString();
-								    scope.data.End = end.toISOString();
-
-								    scope.modal.$setDirty();
-
-								    scope.eventsInstructor[0] = [getDates()];
-
-							    }
-
-						    }
-					    };
-
-					    // Set the default calendar location if this is an existing class
-					    if (scope.data.Start) {
-						    scope.uiConfigInstructor.defaultDate = scope.data.Start;
-					    }
-
 					    // Setup uour empty calendar for FullCalendar
 					    scope.eventsInstructor = [];
 
@@ -374,7 +319,7 @@ FTSS.ng.controller(
 							    var requests = _(scope.data.Requests_JSON).reduce(function (count, request) {
 
 								        // Only count seats pending (1) or approved (2) against total
-								        return  (request[0] < 3) ? count + request[1].length : count;
+								        return (request[0] < 3) ? count + request[1].length : count;
 
 							        }, 0),
 
@@ -424,6 +369,74 @@ FTSS.ng.controller(
 						    }
 
 					    };
+
+					    // Wait until the modal is visible
+					    scope.$on('modal.show', function () {
+
+						    // Init our calendar
+						    FTSS.utils.initInstructorCalendar(
+							    {
+
+								    'weekends'     : false,
+								    'allDayDefault': true,
+								    'header'       : {
+									    'left'  : 'title',
+									    'center': '',
+									    'right' : 'today prev,next'
+								    },
+
+								    'defaultDate': scope.data.Start,
+
+								    'buttonText': {
+									    today: 'Go to Today'
+								    },
+
+								    'eventResize': update,
+
+								    'eventDrop': update,
+
+								    /**
+								     * This is what auto-calculates our course length
+								     * @param start
+								     */
+								    'dayClick': function (start) {
+
+									    if (scope.data.CourseId) {
+
+										    // Reference the course
+										    var course = caches.MasterCourseList[scope.data.CourseId] || {},
+
+										        // copy the days
+										        days = Number(course.Days || 1),
+
+										        // get the end date
+										        end = start.clone();
+
+										    // loop through the days, sipping weeknds
+										    while (days > 0) {
+
+											    if (end.isoWeekday() < 6) {
+												    days -= 1;
+											    }
+
+											    end.add(1, 'days');
+
+										    }
+
+										    scope.data.Start = start.toISOString();
+										    scope.data.End = end.toISOString();
+
+										    scope.modal.$setDirty();
+
+										    scope.eventsInstructor[0] = [getDates()];
+
+									    }
+
+								    }
+							    });
+
+					    });
+
 				    }
 
 			    })

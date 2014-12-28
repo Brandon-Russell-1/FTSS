@@ -156,7 +156,7 @@ angular.module('ui.calendar', [])
 
           angular.extend(config, uiCalendarConfig);
           angular.extend(config, calendarSettings);
-         
+
           angular.forEach(config, function(value,key){
             if (typeof value === 'function'){
               config[key] = wrapFunctionWithScopeApply(config[key]);
@@ -197,33 +197,28 @@ angular.module('ui.calendar', [])
             eventsWatcher = controller.changeWatcher(controller.allEvents, controller.eventsFingerprint),
             options = null;
 
-        function getOptions(){
-          var calendarSettings = attrs.uiCalendar ? scope.$parent.$eval(attrs.uiCalendar) : {},
-              fullCalendarConfig;
+	      FTSS.utils.initInstructorCalendar =  function (config) {
 
-          fullCalendarConfig = controller.getFullCalendarConfig(calendarSettings, uiCalendarConfig);
+		      options = {eventSources: sources};
 
-          options = { eventSources: sources };
-          angular.extend(options, fullCalendarConfig);
+		      angular.extend(options,
+			      controller.getFullCalendarConfig(config,uiCalendarConfig)
+		      );
 
-          var options2 = {};
-          for(var o in options){
-            if(o !== 'eventSources'){
-              options2[o] = options[o];
-            }
-          }
-          return JSON.stringify(options2);
-        }
+		      scope.destroy();
+		      scope.init();
+
+	      };
+
+      scope.calendar = $(elm);
 
         scope.destroy = function(){
           if(scope.calendar && scope.calendar.fullCalendar){
             scope.calendar.fullCalendar('destroy');
           }
-          if(attrs.calendar) {
-            scope.calendar = scope.$parent[attrs.calendar] =  $(elm).html('');
-          } else {
-            scope.calendar = $(elm).html('');
-          }
+
+	        scope.calendar = $(elm).html('');
+
         };
 
         scope.init = function(){
@@ -245,7 +240,7 @@ angular.module('ui.calendar', [])
         };
 
         eventsWatcher.onRemoved = function(event) {
-          scope.calendar.fullCalendar('removeEvents', function(e) { 
+          scope.calendar.fullCalendar('removeEvents', function(e) {
             return e._id === event._id;
           });
         };
@@ -265,10 +260,6 @@ angular.module('ui.calendar', [])
           }
         });
 
-        scope.$watch(getOptions, function(newO,oldO){
-            scope.destroy();
-            scope.init();
-        });
       }
     };
 }]);

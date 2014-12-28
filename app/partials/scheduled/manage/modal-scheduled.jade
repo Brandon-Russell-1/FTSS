@@ -117,7 +117,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
 
                 br
 
-                #instructorCalendar(ui-calendar='uiConfigInstructor', calendar='scheduleInstructor', ng-model='eventsInstructor')
+                #instructorCalendar(ui-calendar, ng-model='eventsInstructor')
 
                 .text-info.info.italics.pull-right
                     +icon('info-circle')
