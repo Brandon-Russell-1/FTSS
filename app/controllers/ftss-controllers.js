@@ -392,7 +392,7 @@ FTSS.controller = (function () {
 				// the isNew boolean determines if this is a create or update action
 				return function (isNew, data) {
 
-					var scope, instance;
+					var scope;
 
 					// Create a new isolated scope for this modal
 					scope = $scope.$new(true);
@@ -401,7 +401,7 @@ FTSS.controller = (function () {
 					scope.createData = isNew || false;
 
 					// Create the angular-strap modal using this model's modal template
-					instance = $modal({
+					scope.modal = $modal({
 						                  'placement'      : opts.modalPlacement || 'top',
 						                  'scope'          : scope,
 						                  'backdrop'       : 'static',
@@ -409,7 +409,7 @@ FTSS.controller = (function () {
 					                  });
 
 					// Bind close to instance.destroy to remove this modal
-					scope.close = instance.destroy;
+					scope.close = scope.modal.destroy;
 
 					// Allow archiving within an edit modal
 					scope.archive = actions.archive;
