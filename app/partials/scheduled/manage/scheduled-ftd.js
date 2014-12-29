@@ -264,7 +264,7 @@ FTSS.ng.controller(
 						        scope.data.startMoment = event.start;
 
 						        // Update the model's start date
-						        scope.data.Start = event.start.format();
+						        scope.data.Start = event.start.format('YYYY-MM-DD');
 
 						        // Update our end date for the modal view
 						        scope.data.endMoment = event.end;
@@ -451,7 +451,7 @@ FTSS.ng.controller(
 											    end.add(1, 'days');
 
 											    // Only count this day if it is a weekday and not a down day
-											    if (end.isoWeekday() < 6 && downDays.indexOf(end.format()) < 0) {
+											    if (end.isoWeekday() < 6 && downDays.indexOf(end.format('YYYY-MM-DD')) < 0) {
 												    days -= 1;
 											    }
 
