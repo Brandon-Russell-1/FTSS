@@ -237,17 +237,18 @@ FTSS.ng.controller(
 						        return scope.data.startMoment &&
 						               scope.data.startMoment.isValid() ?
 
-						               {
-							               'title'           : title,
-							               'start'           : scope.data.startMoment,
-							               'end'             : scope.data.endMoment.clone().add(1, 'days'),
-							               'className'       : 'success',
-							               'editable'        : true,
-							               'durationEditable': true,
-							               'allDay'          : true
-						               }
+						               [{
+							                'title'           : title,
+							                'start'           : scope.data.startMoment,
+							                'end'             : scope.data.endMoment.clone().add(1, 'days'),
+							                'className'       : 'success',
+							                'editable'        : true,
+							                'durationEditable': true,
+							                'allDay'          : true
+						                }
+						               ]
 
-							        : null;
+							        : [];
 
 					        },
 
@@ -289,36 +290,41 @@ FTSS.ng.controller(
 						    // If we have selected an instructor, try to get their teaching schedule
 						    if (instructor) {
 
-							    // Filter out only classes taught by this instructor
-							    var schedule = _.filter($scope.rawSchedule, {'InstructorId': instructor}),
+							    // Build this instructor schedule and add it to the first calendar
+							    scope.eventsInstructor[0] = _($scope.rawSchedule)
 
-							        // Produce the array that FullCalendar expects
-							        result = _.map(schedule, function (row) {
+								                                // Limit to just this instructor
+								                                .filter({'InstructorId': instructor})
 
-								        return {
-									        'title'    : (caches.MasterCourseList[row.CourseId] || {}).PDS ||
-									                   'UNAVAILABLE',
-									        'start'    : row.startMoment,
-									        'end'      : row.endMoment.clone().add(1, 'days'),
-									        'className': 'info'
-								        }
+								                                // Do not include the current class in this list
+								                                .reject({'Id': scope.data.Id})
 
-							        });
+								                                // Convert to a FullCalender-friendly dataset
+								                                .map(function (row) {
 
-							    // Only add valid dates otherwise FullCalendar will just implode....
-							    getDates() && result.push(getDates());
+									                                     return {
+										                                     'title': (caches.MasterCourseList[row.CourseId] ||
+										                                               {}).PDS ||
+										                                     'UNAVAILABLE',
+										                                     'start': row.startMoment,
+										                                     'end': row.endMoment.clone().add(1,
+										                                                                      'days'),
+										                                     'className': 'info'
+									                                     }
 
-							    // update the event source for the calendar
-							    scope.eventsInstructor[0] = result;
+								                                     })
+
+								                                .value() || [];
 
 						    } else {
 
-							    var thisClass = getDates();
-
 							    // Make sure we remove any old events
-							    scope.eventsInstructor[0] = thisClass ? [thisClass] : [];
+							    scope.eventsInstructor[0] = [];
 
 						    }
+
+						    // Finally, add our current class to a third calendar
+						    scope.eventsInstructor[2] = getDates();
 
 					    });
 
@@ -445,7 +451,8 @@ FTSS.ng.controller(
 											           'end'  : end
 										           });
 
-										    scope.eventsInstructor[0] = [getDates()];
+										    // Add the updated event back to the calendar
+										    scope.eventsInstructor[2] = getDates();
 
 									    }
 
