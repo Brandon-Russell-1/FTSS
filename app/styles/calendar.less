@@ -23,6 +23,12 @@
 	color: #000;
 }
 
+.fc-event.downDay {
+	color: #292f32;
+	background-color: #e9f1f5;
+	border-color: #a3cdd9;
+}
+
 .fc-event.primary {
 	color: #428bca;
 	background-color: #428bca;
@@ -152,12 +158,16 @@
 	th.weekend {
 		font-weight: 300 !important;
 	}
-	.weekend:not(.mark) {
+	.weekend {
 		border-left: none !important;
 		border-right: none !important;
 		padding: 0px;
 		color: #eee;
 		background-color: #eee;
+	}
+
+	th.downDay, td.downDay {
+		background-color: #e9f1f5;
 	}
 	tr.spacer {
 		td {

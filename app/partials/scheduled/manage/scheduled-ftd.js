@@ -24,9 +24,14 @@ FTSS.ng.controller(
 
 					    var events = [], min, minClone, max, months, dayBase,
 
-					        // Check if this is a weekend or not
-					        weekend = function (day) {
-						        return (day.isoWeekday() > 5) ? 'weekend' : '';
+					        downDays = FTSS.utils.getDownDays(true),
+
+					        // Check if this is a weekend, holiday or nothing
+					        specialDay = function (day) {
+
+						        return (day.isoWeekday() > 5) ? 'weekend' :
+
+						               (downDays.indexOf(day.format('YYYY-MM-DD')) > -1) ? 'downDay' : '';
 					        };
 
 					    // Make a flat copy of our data for date range detection
@@ -66,12 +71,12 @@ FTSS.ng.controller(
 
 						    months[month].colspan++;
 
-						    dayBase.push(weekend(minClone));
+						    dayBase.push(specialDay(minClone));
 
 						    $scope.resourceDays += [
 
 							    '<th class="',
-							    weekend(minClone),
+							    specialDay(minClone),
 							    '">',
 							    minClone.format('D'),
 							    '<br>',
@@ -323,6 +328,9 @@ FTSS.ng.controller(
 
 						    }
 
+						    // Add our down days and holidays ot a different calendar
+						    scope.eventsInstructor[1] = FTSS.utils.getDownDays();
+
 						    // Finally, add our current class to a third calendar
 						    scope.eventsInstructor[2] = getDates();
 
@@ -432,16 +440,20 @@ FTSS.ng.controller(
 										        days = Number(course.Days || 1),
 
 										        // get the end date
-										        end = start.clone();
+										        end = start.clone(),
+
+										        downDays = FTSS.utils.getDownDays(true);
 
 										    // loop through the days, sipping weekends
-										    while (days > 0) {
+										    while (days > 1) {
 
-											    if (end.isoWeekday() < 6) {
+											    // Add a day to our range
+											    end.add(1, 'days');
+
+											    // Only count this day if it is a weekday and not a down day
+											    if (end.isoWeekday() < 6 && downDays.indexOf(end.format()) < 0) {
 												    days -= 1;
 											    }
-
-											    end.add(1, 'days');
 
 										    }
 
