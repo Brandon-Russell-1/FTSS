@@ -88,7 +88,7 @@ FTSS.ng.controller(
 
 						    var count = 0,
 
-						        filler = function (end) {
+						        createTDs = function (end) {
 
 							        while (count < end) {
 
@@ -123,18 +123,19 @@ FTSS.ng.controller(
 						    // Iterate over each event
 						    _(instructor).each(function (event) {
 
+							    // We subtract one to include the date the class starts
 							    var start = event.startMoment.diff(min, 'days') - 1,
 
-							        colspan = event.endMoment.diff(event.startMoment, 'days'),
+							        // Detect instructor unavailability
+							        unavailable = event.CourseId < 1;
 
-							        unavailable = event.CourseId < 0;
-
-							    filler(start);
+							    createTDs(start);
 
 							    if (unavailable) {
 
+								    // This creates the HTML for our unavailable blocks
 								    instructor.html += '<td class="unavailable" colspan="' +
-								                       colspan + '" id="' + event.Id +
+								                       event.Days + '" id="' + event.Id +
 								                       '"><div class="details italics">' + (event.ClassNotes || '') +
 								                       '</div></td>';
 
@@ -144,13 +145,13 @@ FTSS.ng.controller(
 								    event.bioPhoto = bioPhoto;
 
 								    // Trim the PDS if days are less than 2
-								    event.pds = colspan > 2 ? event.Course.PDS : '';
+								    event.pds = event.Days > 2 ? event.Course.PDS : '';
 
 								    // Trim the class # if days shorter than 4
-								    event.ttms = event.TTMS && (colspan > 4) ? '#' + event.TTMS : '';
+								    event.ttms = event.TTMS && (event.Days > 4) ? '#' + event.TTMS : '';
 
 								    // Trim the instructor name if days are shorter than 12
-								    event.name = colspan > 12 ? event.Instructor.InstructorName : '';
+								    event.name = event.Days > 12 ? event.Instructor.InstructorName : '';
 
 								    // Identify under-min seats
 								    event.className = (event.allocatedSeats <
@@ -163,7 +164,7 @@ FTSS.ng.controller(
 
 								    // Add our html to the event
 								    instructor.html += '<td class="mark ' + event.className + '" colspan="' +
-								                       colspan +
+								                       event.Days +
 								                       '" id="' +
 								                       event.Id +
 								                       '">' +
@@ -175,22 +176,25 @@ FTSS.ng.controller(
 							    }
 
 							    // Increment the day counter
-							    count += colspan;
+							    count += event.Days;
 
 						    });
 
+						    // map our instructor's name
 						    instructor.name = instructor[0].Instructor.InstructorName;
 
+						    // Bind the edit function (single click in this case)
 						    instructor.edit = function () {
 
 							    // Dirty hack to get the current class without a million extra data binds
 							    var row = _.find(instructor, {Id: parseInt($('td:hover').attr('id'))});
 
+							    // complete binding to the edit action with our data
 							    row && $scope.edit.apply({'row': row});
 
 						    };
 
-						    filler(max.diff(min, 'days'));
+						    createTDs(max.diff(min, 'days'));
 
 						    $scope.instructors.push(instructor);
 
@@ -204,6 +208,7 @@ FTSS.ng.controller(
 
 				    'beforeSubmit': function (scope, isNew) {
 
+					    // For creating instructor unavailability
 					    if (isNew && scope.data.CourseId < 0) {
 
 						    delete scope.data.Host;
@@ -229,12 +234,13 @@ FTSS.ng.controller(
 						        // Handle unique titles for leave/class
 						        var title = scope.data.CourseId < 0 ? 'UNAVAILABLE' : 'THIS COURSE';
 
-						        return scope.data.Start && scope.data.End ?
+						        return scope.data.startMoment &&
+						               scope.data.startMoment.isValid() ?
 
 						               {
 							               'title'           : title,
-							               'start'           : scope.data.Start,
-							               'end'             : scope.data.End,
+							               'start'           : scope.data.startMoment,
+							               'end'             : scope.data.endMoment.clone().add(1, 'days'),
 							               'className'       : 'success',
 							               'editable'        : true,
 							               'durationEditable': true,
@@ -245,13 +251,22 @@ FTSS.ng.controller(
 
 					        },
 
+					        // Perform our date updates
 					        update = function (event) {
 
-						        var format = 'D MMM YYYY';
+						        // Get the start date
+						        scope.data.startMoment = event.start;
 
-						        scope.data.Start = event.start.format(format);
-						        scope.data.End = event.end.format(format);
+						        // Update the model's start date
+						        scope.data.Start = event.start.format();
 
+						        // Update our end date for the modal view
+						        scope.data.endMoment = event.end;
+
+						        // Get the number of days
+						        scope.data.Days = event.end.diff(event.start, 'days');
+
+						        // Let the view know of our changes
 						        scope.modal.$setDirty();
 
 					        };
@@ -281,9 +296,10 @@ FTSS.ng.controller(
 							        result = _.map(schedule, function (row) {
 
 								        return {
-									        'title'    : row.CourseId ? caches.MasterCourseList[row.CourseId].PDS : 'UNAVAILABLE',
-									        'start'    : row.Start,
-									        'end'      : row.End,
+									        'title'    : (caches.MasterCourseList[row.CourseId] || {}).PDS ||
+									                   'UNAVAILABLE',
+									        'start'    : row.startMoment,
+									        'end'      : row.endMoment.clone().add(1, 'days'),
 									        'className': 'info'
 								        }
 
@@ -385,7 +401,7 @@ FTSS.ng.controller(
 									    'right' : 'today prev,next'
 								    },
 
-								    'defaultDate': scope.data.Start,
+								    'defaultDate': scope.data.startMoment,
 
 								    'buttonText': {
 									    today: 'Go to Today'
@@ -401,7 +417,7 @@ FTSS.ng.controller(
 								     */
 								    'dayClick': function (start) {
 
-									    if (scope.data.CourseId) {
+									    if (scope.data.CourseId > 0) {
 
 										    // Reference the course
 										    var course = caches.MasterCourseList[scope.data.CourseId] || {},
@@ -412,7 +428,7 @@ FTSS.ng.controller(
 										        // get the end date
 										        end = start.clone();
 
-										    // loop through the days, sipping weeknds
+										    // loop through the days, sipping weekends
 										    while (days > 0) {
 
 											    if (end.isoWeekday() < 6) {
@@ -423,10 +439,11 @@ FTSS.ng.controller(
 
 										    }
 
-										    scope.data.Start = start.toISOString();
-										    scope.data.End = end.toISOString();
-
-										    scope.modal.$setDirty();
+										    // Update the model and notify the view
+										    update({
+											           'start': start,
+											           'end'  : end
+										           });
 
 										    scope.eventsInstructor[0] = [getDates()];
 
@@ -468,15 +485,14 @@ FTSS.ng.controller(
 					      $scope.instructorDropdown = _.filter(angular.copy(caches.Instructors),
 					                                           {'UnitId': $scope.unit.Id});
 
-					      // Get a copy of the data into rawSchedule for showing in modal
-					      $scope.rawSchedule = _.reject(angular.copy(data), 'Archived');
-
 					      // We can always request in this view
 					      $scope.canRequest = true;
 
 					      // Finish data binding and processing
 					      self.initialize(data).then(utils.processScheduledRow);
 
+					      // Get a copy of the data into rawSchedule for showing in modal
+					      $scope.rawSchedule = _.reject(angular.copy(data), 'Archived');
 				      });
 
 		}

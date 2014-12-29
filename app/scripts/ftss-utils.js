@@ -85,11 +85,9 @@
 
 				 row.Instructor = caches.Instructors[row.InstructorId] || {};
 
-				 row.start = row.Start;
-				 row.end = row.End;
-
 				 row.startMoment = moment(row.Start);
-				 row.endMoment = moment(row.End);
+				 row.endMoment = row.startMoment.clone().add(row.Days - 1, 'days');
+
 				 row.dateRange = row.startMoment.format('D MMM YYYY') +
 
 				                 (row.Days > 0 ? ' - ' + row.endMoment.format('D MMM YYYY') : '');

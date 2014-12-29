@@ -139,7 +139,7 @@
 
 			row.startMoment = moment(row.Start);
 
-			row.endMoment = moment(row.End);
+			row.endMoment = row.startMoment.clone().add(row.Days - 1, 'days');
 
 		} else {
 
