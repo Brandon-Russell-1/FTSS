@@ -1,8 +1,5 @@
 /*global FTSS */
 
-/**
- *
- */
 (function () {
 
 	"use strict";
@@ -27,137 +24,63 @@
 
 		    familyDayLabel = 'AETC Family Day',
 
-		    dataSet = [
+		    holidays = {
 
-			    {
-				    'title'    : 'New Year\'s Day',
-				    'start'    : '2015-01-01',
-				    'className': className
-			    },
+			    '2015-01-01': 'New Year\'s Day',
+			    '2015-01-19': 'MLK Day',
+			    '2015-02-16': 'President\'s Day',
+			    '2015-05-25': 'Memorial Day',
+			    '2015-07-03': 'Independence Day',
+			    '2015-09-07': 'Labor Day',
+			    '2015-10-12': 'Columbus Day',
+			    '2015-11-11': 'Veterans Day',
+			    '2015-11-26': 'Thanksgiving Day',
+			    '2015-12-25': 'Christmas Day'
+		    },
 
-			    {
-				    'title'    : 'MLK Day',
-				    'start'    : '2015-01-19',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : 'President\'s Day',
-				    'start'    : '2015-02-16',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : 'Memorial Day',
-				    'start'    : '2015-05-25',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : 'Independence Day',
-				    'start'    : '2015-07-03',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : 'Labor Day',
-				    'start'    : '2015-09-07',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : 'Columbus Day',
-				    'start'    : '2015-10-12',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : 'Veterans Day',
-				    'start'    : '2015-11-11',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : 'Thanksgiving Day',
-				    'start'    : '2015-11-26',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : 'Christmas Day',
-				    'start'    : '2015-12-25',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2015-01-02',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2015-05-22',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2015-07-02',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2015-09-04',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2015-11-27',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2015-12-24',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2015-12-31',
-				    'className': className
-			    },
-
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2016-05-27',
-				    'className': className
-			    },
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2016-07-05',
-				    'className': className
-			    },
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2016-09-02',
-				    'className': className
-			    },
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2016-11-25',
-				    'className': className
-			    },
-			    {
-				    'title'    : familyDayLabel,
-				    'start'    : '2016-12-27',
-				    'className': className
-			    }
-
+		    familyDays = [
+			    '2015-01-02',
+			    '2015-05-22',
+			    '2015-07-02',
+			    '2015-09-04',
+			    '2015-11-27',
+			    '2015-12-24',
+			    '2015-12-31',
+			    '2016-05-27',
+			    '2016-07-05',
+			    '2016-09-02',
+			    '2016-11-25',
+			    '2016-12-27'
 		    ],
+
+		    dataSet = (function () {
+
+			    // Build array of our federal holidays
+			    var set = _.map(holidays, function (label, date) {
+
+				    return {
+					    'title'    : label,
+					    'start'    : date,
+					    'className': className
+				    };
+
+			    });
+
+			    _(familyDays).each(function (day) {
+
+				    set.push(
+					    {
+						    'title'    : familyDayLabel,
+						    'start'    : day,
+						    'className': className
+					    });
+			    });
+
+			    console.log(set);
+
+			    return set;
+
+		    }()),
 
 		    flattened = _.pluck(dataSet, 'start');
 
