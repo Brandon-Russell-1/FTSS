@@ -16,14 +16,16 @@
 	 *  Federal holidays are from opm.gov.
 	 *
 	 * @parms flat bool
-	 * @returns {{title: string, start: string, className: string}[]}
 	 */
 	FTSS.utils.getDownDays = (function () {
 
+		// Class for our events
 		var className = 'downDay',
 
+		    // Default text for our family days
 		    familyDayLabel = 'AETC Family Day',
 
+		    // Collection of federal holidays
 		    holidays = {
 
 			    '2015-01-01': 'New Year\'s Day',
@@ -38,6 +40,7 @@
 			    '2015-12-25': 'Christmas Day'
 		    },
 
+		    // Array of AETC down days
 		    familyDays = [
 			    '2015-01-02',
 			    '2015-05-22',
@@ -53,6 +56,7 @@
 			    '2016-12-27'
 		    ],
 
+		    // We do this once at run time
 		    dataSet = (function () {
 
 			    // Build array of our federal holidays
@@ -66,6 +70,7 @@
 
 			    });
 
+			    // Add the family days to the array
 			    _(familyDays).each(function (day) {
 
 				    set.push(
@@ -76,16 +81,16 @@
 					    });
 			    });
 
-			    console.log(set);
-
 			    return set;
 
 		    }()),
 
+		    // Create a lookup table for dates
 		    flattened = _.pluck(dataSet, 'start');
 
 		return function (flat) {
 
+			// return the lookup table for the actual dataset
 			return flat ? flattened : dataSet;
 
 		};
