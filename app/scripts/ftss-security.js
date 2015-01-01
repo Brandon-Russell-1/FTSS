@@ -16,22 +16,22 @@
 		                 'ftd'
 		],
 
-		'requests'     : ['approvers',
-		                  'mtf',
-		                  'ftd'
+		'requests': ['approvers',
+		             'mtf',
+		             'ftd'
 		],
 
 		'manage-ftd'   : ['ftd', 'scheduling'],
 		'scheduled-ftd': ['ftd', 'scheduling'],
 
-		'backlog'      : ['approvers',
-		                  'mtf',
-		                  'ftd'
+		'backlog': ['approvers',
+		            'mtf',
+		            'ftd'
 		],
-		'hosts'        : ['mtf',
-		                  'ftd'
+		'hosts'  : ['mtf',
+		            'ftd'
 		],
-		'ttms'         : [
+		'ttms'   : [
 			'scheduling'
 		]
 
@@ -39,30 +39,45 @@
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
-		// Load our user data into FTSS
-		SharePoint.user($scope).then(function (user) {
+		var initSecurity = function (user) {
 
-			var groups = user.groups;
+			var isAdmin = false,
 
-			// Extract the name of any groups the user is a member of
-			groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
+			    groups = user.groups;
 
-			groups = groups.length ? groups : ['guest'];
 
-			var isAdmin = groups.indexOf('admin') > -1;
+			if (user === 'DEVELOPER') {
 
-			// Used to modify views based on roles
-			$scope.roleClasses = groups.join(' ');
+				isAdmin = true;
 
-			// This is the text that is displayed in the top-left corner of the app
-			$scope.roleText = groups.join(' • ')
-				.replace('mtf', 'MTS/UTM')
-				.replace('ftd', 'FTD Scheduler/Production Supervisor')
-				.replace('curriculum', 'Training/Curriculum Manager')
-				.replace('scheduling', 'J4 Scheduler')
-				.replace('approvers', 'Approver')
-				.replace('admin', 'Administrator')
-				.replace('guest', 'Visitor');
+				$scope.roleClasses = 'admin';
+
+				$scope.roleText = '*** DEVELOPER MODE ***';
+				;
+
+			} else {
+
+				// Extract the name of any groups the user is a member of
+				groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
+
+				groups = groups.length ? groups : ['guest'];
+
+				isAdmin = groups.indexOf('admin') > -1;
+
+				// Used to modify views based on roles
+				$scope.roleClasses = groups.join(' ');
+
+				// This is the text that is displayed in the top-left corner of the app
+				$scope.roleText = groups.join(' • ')
+					.replace('mtf', 'MTS/UTM')
+					.replace('ftd', 'FTD Scheduler/Production Supervisor')
+					.replace('curriculum', 'Training/Curriculum Manager')
+					.replace('scheduling', 'J4 Scheduler')
+					.replace('approvers', 'Approver')
+					.replace('admin', 'Administrator')
+					.replace('guest', 'Visitor');
+
+			}
 
 			/**
 			 * Test for a particular user role
@@ -74,9 +89,9 @@
 
 				return isAdmin || _(roles.map ? roles : [roles]).any(function (role) {
 
-					return groups.indexOf(role) > -1;
+						return groups.indexOf(role) > -1;
 
-				});
+					});
 
 			};
 
@@ -85,7 +100,7 @@
 			 *
 			 * @private
 			 */
-			$scope.isAuthorized = groups.indexOf('admin') > -1 ?
+			$scope.isAuthorized = isAdmin ?
 
 			                      function () {
 
@@ -107,7 +122,28 @@
 			// Call doInitPage() as this might be the last item in the async chain to complete
 			_fn.doInitPage();
 
-		});
+		};
+
+		/**
+		 * This eliminates the needless server calls for user/group info when developing FTSS.
+		 *
+		 * Yes, someone could easily spoof the global variable (if they paused the code during page load
+		 * and changed it.  However, this is all just client-view stuff anyway.  Additionally, doing so
+		 * would cause them more problems as it would force everything to read from a different SharePoint
+		 * site altogether.  Finally, we make a double check by validating the file name matches.
+		 *
+		 */
+		if (PRODUCTION === false && location.pathname === '/dev.html') {
+
+			// We are assuming they are an admin and this is in development mode
+			initSecurity('DEVELOPER');
+
+		} else {
+
+			// Load our user data into FTSS
+			SharePoint.user($scope).then(initSecurity);
+
+		}
 
 	};
 
