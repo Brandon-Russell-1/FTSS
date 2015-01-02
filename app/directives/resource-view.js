@@ -237,7 +237,7 @@
 
 							html.spacer = '<tr class="spacer"><td></td></tr>';
 
-							_(html.instructors).sortBy('name').each(function (instructor, index) {
+							_(html.instructors).sortBy('name').each(function (instructor) {
 
 								html.render += html.spacer +
 								               '<tr class="event">' +
