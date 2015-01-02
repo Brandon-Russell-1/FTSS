@@ -7,29 +7,4 @@ include ../__scheduled-mixins
 
     +userInstructions('scheduled-ftd', true)
 
-    #legend
-
-        .btn-success(hover='Classes with open seats', right)
-
-        .btn-primary(hover='Full classes', right)
-
-        .btn-warning(hover='Classes currently below student min', right)
-
-        .btn-danger(hover='Classes exceeding student max', right)
-
-        .trainingSession(hover='Training Session', right)
-
-        .unavailable(hover='Instructor unavailbility', right)
-
-
-    table#resourceView.table.table-bordered
-
-        thead
-            tr: th.month(ng-repeat='month in resourceMonths', colspan='{{month.colspan}}') {{month.month}}
-
-            tr.days(ng-bind-html='resourceDays')
-
-        tbody
-
-            tr.event(ng-repeat-start='i in instructors', ng-bind-html='i.html|trust_html', ng-click='i.edit()')
-            tr.spacer(ng-repeat-end): td
+    resource-view

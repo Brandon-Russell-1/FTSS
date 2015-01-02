@@ -120,7 +120,10 @@
 
 #resourceView {
 	width: 100%;
-	overflow: hidden;
+	table {
+		width: 100%;
+		overflow: hidden;
+	}
 	.event {
 		td {
 			height: 35px;
@@ -146,19 +149,34 @@
 			background: linear-gradient(to right, rgba(157, 43, 255, 0.82) 25%, rgba(157, 43, 255, .5) 100%);
 		}
 	}
+
 	.spacer {
 		td {
 			border-right: none !important;
 			padding: 5px;
 		}
 	}
-	th {
+
+	.header {
 		text-align: center;
+		font-weight: 700;
 	}
-	th.weekend {
-		font-weight: 300 !important;
+
+	.days {
+		border-bottom: 3px solid #aaa;
 	}
+
+	.footer.months {
+		border-bottom: 2px solid #ccc;
+	}
+
+	.footer.days {
+		border-bottom: none;
+		border-top: 3px solid #aaa;
+	}
+
 	.weekend {
+		font-weight: 300 !important;
 		border-left: none !important;
 		border-right: none !important;
 		padding: 0px;
@@ -166,7 +184,7 @@
 		background-color: #eee;
 	}
 
-	th.downDay, td.downDay {
+	.downDay {
 		background-color: #e9f1f5;
 	}
 	tr.spacer {

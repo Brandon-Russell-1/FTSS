@@ -1,0 +1,19 @@
+#resourceView
+   #legend
+
+      .btn-success(hover='Classes with open seats', right)
+
+      .btn-primary(hover='Full classes', right)
+
+      .btn-warning(hover='Classes currently below student min', right)
+
+      .btn-danger(hover='Classes exceeding student max', right)
+
+      .trainingSession(hover='Training Session', right)
+
+      .unavailable(hover='Instructor unavailability', right)
+
+
+   table.table.table-bordered
+
+      tbody(ng-bind-html='html|trust_html', ng-click='doClick()')
