@@ -35,7 +35,7 @@
 	 */
 	var Sifter = function(items, settings) {
 		this.items = items;
-		this.settings = settings || {diacritics: true};
+		this.settings = settings || {diacritics: false};
 	};
 
 	/**

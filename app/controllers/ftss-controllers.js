@@ -242,43 +242,40 @@ FTSS.controller = (function () {
 						// Only post-process if we actually have data to work with
 						if (data && oldVal !== newVal) {
 
-							var sifter, results, watcher, exec;
+							var sifter, watcher, exec;
 
 							// Initialize sifter with the array of data after passing through some string sanitization
-							sifter = new Sifter(
-								_(data)
+							sifter = _(data)
 
-									// Wrap our dataset in an array with a search property (just a flattened version of the data)
-									.map(function (d) {
+								// Wrap our dataset in an array with a search property (just a flattened version of the data)
+								.map(function (d) {
 
-										     // Use our search prop if it already exists
-										     d.search = d.search ||
-										                JSON.stringify(d)
-											                .replace(/([,{]"\w+":)|([{}"])/gi, ' ')
-											                .toLowerCase();
+									     // Use our search prop if it already exists
+									     d.search = (d.search ||
+									                 JSON.stringify(d).replace(/([,{]"\w+":)|([{}"])/gi, ' '))
+										     .toLowerCase();
 
-										     return {
-											     /* We're using JSON stringify to fast deep-read our data & then stripping out the JSON junk
-											      * with a regex & then setting lowercase for faster text-processing
-											      */
-											     'search': d.search,
+									     return {
+										     /* We're using JSON stringify to fast deep-read our data & then stripping out the JSON junk
+										      * with a regex & then setting lowercase for faster text-processing
+										      */
+										     'search': d.search,
 
-											     // Also, send the data to sifter for use later on
-											     'data'  : d
-										     };
+										     // Also, send the data to sifter for use later on
+										     'data'  : d
+									     };
 
-									     })
+								     })
 
-									// Perform filtering for Archived so we can shrink our processing load down
-									.filter(function (test) {
+								// Perform filtering for Archived so we can shrink our processing load down
+								.filter(function (test) {
 
-										        // Add if this object does not have an Archived property or if showArchive is enabled
-										        return !test.data.Archived || !!$scope.showArchive;
+									        // Add if this object does not have an Archived property or if showArchive is enabled
+									        return !test.data.Archived || !!$scope.showArchive;
 
-									        })
+								        })
 
-									.value()
-							);
+								.value();
 
 							// This will let us debounce our searches to speed up responsiveness
 							watcher = _.debounce(function (newVal, oldVal) {
@@ -296,9 +293,23 @@ FTSS.controller = (function () {
 								}
 
 								// reference for our searchText
-								var text = $scope.searchText.$ || '';
+								var query = _.map(($scope.searchText.$ || '')
 
-								_verify && _verify(text);
+									                  .replace(/\sor\s/gi, '|')
+
+									                  .replace(/\sand\s/gi, ' ')
+
+									                  .replace(/[^\w\s\|]/mg, '')
+
+									                  .split(' '),
+
+								                  function (q) {
+
+									                  return new RegExp(q, 'i');
+
+								                  });
+
+								_verify && _verify($scope.searchText.$ || '');
 
 								// Update our permalink for this custom view
 								$scope.fn.setPermaLink();
@@ -308,31 +319,36 @@ FTSS.controller = (function () {
 								$scope.counter('-', false);
 								$scope.count = 0;
 
-								// Perform the sifter search using the pageLimit, for no search, all results up to the pageLimit are returned
-								results = sifter.search(text, {
-									'fields'     : [
-										'search'
-									],
-									'limit'      : $scope.pageLimit,
-									'conjunction': 'and'
-								});
-
 								// Create our sorted groups and put in our scope
-								$scope.groups = _(results.items)
+								$scope.groups = _(sifter)
 
-									// we just need the data back into our $scope
-									.map(function (match) {
-										     return sifter.items[match.id].data;
-									     })
+									// Perform our full text search
+									.filter(function (test) {
+
+										        return !query[0] || _.all(query, function (q) {
+
+												        return q.test(test.search);
+
+											        });
+
+									        })
+
+									// Map the data back as the controllers expect it
+									.map('data')
 
 									// Run sortBy first on our mapped data
 									.sortBy(function (srt) {
 										        return utils.deepRead(srt, opts.sort || false);
 									        })
 
+									// Trim our results
+									.initial(sifter.length - $scope.pageLimit)
+
 									// Group the data by the given property
 									.groupBy(function (gp) {
+
 										         $scope.count++;
+
 										         return opts.group ?
 										                utils.deepRead(gp, opts.group) ||
 										                '' : false;
@@ -343,7 +359,7 @@ FTSS.controller = (function () {
 								opts.finalProcess && opts.finalProcess($scope.groups);
 
 								// Update the scope counter + overload indicator
-								$scope.counter($scope.count, $scope.count !== results.total);
+								$scope.counter($scope.count, $scope.count !== sifter.length);
 
 								// Finally, do our tagHighlighting if this is a tagBox
 								tagBox && utils.tagHighlight(data);
@@ -402,11 +418,13 @@ FTSS.controller = (function () {
 
 					// Create the angular-strap modal using this model's modal template
 					scope.modal = $modal({
-						                  'placement'      : opts.modalPlacement || 'top',
-						                  'scope'          : scope,
-						                  'backdrop'       : 'static',
-						                  'contentTemplate': '/partials/modal-' + (opts.modal || opts.model) + '.html'
-					                  });
+						                     'placement'      : opts.modalPlacement || 'top',
+						                     'scope'          : scope,
+						                     'backdrop'       : 'static',
+						                     'contentTemplate': '/partials/modal-' +
+						                                      (opts.modal || opts.model) +
+						                                      '.html'
+					                     });
 
 					// Bind close to instance.destroy to remove this modal
 					scope.close = scope.modal.destroy;
