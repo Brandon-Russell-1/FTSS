@@ -295,16 +295,21 @@ FTSS.controller = (function () {
 								// reference for our searchText
 								var query = _.map(($scope.searchText.$ || '')
 
+									                  // Convert " or " to a regex or
 									                  .replace(/\sor\s/gi, '|')
 
+									                  // Convert " and " to our split and search
 									                  .replace(/\sand\s/gi, ' ')
 
+									                  // Strip everything else out
 									                  .replace(/[^\w\s\|]/mg, '')
 
+									                  // Split by spaces
 									                  .split(' '),
 
 								                  function (q) {
 
+									                  // Create independent regex tests for each word/wordgroup
 									                  return new RegExp(q, 'i');
 
 								                  });
@@ -325,6 +330,7 @@ FTSS.controller = (function () {
 									// Perform our full text search
 									.filter(function (test) {
 
+										        // short-circuit for no search text
 										        return !query[0] || _.all(query, function (q) {
 
 												        return q.test(test.search);
