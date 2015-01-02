@@ -93,6 +93,11 @@ FTSS.ng.controller(
 
 						    var count = 0,
 
+						        /**
+						         * Appends TD elements to our TR HTML until the specified end
+						         *
+						         * @param end
+						         */
 						        createTDs = function (end) {
 
 							        while (count < end) {
@@ -296,30 +301,32 @@ FTSS.ng.controller(
 						    if (instructor) {
 
 							    // Build this instructor schedule and add it to the first calendar
-							    scope.eventsInstructor[0] = _($scope.rawSchedule)
+							    scope.eventsInstructor[0] =
 
-								                                // Limit to just this instructor
-								                                .filter({'InstructorId': instructor})
+							    _($scope.rawSchedule)
 
-								                                // Do not include the current class in this list
-								                                .reject({'Id': scope.data.Id})
+								    // Limit to just this instructor
+								    .filter({'InstructorId': instructor})
 
-								                                // Convert to a FullCalender-friendly dataset
-								                                .map(function (row) {
+								    // Do not include the current class in this list
+								    .reject({'Id': scope.data.Id})
 
-									                                     return {
-										                                     'title': (caches.MasterCourseList[row.CourseId] ||
-										                                               {}).PDS ||
-										                                     'UNAVAILABLE',
-										                                     'start': row.startMoment,
-										                                     'end': row.endMoment.clone().add(1,
-										                                                                      'days'),
-										                                     'className': 'info'
-									                                     }
+								    // Convert to a FullCalender-friendly dataset
+								    .map(function (row) {
 
-								                                     })
+									         return {
+										         'title': (caches.MasterCourseList[row.CourseId] ||
+										                   {}).PDS ||
+										         'UNAVAILABLE',
+										         'start': row.startMoment,
+										         'end': row.endMoment.clone().add(1,
+										                                          'days'),
+										         'className': 'info'
+									         }
 
-								                                .value() || [];
+								         })
+
+								    .value() || [];
 
 						    } else {
 
@@ -451,7 +458,10 @@ FTSS.ng.controller(
 											    end.add(1, 'days');
 
 											    // Only count this day if it is a weekday and not a down day
-											    if (end.isoWeekday() < 6 && downDays.indexOf(end.format('YYYY-MM-DD')) < 0) {
+											    if (end.isoWeekday() <
+											        6 &&
+											        downDays.indexOf(end.format('YYYY-MM-DD')) <
+											        0) {
 												    days -= 1;
 											    }
 
