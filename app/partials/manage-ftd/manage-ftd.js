@@ -146,7 +146,7 @@ FTSS.ng.controller(
 
 				    read = _.clone(FTSS.models.scheduled),
 
-				    today = moment().add(7, 'days'),
+				    nextWeek = moment().add(7, 'days'),
 
 				    yearStart = moment().add(-1, 'years');
 
@@ -205,14 +205,14 @@ FTSS.ng.controller(
 							// Tally all courses taught
 							row.stats['Classes Taught']++;
 
-							// Tally instructor hours
-							row.stats['Instructor Hours'] += course.Course.Hours;
+							// Tally instructor hours, looking for a manual hours override first
+							row.stats['Instructor Hours'] += course.Hours || course.Course.Hours;
 
 							// Tally all students taught
 							row.stats['Total Students'] += course.allocatedSeats;
 
 							// If course was taught in the last year, count hours for annualHours
-							if (course.startMoment > yearStart && course.startMoment < today) {
+							if (course.startMoment > yearStart && course.startMoment < nextWeek) {
 
 								chart[course.startMoment.month()] += course.Course.Hours;
 

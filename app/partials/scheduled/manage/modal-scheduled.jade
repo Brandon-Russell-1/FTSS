@@ -28,7 +28,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
 
         .col-lg-7
 
-            .col-lg-4
+            .col-lg-4(style='margin-top: 4.5em;')
                 photo.img-rounded(size='135px', shape='rectangle', data='data.InstructorId', watch)
 
             .col-lg-8
@@ -44,8 +44,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                 .row
                     +formGroup('Course')
                         .input-group
-                            .input-group-addon.w15
-                                +icon('books')
+                            .input-group-addon.w15:  +icon('books')
                             .input-group-selectize(explain='scheduled-edit-course', right)
                                 select(selectize='coursesDropdown',
                                         bind='CourseId',
@@ -55,8 +54,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                     +formGroup('Instructor')
 
                         .input-group
-                            .input-group-addon.w15
-                                +icon('instructor')
+                            .input-group-addon.w15: +icon('instructor')
 
                             .input-group-selectize(explain='scheduled-edit-instructor', right)
 
@@ -64,6 +62,23 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                                         bind='InstructorId',
                                         remember='instructor',
                                         label='InstructorName')
+
+                .row.hideSetUnavailable
+
+                    +formGroup('Length')
+
+                        .input-group.pull-left.w40
+                            .form-control(style='background: #fafafa;cursor: not-allowed;') {{AcademicDays}}
+                            .input-group-addon Academic Days
+
+                        .input-group.pull-right.w40
+                            input.form-control(ng-model='data.Hours',
+                            type='number',
+                            min='0',
+                            explain='scheduled-edit-hours-deviation',
+                            top)
+                            .input-group-addon Hours
+
 
                 .row.hideSetUnavailable
                     +formGroup('Reserved')
@@ -88,7 +103,9 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                                                 top)
                             .input-group-addon Non-Host
 
-                #modalScheduledOpenSeats.input-group.hideSetUnavailable {{getOpenSeats()}}
+                #modalScheduledOpenSeats.hideSetUnavailable
+                    strong {{getOpenSeats()}}&nbsp;
+                    span ({{data.Course.Min}} Min / {{data.Course.Max}} Max)
 
 
             .clearfix

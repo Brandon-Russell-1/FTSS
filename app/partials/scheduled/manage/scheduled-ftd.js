@@ -7,9 +7,9 @@ FTSS.ng.controller(
 		'$scope',
 		'$modal',
 		'SharePoint',
-		'$templateCache',
-		function ($scope, $modal, SharePoint, $templateCache) {
+		function ($scope, $modal, SharePoint) {
 
+			// Increase the default page limit to 100 for this view
 			$scope.pageLimit = 100;
 
 			var self = FTSS.controller($scope, {
@@ -210,6 +210,24 @@ FTSS.ng.controller(
 
 					    };
 
+					    // Update our data to match the new course
+					    scope.$watch('data.CourseId', function (id) {
+
+						    // If this is a valid course only
+						    if (id > 0) {
+
+							    var course = caches.MasterCourseList[id] || {};
+
+							    // We are binding this to scope vs scope.data since it isn't a part of the SP data (just a local thing)
+							    scope.AcademicDays = course.Days || '-';
+
+							    // Just overwrite whatever the user specified since they changed courses
+							    scope.data.Hours = course.Hours;
+
+						    }
+
+					    });
+
 					    // Wait until the modal is visible
 					    scope.$on('modal.show', function () {
 
@@ -261,10 +279,8 @@ FTSS.ng.controller(
 											    end.add(1, 'days');
 
 											    // Only count this day if it is a weekday and not a down day
-											    if (end.isoWeekday() <
-											        6 &&
-											        downDays.indexOf(end.format('YYYY-MM-DD')) <
-											        0) {
+											    if (end.isoWeekday() < 6 &&
+											        downDays.indexOf(end.format('YYYY-MM-DD')) < 0) {
 												    days -= 1;
 											    }
 
