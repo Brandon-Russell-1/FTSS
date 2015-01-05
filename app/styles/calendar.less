@@ -118,11 +118,21 @@
 	height: auto !important;
 }
 
+/*********************************************/
+
+@classFull: linear-gradient(to right, rgba(70, 184, 218, .95) 25%, rgba(70, 184, 218, .5) 100%);
+@classOpenSeats: linear-gradient(to right, rgba(76, 174, 76, .95) 25%, rgba(76, 174, 76, .6) 100%);
+@classOverBooked: linear-gradient(to right, rgba(217, 83, 79, .95) 25%, rgba(217, 83, 79, .5) 100%);
+@classUnderBooked: linear-gradient(to right, rgba(240, 173, 78, .95) 25%, rgba(240, 173, 78, .5) 100%);
+@classMTT: linear-gradient(to right, rgba(157, 43, 255, 0.82) 25%, rgba(157, 43, 255, .5) 100%);
+@classTrainingSession: linear-gradient(to right, rgba(38, 179, 172, 0.94) 25%, rgba(38, 179, 172, .5) 100%);
+@classHover: linear-gradient(to right, rgba(50, 50, 50, .95) 25%, rgba(50, 50, 50, .5) 100%);
+@instructorUnavailable: linear-gradient(to right, rgba(170, 170, 170, .95) 25%, rgba(170, 170, 170, .5) 100%);
+
 #resourceView {
 	width: 100%;
 	table {
 		width: 100%;
-		overflow: hidden;
 	}
 	.event {
 		td {
@@ -131,27 +141,36 @@
 			height: 35px;
 		}
 		.mark {
-			background-color: #fff;
-			background: linear-gradient(to right, rgba(76, 174, 76, .95) 25%, rgba(76, 174, 76, .6) 100%);
+			background: @classOpenSeats #fff;;
 			border: 1px solid #777;
-			border-left: 3px solid #555 !important;
-			padding: 0px;
+			border-left: 3px solid #555;
+			padding: 0;
 			cursor: pointer;
 			z-index: 10;
 			overflow: visible;
 		}
 		.mark.warning {
-			background: linear-gradient(to right, rgba(70, 184, 218, .95) 25%, rgba(70, 184, 218, .5) 100%);
+			background: @classFull
 		}
 		.mark.danger {
-			background: linear-gradient(to right, rgba(217, 83, 79, .95) 25%, rgba(217, 83, 79, .5) 100%);
+			background: @classOverBooked
 		}
 		.mark.short {
-			background: linear-gradient(to right, rgba(240, 173, 78, .95) 25%, rgba(240, 173, 78, .5) 100%);
+			background: @classUnderBooked
 		}
-		.mark.mtt {
-			background: linear-gradient(to right, rgba(157, 43, 255, 0.82) 25%, rgba(157, 43, 255, .5) 100%);
-		}
+
+	}
+
+	.mtt {
+		background: @classMTT
+	}
+
+	.unavailable {
+		background: @instructorUnavailable;
+	}
+
+	.trainingSession {
+		background: @classTrainingSession;
 	}
 
 	.spacer {
@@ -183,7 +202,7 @@
 		font-weight: 300 !important;
 		border-left: none !important;
 		border-right: none !important;
-		padding: 0px;
+		padding: 0;
 		color: #eee;
 		background-color: #eee;
 		z-index: 1;
@@ -201,13 +220,11 @@
 	.mark {
 		.mask-img {
 			z-index: 25;
-			margin: 0px;
 			width: 50px;
 			height: 50px;
 			position: absolute;
-			margin-left: -10px;
-			margin-top: -10px;
-			box-shadow: 0px 0px 10px rgba(50, 50, 50, 0.7);
+			margin: -10px 0 0 -10px;
+			box-shadow: 0 0 10px rgba(50, 50, 50, 0.7);
 		}
 		.pds {
 			font-weight: 800;
@@ -258,8 +275,8 @@
 	}
 	.mark:hover {
 		z-index: 20;
-		background: linear-gradient(to right, rgba(50, 50, 50, .95) 25%, rgba(50, 50, 50, .5) 100%) !important;
-		box-shadow: 0px 0px 15px 2px rgba(50, 50, 50, 0.7);
+		background: @classHover;
+		box-shadow: 0 0 15px 2px rgba(50, 50, 50, 0.7);
 
 		.mask-img {
 			width: 100px;
@@ -273,7 +290,7 @@
 		}
 		.details {
 			background-color: rgba(255, 255, 255, .9);
-			box-shadow: 0px 0px 15px 2px rgba(50, 50, 50, 0.7);
+			box-shadow: 0 0 15px 2px rgba(50, 50, 50, 0.7);
 			border: 1px solid #555;
 			max-height: 300px;
 			transition: all ease 250ms 1s;
@@ -292,20 +309,12 @@
 
 body.collapsed {
 	#resourceView .event .mark {
-		background: linear-gradient(to right, rgba(70, 184, 218, .95) 25%, rgba(70, 184, 218, .5) 100%);
+		background: @classFull;
 	}
 
 	#legend {
 		display: none;
 	}
-}
-
-#resourceView .unavailable, #legend .unavailable {
-	background: linear-gradient(to right, rgba(170, 170, 170, .95) 25%, rgba(170, 170, 170, .5) 100%);
-}
-
-#resourceView .event .mark.trainingSession, #legend .trainingSession {
-	background: linear-gradient(to right, rgba(38, 179, 172, 0.94) 25%, rgba(38, 179, 172, .5) 100%);
 }
 
 #resourceView tr td, #resourceView .mark * {
@@ -318,13 +327,14 @@ body.collapsed {
 
 #legend {
 	position: absolute;
-	left: 0px;
-	top: 50px;
+	left: 0;
+	top: 10px;
+	z-index: 25;
 	div {
 		opacity: .8;
-		width: 12px;
+		width: 18px;
 		height: 25px;
-		margin-bottom: 5px;
+		margin-bottom: 1px;
 		border-top-right-radius: 7px;
 		border-bottom-right-radius: 7px;
 		border: 1px solid rgba(150, 150, 150, .7);
