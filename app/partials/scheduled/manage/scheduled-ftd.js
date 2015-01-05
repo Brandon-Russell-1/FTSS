@@ -41,6 +41,9 @@ FTSS.ng.controller(
 				     */
 				    'edit': function (scope, isNew) {
 
+					    // Bind isNew to scope for stupid green button crap
+					    scope.isNew = isNew;
+
 					    // Only add valid date-ranges to FC
 					    var getDates = function () {
 
@@ -259,7 +262,7 @@ FTSS.ng.controller(
 								     */
 								    'dayClick': function (start) {
 
-									    if (scope.data.CourseId > 0) {
+									    if (isNew && scope.data.CourseId > 0) {
 
 										    // Reference the course
 										    var course = caches.MasterCourseList[scope.data.CourseId] || {},

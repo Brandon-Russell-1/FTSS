@@ -229,7 +229,7 @@
 								var row = _.find(events, {Id: parseInt($('td:hover').attr('id'))});
 
 								// complete binding to the edit action with our data
-								row && scope.$parent.edit.apply({'row': row});
+								row && scope.$parent.edit.call({'row': row}, false);
 
 							};
 
