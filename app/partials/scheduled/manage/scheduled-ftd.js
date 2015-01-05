@@ -86,7 +86,9 @@ FTSS.ng.controller(
 						        // Let the view know of our changes
 						        scope.modal.$setDirty();
 
-					        };
+					        },
+
+					        hoursOverride = scope.data.Hours;
 
 					    // If this is a new class, pre-fill the reserved seats with 0
 					    if (isNew) {
@@ -225,7 +227,7 @@ FTSS.ng.controller(
 							    scope.AcademicDays = course.Days || '-';
 
 							    // Just overwrite whatever the user specified since they changed courses
-							    scope.data.Hours = course.Hours;
+							    scope.data.Hours = hoursOverride ||  course.Hours;
 
 						    }
 
