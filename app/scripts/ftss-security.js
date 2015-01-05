@@ -53,7 +53,6 @@
 				$scope.roleClasses = 'admin';
 
 				$scope.roleText = '*** DEVELOPER MODE ***';
-				;
 
 			} else {
 
