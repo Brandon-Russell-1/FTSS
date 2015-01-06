@@ -90,7 +90,7 @@
 
 				 row.dateRange = row.startMoment.format('D MMM YYYY') +
 
-				                 (row.Days > 0 ? (' - ' + row.endMoment.format('D MMM YYYY') ): '');
+				                 (row.Days > 0 ? (' - ' + row.endMoment.format('D MMM YYYY') ) : '');
 
 
 				 var seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
@@ -236,7 +236,7 @@
 				 var bytes = new Uint8Array(buffer);
 				 var len = bytes.byteLength;
 				 for (var i = 0; i < len; i++) {
-					 binary += String.fromCharCode(bytes[ i ]);
+					 binary += String.fromCharCode(bytes[i]);
 				 }
 				 return window.btoa(binary);
 			 };
@@ -250,37 +250,31 @@
 
 				 try {
 
-					 var test, map;
+					 var test = [],
 
-					 test = [
-					 ];
-					 map = FTSS.filters.map();
+					     map = FTSS.filters.map();
 
 					 // First, generate the array of tags to test against
 					 _(FTSS.tags).each(function (tag, key) {
 
 						 _(tag).each(function (t) {
 
-							 if (key !== 'custom') {
+							 if (map[key]) {
 
-								 if (map[key]) {
-
-									 test.push({
-										           id       : key + ':' + t,
-										           testField: map[key].split('/').join('.'),
-										           testValue: t
-									           });
-
-								 }
+								 test.push({
+									           id       : key + ':' + t,
+									           testField: map[key].split('/').join('.'),
+									           testValue: t
+								           });
 
 							 }
 
 						 });
 
-
 					 });
 
-					 // Perform tests against all data using the test[] already created, _.all() stops once all tags are marked (if applicable)
+					 // Perform tests against all data using the test[] already created,
+					 // _.all() stops once all tags are marked (if applicable)
 					 _(data).all(function (req) {
 
 						 // Must use _.each() in case a data item matches multiple tags
@@ -305,7 +299,6 @@
 					 });
 
 				 } catch (e) {
-					 FTSS.utils.log(e);
 				 }
 
 			 };
@@ -499,11 +492,11 @@
 										           }
 
 										           text.html(
-												           '<b>' + item[2].title + '</b>: ' +
-												           $(item[2].description.replace(/src=/g, 'fake='))
-													           .toArray()
-													           .pop()
-													           .innerText
+											           '<b>' + item[2].title + '</b>: ' +
+											           $(item[2].description.replace(/src=/g, 'fake='))
+												           .toArray()
+												           .pop()
+												           .innerText
 										           );
 
 										           timer = setTimeout(refresh, secondsInterval * 1000);
