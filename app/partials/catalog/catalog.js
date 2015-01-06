@@ -52,13 +52,13 @@ FTSS.ng.controller(
 								            if (u.Courses_JSON.indexOf(d.Id) > -1) {
 
 									            d.Units.push(u.label);
+									            d.search += ' ' + u.search;
 
 								            }
 
 							            });
 
 							            if (d.Units) {
-								            d.search += d.Units.sort().join(' ');
 								            d.units = d.Units.sort().join('<br>');
 							            }
 
