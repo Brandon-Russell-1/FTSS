@@ -10,7 +10,7 @@
 	window.FTSS = {};
 	window.utils = {};
 	window.caches = {};
-	window.PRODUCTION = (location.pathname === '/app.html');
+	window.PRODUCTION = (location.pathname.indexOf('/app.html') > -1);
 
 	window.brunch = {
 		'auto-reload': {
