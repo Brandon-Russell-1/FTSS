@@ -60,10 +60,10 @@ FTSS.ng.controller(
 				reader.onload = function (result) {
 
 					var // Get the file buffer
-					    rawBuffer = result.target.result,
+						rawBuffer = result.target.result,
 
-					    // Create a random file anem
-					    rand = utils.generateUUID();
+						// Create a random file anem
+						rand = utils.generateUUID();
 
 					$.ajax({
 						       'url'        : SP_CONFIG.baseURL + 'Bios',
