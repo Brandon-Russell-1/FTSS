@@ -95,21 +95,18 @@
 		              // These are the ng-sharepoint parameters for the PRODUCTION version of FTSS
 		              'offline'     : false,
 		              'baseURL'     : base + 'live/_vti_bin/ListData.svc/',
-		              'user'        : { 'url': base + 'live/_vti_bin/UserGroup.asmx' },
-		              'cacheVersion': 17
+		              'user'        : {'url': base + 'live/_vti_bin/UserGroup.asmx'},
+		              'cacheVersion': 19
 
 	              } : {
 
 		              // These are the ng-sharepoint parameters for the DEVELOPMENT version of FTSS
 		              'offline'     : true,
 		              'baseURL'     : base + 'development/_vti_bin/ListData.svc/',
-		              'user'        : { 'url': base + 'development/_vti_bin/UserGroup.asmx' },
-		              'cacheVersion': 17
+		              'user'        : {'url': base + 'development/_vti_bin/UserGroup.asmx'},
+		              'cacheVersion': 23
 
 	              });
-
-	// If the prefetch exists, launch and the pass to garbage collection (it's a huge function)
-	prefetchData && prefetchData() && delete window.prefetchData;
 
 	// Default template for lo-dash _.template() function
 	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
@@ -127,19 +124,19 @@
 	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {
 
 		// Page limit default
-		'limit': 50,
+		'limit'   : 50,
 
 		// CSS animations
-		'animate': true,
+		'animate' : true,
 
 		// Focus tooltips (when in a field it gives you a popup with instructions)
 		'tooltips': true,
 
 		// Enable/disable page instructions
-		'page': true,
+		'page'    : true,
 
 		// Hover tooltips (mainly used with buttons)
-		'hover': true
+		'hover'   : true
 
 	};
 
