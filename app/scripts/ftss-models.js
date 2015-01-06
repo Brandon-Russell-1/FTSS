@@ -115,7 +115,7 @@
 					'UnitId',
 					'CourseId',
 					'Start',
-					'End',
+					'Days',
 					'ClassNotes',
 					'J4Notes'
 				]
