@@ -123,6 +123,18 @@
 
 		},
 
+		'courseInvalidate': {
+
+			'source': 'Scheduled',
+			'params': {
+				'$select': [
+					'Start',
+				    'TTMS'
+				]
+			}
+
+		},
+
 		'requirements': {
 
 			'cache' : true,

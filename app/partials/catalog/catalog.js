@@ -5,7 +5,8 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		function ($scope) {
+		'SharePoint',
+		function ($scope, SharePoint) {
 
 			// Increase to 99 due to the simple binding
 			$scope.pageLimit = 99;
@@ -14,7 +15,65 @@ FTSS.ng.controller(
 
 				'sort' : 'PDS',
 				'group': 'MDS',
-				'model': 'catalog'
+				'model': 'catalog',
+
+				// Actions to perform prior the SP Post operation
+				'beforeSubmit': function (scope) {
+
+					// Check to make sure this is an existing course and the Number was changed
+					if (scope.data.Id && scope.data.Number !== self.data[scope.data.Id].Number) {
+
+						// Copy the model from FTSS.models
+						var model = angular.copy(FTSS.models.courseInvalidate);
+
+						// Search the schedule for active/built classes that match this CourseId
+						model.params.$filter = [
+							'CourseId eq ' + scope.data.Id,
+							'TTMS ne null',
+							'Archived eq false'
+						].join(' and ');
+
+						SharePoint.read(model).then(function (result) {
+
+							// Create moment() for today
+							var today = moment(),
+
+							    // Restrict to only future scheduled classes
+							    collection = [];
+
+							// Iterate over results
+							_(result).each(function (test) {
+
+								// Ignore old classes
+								if (today < moment(test.Start)) {
+
+									// Nullify TTMS
+									collection.push(
+										{
+											// Pass the URL to modify
+											'__metadata': test.__metadata,
+
+											// Tell ngSharePoint to add a cache field
+											'cache': true,
+
+											// Erase the Class #
+											'TTMS': null
+
+										});
+
+								}
+
+							});
+
+							// If there are classes that needed to be edited, send them to the batch POST action
+							collection.length && SharePoint.batch(collection);
+
+
+						})
+
+					}
+
+				}
 
 			});
 
