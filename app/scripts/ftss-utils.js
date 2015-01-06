@@ -180,18 +180,22 @@
 			  */
 			 utils.errorHandler = function (err) {
 
-				 try {
+				 if (PRODUCTION) {
 
-					 SharePoint.create(
-						 {
+					 try {
 
-							 '__metadata': 'ErrorLog',
-							 'Page'      : window.location.hash,
-							 'Stack'     : err.stack
+						 SharePoint.create(
+							 {
 
-						 });
+								 '__metadata': 'ErrorLog',
+								 'Page'      : window.location.hash,
+								 'Stack'     : err.stack
 
-				 } catch (e) {}
+							 });
+
+					 } catch (e) {}
+
+				 }
 
 			 };
 
