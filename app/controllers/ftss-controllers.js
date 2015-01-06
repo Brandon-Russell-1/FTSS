@@ -346,7 +346,7 @@ FTSS.controller = (function () {
 									        })
 
 									// Trim our results
-									.initial(sifter.length - $scope.pageLimit)
+									.first($scope.pageLimit)
 
 									// Group the data by the given property
 									.groupBy(function (gp) {
