@@ -156,7 +156,7 @@
 
 						    tags[split[0]].push(Number(split[1]) || split[1]);
 
-						    scope.fn.setPermaLink();
+						    scope.fn.setPermaLink(true);
 						    scope.fn.doNavigate();
 
 					    });
@@ -461,7 +461,7 @@
 
 								      val.label = val.InstructorName;
 
-								      return  val.InstructorName;
+								      return val.InstructorName;
 
 							      });
 

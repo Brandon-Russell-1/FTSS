@@ -314,10 +314,8 @@ FTSS.controller = (function () {
 
 								                  });
 
-								_verify && _verify($scope.searchText.$ || '');
-
 								// Update our permalink for this custom view
-								$scope.fn.setPermaLink();
+								$scope.fn.setPermaLink(false);
 
 								// Reset groups, counter & count
 								$scope.groups = false;

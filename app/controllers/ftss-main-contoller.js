@@ -46,14 +46,13 @@
 					/**
 					 * Used to create a permaLink for a given page for bookmarking/sharing
 					 */
-					'setPermaLink': function () {
+					'setPermaLink': function (includeSearch) {
 
-						$scope.permaLink = [
+						$scope.permaLink = FTSS.tags ? btoa(JSON.stringify(FTSS.tags)) : '';
 
-							FTSS.tags ? btoa(JSON.stringify(FTSS.tags)) : '',
-							$scope.searchText.$ ? btoa($scope.searchText.$) : ''
-
-						].join('/');
+						if (includeSearch) {
+							$scope.permaLink += '/' + btoa($scope.searchText.$);
+						}
 
 					},
 
@@ -62,11 +61,11 @@
 					 * @returns {*}
 					 */
 					'getPage': function () {
-						return  $location.path().split('/')[1];
+						return $location.path().split('/')[1];
 					},
 
 					/**
-					 * Performs our page navigations function
+					 * Performs our page navigation function
 					 * @param pg
 					 */
 					'doNavigate': function (pg) {
@@ -79,6 +78,7 @@
 									pg || _fn.getPage(),
 									$scope.permaLink
 								].join('/'));
+
 						});
 
 					},
@@ -269,7 +269,7 @@
 					}
 
 					// Fire our page listener for Google Analytics
-					PRODUCTION && window.ga && window.ga('send', 'pageview', { page: $location.path() });
+					PRODUCTION && window.ga && window.ga('send', 'pageview', {page: $location.path()});
 
 					// Start the loading feedback
 					utils.loading(true);
@@ -315,4 +315,4 @@
 
 
 }()
-	);
+);
