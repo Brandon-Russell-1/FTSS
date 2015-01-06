@@ -90,7 +90,7 @@
 
 				 row.dateRange = row.startMoment.format('D MMM YYYY') +
 
-				                 (row.Days > 0 ? ' - ' + row.endMoment.format('D MMM YYYY') : '');
+				                 (row.Days > 0 ? (' - ' + row.endMoment.format('D MMM YYYY') ): '');
 
 
 				 var seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
