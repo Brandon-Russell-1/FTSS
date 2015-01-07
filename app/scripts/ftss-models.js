@@ -63,7 +63,8 @@
 					'Location',
 					'Email'
 				]
-			}
+			},
+			'version': 1
 
 		},
 
