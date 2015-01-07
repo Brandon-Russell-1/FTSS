@@ -30,6 +30,37 @@ FTSS.ng.controller(
 
 						scope.data.TTMS = '*';
 
+					} else {
+
+						var newVal = scope.data,
+
+						    oldVal = self.data[newVal.Id];
+
+						switch (true) {
+
+							// Course start/end days have changed
+							case(oldVal.Start !== newVal.Start):
+							case(oldVal.Days !== newVal.Day):
+/*
+
+								FTSS.utils.sendEmail(
+									{
+										'to'     : FTSS.J4Email,
+										'subject': 'Scheduled Class Change',
+										'body'   : ''
+
+									});
+*/
+
+								break;
+
+							// Course is archived for the first time
+							case (!oldVal.Archived && newVal.Archived):
+
+								break;
+
+						}
+
 					}
 
 				},
