@@ -34,7 +34,7 @@ FTSS.ng.controller(
 
 						var newVal = scope.data,
 
-						    oldVal = self.data[newVal.Id];
+						    oldVal = self.data[newVal.Id] || {};
 
 						switch (true) {
 
