@@ -41,16 +41,16 @@ mixin panelGroup(ico, title, type)
                 br
 
                 #homeInstructions
-                    //
-                        h5.border-bottom.role.mtf.ftd.approvers Requirements
 
-                        .row.role.mtf.ftd
-                            .col-lg-3: +miniLink('backlog', 'checklist2', 'Generate 898')
-                            .col-lg-9(user-message='navigation-generate-898')
+                    h5.border-bottom.role.mtf.ftd.approvers Requirements
 
-                        .row.role.mtf.ftd.approvers
-                            .col-lg-3: +miniLink('requirements', 'agree', '898 Response')
-                            .col-lg-9(user-message='navigation-898-response')
+                    .row.role.mtf.ftd
+                        .col-lg-3: +miniLink('backlog', 'checklist2', 'Create')
+                        .col-lg-9(user-message='navigation-generate-898')
+
+                    .row.role.mtf.ftd.approvers
+                        .col-lg-3: +miniLink('requirements', 'agree', 'Needs Approval')
+                        .col-lg-9(user-message='navigation-898-response')
 
                     h5.border-bottom Classes
 
