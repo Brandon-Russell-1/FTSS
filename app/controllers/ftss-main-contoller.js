@@ -38,8 +38,10 @@
 
 						callback && callback();
 
-						utils.loading(false);
-						$scope.loaded = true;
+						$timeout(function() {
+							utils.loading(false);
+							$scope.loaded = true;
+						});
 
 					},
 
