@@ -268,9 +268,6 @@
 						return;
 					}
 
-					// Fire our page listener for Google Analytics
-					PRODUCTION && window.ga && window.ga('send', 'pageview', {page: $location.path()});
-
 					// Start the loading feedback
 					utils.loading(true);
 
