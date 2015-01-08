@@ -38,16 +38,26 @@
 						// So that Angular will update the model immediately rather than waiting until we click somewhere else
 						timeout(function () {
 
-							var oldVal = scope.data[opts.field],
+							var oldVal = utils.deepRead(scope, opts.field),
 
-							    newVal = (val && val.map && !isNaN(val[0]) ? val.map(Number) : Number(val)) ||
-							             val ||
-							             null;
+							    newVal = (val && val.map && !isNaN(val[0]) ?
+
+							              val.map(Number) : Number(val)) || val || null;
 
 							// Update the field with the value(s)
 							if (oldVal !== newVal) {
 
-								scope.data[opts.field] = newVal;
+								// Split our dotted notation into an array
+								var test = opts.field.split('.'),
+
+								    // Save the last property
+								    prop = test.pop(),
+
+								    // Get a reference to the parent object/scope
+								    item = test.length ? utils.deepRead(scope, test) : scope;
+
+								// Write the changes to the child property on the parent object
+								item[prop] = newVal;
 
 								// This will allow us to retain the last used setting for faster pre-filling of data
 								if (opts.remember) {
@@ -64,7 +74,7 @@
 								} else {
 
 									// Flip the $dirty flag on this modal
-									modal.$setDirty();
+									modal && modal.$setDirty();
 
 									// Add ng-dirty class manually as we aren't really a ngForm control
 									self.$control.addClass('ng-dirty');
@@ -113,7 +123,7 @@
 						loaded = remember;
 
 						// Set the value based on the current model
-						self.setValue(utils.deepRead(scope, 'data.' + opts.field) || remember);
+						self.setValue(utils.deepRead(scope, opts.field) || remember);
 
 						self.refreshOptions(false);
 
@@ -263,16 +273,6 @@
 
 							    // Add the options to our searchBox
 							    that.addOption(tagBoxOpts);
-							    /*
-							     _(caches.Units).each(function(unit) {
-
-							     _(unit.Courses_JSON).each(function(course) {
-
-							     caches.MasterCourseList[course].Units[unit.Id] = unit;
-
-							     });
-
-							     });*/
 
 							    _(caches.Units).each(function (unit) {
 

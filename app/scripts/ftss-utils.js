@@ -36,7 +36,7 @@
 			 utils.deepRead = function (data, expression) {
 
 				 // Cache a copy of the split expression, then set to exp
-				 var exp = (expression || '').split('.'), retVal;
+				 var exp = expression.join ? expression : (expression || '').split('.'), retVal;
 
 				 // Recursively read the object using a do-while loop, uses short-circuit for invalid properties
 				 do {
@@ -374,7 +374,7 @@
 			  * @returns {*} String the pretty version of our number
 			  */
 			 utils.prettyNumber = function (x) {
-				 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+				 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 			 };
 
 
