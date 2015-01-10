@@ -271,7 +271,6 @@ FTSS.ng.controller(
 						FTSS.utils.initInstructorCalendar(
 							{
 
-								'weekends'     : false,
 								'allDayDefault': true,
 								'header'       : {
 									'left'  : 'title',
