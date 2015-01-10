@@ -233,23 +233,27 @@
 
 							};
 
-							html.render = html.monthHeader + html.dayHeader;
+							html.render = '';
 
 							html.spacer = '<tr class="spacer"><td></td></tr>';
 
-							_(html.instructors).sortBy('name').each(function (instructor) {
+							_(html.instructors).sortBy('name').each(function (instructor, index) {
 
-								html.render += html.spacer +
-								               '<tr class="event">' +
+								// For extra large groups,
+								if (index % 10 < 1 && html.instructors.length - index > 5) {
+									html.render += html.monthHeader + html.dayHeader + html.spacer;
+								}
+
+								html.render += '<tr class="event">' +
 								               instructor.html +
-								               '</tr>';
+								               '</tr>' +
+								               html.spacer;
 
 							});
 
 							if (html.instructors.length > 8) {
 
-								html.render += html.spacer +
-								               (html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
+								html.render += (html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
 
 							}
 
