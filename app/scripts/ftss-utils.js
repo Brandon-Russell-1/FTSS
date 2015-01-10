@@ -374,7 +374,10 @@
 			  * @returns {*} String the pretty version of our number
 			  */
 			 utils.prettyNumber = function (x) {
-				 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+				 var str = (x > 1000 ? Math.round(x / 100) : Math.round(x / 10) * 10).toString();
+
+				 return (x > 1000) ? (str[0] + '.' + str[1]).replace('.0', '') + 'K ' : str;
 			 };
 
 
