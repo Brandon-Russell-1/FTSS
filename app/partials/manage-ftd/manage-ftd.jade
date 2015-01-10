@@ -47,7 +47,7 @@ div(ng-class='{addNew:addNew}')
     h3 {{data.Courses_JSON.length}} Courses Taught
 
     .pds(explain='units-courses', right)
-        select(selectize='MasterCourseList', bind='Courses_JSON', multiple, inline)
+        select(selectize='MasterCourseList', bind='data.Courses_JSON', multiple, inline)
 
     .text-info.info.italics.pull-right
         +icon('info-circle')

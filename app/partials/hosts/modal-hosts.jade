@@ -18,7 +18,7 @@ form(name='modal')
 
             +formGroup('Local FTD', 'hosts-ftd')
                 .input-group-selectize
-                    select(selectize='Units', bind='FTD')
+                    select(selectize='Units', bind='data.FTD')
 
             +formGroupIcon('Unit Email', 'data.Email', 'email', true, 'Make sure you enter a valid email address.', 'hosts-email', 'envelope')
 

@@ -26,7 +26,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
 
     .modal-body
 
-        .col-lg-7
+        .col-lg-6
 
             .col-lg-4(style='margin-top: 4.5em;')
                 photo.img-rounded(size='135px', shape='rectangle', data='data.InstructorId', watch)
@@ -47,7 +47,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                             .input-group-addon.w15:  +icon('books')
                             .input-group-selectize(explain='scheduled-edit-course', right)
                                 select(selectize='coursesDropdown',
-                                        bind='CourseId',
+                                        bind='data.CourseId',
                                         remember='course')
 
                 .row
@@ -59,7 +59,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                             .input-group-selectize(explain='scheduled-edit-instructor', right)
 
                                 select(selectize='instructorDropdown',
-                                        bind='InstructorId',
+                                        bind='data.InstructorId',
                                         remember='instructor',
                                         label='InstructorName')
 
@@ -127,7 +127,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                         #j4notes.input-group.italics {{data.J4Notes}}
 
 
-        #rightPanel.col-lg-5(bs-tabs)
+        #rightPanel.col-lg-6(bs-tabs)
 
             div(ng-class='{addEvent:data.CourseId}', bs-pane, title='Schedule')
 
