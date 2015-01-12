@@ -1,0 +1,57 @@
+include ../__mixins
+
+form.form-horizontal(name='modal')
+
+    traverse
+
+    .modal-header.caps
+
+        h3
+            +icon('graph_pie')
+            | {{data.InstructorName}}'s Stats
+
+    .modal-body
+
+        .row
+
+            .col-lg-4
+                photo.img-rounded(size='150px', shape='rectangle', data='data', watch, force)
+
+
+            .col-lg-8
+
+                table.table.table-split
+
+                    tr(ng-repeat='(title, stat) in data.stats')
+
+                        td {{title}}
+                        td.bold {{stat}}
+
+                .text-center
+                    .lead.strong(style='margin-bottom:0') {{data.annualEffectiveness}}% Annual Instructor Utilization
+                    .small.italics {{data.annualHours}} hours out of 48 weeks
+
+        br
+
+        table.table.table-striped
+
+            thead
+
+                tr
+
+                    th PDS
+                    td TTMS
+                    td Dates
+                    td Students
+
+            tbody
+
+                tr(ng-repeat='course in data.history')
+
+                    td {{course.Course.PDS}}
+                    td {{course.TTMS}}
+                    td {{course.dateRange}}
+                    td {{course.allocatedSeats}}
+
+
+    +modalFooter()

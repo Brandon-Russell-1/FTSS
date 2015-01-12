@@ -1,0 +1,39 @@
+include ../__mixins
+
+#embed.col-lg-7
+
+    br
+
+    +userInstructions('units', true)
+
+
+#rightScroll.wrapped.col-lg-5
+
+        div(ng-if='groups')
+
+            h3 {{groups.false.length}} Instructors
+
+            table.table.table-striped.table-expanded.table-hover
+
+                tbody
+
+                    tr.am-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
+                                        ng-dblclick='stats()',
+                                        id='row-{{row.Id}}')
+
+                        td: photo(size='75px', data='row', watch)
+
+                        td
+
+                            h4 {{row.InstructorName}}
+
+                            br
+
+                            .chartMonths(ng-bind-html='row.chart')
+
+                            .clearfix
+
+                            .pull-left.btn-success(ng-style='{width:row.annualEffectiveness+"%"}') &nbsp;
+                            .pull-left.italics.text-success &nbsp;{{row.annualHours}} hours/yr
+
+                        td.w5: +actions(true, false, false, 'instructor')
