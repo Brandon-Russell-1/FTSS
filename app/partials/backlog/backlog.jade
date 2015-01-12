@@ -50,19 +50,6 @@ mixin wizardRow(text)
 
         +userInstructions('generate-898', true)
 
-        //.pull-left(hover="backlog-drag-drop", text-parser='Import IMDS AAA Background Product')
-        //
-            .pull-right(data-content-template='/partials/aaa-paste-text.html',
-                        bs-modal='modal',
-                        style='margin-right:3em!important',
-                        ng-if='viewPaste')
-
-                label.btn.btn-info.btn-labeled.white
-                    span.btn-label
-                        +icon('search')
-                    | Inspect Evaluated AAA Data
-
-
         .clearfix
 
         br
@@ -95,14 +82,14 @@ mixin wizardRow(text)
 
             .rollup.slide
 
-                h4 {{row.course.Title}}
+                .courseTitle {{row.course.Title}}
 
                 .alert.alert-danger(ng-if='row.listFTD.length < 1')
                     .lead *** No available FTD's found! ***
                     p: b Please verify {{row.course.PDS}} is the correct course.
 
                 .row
-                    .col-lg-6.pull-right
+                    .col-lg-6
                         h4.soft-bottom-border Student names ({{row.course.Min}} Min / {{row.course.Max}} Max)
                         select( selectize,
                                 bind='row.requirements',
@@ -117,6 +104,27 @@ mixin wizardRow(text)
 
                         h4.soft-bottom-border Notes to the FTD
                         textarea.form-control(ng-model='row.Notes')
+
+                    .col-lg-6
+                        table.table.table-split#stats898
+                            tbody
+                                tr
+                                    td Jan
+                                    td
+                                        input.w60(ng-model='row.History.r1', placeholder='Requested')
+                                        input.w30.pull-right(ng-model='row.History.b1', placeholder='Built')
+                                tr
+                                    td Feb
+                                    td
+                                        input.w60(ng-model='row.History.r2', placeholder='Requested')
+                                        input.w30.pull-right(ng-model='row.History.b2', placeholder='Built')
+                                tr
+                                    td Mar
+                                    td
+                                        input.w60(ng-model='row.History.r3', placeholder='Requested')
+                                        input.w30.pull-right(ng-model='row.History.b3', placeholder='Built')
+
+
 
         .clearfix
 
