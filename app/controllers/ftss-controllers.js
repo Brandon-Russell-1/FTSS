@@ -52,7 +52,7 @@ FTSS.controller = (function () {
 
 				// If loaded we only want to bind the first time
 
-				var single = !prop,
+				var single = (prop === 'ftd') || !prop,
 
 				    page = $scope.fn.getPage();
 
@@ -111,6 +111,8 @@ FTSS.controller = (function () {
 											opts.filter && filters.push(opts.filter);
 
 											(prop === 'filter') && filters.push(watch);
+
+											(prop === 'ftd') && filters.push('UnitId eq ' + watch.Id);
 
 											model.params.$filter = filters.join(' and ');
 

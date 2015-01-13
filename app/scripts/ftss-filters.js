@@ -11,30 +11,18 @@
 			    'u': 'UnitId',
 			    'c': 'CourseId'
 		    },
-		    'scheduled-ftd': {
-			    'u': 'UnitId'
-		    },
-		    'requests'     : {
-			    'u': 'UnitId'
-		    },
 		    'requirements' : {
 			    'h': 'HostId',
 			    'u': 'UnitId'
 		    },
 		    'backlog'      : {
 			    'h': 'HostId'
-		    },
-		    'manage-ftd'   : {
-			    'u': 'UnitId'
 		    }
 	    },
 
 	    max = {
 		    'backlog'      : 1,
-		    'requirements' : 1,
-		    'requests'     : 1,
-		    'scheduled-ftd': 1,
-		    'manage-ftd'   : 1
+		    'requirements' : 1
 	    };
 
 	filters.map = function () {

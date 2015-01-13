@@ -152,8 +152,11 @@
 							if (!$scope.isAuthorized()) {
 
 								_fn.doNavigate('home');
+								return;
 
 							}
+
+							$scope.initInstructorRole();
 
 							if ($scope.tagBox) {
 

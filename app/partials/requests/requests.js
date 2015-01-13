@@ -18,7 +18,7 @@ FTSS.ng.controller(
 
 			self
 
-				.bind('filter')
+				.bind('ftd')
 
 				.then(function (data) {
 

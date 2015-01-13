@@ -5,19 +5,23 @@ div
 
         +link('home', 'home', 'Home')
 
+        br
+
+        +link('scheduled', 'search', 'Search Classes')
+        +link('catalog', 'books', 'Course Catalog')
+        +link('ttms', 'hash', 'Need Class IDs', 'role scheduling')
+
+        li.role.instructor: h4 My FTD
+        +link('production-ftd', 'graph_pie', 'Production', 'role instructor')
+        +link('scheduled-ftd', 'calendar_range', 'Schedule', 'role instructor')
+        +link('requests', 'download', 'Seat Requests', 'role ftd')
+        +link('manage-ftd', 'edit2', 'Manage', 'role ftd')
+
         li.role: h4 Requirements
         +link('backlog', 'checklist2', 'Create', 'role')
         +link('requirements', 'agree', 'Needs Approval', 'role')
 
-        li: h4 Classes
-        +link('scheduled-ftd', 'calendar_range', 'Manage', 'role ftd scheduling curriculum')
-        +link('ttms', 'hash', 'Need Class IDs', 'role scheduling')
-        +link('requests', 'download', 'Seat Requests', 'role ftd')
-        +link('catalog', 'books', 'Course Catalog')
-        +link('scheduled', 'search', 'Search')
-
         li.role.mtf.ftd.scheduling: h4 Manage FTSS
-        +link('manage-ftd', 'building-o', 'Manage FTD', 'role ftd')
         +link('hosts', 'puzzle-piece', 'Host Units', 'role mtf ftd')
         hr
         +link('admin', 'dollar', 'Admin Tools', 'role')

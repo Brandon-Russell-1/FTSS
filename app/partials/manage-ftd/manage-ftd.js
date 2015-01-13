@@ -140,9 +140,9 @@ FTSS.ng.controller(
 
 			};
 
-			self.bind('filter').then(function (data) {
+			self.bind().then(function (data) {
 
-				var UnitId = parseInt($scope.filter.match(/\d+/)[0]),
+				var UnitId = $scope.ftd.Id,
 
 				    read = _.clone(FTSS.models.scheduled),
 
