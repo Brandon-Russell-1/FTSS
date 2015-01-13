@@ -225,11 +225,15 @@
 							// Bind the edit function (single click in this case)
 							scope.doClick = function () {
 
-								// Dirty hack to get the current class without a million extra data binds
-								var row = _.find(events, {Id: parseInt($('td:hover').attr('id'))});
+								if (scope.canEdit) {
 
-								// complete binding to the edit action with our data
-								row && scope.$parent.edit.call({'row': row}, false);
+									// Dirty hack to get the current class without a million extra data binds
+									var row = _.find(events, {Id: parseInt($('td:hover').attr('id'))});
+
+									// complete binding to the edit action with our data
+									row && scope.$parent.edit.call({'row': row}, false);
+
+								}
 
 							};
 
@@ -240,7 +244,8 @@
 							_(html.instructors).sortBy('name').each(function (instructor, index) {
 
 								// For extra large groups,
-								if (index % 10 < 1 && html.instructors.length - index > 5) {
+								if (index % 10 < 1 &&
+								    (html.instructors.length < 5 || (html.instructors.length - index) > 5)) {
 									html.render += html.monthHeader + html.dayHeader + html.spacer;
 								}
 
@@ -251,11 +256,7 @@
 
 							});
 
-							if (html.instructors.length > 8) {
-
-								html.render += (html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
-
-							}
+							html.render += (html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
 
 							scope.html = html.render;
 
