@@ -21,7 +21,8 @@
     "ng-file-upload": "latest",
     "angular-strap": "2.1.2",
     "selectize": "0.11.2",
-    "angular-ui-calendar": "~0.9.0"
+    "angular-ui-calendar": "~0.9.0",
+    "n3-line-chart": "latest"
   },
   "overrides": {
     "angular-mocks": {
