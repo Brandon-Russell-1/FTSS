@@ -39,7 +39,7 @@ FTSS.ng.controller(
 
 				    yearStart = moment().add(-1, 'years');
 
-				// Only include instructors for this unit
+				// Only include unarchived instructors for this unit
 				data = angular.copy(_.filter(data, {'UnitId': UnitId, 'Archived': false}));
 
 				// Only include this unit
@@ -50,19 +50,26 @@ FTSS.ng.controller(
 
 					var stats = _(results)
 
-						// Ignore our instructor unavailability
-						.reject({'CourseId': null})
+						    // Ignore our instructor unavailability
+						    .reject({'CourseId': null})
 
-						.reject('Archived')
+						    // Ignore cancelled classes
+						    .reject('Archived')
 
-						// Load the cache data for every row (this one is a little expensive)
-						.each(utils.cacheFiller)
+						    // Load the cache data for every row (this one is a little expensive)
+						    .each(utils.cacheFiller)
 
-						// Group the data by InstructorID
-						.groupBy('InstructorId')
+						    // Group the data by InstructorID
+						    .groupBy('InstructorId')
 
-						// Return the chained value output from lodash
-						.value();
+						    // Return the chained value output from lodash
+						    .value(),
+
+					    ftdStats = {
+						    'hours'   : 0,
+						    'classes' : 0,
+						    'students': 0
+					    };
 
 					// Complete the controller initialization
 					self.initialize(data).then(function (row) {
@@ -75,9 +82,9 @@ FTSS.ng.controller(
 
 						// for aggregate instructor stats
 						row.stats = {
-							'Instructor Hours': 0,
-							'Classes Taught'  : 0,
-							'Total Students'  : 0
+							'hours'   : 0,
+							'classes' : 0,
+							'students': 0
 						};
 
 						row.annualHours = 0;
@@ -91,21 +98,27 @@ FTSS.ng.controller(
 
 						_(stat).each(function (course) {
 
-							// Tally all courses taught
-							row.stats['Classes Taught']++;
+							var hours = course.Hours || course.Course.Hours;
 
-							// Tally instructor hours, looking for a manual hours override first
-							row.stats['Instructor Hours'] += course.Hours || course.Course.Hours;
+							// Tally all courses taught
+							row.stats.classes++;
+
+							// Tally hours, looking for a manual hours override first
+							row.stats.hours += hours;
 
 							// Tally all students taught
-							row.stats['Total Students'] += course.allocatedSeats;
+							row.stats.students += course.allocatedSeats;
 
 							// If course was taught in the last year, count hours for annualHours
 							if (course.startMoment > yearStart && course.startMoment < nextWeek) {
 
-								chart[course.startMoment.month()] += course.Course.Hours;
+								chart[course.startMoment.month()] += hours;
 
-								row.annualHours += course.Course.Hours;
+								row.annualHours += hours;
+
+								ftdStats.classes++;
+								ftdStats.hours += hours;
+								ftdStats.students += course.allocatedSeats;
 
 							}
 						});
@@ -129,14 +142,14 @@ FTSS.ng.controller(
 
 							});
 
-							console.log(row.chart);
-
 						}());
 
 						// A rough estimate of instructor time utilization
 						row.annualEffectiveness = Math.floor(row.annualHours / 19.2);
 
 					});
+
+					$scope.ftdStats = ftdStats;
 
 				});
 

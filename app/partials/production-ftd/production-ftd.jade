@@ -6,6 +6,22 @@ include ../__mixins
 
     +userInstructions('units', true)
 
+    .col-lg-6
+
+        h3 Det {{ftd.Det}} Last 12 Months
+
+        table.table.table-split(style='font-size:1.25em')
+            tr
+                td Instructor Hours
+                td {{ftdStats.hours | number}}
+            tr
+                td Classes Taught
+                td {{ftdStats.classes | number}}
+
+            tr
+                td Students
+                td {{ftdStats.students | number}}
+
 
 #rightScroll.wrapped.col-lg-5
 
@@ -29,9 +45,10 @@ include ../__mixins
 
                             br
 
-                            .chartMonths(ng-bind-html='row.chart')
+                            .chartMonths(ng-bind-html='row.chart | trust_html')
 
                             .clearfix
+                            br
 
                             .pull-left.btn-success(ng-style='{width:row.annualEffectiveness+"%"}') &nbsp;
                             .pull-left.italics.text-success &nbsp;{{row.annualHours}} hours/yr

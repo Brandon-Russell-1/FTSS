@@ -51,7 +51,8 @@
 						    'backlog',
 						    'hosts',
 						    'admin',
-						    'reset'
+						    'reset',
+					        'production-ftd'
 					    ];
 
 				while (routes.length) {
