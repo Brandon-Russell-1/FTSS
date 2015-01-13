@@ -6,7 +6,8 @@ header.navbar.navbar-inverse
         span.navbar-brand
             span.white
                 +icon('af_logo')
-            span.text#ftss FTSS 3 |&nbsp;
+            span.text#ftss FTSS |&nbsp
+            span.text#ftd(ng-if='ftd') {{ftd.LongName}} -&nbsp;
             span.text#roleText {{roleText || 'Getting roles...'}}
 
     ul.nav.navbar-nav.pull-right.hidden-xs
