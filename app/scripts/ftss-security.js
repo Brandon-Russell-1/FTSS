@@ -10,32 +10,35 @@
 
 	"use strict";
 
-	var authorizationMatrix = {
+	var firstRun = true,
 
-		'requirements': ['mtf',
+	    authorizationMatrix = {
+
+		    'requirements': ['mtf',
+		                     'ftd'
+		    ],
+
+		    'requests': ['approvers',
+		                 'mtf',
 		                 'ftd'
-		],
+		    ],
 
-		'requests': ['approvers',
-		             'mtf',
-		             'ftd'
-		],
+		    'manage-ftd'    : ['ftd', 'scheduling'],
+		    'scheduled-ftd' : ['ftd', 'scheduling'],
+		    'production-ftd': ['ftd', 'instructor'],
 
-		'manage-ftd'   : ['ftd', 'scheduling'],
-		'scheduled-ftd': ['ftd', 'scheduling'],
+		    'backlog': ['approvers',
+		                'mtf',
+		                'ftd'
+		    ],
+		    'hosts'  : ['mtf',
+		                'ftd'
+		    ],
+		    'ttms'   : [
+			    'scheduling'
+		    ]
 
-		'backlog': ['approvers',
-		            'mtf',
-		            'ftd'
-		],
-		'hosts'  : ['mtf',
-		            'ftd'
-		],
-		'ttms'   : [
-			'scheduling'
-		]
-
-	};
+	    };
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
@@ -52,7 +55,11 @@
 
 				$scope.roleClasses = 'admin';
 
-				$scope.roleText = '*** DEVELOPER MODE ***';
+				$scope.roleText = 'DEVELOPER MODE';
+
+				user = {
+					'email': 'jeffrey.mccoy.2@us.af.mil'
+				};
 
 			} else {
 
@@ -75,8 +82,38 @@
 					.replace('approvers', 'Approver')
 					.replace('admin', 'Administrator')
 					.replace('guest', 'Visitor');
-
 			}
+
+			$scope.initInstructorRole = function () {
+
+				if (firstRun) {
+
+					var email = (user.email || '').toLowerCase();
+
+					firstRun = false;
+
+					$scope.instructor = _.find(caches.Instructors, function (test) {
+						return test.InstructorEmail.toLowerCase() === email;
+					});
+
+					if ($scope.instructor) {
+
+						$scope.ftd = caches.Units[$scope.instructor.UnitId];
+
+						if (groups) {
+
+							groups.push('instructor');
+
+							$scope.roleText += ' • Instructor ';
+
+						}
+
+
+					}
+
+				}
+
+			};
 
 			/**
 			 * Test for a particular user role
