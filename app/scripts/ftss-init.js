@@ -23,7 +23,8 @@
 			'angularFileUpload',
 			'ngAnimate',
 			'ngSanitize',
-			'ui.calendar'
+			'ui.calendar',
+			'n3-line-chart'
 		]);
 
 	/*

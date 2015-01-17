@@ -8,13 +8,48 @@
 	}
 }
 
-#rightScroll h3,  #embed h3 {
+#rightScroll h3, #embed h3 {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
 #production-ftd {
+
+	#ftdStats {
+		position: absolute;
+		left: 20%;
+		width: 40%;
+		background: rgba(255,255,255, .8);
+		z-index: 50;
+	}
+
+	#ftdChart {
+		position: absolute;
+		top: 10%;
+		right: 5%;
+		left: 5%;
+		bottom: 5%;
+
+		svg {
+			overflow: visible;
+
+			.legend {
+				transform: translate(0, 40px);
+			}
+
+			.x.axis {
+
+				.tick text {
+					transform: rotate(-45deg);
+					text-anchor: end!important;
+					font-size: 12px;
+				}
+			}
+		}
+	}
+
 	#embed {
+		height: 100%;
 		h3 {
 			margin-top: 0;
 		}

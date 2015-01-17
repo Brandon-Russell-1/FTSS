@@ -6,7 +6,8 @@ include ../__mixins
 
     +userInstructions('units', true)
 
-    .col-lg-6
+
+    #ftdStats
 
         h3 Det {{ftd.Det}} Last 12 Months
 
@@ -21,6 +22,11 @@ include ../__mixins
             tr
                 td Students
                 td {{ftdStats.students | number}}
+
+
+    #ftdChart
+        linechart(data='graph', options='graphOptions')
+
 
 
 #rightScroll.wrapped.col-lg-5

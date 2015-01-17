@@ -33,11 +33,7 @@ FTSS.ng.controller(
 
 				var UnitId = $scope.ftd.Id,
 
-				    read = _.clone(FTSS.models.scheduled),
-
-				    nextWeek = moment().add(7, 'days'),
-
-				    yearStart = moment().add(-1, 'years');
+				    read = _.clone(FTSS.models.scheduled);
 
 				// Only include unarchived instructors for this unit
 				data = angular.copy(_.filter(data, {'UnitId': UnitId, 'Archived': false}));
@@ -59,16 +55,53 @@ FTSS.ng.controller(
 						    // Load the cache data for every row (this one is a little expensive)
 						    .each(utils.cacheFiller)
 
+						    .sortBy('startMoment')
+
+						    .reverse()
+
 						    // Group the data by InstructorID
 						    .groupBy('InstructorId')
 
 						    // Return the chained value output from lodash
 						    .value(),
 
+					    yearStart = moment().add(-12, 'months'),
+
+					    yearEnd = moment().add(-1, 'months'),
+
+					    buildMonths = (function () {
+
+						    var collection = {},
+
+						        month = moment();
+
+						    for (var i = 0; i < 12; i++) {
+
+							    collection[month.add(-1, 'months').format('YYYYMM')] = {
+								    'sort'    : parseInt(month.format('YYYYMM'), 10),
+								    'text'    : month.format('MMM'),
+								    'date'    : month.clone().toDate(),
+								    'hours'   : 0,
+								    'classes' : 0,
+								    'students': 0,
+								    'impact'  : 0
+							    };
+
+						    }
+
+						    return function () {
+
+							    return _.cloneDeep(collection);
+
+						    }
+
+					    }()),
+
 					    ftdStats = {
 						    'hours'   : 0,
 						    'classes' : 0,
-						    'students': 0
+						    'students': 0,
+						    'graph'   : buildMonths()
 					    };
 
 					// Complete the controller initialization
@@ -76,7 +109,7 @@ FTSS.ng.controller(
 
 						var stat = stats[row.Id],
 
-						    chart = [];
+						    chart = buildMonths();
 
 						row.search = row.InstructorName;
 
@@ -92,10 +125,6 @@ FTSS.ng.controller(
 						// add the data back to the scope
 						row.history = stat;
 
-						while (chart.length < 12) {
-							chart.push(0);
-						}
-
 						_(stat).each(function (course) {
 
 							var hours = course.Hours || course.Course.Hours;
@@ -110,9 +139,15 @@ FTSS.ng.controller(
 							row.stats.students += course.allocatedSeats;
 
 							// If course was taught in the last year, count hours for annualHours
-							if (course.startMoment > yearStart && course.startMoment < nextWeek) {
+							if (course.startMoment > yearStart && course.startMoment < yearEnd) {
 
-								chart[course.startMoment.month()] += hours;
+								var monthIndex = course.startMoment.format('YYYYMM');
+
+								chart[monthIndex].hours += hours;
+								ftdStats.graph[monthIndex].hours += hours;
+								ftdStats.graph[monthIndex].classes++;
+								ftdStats.graph[monthIndex].students += course.allocatedSeats;
+								ftdStats.graph[monthIndex].impact += (course.allocatedSeats * hours / 8);
 
 								row.annualHours += hours;
 
@@ -123,26 +158,18 @@ FTSS.ng.controller(
 							}
 						});
 
-						(function () {
+						row.max = _.max(chart, 'hours');
+						row.chart = '';
 
-							var max = _.max(chart),
+						_(chart).sortBy('sort').each(function (item) {
 
-							    months = 'Jan.Feb.Mar.Apr.May.Jun.Jul.Aug.Sep.Oct.Nov.Dec'.split('.');
+							var pct = item.hours ? Math.round((item.hours / row.max.hours) * 100) : 0;
 
-							row.chart = '';
+							row.chart += '<b><em style="height:' + pct + '%">&nbsp;</em>' +
 
-							_(chart).each(function (item, index) {
+							             '<i>' + item.text + '</i></b>';
 
-								var pct = item ? Math.round((item / max) * 100) : 0;
-
-								row.chart += '<b><em style="height:' + pct + '%">&nbsp;</em>' +
-
-								             '<i>' + months[index] + '</i></b>';
-
-
-							});
-
-						}());
+						});
 
 						// A rough estimate of instructor time utilization
 						row.annualEffectiveness = Math.floor(row.annualHours / 19.2);
@@ -150,6 +177,61 @@ FTSS.ng.controller(
 					});
 
 					$scope.ftdStats = ftdStats;
+
+					$scope.graph = _.sortBy(ftdStats.graph, 'sort');
+
+					console.log($scope.graph);
+					// Column
+					$scope.graphOptions = {
+						lineMode     : "basis",
+						tension      : 0.7,
+						axes         : {
+							x : {
+								type: "date",
+								key : "date"
+							},
+							y : {type: "linear"},
+							y2: {type: "linear"}
+						},
+						tooltipMode  : "dots",
+						drawLegend   : true,
+						drawDots     : false,
+
+						series       : [
+							{
+								y        : "impact",
+								label    : "Training Impact (Days * Students)",
+								type     : "area",
+								color    : "#efaa33",
+								thickness: "4px",
+								axis     : "y",
+								id       : "series_impact"
+							},
+							{
+								y    : "hours",
+								label: "Hours",
+								type : "column",
+								color: "#17becf",
+								axis : "y",
+								id   : "series_hours"
+							},
+							{
+								'y'    : "students",
+								'label': "Students",
+								'color': "#9467bd",
+								'axis' : "y2",
+								'type' : "column",
+								'id'   : "series_students"
+							}
+						],
+						'tooltip'    : {
+							'mode'     : 'scrubber',
+							'formatter': function (x, y, series) {
+								return moment(x).format('MMM YYYY') + ': ' + y + ' ' + series.label;
+							}
+						},
+						'columnsHGap': 10
+					};
 
 				});
 
