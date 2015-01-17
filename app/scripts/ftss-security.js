@@ -46,8 +46,10 @@
 
 			var isAdmin = false,
 
-			    groups = user.groups;
+			    groups = user.groups || [];
 
+				// Extract the name of any groups the user is a member of
+				groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
 
 			if (user === 'DEVELOPER') {
 
@@ -62,9 +64,6 @@
 				};
 
 			} else {
-
-				// Extract the name of any groups the user is a member of
-				groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
 
 				groups = groups.length ? groups : ['guest'];
 
