@@ -35,8 +35,12 @@ directive('linechart', [
         return dimensions.height = +(attrs.height || parent.offsetHeight || 500) - top - bottom;
       };
       scope.redraw = function() {
-        scope.updateDimensions(dim);
-        return scope.update(dim);
+
+	      // Bad hack to fix resize/drawing issues
+        $timeout(function() {
+          scope.updateDimensions(dim);
+         scope.update(dim);
+        }, 100);
       };
       isUpdatingOptions = false;
       initialHandlers = {
