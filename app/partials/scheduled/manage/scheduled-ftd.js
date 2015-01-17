@@ -371,7 +371,7 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
-					      $scope.canEditt = $scope.hasRole(
+					      $scope.canEdit = $scope.hasRole(
 						      ['ftd',
 						       'scheduling'
 						      ]);

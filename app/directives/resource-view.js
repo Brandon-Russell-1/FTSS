@@ -225,7 +225,7 @@
 							// Bind the edit function (single click in this case)
 							scope.doClick = function () {
 
-								if (scope.canEdit) {
+								if (scope.$parent.canEdit) {
 
 									// Dirty hack to get the current class without a million extra data binds
 									var row = _.find(events, {Id: parseInt($('td:hover').attr('id'))});
