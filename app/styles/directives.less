@@ -127,26 +127,9 @@ time-ago {
 
 .spinner, #spinner svg {
 	padding: 0;
-	-webkit-animation: rotation 1.5s linear 0s infinite;
-	animation: rotation 1.5s linear 0s infinite;
-}
+	-webkit-animation: loading-bar-spinner 1.3s linear infinite;
+	animation: loading-bar-spinner 1.3s linear infinite;
 
-@-webkit-keyframes rotation {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(359deg);
-	}
-}
-
-@keyframes rotation {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(359deg);
-	}
 }
 
 .loading + #loading {
