@@ -71,7 +71,7 @@ directive('linechart', [
         _u.createContent(svg, handlers);
         if (dataPerSeries.length) {
           columnWidth = _u.getBestColumnWidth(dimensions, dataPerSeries, options);
-          _u.drawArea(svg, axes, dataPerSeries, options, handlers).drawColumns(svg, axes, dataPerSeries, columnWidth, options, handlers).drawLines(svg, axes, dataPerSeries, options, handlers);
+          _u.drawColumns(svg, axes, dataPerSeries, columnWidth, options, handlers).drawArea(svg, axes, dataPerSeries, options, handlers).drawLines(svg, axes, dataPerSeries, options, handlers);
           if (options.drawDots) {
             _u.drawDots(svg, axes, dataPerSeries, options, handlers);
           }
@@ -988,7 +988,7 @@ mod.factory('n3utils', [
         if (options == null) {
           return [];
         }
-        colors = d3.scale.category10();
+        colors = d3.scale.category20();
         knownIds = {};
         options.forEach(function(s, i) {
           if (knownIds[s.id] != null) {
