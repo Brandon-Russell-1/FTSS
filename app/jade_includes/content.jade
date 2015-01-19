@@ -1,0 +1,16 @@
+div(style='display:none!important')
+    include sprites
+    include user-messages
+
+include topbar
+include leftbar
+
+#content
+
+    #pageActions(ng-show='loaded && fn.getPage() !== "home"', ng-cloak)
+        include searchbox
+
+        .clearfix
+        hr(style='margin:3px 0 5px')
+
+    #mainView(ng-view)
