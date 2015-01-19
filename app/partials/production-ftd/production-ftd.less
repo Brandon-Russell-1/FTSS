@@ -19,8 +19,12 @@
 		position: absolute;
 		left: 20%;
 		width: 40%;
-		background: rgba(255,255,255, .8);
+		background: rgba(255, 255, 255, .8);
 		z-index: 50;
+	}
+
+	#ftdChart:hover {
+		z-index: 75;
 	}
 
 	#ftdChart {
@@ -35,91 +39,145 @@
 
 			.legend {
 				transform: translate(0, 40px);
+
+				text {
+					font-size: 15px;
+				}
+			}
+
+			.scrubberText {
+				font-size: 14px;
+				letter-spacing: 1px;
+				font-weight: 500;
+			}
+
+			.scrubberText.series_2 {
+				font-weight: 600;
+				fill: #333;
+			}
+
+			.y.axis, .y2.axis {
+
+				text {
+					font-weight: 700;
+				}
+
 			}
 
 			.x.axis {
 
-				.tick text {
-					transform: rotate(-45deg);
-					text-anchor: end!important;
-					font-size: 12px;
+				.tick {
+
+					line {
+						stroke: #aaa;
+						transform: rotate(45deg) scaleY(13);
+						stroke-width: 1px;
+					}
+
+					text {
+						transform: rotate(-45deg);
+						text-anchor: end !important;
+						font-size: 12px;
+						font-weight: 600;
+					}
+
+				}
+
+				.tick:first-child line {
+					visibility: hidden;
 				}
 			}
 		}
 	}
+}
 
-	#embed {
-		height: 100%;
-		h3 {
-			margin-top: 0;
-		}
-		#cancel {
-			display: none;
-		}
+#embed {
+	height: 100%;
+	h3 {
+		margin-top: 0;
 	}
-	td:first-child {
-		width: 100px;
-		padding-left: 25px !important;
+	#cancel {
+		display: none;
 	}
+}
 
-	.mask-img.invalid {
-		border-radius: 6px;
-		box-shadow: none;
-	}
-	.item {
-		a {
-			border-bottom: none;
-		}
-	}
-	td {
-		& > .pull-right {
-			& > .btn {
-				display: block;
-			}
-		}
-		.text-success {
-			line-height: 19px;
-		}
-	}
+td:first-child {
+	width: 100px;
+	padding-left: 25px !important;
+}
 
-	tr:hover {
-		.chartMonths {
-			i {
-				color: #aaa;
-			}
+.mask-img.invalid {
+	border-radius: 6px;
+	box-shadow: none;
+}
+
+.item {
+	a {
+		border-bottom: none;
+	}
+}
+
+td {
+	& > .pull-right {
+		& > .btn {
+			display: block;
 		}
 	}
+	.text-success {
+		line-height: 19px;
+	}
+}
+
+tr:hover {
 	.chartMonths {
-		height: 25px;
-		width: 100%;
-		em {
-			border-bottom: 1px solid #46b8da;
-			background: #46b8da;
-			width: 100%;
-			bottom: 0;
-			left: 0;
-			position: absolute;
-		}
 		i {
-			background: none;
-			color: transparent;
-			font-size: .65em;
-			line-height: 55px;
+			color: #aaa;
 		}
-		b {
-			font-weight: 400;
-			position: relative;
-			height: 20px;
-			line-height: 20px;
-			float: left;
-			margin-left: 2%;
-			width: 6%;
-			text-align: center;
+		i:first-child {
+			color: #333;
 		}
-		& + {
-			.clearfix {
-				height: 13px;
-			}
+	}
+}
+
+.chartMonths {
+	height: 25px;
+	width: 100%;
+	em {
+		border-bottom: 1px solid #46b8da;
+		background: #46b8da;
+		width: 100%;
+		bottom: 0;
+		left: 0;
+		position: absolute;
+	}
+	i:first-child {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		left: 0;
+		line-height: 0;
+		font-size: 0.9em;
+		z-index: 20;
+	}
+	i {
+		background: none;
+		color: transparent;
+		font-size: .65em;
+		line-height: 55px;
+	}
+	b {
+		font-weight: 400;
+		position: relative;
+		height: 20px;
+		line-height: 20px;
+		float: left;
+		margin-left: 2%;
+		width: 6%;
+		text-align: center;
+	}
+	& + {
+		.clearfix {
+			height: 13px;
 		}
 	}
 }

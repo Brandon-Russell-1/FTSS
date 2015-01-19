@@ -78,13 +78,14 @@ FTSS.ng.controller(
 						    for (var i = 0; i < 12; i++) {
 
 							    collection[month.add(-1, 'months').format('YYYYMM')] = {
-								    'sort'    : parseInt(month.format('YYYYMM'), 10),
-								    'text'    : month.format('MMM'),
-								    'date'    : month.clone().toDate(),
-								    'hours'   : 0,
-								    'classes' : 0,
-								    'students': 0,
-								    'impact'  : 0
+								    'sort'     : parseInt(month.format('YYYYMM'), 10),
+								    'text'     : month.format('MMM'),
+								    'date'     : month.clone().toDate(),
+								    'hours'    : 0,
+								    'classes'  : 0,
+								    'students' : 0,
+								    'impact'   : 0,
+								    'available': 0
 							    };
 
 						    }
@@ -148,6 +149,7 @@ FTSS.ng.controller(
 								ftdStats.graph[monthIndex].classes++;
 								ftdStats.graph[monthIndex].students += course.allocatedSeats;
 								ftdStats.graph[monthIndex].impact += (course.allocatedSeats * hours / 8);
+								ftdStats.graph[monthIndex].available += course.Course.Max;
 
 								row.annualHours += hours;
 
@@ -158,16 +160,22 @@ FTSS.ng.controller(
 							}
 						});
 
-						row.max = _.max(chart, 'hours');
 						row.chart = '';
 
 						_(chart).sortBy('sort').each(function (item) {
 
-							var pct = item.hours ? Math.round((item.hours / row.max.hours) * 100) : 0;
+							// We use 175 as the theoratical teaching hours in a month
+							var pct = item.hours ? Math.round((item.hours / 175) * 100) : 0;
 
-							row.chart += '<b><em style="height:' + pct + '%">&nbsp;</em>' +
+							row.chart += '<b><i>' +
+							             (item.hours || '') +
+							             '</i><em style="height:' +
+							             pct +
+							             '%">&nbsp;</em>' +
 
-							             '<i>' + item.text + '</i></b>';
+							             '<i>' +
+							             item.text +
+							             '</i></b>';
 
 						});
 
@@ -178,14 +186,19 @@ FTSS.ng.controller(
 
 					$scope.ftdStats = ftdStats;
 
+					_(ftdStats.graph).each(function (month) {
+
+						month.utilization = (month.students / month.available) * 100 || 0;
+
+					});
+
 					$scope.graph = _.sortBy(ftdStats.graph, 'sort');
 
-					console.log($scope.graph);
 					// Column
 					$scope.graphOptions = {
-						lineMode     : "basis",
-						tension      : 0.7,
-						axes         : {
+						lineMode   : "basis",
+						tension    : 1,
+						axes       : {
 							x : {
 								type: "date",
 								key : "date"
@@ -193,16 +206,16 @@ FTSS.ng.controller(
 							y : {type: "linear"},
 							y2: {type: "linear"}
 						},
-						tooltipMode  : "dots",
-						drawLegend   : true,
-						drawDots     : false,
+						tooltipMode: "dots",
+						drawLegend : true,
+						drawDots   : false,
 
 						series       : [
 							{
 								y        : "impact",
-								label    : "Training Impact (Days * Students)",
+								label    : "Impact",
 								type     : "area",
-								color    : "#efaa33",
+								color    : "#4CAE4C",
 								thickness: "4px",
 								axis     : "y",
 								id       : "series_impact"
@@ -211,26 +224,51 @@ FTSS.ng.controller(
 								y    : "hours",
 								label: "Hours",
 								type : "column",
-								color: "#17becf",
 								axis : "y",
 								id   : "series_hours"
 							},
 							{
 								'y'    : "students",
 								'label': "Students",
-								'color': "#9467bd",
 								'axis' : "y2",
 								'type' : "column",
 								'id'   : "series_students"
+							},
+							{
+								'y'      : 'utilization',
+								'label'  : 'Utilization',
+								'type'   : 'line',
+								thickness: "5px",
+								'axis'   : 'y2',
+								'id'     : 'series_utilization'
 							}
 						],
 						'tooltip'    : {
 							'mode'     : 'scrubber',
 							'formatter': function (x, y, series) {
-								return moment(x).format('MMM YYYY') + ': ' + y + ' ' + series.label;
+
+								var text = parseInt(y, 10);
+
+								switch (series.label) {
+
+									case 'Impact':
+										return text + '  days (students * training days)';
+
+									case 'Utilization':
+										return text + '% seat utilization';
+
+									case 'Hours':
+										return text + ' instructor hours';
+
+									default:
+										return text + ' ' + series.label;
+
+
+								}
+
 							}
 						},
-						'columnsHGap': 10
+						'columnsHGap': 15
 					};
 
 				});
