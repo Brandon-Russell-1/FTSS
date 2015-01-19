@@ -325,6 +325,7 @@
 							 if (loading) {
 
 								 body.className += ' wait';
+
 							 }
 
 							 document.body.style.cursor = loading ? 'wait' : '';
