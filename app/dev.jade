@@ -15,6 +15,19 @@ html(lang='en', ng-app='FTSS')
 
         |<!--[if IE]><meta http-equiv="refresh" content="0;URL='legacy.html'"><![endif]-->
 
+        style(type='text/css').
+            [ng-cloak] {
+                display: none !important;
+            }
+            #setupMessage {
+                position: absolute;
+                background: #222;
+                height: 50px;
+                width: 100%;
+                color: #fff;
+                padding: 15px;
+            }
+
         link(rel='stylesheet', href='css/app.css')
 
     body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}} {{roleClasses}}')
@@ -23,7 +36,7 @@ html(lang='en', ng-app='FTSS')
         img#bg2
         #bgText
 
-        div(style='position:absolute;background:#222;height:50px;width:100%;color:#fff;padding:15px') Setting up FTSS...
+        #setupMessage Setting up FTSS...
 
         include jade_includes/content
 
