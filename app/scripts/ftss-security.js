@@ -10,35 +10,33 @@
 
 	"use strict";
 
-	var firstRun = true,
+	var authorizationMatrix = {
 
-	    authorizationMatrix = {
-
-		    'requirements': ['mtf',
-		                     'ftd'
-		    ],
-
-		    'requests': ['approvers',
-		                 'mtf',
+		'requirements': ['mtf',
 		                 'ftd'
-		    ],
+		],
 
-		    'manage-ftd'    : ['ftd', 'scheduling'],
-		    'scheduled-ftd' : ['ftd', 'scheduling'],
-		    'production-ftd': ['ftd', 'instructor'],
+		'requests': ['approvers',
+		             'mtf',
+		             'ftd'
+		],
 
-		    'backlog': ['approvers',
-		                'mtf',
-		                'ftd'
-		    ],
-		    'hosts'  : ['mtf',
-		                'ftd'
-		    ],
-		    'ttms'   : [
-			    'scheduling'
-		    ]
+		'manage-ftd'    : ['ftd', 'scheduling'],
+		'scheduled-ftd' : ['ftd', 'scheduling'],
+		'production-ftd': ['ftd', 'instructor'],
 
-	    };
+		'backlog': ['approvers',
+		            'mtf',
+		            'ftd'
+		],
+		'hosts'  : ['mtf',
+		            'ftd'
+		],
+		'ttms'   : [
+			'scheduling'
+		]
+
+	};
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
@@ -48,8 +46,8 @@
 
 			    groups = user.groups || [];
 
-				// Extract the name of any groups the user is a member of
-				groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
+			// Extract the name of any groups the user is a member of
+			groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
 
 			if (user === 'DEVELOPER') {
 
@@ -84,32 +82,10 @@
 
 			$scope.initInstructorRole = function () {
 
-				if (firstRun) {
+				checkFTD();
 
-					var email = (user.email || '').toLowerCase();
-
-					firstRun = false;
-
-					$scope.instructor = _.find(caches.Instructors, function (test) {
-						return test.InstructorEmail.toLowerCase() === email;
-					});
-
-					if ($scope.instructor) {
-
-						$scope.ftd = caches.Units[$scope.instructor.UnitId];
-
-						if (groups) {
-
-							groups.push('instructor');
-
-							$scope.roleText += ' • Instructor ';
-
-						}
-
-
-					}
-
-				}
+				// Remove this after the first run
+				$scope.initInstructorRole = angular.noop;
 
 			};
 
@@ -153,8 +129,47 @@
 
 			                      };
 
+			checkFTD();
+
 			// Call doInitPage() as this might be the last item in the async chain to complete
 			_fn.doInitPage();
+
+			function checkFTD() {
+
+				var email = (user.email || '').toLowerCase(),
+
+				    ftd = JSON.parse(localStorage.ftssCachedFTD || false) ||
+
+				          _.find(caches.Instructors, function (test) {
+					          return test.InstructorEmail.toLowerCase() === email;
+				          });
+
+				if (ftd) {
+
+					$scope.initInstructorRole = angular.noop;
+
+					$scope.ftd = caches.Units ? caches.Units[ftd.UnitId] : ftd;
+
+					if (groups) {
+
+						groups.push('instructor');
+
+						$scope.roleText += ' • Instructor ';
+
+					}
+
+					if (!localStorage.ftssCachedFTD) {
+						localStorage.ftssCachedFTD = JSON.stringify(
+							{
+								'Id'      : $scope.ftd.Id,
+								'LongName': $scope.ftd.LongName
+							}
+						);
+					}
+
+				}
+
+			}
 
 		};
 
