@@ -36,11 +36,22 @@ directive('linechart', [
       };
       scope.redraw = function() {
 
-	      // Bad hack to fix resize/drawing issues
+        // Customized for FTSS
         $timeout(function() {
+          var view = $('#mainView');
+
           scope.updateDimensions(dim);
-         scope.update(dim);
-        }, 100);
+
+          dim.width = view.width() * .55;
+          dim.height = view.height() * .85;
+
+          scope.update(dim);
+
+          $('.x.axis line').attr('transform', 'rotate(45)').attr('y2', '75');
+          $('.x.axis text').attr('transform', 'rotate(-45)');
+          $('.legend').attr('transform', 'translate(0 40)');
+        }, 250);
+
       };
       isUpdatingOptions = false;
       initialHandlers = {
@@ -1133,7 +1144,14 @@ mod.factory('n3utils', [
           y2Axis: y2Axis,
           andAddThemIf: function(condition) {
             if (!condition) {
-              style(svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis));
+              style(svg.append('g')
+                        .attr('class', 'x axis')
+                        .attr('transform',
+                              'translate(0,' +
+                              height +
+                              ')')
+                        .call(xAxis));
+
               style(svg.append('g').attr('class', 'y axis').call(yAxis));
               if (drawY2Axis) {
                 style(svg.append('g').attr('class', 'y2 axis').attr('transform', 'translate(' + width + ', 0)').call(y2Axis));
