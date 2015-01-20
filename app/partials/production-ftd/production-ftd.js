@@ -15,18 +15,28 @@ FTSS.ng.controller(
 
 				'sort' : 'InstructorName',
 				'model': 'instructors',
-				'modal': 'instructor-stats'
+				'modal': 'instructor-stats',
+
+				'noFilter': true
 
 			});
 
-			self.bind('ftd').then(function (data) {
+			// We use $scope.edit's modal function to show instructor stats
+			$scope.stats = function () {
+
+				// We have to pass our context to $scope.edit for the instructor stats
+				$scope.edit.apply(this);
+
+			};
+
+			self.bind().then(function (data) {
 
 				var UnitId = $scope.ftd.Id,
 
 				    read = _.clone(FTSS.models.scheduled);
 
 				// Only include unarchived instructors for this unit
-				data = angular.copy(_.filter(data, {'Archived': false}));
+				data = angular.copy(_.filter(data, {'UnitId': UnitId, 'Archived': false}));
 
 				// Only include this unit
 				read.params.$filter = '(UnitId eq ' + UnitId + ')';
