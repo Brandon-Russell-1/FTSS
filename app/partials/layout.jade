@@ -1,14 +1,14 @@
 div(style='display:none!important')
-    include sprites
-    include user-messages
+    include ../jade_includes/sprites
+    include ../jade_includes/user-messages
 
-include topbar
-include leftbar
+include ../jade_includes/topbar
+include ../jade_includes/leftbar
 
 #content
 
     #pageActions(ng-show='loaded && fn.getPage() !== "home"', ng-cloak)
-        include searchbox
+        include ../jade_includes/searchbox
 
         .clearfix
         hr(style='margin:3px 0 5px')

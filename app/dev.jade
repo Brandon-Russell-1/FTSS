@@ -16,14 +16,38 @@ html(lang='en', ng-app='FTSS')
         |<!--[if IE]><meta http-equiv="refresh" content="0;URL='legacy.html'"><![endif]-->
 
         style(type='text/css').
-            [ng-cloak] {
+            body > :not(#setupMessage) {
+                display: none!important;
+            }
+
+            html, body {
+                height: 100%;
+                width: 100%;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                overflow: hidden;
+                position: absolute;
+            }
+
+            body {
+                background-color: #f7f7f7;
+                font-family: 'Open Sans', sans-serif;
+                margin: 0;
+                padding: 0;
+                position: relative;
+            }
+
+            [ng-cloak]  {
                 display: none !important;
             }
             #setupMessage {
                 position: absolute;
                 background: #222;
-                height: 50px;
-                width: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
                 color: #fff;
                 padding: 15px;
             }
@@ -38,9 +62,10 @@ html(lang='en', ng-app='FTSS')
 
         #setupMessage Setting up FTSS...
 
-        include jade_includes/content
+        ng-include(src='"/partials/layout.html"')
 
-        +spinner()
+        #spinner(ng-cloak)
+            +spinner()
 
         script(src='js/vendor.js')
         script(src='js/partials.js')

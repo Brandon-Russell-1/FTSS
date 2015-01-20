@@ -1,13 +1,13 @@
 include ../partials/mixins
 
-header.navbar.navbar-inverse(ng-cloak)
+header.navbar.navbar-inverse
 
     .navbar-header
         span.navbar-brand
             span.white: +icon('af_logo')
             span.text#ftss FTSS |&nbsp
-            span.text#ftd(ng-if='ftd') {{ftd.LongName}} -&nbsp;
-            span.text#roleText {{roleText || 'Getting roles...'}}
+            span.text#ftd(ng-if='ftd', ng-cloak) {{ftd.LongName}} -&nbsp;
+            span.text#roleText(ng-cloak) {{roleText || 'Getting roles...'}}
 
     ul.nav.navbar-nav.pull-right.hidden-xs
 
