@@ -24,6 +24,7 @@
 			'$routeParams',
 			'$timeout',
 			'$http',
+			'$route',
 			function ($scope, $location, SharePoint, $routeParams, $timeout, $http) {
 
 				$scope.cleanSlate = false;
@@ -147,7 +148,7 @@
 					 */
 					'doInitPage': function () {
 
-						if ($scope.isAuthorized && (FTSS.search || $scope.loaded)) {
+						if (!!$scope.isAuthorized && (!!FTSS.search || !!$scope.loaded)) {
 
 							if (!$scope.isAuthorized()) {
 
