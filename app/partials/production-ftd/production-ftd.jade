@@ -40,7 +40,7 @@ include ../mixins
                 tbody
 
                     tr.am-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
-                                        ng-dblclick='stats()',
+                                        ng-click='edit()',
                                         id='row-{{row.Id}}')
 
                         td: photo(size='75px', data='row', watch)
