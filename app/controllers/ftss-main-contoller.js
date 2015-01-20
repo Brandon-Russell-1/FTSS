@@ -27,9 +27,27 @@
 			'$route',
 			function ($scope, $location, SharePoint, $routeParams, $timeout, $http) {
 
+				var jobs = [],
+
+				    checkState = function () {
+
+					    return (!!$scope.isAuthorized && (!!FTSS.search || !!$scope.loaded));
+
+				    };
+
 				$scope.cleanSlate = false;
 
 				var _fn = $scope.fn = {
+
+					'addAsync': function (job) {
+
+						if (checkState()) {
+							job();
+						} else {
+							jobs.push(job);
+						}
+
+					},
 
 					/**
 					 * Disables the page spinner/loading functions and marks everything as complete
@@ -39,12 +57,14 @@
 
 						callback && callback();
 
-						$timeout(function() {
+						$timeout(function () {
 							utils.loading(false);
 							$scope.loaded = true;
 						});
 
-					},
+					}
+
+					,
 
 					/**
 					 * Used to create a permaLink for a given page for bookmarking/sharing
@@ -57,7 +77,9 @@
 							$scope.permaLink += '/' + btoa($scope.searchText.$);
 						}
 
-					},
+					}
+
+					,
 
 					/**
 					 * Gets the current page
@@ -65,7 +87,9 @@
 					 */
 					'getPage': function () {
 						return $location.path().split('/')[1];
-					},
+					}
+
+					,
 
 					/**
 					 * Performs our page navigation function
@@ -84,21 +108,27 @@
 
 						});
 
-					},
+					}
+
+					,
 
 					/**
 					 * Toggles data well collapses
 					 */
 					'doToggleCollapse': function () {
 						$scope.wellCollapse = $scope.wellCollapse ? '' : 'collapsed';
-					},
+					}
+
+					,
 
 					/**
 					 * Toggles data archive visibility
 					 */
 					'doToggleArchive': function () {
 						$scope.showArchive = $scope.showArchive ? '' : 'archived';
-					},
+					}
+
+					,
 
 					/**
 					 * Generates short URLs using the USA.gov API for generating go.usa.gov links
@@ -140,7 +170,9 @@
 								                              page).split('://')[1];
 
 							      });
-					},
+					}
+
+					,
 
 					/**
 					 * Performs the final page initialization.  This is called by multiple async operations so we must
@@ -148,7 +180,7 @@
 					 */
 					'doInitPage': function () {
 
-						if (!!$scope.isAuthorized && (!!FTSS.search || !!$scope.loaded)) {
+						if (checkState()) {
 
 							if (!$scope.isAuthorized()) {
 
@@ -251,6 +283,10 @@
 									$scope.cleanSlate = true;
 								});
 
+							}
+
+							while (jobs.length) {
+								jobs.shift().apply();
 							}
 
 						}

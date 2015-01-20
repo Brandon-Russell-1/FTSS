@@ -96,7 +96,12 @@ FTSS.controller = (function () {
 										if (!_.isEqual(data, last)) {
 
 											last = data;
-											callback && callback(data);
+
+											if (callback) {
+												$scope.fn.addAsync(function () {
+													callback(data);
+												})
+											}
 
 										}
 
