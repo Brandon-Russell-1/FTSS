@@ -78,7 +78,6 @@
 					.replace('ftd', 'FTD Scheduler/Production Supervisor')
 					.replace('curriculum', 'Training/Curriculum Manager')
 					.replace('scheduling', 'J4 Scheduler')
-					.replace('approvers', 'Approver')
 					.replace('admin', 'Administrator')
 					.replace('guest', 'Visitor');
 			}
