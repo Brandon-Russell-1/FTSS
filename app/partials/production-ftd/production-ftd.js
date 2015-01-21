@@ -21,14 +21,6 @@ FTSS.ng.controller(
 
 			});
 
-			// We use $scope.edit's modal function to show instructor stats
-			$scope.stats = function () {
-
-				// We have to pass our context to $scope.edit for the instructor stats
-				$scope.edit.apply(this);
-
-			};
-
 			self.bind().then(function (data) {
 
 				var UnitId = $scope.ftd.Id,
