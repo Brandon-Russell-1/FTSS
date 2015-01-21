@@ -114,7 +114,7 @@ FTSS.ng.controller(
 							    scope.data.endMoment = event.end;
 
 							    // Get the number of days
-							    scope.data.Days = event.end.diff(event.start, 'days');
+							    scope.data.Days = event.end.diff(event.start, 'days') + (event.offset || 0);
 
 							    // Let the view know of our changes
 							    scope.modal.$setDirty();
@@ -318,15 +318,16 @@ FTSS.ng.controller(
 												// Only count this day if it is a weekday and not a down day
 												if (end.isoWeekday() < 6 &&
 												    downDays.indexOf(end.format('YYYY-MM-DD')) < 0) {
-													days -= 1;
+													days--;
 												}
 
 											}
 
-											// Update the model and notify the view
+											// Update the model and notify the view, added offset for strange day count issue--needs another look later on
 											update({
-												       'start': start,
-												       'end'  : end
+												       'start' : start,
+												       'end'   : end,
+												       'offset': 1
 											       });
 
 											// Add the updated event back to the calendar
