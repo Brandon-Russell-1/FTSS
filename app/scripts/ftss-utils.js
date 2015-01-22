@@ -132,6 +132,7 @@
 
 			 };
 
+
 			 /**
 			  * A simple watch destroyer for when we know we don't need all those dirty checks
 			  */
@@ -197,28 +198,6 @@
 
 				 }
 
-			 };
-
-			 utils.watchCount = function (log) {
-				 var root = angular.element(document.getElementsByTagName('body'));
-				 var watchers = [];
-
-				 var f = function (element) {
-					 if (element.data().hasOwnProperty('$scope')) {
-						 angular.forEach(element.data().$scope.$$watchers, function (watcher) {
-							 log && console.log(watcher.last);
-							 watchers.push(watcher);
-						 });
-					 }
-
-					 angular.forEach(element.children(), function (childElement) {
-						 f(angular.element(childElement));
-					 });
-				 };
-
-				 f(root);
-
-				 return watchers.length;
 			 };
 
 			 /**
@@ -381,64 +360,6 @@
 				 return (x > 1000) ? (str[0] + '.' + str[1]).replace('.0', '') + 'K ' : str;
 			 };
 
-
-			 utils.imdsGradeLookup = function (grade) {
-
-				 return {
-
-					        '001': 'AB',
-					        '002': 'Amn',
-					        '003': 'A1C',
-					        '004': 'SrA',
-					        '005': 'SSgt',
-					        '006': 'TSgt',
-					        '007': 'MSgt',
-					        '008': 'SMSgt',
-					        '009': 'CMSgt',
-
-					        '014': '2LT',
-					        '015': '1LT',
-					        '016': 'Capt',
-					        '017': 'Maj',
-					        '018': 'Lt Col',
-					        '019': 'Col',
-
-					        'G01': 'GS1',
-					        'G02': 'GS2',
-					        'G03': 'GS3',
-					        'G04': 'GS4',
-					        'G05': 'GS5',
-					        'G06': 'GS6',
-					        'G07': 'GS7',
-					        'G08': 'GS8',
-					        'G09': 'GS9',
-					        'G10': 'GS10',
-					        'G11': 'GS11',
-					        'G12': 'GS12',
-					        'G13': 'GS13',
-					        'G14': 'GS14',
-
-
-					        'W01': 'WG1',
-					        'W02': 'WG2',
-					        'W03': 'WG3',
-					        'W04': 'WG4',
-					        'W05': 'WG5',
-					        'W06': 'WG6',
-					        'W07': 'WG7',
-					        'W08': 'WG8',
-					        'W09': 'WG9',
-					        'W10': 'WG10',
-					        'W11': 'WG11',
-					        'W12': 'WG12',
-					        'W13': 'WG13',
-					        'W14': 'WG14',
-
-					        'CON': 'Contractor'
-
-				        }[grade] || 'Unknown';
-
-			 };
 
 			 utils.flickr = function () {
 
