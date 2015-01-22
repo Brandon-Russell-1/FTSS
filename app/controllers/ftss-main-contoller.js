@@ -214,23 +214,6 @@
 
 								    };
 
-								if (!pending) {
-
-									var ftd = localStorage['FTSS-selectize-ftd'],
-									    host = localStorage['FTSS-selectize-host'];
-
-									pending = ftd || host ? {} : false;
-
-									if (ftd && validFilters.u) {
-										pending.u = [ftd];
-									}
-
-									if (host && validFilters.h) {
-										pending.h = [host];
-									}
-
-								}
-
 								if (pending) {
 
 									var valMap = [],
