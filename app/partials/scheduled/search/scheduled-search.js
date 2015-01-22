@@ -6,8 +6,7 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'$modal',
-		'SharePoint',
-		function ($scope, $modal, SharePoint) {
+		function ($scope, $modal) {
 
 			var self = FTSS.controller($scope, {
 

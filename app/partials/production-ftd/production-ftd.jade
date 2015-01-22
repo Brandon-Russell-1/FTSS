@@ -4,9 +4,6 @@ include ../mixins
 
     br
 
-    +userInstructions('units', true)
-
-
     #ftdStats
 
         h3 Det {{ftd.Det}} Last 12 Months
@@ -23,7 +20,6 @@ include ../mixins
                 td Students
                 td {{ftdStats.students | number}}
 
-
     #ftdChart
         linechart(data='graph', options='graphOptions')
 
@@ -31,7 +27,7 @@ include ../mixins
 
 #rightScroll.wrapped.col-lg-5
 
-        div(ng-if='groups')
+        div
 
             h3 {{groups.false.length}} Instructors
 
@@ -39,7 +35,7 @@ include ../mixins
 
                 tbody
 
-                    tr.am-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
+                    tr.am-fade-and-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
                                         ng-click='edit()',
                                         id='row-{{row.Id}}')
 

@@ -106,12 +106,7 @@
 
 					_.each(tags[key], function (tag) {
 
-						fTemp.push(
-							[
-								map,
-								'eq',
-								tag
-							].join(' '));
+						fTemp.push(map + ' eq ' + tag);
 
 					});
 
