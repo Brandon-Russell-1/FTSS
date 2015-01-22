@@ -191,7 +191,9 @@
 
 							$scope.initInstructorRole();
 
-							if ($scope.tagBox) {
+							$scope.tagBox = FTSS.tagBox;
+
+							if (FTSS.tagBox) {
 
 								FTSS.filters.$refresh();
 
@@ -329,6 +331,7 @@
 
 					FTSS.selectizeInstances = {};
 					FTSS.pasteAction = false;
+					FTSS.tagBox = false;
 
 				});
 

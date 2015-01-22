@@ -9,11 +9,10 @@
  * @param opts
  * @returns {{$scope: *, bind: 'bind', initialize: 'initialize', process: 'process', scheduledClass: 'scheduledClass', postProcess: 'postProcess'}}
  *
- * @todo need some more commenting/cleanup in FTSS.controller
  */
 FTSS.controller = (function () {
 
-	var tagBox, $modal, SharePoint, $timeout, $alert;
+	var $modal, SharePoint, $timeout, $alert;
 
 	// Grab some angular variables for use later on
 	FTSS.ng.run(
@@ -48,19 +47,12 @@ FTSS.controller = (function () {
 			 *
 			 * @returns {{then: 'then'}}
 			 */
-			'bind': function (prop) {
+			'bind': function (watchTarget) {
 
-				// If loaded we only want to bind the first time
-
-				var single = (prop === 'ftd') || !prop,
-
-				    page = $scope.fn.getPage();
-
-				// Default to cached mode & watch cleanSlate
-				prop = prop || 'cleanSlate';
+				var page = $scope.fn.getPage();
 
 				// The tagBox controls whether the search or tagBox are shown
-				$scope.$parent.tagBox = tagBox = !single;
+				FTSS.tagBox  = !!watchTarget;
 
 				// Copy the model to a local variable for reuse without affecting the original model
 				model = angular.copy(FTSS.models[opts.model]);
@@ -79,55 +71,35 @@ FTSS.controller = (function () {
 				return {
 					'then': function (callback) {
 
-						$scope.fn.doInitPage();
+						// If a watchTarget exists, and a $watch for it, otherwise, keeping on running (faster loads)
+						watchTarget ? $scope.$watch(watchTarget, watchAction) : watchAction(true);
 
-						// Create a $scope.$watch and unwatch = to the return value for unbinding
-						var unwatch = $scope.$watch(prop, function (watch) {
+						function watchAction(watch) {
+
+							// Attempt to call the page init again (async fun)
+							$scope.fn.doInitPage();
 
 							// Only act if there is a valid change to our watch
 							if (watch) {
 
 								var last;
 
+								/**
+								 * Re-request data from the server
+								 */
 								actions.reload = function () {
-
-									var finalize = function (data) {
-
-										if (!_.isEqual(data, last)) {
-
-											last = data;
-
-											if (callback) {
-												$scope.fn.addAsync(function () {
-													callback(data);
-												})
-											}
-
-										}
-
-									};
 
 									if (!opts.static) {
 
 										var filters = [];
 
-										if (!opts.noFilter) {
+										opts.filter && filters.push(opts.filter);
 
-											opts.filter && filters.push(opts.filter);
+										watchTarget && filters.push(watch);
 
-											(prop === 'filter') && filters.push(watch);
+										model.params.$filter = filters.join(' and ');
 
-											(prop === 'ftd') && filters.push('UnitId eq ' + watch.Id);
-
-											model.params.$filter = filters.join(' and ');
-
-										}
-
-										SharePoint
-
-											.read(model)
-
-											.then(finalize);
+										SharePoint.read(model).then(finalize);
 
 									} else {
 
@@ -135,21 +107,42 @@ FTSS.controller = (function () {
 
 									}
 
+									/**
+									 * Pass to the async ops handler if there has been a change
+									 *
+									 * @param data
+									 */
+									function finalize(data) {
+
+										// Only continue if the data has changed
+										if (!_.isEqual(data, last)) {
+
+											// Keep a reference for future update checks
+											last = data;
+
+											// If a callback exists, add it to our async handler
+											callback && $scope.fn.addAsync(function () {
+												callback(data);
+											});
+
+										}
+
+									}
+
 								};
 
+								// Run our reload action now
 								actions.reload();
 
-								// If this is a bind-once and has been called, delete the watch
-								single && unwatch();
-
-								(opts.refresh > 1) && window.setInterval(actions.reload, opts.refresh * 1000);
+								// For auto-refreshing pages
+								(opts.refresh > 1) && window.setInterval(actions.reload, opts.refresh * 15000);
 
 							}
 
-						});
-
+						}
 					}
-				};
+
+				}
 
 			},
 
@@ -182,11 +175,7 @@ FTSS.controller = (function () {
 
 					// We must still pass a then() promise to prevent an error, we're just not executing the callback
 					return {
-						'then': function () {
-
-							$scope.fn.setLoaded();
-
-						}
+						'then': $scope.fn.setLoaded
 					};
 
 				} else {
@@ -224,10 +213,8 @@ FTSS.controller = (function () {
 				// If there is a defined data processor, then execute it against the data as well
 				process && _(data).each(process);
 
-				// If this is a tagBox then we should call taghighlight as well
-				if (tagBox) {
-					utils.tagHighlight(data);
-				}
+				// Finally, do our tagHighlighting if this is a tagBox
+				FTSS.tagBox && utils.tagHighlight(data);
 
 				// Finally, send our data off to the post-processor
 				actions.postProcess(data);
@@ -361,8 +348,8 @@ FTSS.controller = (function () {
 										         $scope.count++;
 
 										         return opts.group ?
-										                utils.deepRead(gp, opts.group) ||
-										                '' : false;
+										                utils.deepRead(gp, opts.group) || '' :
+										                false;
 									         })
 
 									.value();
@@ -371,9 +358,6 @@ FTSS.controller = (function () {
 
 								// Update the scope counter + overload indicator
 								$scope.counter($scope.count, $scope.count !== sifter.length);
-
-								// Finally, do our tagHighlighting if this is a tagBox
-								tagBox && utils.tagHighlight(data);
 
 								// Perform final loading
 								$scope.fn.setLoaded(function () {

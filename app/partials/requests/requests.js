@@ -12,13 +12,15 @@ FTSS.ng.controller(
 
 				'sort' : 'Start',
 				'group': 'Course.Number',
-				'model': 'scheduled'
+				'model': 'scheduled',
+
+				'filter': 'UnitId eq ' + $scope.ftd.Id
 
 			});
 
 			self
 
-				.bind('ftd')
+				.bind()
 
 				.then(function (data) {
 

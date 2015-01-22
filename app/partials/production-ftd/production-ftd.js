@@ -11,30 +11,18 @@ FTSS.ng.controller(
 
 			$scope.pageLimit = 99;
 
-			var self = FTSS.controller($scope, {
+			var read = _.clone(FTSS.models.scheduled);
 
-				'sort' : 'InstructorName',
-				'model': 'instructors',
-				'modal': 'instructor-stats',
+			// Only include this unit
+			read.params.$filter = '(UnitId eq ' + $scope.ftd.Id + ')';
 
-				'noFilter': true
+			// Request the scheduled data for this unit
+			SharePoint.read(read).then(buildProductionView);
 
-			});
+			function buildProductionView(results) {
 
-			self.bind().then(function (data) {
-
-				var UnitId = $scope.ftd.Id,
-
-				    read = _.clone(FTSS.models.scheduled);
-
-				// Only include unarchived instructors for this unit
-				data = angular.copy(_.filter(data, {'UnitId': UnitId, 'Archived': false}));
-
-				// Only include this unit
-				read.params.$filter = '(UnitId eq ' + UnitId + ')';
-
-				// Request the scheduled data for this unit
-				SharePoint.read(read).then(function (results) {
+				// Pass the rest of this op to our async collector just in case the caches aren't loaded yet
+				$scope.fn.addAsync(function () {
 
 					var stats = _(results)
 
@@ -47,8 +35,10 @@ FTSS.ng.controller(
 						    // Load the cache data for every row (this one is a little expensive)
 						    .each(utils.cacheFiller)
 
+						    // Sort oldest to newest
 						    .sortBy('startMoment')
 
+						    // Then reverse
 						    .reverse()
 
 						    // Group the data by InstructorID
@@ -57,10 +47,13 @@ FTSS.ng.controller(
 						    // Return the chained value output from lodash
 						    .value(),
 
+					    // The start of our 12-month range
 					    yearStart = moment().add(-12, 'months'),
 
+					    // End of the 12-month range
 					    yearEnd = moment().add(-1, 'months'),
 
+					    // Builds our monthly statistics objects
 					    buildMonths = (function () {
 
 						    var collection = {},
@@ -90,91 +83,111 @@ FTSS.ng.controller(
 
 					    }()),
 
+					    // FTD-wide stats
 					    ftdStats = {
 						    'hours'   : 0,
 						    'classes' : 0,
 						    'students': 0,
 						    'graph'   : buildMonths()
-					    };
+					    },
 
-					// Complete the controller initialization
-					self.initialize(data).then(function (row) {
+					    // The filtered list of instructors/members
+					    data = angular.copy(_.filter(caches.Instructors, {
+						    'UnitId'  : $scope.ftd.Id,
+						    'Archived': false
+					    }));
 
-						var stat = stats[row.Id],
+					// Load the controller
+					FTSS.controller($scope,
 
-						    chart = buildMonths();
+					                {
 
-						row.search = row.InstructorName;
+						                'sort' : 'InstructorName',
+						                'modal': 'instructor-stats'
 
-						// for aggregate instructor stats
-						row.stats = {
-							'hours'   : 0,
-							'classes' : 0,
-							'students': 0
-						};
+					                })
 
-						row.annualHours = 0;
+						// Initialize with the instructor data
+						.initialize(data)
 
-						// add the data back to the scope
-						row.history = stat;
+						// Pass a function for each instructor
+						.then(function (row) {
 
-						_(stat).each(function (course) {
+							      var stat = stats[row.Id],
 
-							var hours = course.Hours || course.Course.Hours;
+							          chart = buildMonths();
 
-							// Tally all courses taught
-							row.stats.classes++;
+							      row.search = row.InstructorName;
 
-							// Tally hours, looking for a manual hours override first
-							row.stats.hours += hours;
+							      // for aggregate instructor stats
+							      row.stats = {
+								      'hours'   : 0,
+								      'classes' : 0,
+								      'students': 0
+							      };
 
-							// Tally all students taught
-							row.stats.students += course.allocatedSeats;
+							      row.annualHours = 0;
 
-							// If course was taught in the last year, count hours for annualHours
-							if (course.startMoment > yearStart && course.startMoment < yearEnd) {
+							      // add the data back to the scope
+							      row.history = stat;
 
-								var monthIndex = course.startMoment.format('YYYYMM');
+							      _(stat).each(function (course) {
 
-								chart[monthIndex].hours += hours;
-								ftdStats.graph[monthIndex].hours += hours;
-								ftdStats.graph[monthIndex].classes++;
-								ftdStats.graph[monthIndex].students += course.allocatedSeats;
-								ftdStats.graph[monthIndex].impact += (course.allocatedSeats * hours / 8);
-								ftdStats.graph[monthIndex].available += course.Course.Max;
+								      var hours = course.Hours || course.Course.Hours;
 
-								row.annualHours += hours;
+								      // Tally all courses taught
+								      row.stats.classes++;
 
-								ftdStats.classes++;
-								ftdStats.hours += hours;
-								ftdStats.students += course.allocatedSeats;
+								      // Tally hours, looking for a manual hours override first
+								      row.stats.hours += hours;
 
-							}
-						});
+								      // Tally all students taught
+								      row.stats.students += course.allocatedSeats;
 
-						row.chart = '';
+								      // If course was taught in the last year, count hours for annualHours
+								      if (course.startMoment > yearStart && course.startMoment < yearEnd) {
 
-						_(chart).sortBy('sort').each(function (item) {
+									      var monthIndex = course.startMoment.format('YYYYMM');
 
-							// We use 175 as the theoratical teaching hours in a month
-							var pct = item.hours ? Math.round((item.hours / 175) * 100) : 0;
+									      chart[monthIndex].hours += hours;
+									      ftdStats.graph[monthIndex].hours += hours;
+									      ftdStats.graph[monthIndex].classes++;
+									      ftdStats.graph[monthIndex].students += course.allocatedSeats;
+									      ftdStats.graph[monthIndex].impact += (course.allocatedSeats * hours / 8);
+									      ftdStats.graph[monthIndex].available += course.Course.Max;
 
-							row.chart += '<b><i>' +
-							             (item.hours || '') +
-							             '</i><em style="height:' +
-							             pct +
-							             '%">&nbsp;</em>' +
+									      row.annualHours += hours;
 
-							             '<i>' +
-							             item.text +
-							             '</i></b>';
+									      ftdStats.classes++;
+									      ftdStats.hours += hours;
+									      ftdStats.students += course.allocatedSeats;
 
-						});
+								      }
+							      });
 
-						// A rough estimate of instructor time utilization
-						row.annualEffectiveness = Math.floor(row.annualHours / 19.2);
+							      row.chart = '';
 
-					});
+							      _(chart).sortBy('sort').each(function (item) {
+
+								      // We use 175 as the theoratical teaching hours in a month
+								      var pct = item.hours ? Math.round((item.hours / 175) * 100) : 0;
+
+								      row.chart += '<b><i>' +
+								                   (item.hours || '') +
+								                   '</i><em style="height:' +
+								                   pct +
+								                   '%">&nbsp;</em>' +
+
+								                   '<i>' +
+								                   item.text +
+								                   '</i></b>';
+
+							      });
+
+							      // A rough estimate of instructor time utilization
+							      row.annualEffectiveness = Math.floor(row.annualHours / 19.2);
+
+						      });
 
 					$scope.ftdStats = ftdStats;
 
@@ -265,7 +278,9 @@ FTSS.ng.controller(
 
 				});
 
-			});
+
+			}
 
 		}
-	]);
+	]
+);

@@ -21,6 +21,8 @@ FTSS.ng.controller(
 					'model'         : 'scheduled',
 					'modalPlacement': 'wide',
 
+					'filter': 'UnitId eq ' + $scope.ftd.Id,
+
 					'beforeSubmit': function (scope, isNew) {
 
 						// For creating instructor unavailability
@@ -368,7 +370,7 @@ FTSS.ng.controller(
 
 			self
 
-				.bind('ftd')
+				.bind()
 
 				.then(function (data) {
 

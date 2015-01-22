@@ -16,9 +16,7 @@ FTSS.ng.controller(
 
 				'sort' : 'InstructorName',
 				'model': 'instructors',
-				'modal': 'instructor-stats',
-
-				'noFilter': true
+				'modal': 'instructor-stats'
 
 			});
 
