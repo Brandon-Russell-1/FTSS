@@ -7,48 +7,44 @@
 	FTSS.ng.controller(
 		'homeController',
 
-		['$scope',
+		[
+			'$scope',
 
-		 'SharePoint',
+			'SharePoint',
 
-		 function ($scope, SharePoint) {
+			function ($scope, SharePoint) {
 
-			 SharePoint
+				$scope.toggleSlides = true;
 
-				 .read(FTSS.models.updates)
+				SharePoint
 
-				 .then(function (data) {
+					.read(FTSS.models('updates'))
 
-					       $scope.updates = _(data)
+					.then(function (data) {
 
-						       .sortBy('Created')
+						      $scope.updates = _(data)
 
-						       .reverse()
+							      .sortBy('Created')
 
-						       .map(function (d) {
-							            d.date = moment(d.Created).fromNow();
-							            return d;
-						            })
+							      .reverse()
 
-						       .value();
+							      .map(function (d) {
+								           d.date = moment(d.Created).fromNow();
+								           return d;
+							           })
 
-				       });
+							      .value();
 
-			 var complete = function (loaded) {
+						      // Add to the async handler in case this returns first (likely)
+						      $scope.fn.addAsync(function () {
 
-				 if (loaded) {
-					 $scope.courseUpdates = _.filter(caches.MasterCourseList, 'updated');
+							      $scope.courseUpdates = _.filter(caches.MasterCourseList, 'updated');
 
-					 utils.loading(false);
-				 }
+						      });
 
-			 };
+					      });
 
-			 $scope.cleanSlate ? complete(true) : $scope.$parent.$watch('cleanSlate', complete);
-
-			 $scope.toggleSlides = true;
-
-		 }
+			}
 		]);
 
 
