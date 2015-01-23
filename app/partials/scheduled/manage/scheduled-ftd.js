@@ -298,7 +298,7 @@ FTSS.ng.controller(
 									 */
 									'dayClick': function (start) {
 
-										if (isNew && scope.data.CourseId > 0) {
+										if (isNew && _.isNumber(scope.data.CourseId)) {
 
 											// Reference the course
 											var course = caches.MasterCourseList[scope.data.CourseId] || {},
