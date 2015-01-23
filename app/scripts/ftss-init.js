@@ -114,9 +114,6 @@
 	// Default template for lo-dash _.template() function
 	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
-	// Init our utils objects as it is used in various other JS files
-	FTSS.utils = {};
-
 	// This probably doesn't belong here? :-D
 	FTSS.supportEmail = '372trs.trg.ftss@us.af.mil';
 	FTSS.J4Email = '982TRG.J4scheduling@us.af.mil';

@@ -6,16 +6,15 @@
 
 	FTSS.ng.controller(
 		'homeController',
-
 		[
 			'$scope',
-
 			'SharePoint',
-
 			function ($scope, SharePoint) {
 
+				// We will be using the flickr slides how on this page
 				$scope.toggleSlides = true;
 
+				// Read any app updates from the server
 				SharePoint
 
 					.read(FTSS.models('updates'))
