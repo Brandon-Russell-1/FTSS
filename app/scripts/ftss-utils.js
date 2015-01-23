@@ -304,7 +304,7 @@
 
 						// Only do something if the state has changed
 						if (loadingState !== updateState) {
-console.log(updateState);
+
 							if (updateState) {
 
 								body.className += ' wait';

@@ -17,7 +17,7 @@
 	 *
 	 * @parms flat bool
 	 */
-	FTSS.utils.getDownDays = (function () {
+	utils.getDownDays = (function () {
 
 		// Class for our events
 		var className = 'downDay',
