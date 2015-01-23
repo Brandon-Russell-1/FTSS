@@ -69,9 +69,10 @@
 					     $http(
 						     {
 
-							     url         : photo,
-							     method      : 'GET',
-							     responseType: 'arraybuffer'
+							     'url'             : photo,
+							     'method'          : 'GET',
+							     'responseType'    : 'arraybuffer',
+							     'ignoreLoadingBar': true
 
 						     })
 
