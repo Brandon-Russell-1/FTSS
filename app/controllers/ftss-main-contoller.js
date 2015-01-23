@@ -29,18 +29,27 @@
 
 				var jobs = [],
 
+				    /**
+				     * Determines if the page load is complete
+				     *
+				     * @returns {boolean}
+				     */
 				    checkState = function () {
 
 					    return (!!$scope.isAuthorized && (!!FTSS.search || !!$scope.loaded));
 
 				    };
 
-				$scope.cleanSlate = false;
-
 				var _fn = $scope.fn = {
 
+					/**
+					 * Collects async operations that are only executed once the page is initialized
+					 *
+					 * @param job
+					 */
 					'addAsync': function (job) {
 
+						// If already loaded, just execute immediately
 						if (checkState()) {
 							job();
 						} else {
@@ -58,9 +67,10 @@
 						callback && callback();
 
 						$timeout(function () {
-							utils.loading(false);
 							$scope.loaded = true;
 						});
+
+						utils.loading(false);
 
 					}
 
@@ -264,12 +274,11 @@
 
 							} else {
 
-								$timeout(function () {
-									$scope.cleanSlate = true;
-								});
+								_fn.setLoaded();
 
 							}
 
+							// Finally, run through all our async jobs
 							while (jobs.length) {
 								jobs.shift().apply();
 							}
