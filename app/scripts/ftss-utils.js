@@ -16,9 +16,9 @@
 				 * due to performance considerations.  Uses a short-circuit for invalid properties & returns false.
 				 *
 				 * data = {
- *   a1: { b1: "hello" },
- *	 a2: { b2: { c2: "world" } }
- *	}
+				 *   a1: { b1: "hello" },
+				 *	 a2: { b2: { c2: "world" } }
+				 *	}
 				 *
 				 * deepRead(data, "a1.b1") => "hello"
 				 *
