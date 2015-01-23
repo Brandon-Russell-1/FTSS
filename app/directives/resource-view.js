@@ -26,7 +26,7 @@
 
 							var html = {}, events = [], min, minClone, max, dayBase,
 
-							    downDays = FTSS.utils.getDownDays(true),
+							    downDays = utils.getDownDays(true),
 
 							    // Check if this is a weekend, holiday or nothing
 							    specialDay = function (day) {

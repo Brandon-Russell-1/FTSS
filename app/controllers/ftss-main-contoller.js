@@ -51,7 +51,8 @@
 
 						// If already loaded, just execute immediately
 						if (checkState()) {
-							job();
+							$timeout(job);
+							utils.loading(false);
 						} else {
 							jobs.push(job);
 						}
@@ -280,7 +281,7 @@
 
 							// Finally, run through all our async jobs
 							while (jobs.length) {
-								jobs.shift().apply();
+								$timeout(jobs.shift());
 							}
 
 						}
