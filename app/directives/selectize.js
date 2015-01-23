@@ -313,13 +313,13 @@
 
 					    };
 
-					SharePoint.read(FTSS.models.catalog).then(loadCourses);
+					SharePoint.read(FTSS.models('catalog')).then(loadCourses);
 
-					SharePoint.read(FTSS.models.units).then(loadUnits);
+					SharePoint.read(FTSS.models('units')).then(loadUnits);
 
-					SharePoint.read(FTSS.models.hosts).then(loadHosts);
+					SharePoint.read(FTSS.models('hosts')).then(loadHosts);
 
-					SharePoint.read(FTSS.models.instructors).then(loadInstructors);
+					SharePoint.read(FTSS.models('instructors')).then(loadInstructors);
 
 					function loadCourses(response) {
 

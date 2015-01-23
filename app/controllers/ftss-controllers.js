@@ -52,10 +52,10 @@ FTSS.controller = (function () {
 				var page = $scope.fn.getPage();
 
 				// The tagBox controls whether the search or tagBox are shown
-				FTSS.tagBox  = !!watchTarget;
+				FTSS.tagBox = !!watchTarget;
 
 				// Copy the model to a local variable for reuse without affecting the original model
-				model = angular.copy(FTSS.models[opts.model]);
+				model = FTSS.models(opts.model);
 
 				// Bind archive() & edit() to the scope in case they are needed
 				$scope.archive = actions.archive;
@@ -91,7 +91,7 @@ FTSS.controller = (function () {
 
 									if (!opts.static) {
 
-										var filters = [];
+										var filters = model.params.$filter || [];
 
 										opts.filter && filters.push(opts.filter);
 
@@ -640,8 +640,8 @@ FTSS.controller = (function () {
 						// Keep a copy of the original data for comparison
 						old = actions.data[scope.data.Id] || {};
 
-						// angular.copy() so we don't overwrite the original model
-						fields = angular.copy(model.params.$select);
+						// Reference list of fields to use
+						fields = FTSS.models(opts.model).params.$select;
 
 						//  Compare each field from the list of fields to the old data
 						_(fields).each(function (field) {

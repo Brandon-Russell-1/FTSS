@@ -11,7 +11,7 @@ FTSS.ng.controller(
 
 			$scope.pageLimit = 99;
 
-			var read = _.clone(FTSS.models.scheduled);
+			var read = FTSS.models('scheduled');
 
 			// Only include this unit
 			read.params.$filter = '(UnitId eq ' + $scope.ftd.Id + ')';

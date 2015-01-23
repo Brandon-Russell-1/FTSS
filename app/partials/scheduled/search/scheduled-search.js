@@ -12,7 +12,7 @@ FTSS.ng.controller(
 
 				    'sort' : 'Start',
 				    'group': 'Course.Number',
-				    'model': 'scheduled'
+				    'model': 'scheduledSearch'
 
 			    }),
 

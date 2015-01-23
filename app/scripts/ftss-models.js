@@ -11,7 +11,8 @@
 
 	"use strict";
 
-	FTSS.models = {
+	// Our internal collection of models--these are immutable! :-)
+	var _models = {
 
 		'catalog': {
 
@@ -54,9 +55,9 @@
 
 		'hosts': {
 
-			'cache' : true,
-			'source': 'HostUnits',
-			'params': {
+			'cache'  : true,
+			'source' : 'HostUnits',
+			'params' : {
 				'$select': [
 					'Unit',
 					'FTD',
@@ -108,10 +109,35 @@
 
 		},
 
+		'scheduledSearch': {
+
+			'source': 'Scheduled',
+			'params': {
+				'$filter': [
+					'Archived eq false',
+					'CourseId ne null',
+					'Start ge ' + moment().diff(moment('2000-01-01'), 'days')
+				],
+				'$select': [
+					'UnitId',
+					'CourseId',
+					'Start',
+					'InstructorId',
+					'Host',
+					'Other',
+					'Requests_JSON',
+					'ClassNotes',
+					'TTMS'
+				]
+			}
+
+		},
+
 		'ttms': {
 
 			'source': 'Scheduled',
 			'params': {
+				'$filter': ['TTMS eq null and Archived eq false'],
 				'$select': [
 					'UnitId',
 					'CourseId',
@@ -130,7 +156,7 @@
 			'params': {
 				'$select': [
 					'Start',
-				    'TTMS'
+					'TTMS'
 				]
 			}
 
@@ -204,6 +230,18 @@
 			}
 
 		}
+
+	};
+
+	/**
+	 * Allows us to capture a copy of the model without corrupting the original (immutable models FTW)
+	 *
+	 * @param  modelName String
+	 * @returns model Object
+	 */
+	FTSS.models = function (modelName) {
+
+		return _.cloneDeep(_models[modelName]);
 
 	};
 

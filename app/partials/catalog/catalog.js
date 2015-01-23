@@ -24,7 +24,7 @@ FTSS.ng.controller(
 					if (scope.data.Id && scope.data.Number !== self.data[scope.data.Id].Number) {
 
 						// Copy the model from FTSS.models
-						var model = angular.copy(FTSS.models.courseInvalidate);
+						var model = FTSS.models('courseInvalidate');
 
 						// Search the schedule for active/built classes that match this CourseId
 						model.params.$filter = [
