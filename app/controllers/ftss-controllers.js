@@ -296,7 +296,7 @@ FTSS.controller = (function () {
 									                  .replace(/\sand\s/gi, ' ')
 
 									                  // Strip everything else out
-									                  .replace(/[^\w\s\|]/mg, '')
+									                  .replace(/[^\w\s\|\-\_]/mg, '')
 
 									                  // Split by spaces
 									                  .split(' '),
@@ -640,7 +640,7 @@ FTSS.controller = (function () {
 						// Keep a copy of the original data for comparison
 						old = actions.data[scope.data.Id] || {};
 
-						// Reference list of fields to use
+						// Reference l
 						fields = FTSS.models(opts.model).params.$select;
 
 						//  Compare each field from the list of fields to the old data
