@@ -97,10 +97,10 @@ mixin panelGroup(ico, title, type)
 
                 +panelGroup('flag', 'Course Updates', 'success')
 
-                    h4(ng-repeat='course in courseUpdates') {{course.PDS}} - {{course.Number}}
+                    h4(ng-repeat='course in courseUpdates') {{::course.PDS}} - {{::course.Number}}
 
             #updates
                 +panelGroup('info-circle', 'FTSS Updates', 'warning')
                     blockquote.blockquote-reverse(ng-repeat='update in updates')
-                        p(style='font-size:.85em') {{update.Update}}
-                        footer {{update.date}}
+                        p(style='font-size:.85em') {{::update.Update}}
+                        footer {{::update.date}}

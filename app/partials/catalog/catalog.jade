@@ -23,7 +23,7 @@ include ../mixins
                         tr.traverse(ng-repeat='row in group track by row.Id',
                                             ng-class='{archived:row.Archived}',
                                             ng-dblclick='canEdit && edit(false)',
-                                            id='row-{{row.Id}}')
+                                            id='row-{{::row.Id}}')
 
 
                             td.uppercase
@@ -32,22 +32,22 @@ include ../mixins
 
                                     .col-lg-10
 
-                                        b {{row.PDS}}
+                                        b {{::row.PDS}}
                                         |&nbsp;-&nbsp;
                                         a(target='etca',
-                                            href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{row.Number}}')
-                                            | {{row.Number}}
+                                            href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{::row.Number}}')
+                                            | {{::row.Number}}
 
                                     .pull-right.archiveExclude(ng-show='row.Units',
-                                                hover='{{row.PDS}} is taught by {{row.Units.length}} FTDs:',
-                                                content='{{row.units}}',
+                                                hover='{{::row.PDS}} is taught by {{::row.Units.length}} FTDs:',
+                                                content='{{::row.units}}',
                                                 left
                                                 style='margin-right: 15px;')
                                                 +icon('instructor')
                                     .pull-right.archiveOnly(style='margin-right:10%') *** ARCHIVED COURSE ***
 
                                 .row
-                                    .col-lg-12.peek {{row.Title}}
+                                    .col-lg-12.peek {{::row.Title}}
 
 
-    iframe(name='etca', ng-if='count') {{FocusCourse}}'
+    iframe(name='etca', ng-if='count') {{::FocusCourse}}'

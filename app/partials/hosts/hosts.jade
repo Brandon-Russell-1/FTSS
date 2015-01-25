@@ -5,10 +5,10 @@ include ../mixins
 
     td
 
-    td.bold {{row.Unit}}
+    td.bold {{::row.Unit}}
 
-    td {{row.det.LongName}}
+    td {{::row.det.LongName}}
 
-    td {{row.Email}}
+    td {{::row.Email}}
 
-    td: +actions(true, true, false, 'Host Unit')
+    td: +actions(false, true, false, 'Host Unit')
