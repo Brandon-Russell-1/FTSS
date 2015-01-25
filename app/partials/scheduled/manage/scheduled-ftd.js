@@ -12,399 +12,408 @@ FTSS.ng.controller(
 			// Increase the default page limit to 100 for this view
 			$scope.pageLimit = 100;
 
-			var //unitId = $scope.ftd.Id, // || parseInt($scope.filter.match(/\d+/)[0]),
+			$scope.ftd ? getSchedule() : $scope.fn.addAsync(getSchedule);
 
-				self = FTSS.controller($scope, {
+			function getSchedule() {
 
-					'sort'          : 'startMoment',
-					'group'         : 'Instructor.InstructorName',
-					'model'         : 'scheduled',
-					'modalPlacement': 'wide',
+				var //unitId = $scope.ftd.Id, // || parseInt($scope.filter.match(/\d+/)[0]),
 
-					'filter': 'UnitId eq ' + $scope.ftd.Id,
+					self = FTSS.controller($scope, {
 
-					'beforeSubmit': function (scope, isNew) {
+						'sort'          : 'startMoment',
+						'group'         : 'Instructor.InstructorName',
+						'model'         : 'scheduled',
+						'modalPlacement': 'wide',
 
-						// For creating instructor unavailability
-						if (isNew && scope.data.CourseId < 0) {
+						'filter': 'UnitId eq ' + $scope.ftd.Id,
 
-							delete scope.data.Host;
-							delete scope.data.Other;
-							delete scope.data.CourseId;
+						'beforeSubmit': function (scope, isNew) {
 
-							scope.data.TTMS = '*';
+							// For creating instructor unavailability
+							if (isNew && scope.data.CourseId < 0) {
 
-						} else {
+								delete scope.data.Host;
+								delete scope.data.Other;
+								delete scope.data.CourseId;
 
-							var newVal = scope.data,
-
-							    oldVal = self.data[newVal.Id] || {};
-
-							switch (true) {
-
-								// Course start/end days have changed
-								case(oldVal.Start !== newVal.Start):
-								case(oldVal.Days !== newVal.Day):
-									/*
-
-									 utils.sendEmail(
-									 {
-									 'to'     : FTSS.J4Email,
-									 'subject': 'Scheduled Class Change',
-									 'body'   : ''
-
-									 });
-									 */
-
-									break;
-
-								// Course is archived for the first time
-								case (!oldVal.Archived && newVal.Archived):
-
-									break;
-
-							}
-
-						}
-
-					},
-
-					/**
-					 * This is our modal dialog used for editing existing classes as well as building new classes
-					 * @param scope
-					 * @param isNew
-					 */
-					'edit': function (scope, isNew) {
-
-						// Bind isNew to scope for stupid green button crap
-						scope.isNew = isNew;
-
-						// Only add valid date-ranges to FC
-						var getDates = function () {
-
-							    // Handle unique titles for leave/class
-							    var title = scope.data.CourseId < 0 ? 'UNAVAILABLE' : 'THIS COURSE';
-
-							    return scope.data.startMoment &&
-							           scope.data.startMoment.isValid() ?
-
-							           [{
-								            'title'           : title,
-								            'start'           : scope.data.startMoment,
-								            'end'             : scope.data.endMoment.clone().add(1, 'days'),
-								            'className'       : 'success',
-								            'editable'        : true,
-								            'durationEditable': true,
-								            'allDay'          : true
-							            }
-							           ]
-
-								    : [];
-
-						    },
-
-						    // Perform our date updates
-						    update = function (event) {
-
-							    // Get the start date
-							    scope.data.startMoment = event.start;
-
-							    // Update the model's start date
-							    scope.data.Start = event.start.format('YYYY-MM-DD');
-
-							    // Update our end date for the modal view
-							    scope.data.endMoment = event.end;
-
-							    // Get the number of days
-							    scope.data.Days = event.end.diff(event.start, 'days') + (event.offset || 0);
-
-							    // Let the view know of our changes
-							    scope.modal.$setDirty();
-
-						    },
-
-						    hoursOverride = scope.data.Hours;
-
-						// If this is a new class, pre-fill the reserved seats with 0
-						if (isNew) {
-
-							scope.data.UnitId = $scope.unit.Id;
-							scope.data.Host = 0;
-							scope.data.Other = 0;
-
-						}
-
-						// Setup uour empty calendar for FullCalendar
-						scope.eventsInstructor = [];
-
-						// Monitors the InstructorId to load their teaching schedule
-						scope.$watch('data.InstructorId', function (instructor) {
-
-							// If we have selected an instructor, try to get their teaching schedule
-							if (instructor) {
-
-								// Build this instructor schedule and add it to the first calendar
-								scope.eventsInstructor[0] =
-
-								_($scope.rawSchedule)
-
-									// Limit to just this instructor
-									.filter({'InstructorId': instructor})
-
-									// Do not include the current class in this list
-									.reject({'Id': scope.data.Id})
-
-									// Convert to a FullCalender-friendly dataset
-									.map(function (row) {
-
-										     return {
-											     'title': (caches.MasterCourseList[row.CourseId] ||
-											               {}).PDS ||
-											     'UNAVAILABLE',
-											     'start': row.startMoment,
-											     'end': row.endMoment.clone().add(1,
-											                                      'days'),
-											     'className': 'info'
-										     }
-
-									     })
-
-									.value() || [];
+								scope.data.TTMS = '*';
 
 							} else {
 
-								// Make sure we remove any old events
-								scope.eventsInstructor[0] = [];
+								var newVal = scope.data,
+
+								    oldVal = self.data[newVal.Id] || {};
+
+								switch (true) {
+
+									// Course start/end days have changed
+									case(oldVal.Start !== newVal.Start):
+									case(oldVal.Days !== newVal.Day):
+										/*
+
+										 utils.sendEmail(
+										 {
+										 'to'     : FTSS.J4Email,
+										 'subject': 'Scheduled Class Change',
+										 'body'   : ''
+
+										 });
+										 */
+
+										break;
+
+									// Course is archived for the first time
+									case (!oldVal.Archived && newVal.Archived):
+
+										break;
+
+								}
 
 							}
 
-							// Add our down days and holidays ot a different calendar
-							scope.eventsInstructor[1] = utils.getDownDays();
-
-							// Finally, add our current class to a third calendar
-							scope.eventsInstructor[2] = getDates();
-
-						});
+						},
 
 						/**
-						 * Get Open Seats, performs live counting of remaining seat openings in modals
-						 *
-						 * @returns
+						 * This is our modal dialog used for editing existing classes as well as building new classes
+						 * @param scope
+						 * @param isNew
 						 */
-						scope.getOpenSeats = function (countOnly) {
+						'edit': function (scope, isNew) {
 
-							// Only attempt this if a CourseID exists
-							if (scope.data.CourseId > 0) {
+							// Bind isNew to scope for stupid green button crap
+							scope.isNew = isNew;
 
-								var requests = _(scope.data.Requests_JSON).reduce(function (count, request) {
+							// Only add valid date-ranges to FC
+							var getDates = function () {
 
-									    // Only count seats pending (1) or approved (2) against total
-									    return (request[0] < 3) ? count + request[1].length : count;
+								    // Handle unique titles for leave/class
+								    var title = scope.data.CourseId < 0 ? 'UNAVAILABLE' : 'THIS COURSE';
 
-								    }, 0),
+								    return scope.data.startMoment &&
+								           scope.data.startMoment.isValid() ?
 
-								    open = (caches.MasterCourseList[scope.data.CourseId].Max -
-								            (scope.data.Host || 0) -
-								            (scope.data.Other || 0) -
-								            requests);
+								           [
+									           {
+										           'title'           : title,
+										           'start'           : scope.data.startMoment,
+										           'end'             : scope.data.endMoment.clone().add(1, 'days'),
+										           'className'       : 'success',
+										           'editable'        : true,
+										           'durationEditable': true,
+										           'allDay'          : true
+									           }
+								           ]
 
-								return countOnly ? open :
+									    : [];
 
-								       open < 0 ? 'Overbooked by ' + Math.abs(open) :
+							    },
 
-								       open > 0 ? open + ' Open Seats' :
+							    // Perform our date updates
+							    update = function (event) {
 
-								       'Class Full';
+								    // Get the start date
+								    scope.data.startMoment = event.start;
 
-							} else {
+								    // Update the model's start date
+								    scope.data.Start = event.start.format('YYYY-MM-DD');
 
-								return '';
+								    // Update our end date for the modal view
+								    scope.data.endMoment = event.end;
 
-							}
+								    // Get the number of days
+								    scope.data.Days = event.end.diff(event.start, 'days') + (event.offset || 0);
 
-						};
+								    // Let the view know of our changes
+								    scope.modal.$setDirty();
 
-						scope.data.requests = utils.requestDecode(scope.data.Requests_JSON);
+							    },
 
-						// Our shortcut helpers for building different types of classes
-						scope.shortcut = function (shortcut) {
+							    hoursOverride = scope.data.Hours;
 
-							switch (shortcut) {
+							// If this is a new class, pre-fill the reserved seats with 0
+							if (isNew) {
 
-								// Create a leave/tdy/cto unavailable date range
-								case 0:
-									FTSS.selectizeInstances.CourseId.setValue(-1);
-									break;
-
-								// Create historical data
-								case 1:
-									scope.data.TTMS = 'OLD';
-									break;
-
-								// Create a training session
-								default:
-									scope.data.TTMS = 'TS';
-
-
-							}
-
-						};
-
-						// Update our data to match the new course
-						scope.$watch('data.CourseId', function (id) {
-
-							// If this is a valid course only
-							if (id > 0) {
-
-								var course = caches.MasterCourseList[id] || {};
-
-								// We are binding this to scope vs scope.data since it isn't a part of the SP data (just a local thing)
-								scope.AcademicDays = course.Days || '-';
-
-								// Just overwrite whatever the user specified since they changed courses
-								scope.data.Hours = hoursOverride || course.Hours;
+								scope.data.UnitId = $scope.unit.Id;
+								scope.data.Host = 0;
+								scope.data.Other = 0;
 
 							}
 
-						});
+							// Setup uour empty calendar for FullCalendar
+							scope.eventsInstructor = [];
 
-						// Wait until the modal is visible
-						scope.$on('modal.show', function () {
+							// Monitors the InstructorId to load their teaching schedule
+							scope.$watch('data.InstructorId', function (instructor) {
 
-							// Init our calendar
-							utils.initInstructorCalendar(
-								{
+								// If we have selected an instructor, try to get their teaching schedule
+								if (instructor) {
 
-									'allDayDefault': true,
-									'header'       : {
-										'left'  : 'title',
-										'center': '',
-										'right' : 'today prev,next'
-									},
+									// Build this instructor schedule and add it to the first calendar
+									scope.eventsInstructor[0] =
 
-									'defaultDate': scope.data.startMoment,
+									_($scope.rawSchedule)
 
-									'buttonText': {
-										today: 'Go to Today'
-									},
+										// Limit to just this instructor
+										.filter({'InstructorId': instructor})
 
-									'eventResize': update,
+										// Do not include the current class in this list
+										.reject({'Id': scope.data.Id})
 
-									'eventDrop': update,
+										// Convert to a FullCalender-friendly dataset
+										.map(function (row) {
 
-									/**
-									 * This is what auto-calculates our course length
-									 * @param start
-									 */
-									'dayClick': function (start) {
+											     return {
+												     'title': (caches.MasterCourseList[row.CourseId] ||
+												               {}).PDS ||
+												     'UNAVAILABLE',
+												     'start': row.startMoment,
+												     'end': row.endMoment.clone().add(1,
+												                                      'days'),
+												     'className': 'info'
+											     }
 
-										if (isNew && _.isNumber(scope.data.CourseId)) {
+										     })
 
-											// Reference the course
-											var course = caches.MasterCourseList[scope.data.CourseId] || {},
+										.value() || [];
 
-											    // copy the days
-											    days = Number(course.Days || 1),
+								} else {
 
-											    // get the end date
-											    end = start.clone(),
+									// Make sure we remove any old events
+									scope.eventsInstructor[0] = [];
 
-											    downDays = utils.getDownDays(true);
+								}
 
-											// loop through the days, sipping weekends
-											while (days > 1) {
+								// Add our down days and holidays ot a different calendar
+								scope.eventsInstructor[1] = utils.getDownDays();
 
-												// Add a day to our range
-												end.add(1, 'days');
+								// Finally, add our current class to a third calendar
+								scope.eventsInstructor[2] = getDates();
 
-												// Only count this day if it is a weekday and not a down day
-												if (end.isoWeekday() < 6 &&
-												    downDays.indexOf(end.format('YYYY-MM-DD')) < 0) {
-													days--;
+							});
+
+							/**
+							 * Get Open Seats, performs live counting of remaining seat openings in modals
+							 *
+							 * @returns
+							 */
+							scope.getOpenSeats = function (countOnly) {
+
+								// Only attempt this if a CourseID exists
+								if (scope.data.CourseId > 0) {
+
+									var requests = _(scope.data.Requests_JSON).reduce(function (count, request) {
+
+										    // Only count seats pending (1) or approved (2) against total
+										    return (request[0] < 3) ? count + request[1].length : count;
+
+									    }, 0),
+
+									    open = (caches.MasterCourseList[scope.data.CourseId].Max -
+									            (scope.data.Host || 0) -
+									            (scope.data.Other || 0) -
+									            requests);
+
+									return countOnly ? open :
+
+									       open < 0 ? 'Overbooked by ' + Math.abs(open) :
+
+									       open > 0 ? open + ' Open Seats' :
+
+									       'Class Full';
+
+								} else {
+
+									return '';
+
+								}
+
+							};
+
+							scope.data.requests = utils.requestDecode(scope.data.Requests_JSON);
+
+							// Our shortcut helpers for building different types of classes
+							scope.shortcut = function (shortcut) {
+
+								switch (shortcut) {
+
+									// Create a leave/tdy/cto unavailable date range
+									case 0:
+										FTSS.selectizeInstances.CourseId.setValue(-1);
+										break;
+
+									// Create historical data
+									case 1:
+										scope.data.TTMS = 'OLD';
+										break;
+
+									// Create a training session
+									default:
+										scope.data.TTMS = 'TS';
+
+
+								}
+
+							};
+
+							// Update our data to match the new course
+							scope.$watch('data.CourseId', function (id) {
+
+								// If this is a valid course only
+								if (id > 0) {
+
+									var course = caches.MasterCourseList[id] || {};
+
+									// We are binding this to scope vs scope.data since it isn't a part of the SP data (just a local thing)
+									scope.AcademicDays = course.Days || '-';
+
+									// Just overwrite whatever the user specified since they changed courses
+									scope.data.Hours = hoursOverride || course.Hours;
+
+								}
+
+							});
+
+							// Wait until the modal is visible
+							scope.$on('modal.show', function () {
+
+								// Init our calendar
+								utils.initInstructorCalendar(
+									{
+
+										'allDayDefault': true,
+										'header'       : {
+											'left'  : 'title',
+											'center': '',
+											'right' : 'today prev,next'
+										},
+
+										'defaultDate': scope.data.startMoment,
+
+										'buttonText': {
+											today: 'Go to Today'
+										},
+
+										'eventResize': update,
+
+										'eventDrop': update,
+
+										/**
+										 * This is what auto-calculates our course length
+										 * @param start
+										 */
+										'dayClick': function (start) {
+
+											// Only continue if this is a new and has a course selected
+											if (isNew && _.isNumber(scope.data.CourseId)) {
+
+												// Reference the course
+												var course = caches.MasterCourseList[scope.data.CourseId] || {},
+
+												    // copy the days
+												    days = Number(course.Days || 1),
+
+												    // get the end date
+												    end = start.clone(),
+
+												    downDays = utils.getDownDays(true);
+
+												// loop through the days, sipping weekends
+												while (days > 1) {
+
+													// Add a day to our range
+													end.add(1, 'days');
+
+													// Only count this day if it is a weekday and not a down day
+													if (end.isoWeekday() < 6 &&
+													    downDays.indexOf(end.format('YYYY-MM-DD')) < 0) {
+														days--;
+													}
+
 												}
+
+												// Update the model and notify the view, added offset for strange day count issue--needs another look later on
+												update({
+													       'start' : start,
+													       'end'   : end,
+													       'offset': 1
+												       });
+
+												// Add the updated event back to the calendar
+												scope.eventsInstructor[2] = getDates();
 
 											}
 
-											// Update the model and notify the view, added offset for strange day count issue--needs another look later on
-											update({
-												       'start' : start,
-												       'end'   : end,
-												       'offset': 1
-											       });
-
-											// Add the updated event back to the calendar
-											scope.eventsInstructor[2] = getDates();
-
 										}
+									});
 
-									}
-								});
+							});
 
-						});
+						}
 
-					}
+					});
 
-				});
+				/**
+				 * This is a helper to default to searching for only the next three months of scheduled classes.
+				 * The idea is to give the scheduler a more manageable set of data to work with.
+				 */
+				if (!$scope.searchText.$) {
 
-			/**
-			 * This is a helper to default to searching for only the next three months of scheduled classes.
-			 * The idea is to give the scheduler a more manageable set of data to work with.
-			 */
-			if (!$scope.searchText.$) {
+					var format = 'MMMM',
 
-				var format = 'MMMM',
+					    month = moment();
 
-				    month = moment();
+					// Type the next three months as a search criteria, i.e. "January or February or March"
+					$scope.searchText.$ = [
+						month.format(format),
+						month.add(1, 'months').format(format),
+						month.add(1, 'months').format(format),
+					].join(' or ');
 
-				// Type the next three months as a search criteria, i.e. "January or February or March"
-				$scope.searchText.$ = [
-					month.format(format),
-					month.add(1, 'months').format(format),
-					month.add(1, 'months').format(format),
-				].join(' or ');
+				}
+
+				// Bind the seat request function
+				$scope.request = utils.requestSeats($scope, $modal, SharePoint);
+
+				self
+
+					.bind()
+
+					.then(function (data) {
+
+						      $scope.canEdit = $scope.hasRole(
+							      [
+								      'ftd',
+								      'scheduling'
+							      ]);
+
+						      // Load our unit data based on the dropdown
+						      $scope.unit = angular.copy(caches.Units[$scope.ftd.Id]);
+
+						      // Add our fake "instructor unavailable placeholder
+						      $scope.unit.Courses.unshift(
+							      {
+								      'Id'   : -1,
+								      'label': '<div><h5>*** Instructor Unavailable to Teach ***</h5></div>'
+							      });
+
+						      // Bind the unit.courses to coursesDropdown for selectize
+						      $scope.coursesDropdown = $scope.unit.Courses;
+
+						      // Bind the filtered instructor list for this unit
+						      $scope.instructorDropdown = _.filter(angular.copy(caches.Instructors),
+						                                           {'UnitId': $scope.unit.Id});
+
+						      // We can always request in this view
+						      $scope.canRequest = true;
+
+						      // Finish data binding and processing
+						      self.initialize(data).then(utils.processScheduledRow);
+
+						      // Get a copy of the data into rawSchedule for showing in modal
+						      $scope.rawSchedule = _.reject(angular.copy(data), 'Archived');
+					      });
 
 			}
-
-			// Bind the seat request function
-			$scope.request = utils.requestSeats($scope, $modal, SharePoint);
-
-			self
-
-				.bind()
-
-				.then(function (data) {
-
-					      $scope.canEdit = $scope.hasRole(
-						      ['ftd',
-						       'scheduling'
-						      ]);
-
-					      // Load our unit data based on the dropdown
-					      $scope.unit = angular.copy(caches.Units[$scope.ftd.Id]);
-
-					      // Add our fake "instructor unavailable placeholder
-					      $scope.unit.Courses.unshift(
-						      {
-							      'Id'   : -1,
-							      'label': '<div><h5>*** Instructor Unavailable to Teach ***</h5></div>'
-						      });
-
-					      // Bind the unit.courses to coursesDropdown for selectize
-					      $scope.coursesDropdown = $scope.unit.Courses;
-
-					      // Bind the filtered instructor list for this unit
-					      $scope.instructorDropdown = _.filter(angular.copy(caches.Instructors),
-					                                           {'UnitId': $scope.unit.Id});
-
-					      // We can always request in this view
-					      $scope.canRequest = true;
-
-					      // Finish data binding and processing
-					      self.initialize(data).then(utils.processScheduledRow);
-
-					      // Get a copy of the data into rawSchedule for showing in modal
-					      $scope.rawSchedule = _.reject(angular.copy(data), 'Archived');
-				      });
 
 		}
 	])
