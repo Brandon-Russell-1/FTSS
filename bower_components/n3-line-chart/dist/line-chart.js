@@ -37,7 +37,6 @@ directive('linechart', [
       scope.redraw = function() {
 
         // Customized for FTSS
-        $timeout(function() {
           var view = $('#mainView');
 
           scope.updateDimensions(dim);
@@ -50,7 +49,7 @@ directive('linechart', [
           $('.x.axis line').attr('transform', 'rotate(45)').attr('y2', '75');
           $('.x.axis text').attr('transform', 'rotate(-45)');
           $('.legend').attr('transform', 'translate(0 40)');
-        }, 250);
+	      $('#ftdChart').addClass('ng-enter-active');
 
       };
       isUpdatingOptions = false;
