@@ -14,6 +14,16 @@
 	// Our internal collection of models--these are immutable! :-)
 	var _models = {
 
+		'users': {
+			'source': 'UserInformationList',
+			'params': {
+				'$select': [
+					'Name',
+					'WorkEMail'
+				]
+			}
+		},
+
 		'catalog': {
 
 			'cache' : true,
@@ -28,8 +38,7 @@
 					'Title',
 					'Number',
 					'IMDS',
-					'Priority',
-					'Archived'
+					'Priority'
 				]
 			}
 
@@ -122,6 +131,7 @@
 					'UnitId',
 					'CourseId',
 					'Start',
+					'Days',
 					'InstructorId',
 					'Host',
 					'Other',

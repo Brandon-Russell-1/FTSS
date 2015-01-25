@@ -2,6 +2,17 @@
 
 (function () {
 
+	utils.startDayFinder = (function () {
+
+		start = moment('2000-01-01', 'YYYY-MM-DD');
+
+		return function (days) {
+
+			return start.clone().add(days, 'days');
+
+		}
+
+	}());
 
 	FTSS.ng.run(
 		[
@@ -86,7 +97,7 @@
 
 					row.Instructor = caches.Instructors[row.InstructorId] || {};
 
-					row.startMoment = moment(row.Start);
+					row.startMoment = utils.startDayFinder(row.Start);
 					row.endMoment = row.startMoment.clone().add(row.Days - 1, 'days');
 
 					row.dateRange = row.startMoment.format('D MMM YYYY') +
@@ -314,7 +325,7 @@
 							} else {
 
 								body.className = body.className.replace('wait', '');
-								document.body.style.cursor =  '';
+								document.body.style.cursor = '';
 
 							}
 

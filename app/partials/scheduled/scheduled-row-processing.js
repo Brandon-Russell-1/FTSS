@@ -143,7 +143,7 @@
 			row.search = row.Instructor.InstructorName + ' unavailable';
 
 			// Calculate the start time
-			row.startMoment = moment(row.Start);
+			row.startMoment = utils.startDayFinder(row.Start);
 
 			// Calculate the end time
 			row.endMoment = row.startMoment.clone().add(row.Days - 1, 'days');
