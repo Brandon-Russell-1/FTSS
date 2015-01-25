@@ -19,3 +19,7 @@ test/test-results.xml
 vendor/random.js
 
 vendor/prefetch.js
+
+app/assets/prefetch.js
+
+app/assets/prefetch.min.js
