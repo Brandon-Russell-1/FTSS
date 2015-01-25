@@ -53,6 +53,7 @@
 						    'backlog',
 						    'hosts',
 						    'admin',
+						    'admin-instructors',
 						    'reset',
 					        'production-ftd'
 					    ];

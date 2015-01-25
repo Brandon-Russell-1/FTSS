@@ -12,6 +12,10 @@
 
 	var authorizationMatrix = {
 
+		    'admin': ['admin'],
+
+		    'admin-instructors': ['admin'],
+
 		    'requirements': [
 			    'mtf',
 			    'ftd'

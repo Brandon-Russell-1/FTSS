@@ -1,0 +1,38 @@
+include ../../mixins
+
+#embed.wrapped.col-lg-7
+
+    h3 {{users.length}} Users Found in SharePoint Site
+
+    table.table.table-striped.table-expanded.table-hover
+        tbody
+            tr(ng-repeat='row in users')
+                td
+                    b {{::row.Name}}
+                    br
+                    span {{::row.WorkEMail}}
+
+
+#rightScroll.wrapped.col-lg-5.addNew
+
+    +grouping()
+
+        table.table.table-striped.table-expanded.table-hover
+
+            tbody
+
+                tr(ng-repeat='row in group track by row.Id')
+
+                    td
+
+                        b.form-control(contenteditable,
+                                        blur,
+                                        ng-model='row.InstructorName',
+                                        onEnter='inlineUpdate("InstructorName")',
+                                        placeholder='Member, i.e. SSgt John Doe')
+
+                        .form-control(contenteditable,
+                                        blur,
+                                        ng-model='row.InstructorEmail',
+                                        onEnter='inlineUpdate("InstructorEmail")',
+                                        placeholder='Email address')
