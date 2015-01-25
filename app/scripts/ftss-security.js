@@ -12,56 +12,92 @@
 
 	var authorizationMatrix = {
 
-		'requirements': ['mtf',
-		                 'ftd'
-		],
+		    'requirements': [
+			    'mtf',
+			    'ftd'
+		    ],
 
-		'requests': ['approvers',
-		             'mtf',
-		             'ftd'
-		],
+		    'requests': [
+			    'approvers',
+			    'mtf',
+			    'ftd'
+		    ],
 
-		'manage-ftd'    : ['ftd', 'scheduling'],
-		'scheduled-ftd' : ['ftd', 'scheduling'],
-		'production-ftd': ['ftd', 'instructor'],
+		    'manage-ftd'    : ['ftd', 'scheduling'],
+		    'scheduled-ftd' : ['ftd', 'scheduling'],
+		    'production-ftd': ['ftd', 'instructor'],
 
-		'backlog': ['approvers',
-		            'mtf',
-		            'ftd'
-		],
-		'hosts'  : ['mtf',
-		            'ftd'
-		],
-		'ttms'   : [
-			'scheduling'
-		]
+		    'backlog': [
+			    'approvers',
+			    'mtf',
+			    'ftd'
+		    ],
+		    'hosts'  : [
+			    'mtf',
+			    'ftd'
+		    ],
+		    'ttms'   : [
+			    'scheduling'
+		    ]
 
-	};
+	    },
+
+	    isAdmin = false,
+
+	    groups = [];
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
-		var initSecurity = function (user) {
+		$scope.initInstructorRole = angular.noop;
 
-			var isAdmin = false,
+		$scope.roleClasses = '';
+		$scope.roleText = '';
 
-			    groups = user.groups || [];
 
-			// Extract the name of any groups the user is a member of
-			groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
+		/**
+		 * This eliminates the needless server calls for user/group info when developing FTSS.
+		 *
+		 * Yes, someone could easily spoof the global variable (if they paused the code during page load
+		 * and changed it.  However, this is all just client-view stuff anyway.  Additionally, doing so
+		 * would cause them more problems as it would force everything to read from a different SharePoint
+		 * site altogether.  Finally, we make a double check by validating the file name matches.
+		 *
+		 */
+		if (PRODUCTION === false && location.pathname === '/dev.html') {
 
-			if (user === 'DEVELOPER') {
+			// We are assuming they are an admin and this is in development mode
+			initSecurity('DEVELOPER');
 
-				isAdmin = true;
+			isAdmin = true;
 
-				$scope.roleClasses = 'admin';
+			$scope.roleClasses = 'admin';
 
-				$scope.roleText = 'DEVELOPER MODE';
+			$scope.roleText = 'DEVELOPER MODE';
 
-				user = {
-					'email': 'jeffrey.mccoy.2@us.af.mil'
-				};
+			$scope.ftd = {
+				'Id'      : 9,
+				'LongName': 'Robins AFB (Det. 306)'
+			};
 
-			} else {
+			completeSecurity();
+
+		} else {
+
+			checkFTD();
+
+			// Load our user data into FTSS
+			SharePoint.user($scope).then(initSecurity);
+
+		}
+
+		function initSecurity(user) {
+
+			checkFTD(user);
+
+			SharePoint.groups().then(function (spGroups) {
+
+				// Extract the name of any groups the user is a member of
+				groups = groups.concat(spGroups.name ? [spGroups.name] : _.pluck(spGroups, 'name'));
 
 				groups = groups.length ? groups : ['guest'];
 
@@ -77,17 +113,58 @@
 					.replace('curriculum', 'Training/Curriculum Manager')
 					.replace('scheduling', 'J4 Scheduler')
 					.replace('admin', 'Administrator')
+					.replace('instructor', 'FTD Instructor/Supervisor')
 					.replace('guest', 'Visitor');
+
+				completeSecurity();
+
+			});
+
+		}
+
+		function checkFTD(user) {
+
+			if ($scope.ftd) {
+				return;
 			}
 
-			$scope.initInstructorRole = function () {
+			var ftd = JSON.parse(localStorage.ftssCachedFTD || false) ||
 
-				checkFTD();
+			          _.find(caches.Instructors, function (test) {
+				          return test.InstructorEmail.toLowerCase() === (user.email || '').toLowerCase();
+			          });
 
-				// Remove this after the first run
-				$scope.initInstructorRole = angular.noop;
+			if (ftd) {
 
-			};
+				$scope.ftd = caches.Units ? caches.Units[ftd.UnitId] : ftd;
+
+				groups.push('instructor');
+
+				if (!localStorage.ftssCachedFTD) {
+					localStorage.ftssCachedFTD = JSON.stringify(
+						{
+							'Id'      : $scope.ftd.Id,
+							'LongName': $scope.ftd.LongName
+						}
+					);
+				}
+
+			} else {
+
+				$scope.initInstructorRole = function () {
+
+					checkFTD(user);
+
+					// Remove this after the first run
+					$scope.initInstructorRole = angular.noop;
+
+				};
+
+			}
+
+		}
+
+		function completeSecurity() {
 
 			/**
 			 * Test for a particular user role
@@ -129,71 +206,14 @@
 
 			                      };
 
-			checkFTD();
-
 			// Call doInitPage() as this might be the last item in the async chain to complete
 			_fn.doInitPage();
 
-			function checkFTD() {
-
-				var email = (user.email || '').toLowerCase(),
-
-				    ftd = JSON.parse(localStorage.ftssCachedFTD || false) ||
-
-				          _.find(caches.Instructors, function (test) {
-					          return test.InstructorEmail.toLowerCase() === email;
-				          });
-
-				if (ftd) {
-
-					$scope.initInstructorRole = angular.noop;
-
-					$scope.ftd = caches.Units ? caches.Units[ftd.UnitId] : ftd;
-
-					if (groups) {
-
-						groups.push('instructor');
-
-						$scope.roleText += ' • Instructor ';
-
-					}
-
-					if (!localStorage.ftssCachedFTD) {
-						localStorage.ftssCachedFTD = JSON.stringify(
-							{
-								'Id'      : $scope.ftd.Id,
-								'LongName': $scope.ftd.LongName
-							}
-						);
-					}
-
-				}
-
-			}
-
-		};
-
-		/**
-		 * This eliminates the needless server calls for user/group info when developing FTSS.
-		 *
-		 * Yes, someone could easily spoof the global variable (if they paused the code during page load
-		 * and changed it.  However, this is all just client-view stuff anyway.  Additionally, doing so
-		 * would cause them more problems as it would force everything to read from a different SharePoint
-		 * site altogether.  Finally, we make a double check by validating the file name matches.
-		 *
-		 */
-		if (PRODUCTION === false && location.pathname === '/dev.html') {
-
-			// We are assuming they are an admin and this is in development mode
-			initSecurity('DEVELOPER');
-
-		} else {
-
-			// Load our user data into FTSS
-			SharePoint.user($scope).then(initSecurity);
 
 		}
 
 	};
 
-}());
+}()
+)
+;
