@@ -271,11 +271,8 @@
 								} else {
 
 									emptyFinish();
+
 								}
-
-							} else {
-
-								_fn.setLoaded();
 
 							}
 
