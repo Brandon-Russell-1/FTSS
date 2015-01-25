@@ -28,7 +28,7 @@
 		    ],
 
 		    'manage-ftd'    : ['ftd', 'scheduling'],
-		    'scheduled-ftd' : ['ftd', 'scheduling'],
+		    'scheduled-ftd' : ['ftd', 'scheduling', 'instructor'],
 		    'production-ftd': ['ftd', 'instructor'],
 
 		    'backlog': [
@@ -158,9 +158,6 @@
 				$scope.initInstructorRole = function () {
 
 					checkFTD(user);
-
-					// Remove this after the first run
-					$scope.initInstructorRole = angular.noop;
 
 				};
 
