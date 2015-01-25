@@ -13,11 +13,20 @@ FTSS.ng.controller(
 
 			var read = FTSS.models('scheduled');
 
-			// Only include this unit
-			read.params.$filter = '(UnitId eq ' + $scope.ftd.Id + ')';
+			$scope.ftd && getProductionData() || $scope.fn.addAsync(getProductionData);
 
-			// Request the scheduled data for this unit
-			SharePoint.read(read).then(buildProductionView);
+			function getProductionData() {
+
+				utils.loading(true);
+
+				// Only include this unit
+				read.params.$filter = '(UnitId eq ' + $scope.ftd.Id + ')';
+
+				// Request the scheduled data for this unit
+				SharePoint.read(read).then(buildProductionView);
+
+			}
+
 
 			function buildProductionView(results) {
 
@@ -95,20 +104,23 @@ FTSS.ng.controller(
 					    data = angular.copy(_.filter(caches.Instructors, {
 						    'UnitId'  : $scope.ftd.Id,
 						    'Archived': false
-					    }));
+					    })),
 
-					// Load the controller
-					FTSS.controller($scope,
 
-					                {
+					    // Load the controller
+					    self = FTSS.controller($scope,
 
-						                'sort' : 'InstructorName',
-						                'modal': 'instructor-stats'
+					                           {
 
-					                })
+						                           'sort' : 'InstructorName',
+						                           'modal': 'instructor-stats'
 
-						// Initialize with the instructor data
-						.initialize(data)
+					                           });
+
+					$scope.stats = self.edit();
+
+					// Initialize with the instructor data
+					self.initialize(data)
 
 						// Pass a function for each instructor
 						.then(function (row) {
@@ -275,6 +287,8 @@ FTSS.ng.controller(
 						},
 						'columnsHGap': 15
 					};
+
+					utils.loading(false);
 
 				});
 

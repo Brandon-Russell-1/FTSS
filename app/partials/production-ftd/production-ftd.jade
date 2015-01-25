@@ -20,7 +20,7 @@ include ../mixins
                 td Students
                 td {{::ftdStats.students | number}}
 
-    #ftdChart
+    #ftdChart.am-fade.ng-enter
         linechart(data='graph', options='graphOptions')
 
 
@@ -36,7 +36,7 @@ include ../mixins
                 tbody
 
                     tr.am-fade-and-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
-                                        ng-click='edit()',
+                                        ng-click='stats()',
                                         id='row-{{row.Id}}')
 
                         td: photo(size='75px', data='row', watch)
