@@ -52,8 +52,8 @@
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
+		// Initialize our $scope variables
 		$scope.initInstructorRole = angular.noop;
-
 		$scope.roleClasses = '';
 		$scope.roleText = '';
 
@@ -68,9 +68,6 @@
 		 *
 		 */
 		if (PRODUCTION === false && location.pathname === '/dev.html') {
-
-			// We are assuming they are an admin and this is in development mode
-			initSecurity('DEVELOPER');
 
 			isAdmin = true;
 
@@ -87,24 +84,29 @@
 
 		} else {
 
+			// First try to check for the cached FTD settings (before the user data is loaded)
 			checkFTD();
 
 			// Load our user data into FTSS
-			SharePoint.user($scope).then(initSecurity);
+			SharePoint.user().then(initSecurity);
 
 		}
 
 		function initSecurity(user) {
 
+			// Check again if this is an FTD user (should only happen the first time for them)
 			checkFTD(user);
 
+			// Load the SP groups every time
 			SharePoint.groups().then(function (spGroups) {
 
 				// Extract the name of any groups the user is a member of
 				groups = groups.concat(spGroups.name ? [spGroups.name] : _.pluck(spGroups, 'name'));
 
+				// If no groups were found, just add our "guest" group
 				groups = groups.length ? groups : ['guest'];
 
+				// Check for the admin group
 				isAdmin = groups.indexOf('admin') > -1;
 
 				// Used to modify views based on roles
@@ -120,12 +122,17 @@
 					.replace('instructor', 'FTD Instructor/Supervisor')
 					.replace('guest', 'Visitor');
 
+				// Finish the security code
 				completeSecurity();
 
 			});
 
 		}
 
+		/**
+		 *
+		 * @param user
+		 */
 		function checkFTD(user) {
 
 			if ($scope.ftd) {
@@ -165,6 +172,9 @@
 
 		}
 
+		/**
+		 * Complete security by binding $scope.hasRole(), $scope.isAuthorized() and then running doInitPage()
+		 */
 		function completeSecurity() {
 
 			/**
@@ -184,9 +194,8 @@
 			};
 
 			/**
-			 * Performs page validation check, this is a private function to help keep things a little more protected
+			 * Performs page validation check
 			 *
-			 * @private
 			 */
 			$scope.isAuthorized = isAdmin ?
 
@@ -209,7 +218,6 @@
 
 			// Call doInitPage() as this might be the last item in the async chain to complete
 			_fn.doInitPage();
-
 
 		}
 
