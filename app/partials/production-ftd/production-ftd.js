@@ -37,6 +37,7 @@ FTSS.ng.controller(
 
 						    // Ignore our instructor unavailability
 						    .reject({'CourseId': null})
+						    .reject({'CourseId': -1})
 
 						    // Ignore cancelled classes
 						    .reject('Archived')

@@ -124,7 +124,7 @@
 			'params': {
 				'$filter': [
 					'Archived eq false',
-					'CourseId ne null',
+					'CourseId gt 1',
 					'Start ge ' + moment().diff(moment('2000-01-01'), 'days')
 				],
 				'$select': [
