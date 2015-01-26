@@ -25,7 +25,7 @@
 			'ngSanitize',
 			'ui.calendar',
 			'n3-line-chart',
-		    'angular-loading-bar'
+			'angular-loading-bar'
 		]);
 
 	/*
@@ -55,7 +55,7 @@
 						    'admin',
 						    'admin-instructors',
 						    'reset',
-					        'production-ftd'
+						    'production-ftd'
 					    ];
 
 				while (routes.length) {
@@ -106,8 +106,8 @@
 
 		              // These are the ng-sharepoint parameters for the DEVELOPMENT version of FTSS
 		              'offline'     : false,
-		              'baseURL'     : base + 'development/_vti_bin/ListData.svc/',
-		              'user'        : {'url': base + 'development/_vti_bin/UserGroup.asmx'},
+		              'baseURL'     : base + 'dev2/_vti_bin/ListData.svc/',
+		              'user'        : {'url': base + 'dev2/_vti_bin/UserGroup.asmx'},
 		              'cacheVersion': 23
 
 	              });
@@ -120,7 +120,7 @@
 	FTSS.J4Email = '982TRG.J4scheduling@us.af.mil';
 
 	// Helper variable for handling production vs development mode photos
-	FTSS.photoURL = PRODUCTION ? base + 'live/Bios/' : base + 'development/Bios/';
+	FTSS.photoURL = PRODUCTION ? base + 'live/Bios/' : base + 'dev2/Bios/';
 
 	// These are the default user preferences for the app
 	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {
