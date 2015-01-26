@@ -66,14 +66,19 @@
 			// Try to load the instructor's data
 			row.Instructor = caches.Instructors[row.InstructorId] || {};
 
-			// Only search by instructor name + unavailable
-			row.search = row.Instructor.InstructorName + ' unavailable';
-
 			// Calculate the start time
 			row.startMoment = utils.startDayFinder(row.Start);
 
 			// Calculate the end time
 			row.endMoment = row.startMoment.clone().add(row.Days - 1, 'days');
+
+			// Setup the search params
+			row.search = [
+				row.Instructor.InstructorName ,
+				'unavailable',
+				row.startMoment.format('MMMM'),
+				row.ClassNotes
+			].join(' ');
 
 		} else {
 
