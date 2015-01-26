@@ -10,26 +10,13 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				    'sort' : 'Start',
-				    'group': 'Course.Number',
-				    'model': 'scheduledSearch'
+				'sort' : 'Start',
+				'group': 'Course.Number',
+				'model': 'scheduledSearch'
 
-			    });
+			});
 
-			$scope.autoApprove = $scope.hasRole
-			([
-				 'ftd',
-				 'scheduling'
-			 ]);
-
-			$scope.canRequest = $scope.hasRole
-			([
-				 'mtf',
-				 'ftd',
-				 'scheduling'
-			 ]);
-
-			$scope.request = function() {
+			$scope.request = function () {
 
 				var row = this;
 
@@ -107,12 +94,53 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
+					      $scope.autoApprove = $scope.hasRole
+					      ([
+						       'ftd',
+						       'scheduling'
+					       ]);
+
+					      $scope.canRequest = $scope.hasRole
+					      ([
+						       'mtf',
+						       'ftd',
+						       'scheduling'
+					       ]);
+
 					      self.initialize(data).then(function (row) {
 
 						      utils.processScheduledRow(row);
 
 						      // Hide full classes by default
 						      row.Archived = (row.openSeats < 1);
+
+						      // The URL for our mailTo link
+						      row.mailFTD = row.FTD.Email +
+						                    '?subject=FTSS Class Inquiry for ' +
+						                    row.Course.PDS +
+						                    ' Class #' +
+						                    row.TTMS;
+
+						      if (row.MTT) {
+
+							      row.locationName = row.MTT;
+							      row.locationCoords = caches.geodataFlat[row.MTT].toString()
+
+						      } else {
+
+							      row.locationName = row.FTD.LongName;
+							      row.locationCoords = row.FTD.Location;
+
+						      }
+
+						      // This is the hover image for each FTD
+						      row.map = row.locationCoords ?
+
+						                'https://maps.googleapis.com/maps/api/staticmap?' +
+						                'sensor=false&size=400x300&zoom=5&markers=color:red|' +
+						                row.locationCoords.replace(/\s/g, '')
+
+							      : '';
 
 					      });
 

@@ -191,8 +191,12 @@
 										                   event.Course.Min) ? 'short' : event.className;
 
 										// Add trainingSession class if TTMS contains TS
-										if (event.TTMS && event.TTMS.indexOf('TS') > -1) {
+										if (event.TTMS && event.TTMS.toUpperCase().indexOf('TS') > -1) {
 											event.className = 'trainingSession';
+										}
+
+										if(event.MTT) {
+											event.className = 'mtt';
 										}
 
 										// Add our html to the event

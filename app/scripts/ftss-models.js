@@ -112,7 +112,8 @@
 					'Requests_JSON',
 					'ClassNotes',
 					'J4Notes',
-					'TTMS'
+					'TTMS',
+				    'MTT'
 				]
 			}
 
@@ -129,6 +130,7 @@
 				],
 				'$select': [
 					'UnitId',
+					'MTT',
 					'CourseId',
 					'Start',
 					'Days',

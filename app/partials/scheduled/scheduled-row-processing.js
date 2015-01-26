@@ -116,18 +116,6 @@
 			// Auto archive (in the view) older classes
 			row.Archived = row.Archived || row.endMoment.isBefore(lastWeek);
 
-			// The URL for our mailTo link
-			row.mailFTD = row.FTD.Email +
-			              '?subject=FTSS Class Inquiry for ' +
-			              row.Course.PDS +
-			              ' Class #' +
-			              row.TTMS;
-
-			// This is the hover image for each FTD
-			row.map = 'https://maps.googleapis.com/maps/api/staticmap?' +
-			          'sensor=false&size=400x300&zoom=5&markers=color:red|' +
-			          row.FTD.Location.replace(/\s/g, '');
-
 			// Hide the J4 notes if they have the leading #
 			row.J4Notes =  (row.J4Notes && row.J4Notes[0] === '#') ? '' : row.J4Notes;
 

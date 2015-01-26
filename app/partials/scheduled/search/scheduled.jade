@@ -48,11 +48,11 @@ include ../__scheduled-mixins
                             tr
                                 td Location
                                 td
-                                    a(href='https://www.google.com/maps/@{{::row.FTD.Location | nospace}},15z',
+                                    a(href='https://www.google.com/maps/@{{::row.locationCoords | nospace}},15z',
                                         target='_blank',
                                         hover="<img style='width:400px;height:300px' src='{{::row.map}}'/>")
 
-                                        | {{::row.FTD.LongName}}
+                                        | {{::row.locationName}}
 
                                     a.no-border.pull-right(href='mailto:{{::row.mailFTD}}',
                                     hover='Contact the FTD about this class.')

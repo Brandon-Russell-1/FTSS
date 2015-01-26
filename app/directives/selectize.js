@@ -22,13 +22,17 @@
 			opts,
 
 			{
-				'labelField'  : opts.label || 'label',
-				'maxItems'    : 1,
-				'options'     : (!opts.watch && scope.$parent[opts.select] || options[opts.select]) || null,
-				'plugins'     : opts.maxItems > 1 ? [
+				'labelField': opts.label || 'label',
+				'maxItems': 1,
+				'options': (!opts.watch &&
+				            scope.$parent[opts.select] ||
+				            options[opts.select] ||
+				            caches[opts.select]) ||
+				null,
+				'plugins': opts.maxItems > 1 ? [
 					'remove_button'
 				] : null,
-				'onChange'    : function (val) {
+				'onChange': function (val) {
 
 					// Do not run when initializing the value
 					if (loaded) {
@@ -543,7 +547,9 @@
 
 						// Strange bug we need to look into later on, just try/catch for now...
 						try {
-							selectize = FTSS.selectizeInstances[opts.field] = $(element).selectize(opts)[0].selectize;
+							selectize
+							= FTSS.selectizeInstances[opts.field || attrs.selectize]
+							= $(element).selectize(opts)[0].selectize;
 						} catch (e) {}
 
 						selectize && scope.modal && scope.modal

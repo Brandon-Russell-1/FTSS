@@ -36,10 +36,19 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                 .row
                     ul.nav.nav-tabs#shortcuts
 
-                        li Shortcuts
-                        li: a(ng-click='shortcut(2)') Training Session
-                        li: a(ng-click='shortcut(1)') Historical
-                        li: a(ng-click='shortcut(0)') Unavailable
+                        li Type
+                        li.pull-right
+                            select.form-control(
+                                ng-change='selectType()',
+                                ng-model='recordType',
+                                ng-options='o for o in recordTypes')
+
+                .row(ng-show='data.MTT')
+                    +formGroup(' Location')
+                        .input-group
+                            .input-group-addon.w15:  +icon('location')
+                            .input-group-selectize(explain='scheduled-edit-mtt', right)
+                                select(selectize='geodata', bind='data.MTT')
 
                 .row
                     +formGroup('Course')

@@ -231,29 +231,91 @@ FTSS.ng.controller(
 
 							scope.data.requests = utils.requestDecode(scope.data.Requests_JSON);
 
-							// Our shortcut helpers for building different types of classes
-							scope.shortcut = function (shortcut) {
+							// Wrap this in a closure simply for organization--we'll probably move out of here later on
+							(function () {
 
-								switch (shortcut) {
+								// Collection of modes for type of classes to create
+								scope.recordTypes = [
+									'Regular Class',
+									'Training Session',
+									'Mobile Training Team',
+									'Instructor Unavailability',
+									'Historical Class Entry'
+								];
 
-									// Create a leave/tdy/cto unavailable date range
-									case 0:
-										FTSS.selectizeInstances.CourseId.setValue(-1);
-										break;
+								// Our shortcut helpers for building different types of classes
+								scope.selectType = function () {
 
-									// Create historical data
-									case 1:
-										scope.data.TTMS = 'OLD';
-										break;
+									var courseSelect = FTSS.selectizeInstances['data.CourseId'];
 
-									// Create a training session
+									// Reset a few things first @todo:  need to replace with a regex later on
+									scope.data.TTMS = (scope.data.TTMS || '')
+														.replace('TS', '')
+														.replace('OLD', '')
+														.replace('*', '');
+									
+									scope.data.MTT = null;
+
+									// Change off of unavailability
+									if (scope.data.CourseId < 1) {
+										courseSelect.setValue(scope.$parent.coursesDropdown[1].Id);
+									}
+
+									switch (getRecord()) {
+
+										case 1:
+											scope.data.TTMS = 'TS';
+											break;
+
+										case 2:
+											scope.data.MTT = true;
+											break;
+
+										// Create a leave/tdy/cto unavailable date range
+										case 3:
+											courseSelect.setValue(-1);
+											break;
+
+										// Create historical data
+										case 4:
+											scope.data.TTMS = 'OLD';
+											break;
+
+									}
+
+								};
+
+								switch (true) {
+
+									case isNew:
+										return setRecord(0);
+
+									case ((scope.data.TTMS || '').indexOf('TS') > -1):
+										return setRecord(1);
+
+									case (scope.data.TTMS === 'OLD'):
+										return setRecord(4);
+
+									case (scope.data.CourseId < 1):
+										return setRecord(3);
+
+									case (!!scope.data.MTT):
+										return setRecord(2);
+
 									default:
-										scope.data.TTMS = 'TS';
-
-
+										setRecord(0);
 								}
 
-							};
+								function getRecord() {
+									return scope.recordTypes.indexOf(scope.recordType);
+								}
+
+								function setRecord(val) {
+									scope.recordType = scope.recordTypes[val];
+								}
+
+							}());
+
 
 							// Update our data to match the new course
 							scope.$watch('data.CourseId', function (id) {
@@ -371,47 +433,40 @@ FTSS.ng.controller(
 
 				}
 
-				// Bind the seat request function
-				$scope.request = utils.requestSeats($scope, $modal, SharePoint);
+				self.bind().then(function (data) {
 
-				self
+					$scope.canEdit = $scope.hasRole(
+						[
+							'ftd',
+							'scheduling'
+						]);
 
-					.bind()
+					// Load our unit data based on the dropdown
+					$scope.unit = angular.copy(caches.Units[$scope.ftd.Id]);
 
-					.then(function (data) {
+					// Add our fake "instructor unavailable placeholder
+					$scope.unit.Courses.unshift(
+						{
+							'Id'   : -1,
+							'label': '<div><h5>*** Instructor Unavailable to Teach ***</h5></div>'
+						});
 
-						      $scope.canEdit = $scope.hasRole(
-							      [
-								      'ftd',
-								      'scheduling'
-							      ]);
+					// Bind the unit.courses to coursesDropdown for selectize
+					$scope.coursesDropdown = $scope.unit.Courses;
 
-						      // Load our unit data based on the dropdown
-						      $scope.unit = angular.copy(caches.Units[$scope.ftd.Id]);
+					// Bind the filtered instructor list for this unit
+					$scope.instructorDropdown = _.filter(angular.copy(caches.Instructors),
+					                                     {'UnitId': $scope.unit.Id});
 
-						      // Add our fake "instructor unavailable placeholder
-						      $scope.unit.Courses.unshift(
-							      {
-								      'Id'   : -1,
-								      'label': '<div><h5>*** Instructor Unavailable to Teach ***</h5></div>'
-							      });
+					// We can always request in this view
+					$scope.canRequest = true;
 
-						      // Bind the unit.courses to coursesDropdown for selectize
-						      $scope.coursesDropdown = $scope.unit.Courses;
+					// Finish data binding and processing
+					self.initialize(data).then(utils.processScheduledRow);
 
-						      // Bind the filtered instructor list for this unit
-						      $scope.instructorDropdown = _.filter(angular.copy(caches.Instructors),
-						                                           {'UnitId': $scope.unit.Id});
-
-						      // We can always request in this view
-						      $scope.canRequest = true;
-
-						      // Finish data binding and processing
-						      self.initialize(data).then(utils.processScheduledRow);
-
-						      // Get a copy of the data into rawSchedule for showing in modal
-						      $scope.rawSchedule = _.reject(angular.copy(data), 'Archived');
-					      });
+					// Get a copy of the data into rawSchedule for showing in modal
+					$scope.rawSchedule = _.reject(angular.copy(data), 'Archived');
+				});
 
 			}
 
