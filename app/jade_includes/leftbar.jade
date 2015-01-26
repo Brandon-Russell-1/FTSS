@@ -10,6 +10,7 @@ div(ng-cloak)
         +link('scheduled', 'search', 'Search Classes')
         +link('catalog', 'books', 'Course Catalog')
         +link('ttms', 'hash', 'Need Class IDs', 'role scheduling')
+        +link('hosts', 'puzzle-piece', 'Host Units', 'role mtf ftd')
 
         li.role.instructor: h4 My FTD
         +link('production-ftd', 'graph_pie', 'Production', 'role instructor')
@@ -20,8 +21,3 @@ div(ng-cloak)
         li.role: h4 Requirements
         +link('backlog', 'checklist2', 'Create', 'role')
         +link('requirements', 'agree', 'Needs Approval', 'role')
-
-        li.role.mtf.ftd.scheduling: h4 Manage FTSS
-        +link('hosts', 'puzzle-piece', 'Host Units', 'role mtf ftd')
-        hr
-        +link('admin', 'dollar', 'Admin Tools', 'role')
