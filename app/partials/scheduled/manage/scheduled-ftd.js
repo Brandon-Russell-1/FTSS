@@ -253,7 +253,7 @@ FTSS.ng.controller(
 														.replace('TS', '')
 														.replace('OLD', '')
 														.replace('*', '');
-									
+
 									scope.data.MTT = null;
 
 									// Change off of unavailability
