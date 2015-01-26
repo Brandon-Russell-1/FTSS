@@ -1,4 +1,4 @@
-/*global utils, caches, FTSS, _, moment */
+/*global caches, FTSS, _ */
 
 (function () {
 
@@ -8,42 +8,19 @@
 		'homeController',
 		[
 			'$scope',
-			'SharePoint',
-			function ($scope, SharePoint) {
+			function ($scope) {
 
 				// We will be using the flickr slides how on this page
 				$scope.toggleSlides = true;
 
-				// Read any app updates from the server
-				SharePoint
+				// Add to the async handler in case this returns first (likely)
+				$scope.fn.addAsync(function () {
 
-					.read(FTSS.models('updates'))
+					$scope.courseUpdates = _.filter(caches.MasterCourseList, 'updated');
 
-					.then(function (data) {
+					$scope.fn.setLoaded();
 
-						      $scope.updates = _(data)
-
-							      .sortBy('Created')
-
-							      .reverse()
-
-							      .map(function (d) {
-								           d.date = moment(d.Created).fromNow();
-								           return d;
-							           })
-
-							      .value();
-
-						      // Add to the async handler in case this returns first (likely)
-						      $scope.fn.addAsync(function () {
-
-							      $scope.courseUpdates = _.filter(caches.MasterCourseList, 'updated');
-
-							      $scope.fn.setLoaded();
-
-						      });
-
-					      });
+				});
 
 			}
 		]);
