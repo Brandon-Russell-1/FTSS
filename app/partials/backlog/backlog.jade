@@ -1,181 +1,146 @@
-include ../__mixins
+include ../mixins
 
-#main-stats.slideToggleEffect.slideOut(ng-if='viewPaste')
-    #backlogStats(hover='backlog-graph-view', left)
-        +icon('graph_pie')
-    .stats-row
-        .col-md-3.stat
-            .data
-                span.number {{totals.reqs}}
-                | Courses
-            span.date
-                b(style='color:#32a0ee') {{totals.reqsTDY}}&nbsp;
-                | Require TDY
+mixin wizardRow(text)
+    +icon('check-square-o')
+    +icon('times')
+    +icon('wait', '0 0 36 32')
+    span.text= text
+    span.chevron
 
-        .col-md-3.stat
-            .data
-                span.number {{totals.students}}
-                | Students
-            span.date
-                b(style='color:#32a0ee') {{totals.pctStudents}}%&nbsp;
-                | Backlogged
-
-        .col-md-3.stat
-            .data
-                span.number {{totals.avg[1]}}
-                | {{totals.avg[2]}}
-            span.date Average Wait Time
-
-        .col-md-2.stat.last
-            .data
-                span.number {{totals.max[1]}}
-                | {{totals.max[2]}}
-            span.date Longest Wait Time
-
-    //br
-        div
-            .graph.pull-left(width='.65', height='250', type='bar')
-            .graph.pull-right(width='.32', height='250', type='pie')
-            .clearfix
+.col-lg-12
+    .wizard
+        ul.steps
+            li(class='{{getProgress(0)}}'): +wizardRow('Choose Month')
+            li(class='{{getProgress(1)}}'): +wizardRow('Identify Courses')
+            li(class='{{getProgress(2)}}'): +wizardRow('Add Students')
+            li(class='{{getProgress(3)}}'): +wizardRow('Verify Request')
+            li(class='{{getProgress(4)}}'): +wizardRow('Send to FTD')
 
 .clearfix
 
-#backlogRequests.am-slide-right.col-lg-3(ng-if='requests.display')
+.col-lg-2
 
-    h3 {{requests.count}} Seats Requested
+    br
 
-    .wrapped
+    #datePicker
+        input.hide(type='text',
+                    ng-model='month',
+                    data-date-format='MMMM yyyy',
+                    data-min-view=1,
+                    data-min-date='today',
+                    bs-datepicker,
+                    bs-show='loaded')
 
-        .well.well-sm.am-fade-and-slide-top(ng-repeat='(unit, courses) in requests.display')
+    h4(style='clear:both;padding-top:1em') Courses Needed
+    .pds(explain='units-courses', right)
+        select(selectize='MasterCourseList',
+        bind='data.Course_Requirements',
+        multiple,
+        ng-if='loaded')
+    .text-info.info.italics.pull-right
+        +icon('info-circle')
+        small You can paste PDS codes
 
-            h4.animateColorFast(class='btn-{{courses[0].Type}}', ng-click='edit(true, courses)') {{unit}}
-                .pull-right.white
-                    +icon('plus-circle')
-                    +icon('arrow-circle-o-right')
 
-            ul.list-group(style='margin:0')
-                li.list-group-item(ng-repeat='crs in courses', ng-class='{limit:(crs.Over ||crs.Under)}')
-                    span.badge {{crs.Count}}
-                    h5: span.a(scroll-to='crs.course.PDS') {{crs.course.Number}}
-
-#scrollTarget.wrapped.addNew(class='{{requests.display === false ? "col-lg-12" : "col-lg-9"}}', ng-any-drop, style='padding-top:10px')
+#scrollTarget.wrapped.addNew.col-lg-7(ng-any-drop, style='margin-top:50px;margin-left:16.5%')
 
     .no-pad
 
-        #dragIcon
-            +icon('insert')
+        #dragIcon:  +icon('insert')
 
         +userInstructions('generate-898', true)
-
-        .pull-left(hover="backlog-drag-drop", text-parser='Import IMDS AAA Background Product')
-
-        .pull-right(data-content-template='/partials/aaa-paste-text.html',
-                    bs-modal='modal',
-                    style='margin-right:3em!important',
-                    ng-if='viewPaste')
-
-            label.btn.btn-info.btn-labeled.white
-                span.btn-label
-                    +icon('search')
-                | Inspect Evaluated AAA Data
-
 
         .clearfix
 
         br
 
-        +grouping()
+        .well.well-sm.am-fade-and-scale(id='{{row.course.PDS}}',
+                                ng-repeat='row in flatData track by row.Id',
+                                ng-class='{priority:row.priority}')
 
-            .well(id='{{row.course.PDS}}', ng-repeat='row in group track by row.Id'
-            ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}')
+            .h4.pull-left
 
-                .h4
-                    +icon('flag')
+                .btnFake.white(class='btn-{{requestType(row)}}')
+                    span.bigLetter {{row.requirements.length}}
+                    span(style='font-size:1.15em') {{row.course.Number}} - {{row.course.PDS}}
+                    span#tdyOrLocal
+                        +icon('plane')
+                        +icon('exclamation-circle')
 
-                    .btnFake.white(class='btn-{{requestType(row)}}')
-                        span.bigLetter {{row.requirements.length}}
-                        span {{row.course.PDS}}&nbsp;
-                        span
-                            +icon('plane')
-                            +icon('exclamation-circle')
+            .h4.pull-right.pad1
 
-                    .pull-right.w75(style='position:relative;top:.2em')
-                        span.pull-right(hover='This is a priority course (listed on the CAF/MCL).')
-                            +icon('asterisk')
-                        .truncate.text-right(style='margin-top:5px') {{row.course.Title}}
+                .pull-right(style='position:relative;top:.2em')
+                    span.pull-right(hover='This is a MAJCOM priority course.')
+                        +icon('asterisk')
 
-                hr.rollup
-
-                .rollup.slide
-
-                    .row(style='margin-top:-20px')
-                        .col-lg-4
-                            table.table.table-split
-                                tbody
-                                    tr
-                                        td {{row.course.MDS}}
-                                        td {{row.course.Number}}
-
-                        .col-lg-4
-                            table.table.table-split
-                                tbody
-                                    tr
-                                        td Length
-                                        td {{row.course.Days}} Days / {{row.course.Hours}} Hours
-
-                        .col-lg-3
-                            table.table.table-split
-                                tbody
-                                    tr
-                                        td Limits
-                                        td {{row.course.Min}} Min / {{row.course.Max}} Max
-
-                    br
-
-                    .alert.alert-danger(ng-if='!row.detRequest')
-                        .lead *** No available FTD's found! ***
-                        p: b Please verify {{row.course.PDS}} is the course required for the student(s) listed below:
-                        p: ol: li(ng-repeat="r in row.requirements") {{r.name}}
-
-                    .row(ng-if='row.detRequest')
-                        .col-lg-3
-                            table.table.table-split.table-hover
-                                thead: tr: th.truncate(colspan='2') 1. Choose an FTD
-
-                                    tbody
-                                        tr(ng-repeat="u in row.listFTD")
-                                            td(style='width:125px;border-right:none') {{u.distance}}
-                                            td.truncate
-                                                input.css-checkbox(type='radio',
-                                                name='unit{{row.course.Id}}',
-                                                ng-model='$parent.$parent.row.detRequest',
-                                                ng-value='u'
-                                                ng-change='checkStudent(row)')
-                                                label.css-label &nbsp;&nbsp;&nbsp;{{u.LongName}}
-
-                        .col-lg-2
-
-                        .col-lg-7(style='overflow:hidden;margin-left:-1%')
-                            table.table.table-split.table-hover
-                                thead: tr: th.truncate(colspan='2') 2. Choose students
-                                tbody
-                                    tr(ng-repeat='r in row.requirements')
-                                        td(style='border-right:none')
-                                            | {{r.dueDate}}
-                                            .pull-right.muted(hover='IMDS Text Verification', content='{{r.text}}')
-                                                +icon('search')
-
-                                        td.truncate(style='display:block')
-                                            input.css-checkbox(type='checkbox',
-                                            ng-model='r.selected',
-                                            ng-change='checkStudent(row)')
-                                            label.css-label &nbsp;&nbsp;&nbsp;{{r.name}}
-
-
-                            .text-danger.am-fade-and-slide-bottom.text-center
-                                em(ng-if='row.Over') FYI, you've exceeded this course's max capacity
-                                em(ng-if='row.Under') FYI, you're under the student minimum for this course
-
-                .clearfix
+                select.form-control(
+                        ng-change='updateGrouping()',
+                        ng-model='row.detRequest',
+                        ng-options='ftd as ftd.distanceText for ftd in row.listFTD')
 
             .clearfix
+
+            .rollup.slide
+
+                .courseTitle {{row.course.Title}}
+
+                .alert.alert-danger(ng-if='row.listFTD.length < 1')
+                    .lead *** No available FTD's found! ***
+                    p: b Please verify {{row.course.PDS}} is the correct course.
+
+                .row
+                    .col-lg-6
+                        h4.soft-bottom-border Student names ({{row.course.Min}} Min / {{row.course.Max}} Max)
+                        select( selectize,
+                                bind='row.requirements',
+                                multiple,
+                                create)
+
+                        .text-danger.am-fade-and-slide-bottom.text-center
+                            em(ng-show='getOver(row)') FYI, you've exceeded this course's max capacity
+                            em(ng-show='getUnder(row)') FYI, you're under the student minimum for this course
+
+                        br
+
+                        h4.soft-bottom-border Notes to the FTD
+                        textarea.form-control(ng-model='row.Notes')
+
+                    .col-lg-6
+                        table.table.table-split#stats898
+                            tbody
+                                tr
+                                    td Jan
+                                    td
+                                        input.w60(ng-model='row.History.r1', placeholder='Requested')
+                                        input.w30.pull-right(ng-model='row.History.b1', placeholder='Built')
+                                tr
+                                    td Feb
+                                    td
+                                        input.w60(ng-model='row.History.r2', placeholder='Requested')
+                                        input.w30.pull-right(ng-model='row.History.b2', placeholder='Built')
+                                tr
+                                    td Mar
+                                    td
+                                        input.w60(ng-model='row.History.r3', placeholder='Requested')
+                                        input.w30.pull-right(ng-model='row.History.b3', placeholder='Built')
+
+
+
+        .clearfix
+
+#backlogRequests.col-lg-3
+
+    .wrapped
+
+        .well.well-sm.am-fade-and-slide-top(ng-repeat='(unit, courses) in groups')
+            h4.animateColorFast(class='btn-{{requestType(courses)}}', ng-click='edit(true, courses)') {{unit}}
+                .pull-right.white
+                    +icon('plus-circle')
+                    +icon('arrow-circle-o-right')
+
+            ul.list-group(style='margin:0')
+                li.list-group-item(ng-repeat='crs in courses',
+                                    ng-class='{limit:(getUnder(crs) || getOver(crs))}',
+                                    ng-if='crs.requirements.length')
+                    span.badge {{crs.requirements.length}}
+                    h5: span.a(scroll-to='crs.course.PDS') {{crs.course.Number}}

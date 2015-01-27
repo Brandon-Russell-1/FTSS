@@ -1,4 +1,4 @@
-include ../__mixins
+include ../mixins
 
 form.form-horizontal(name='modal')
 
@@ -15,19 +15,19 @@ form.form-horizontal(name='modal')
             | available for the {{data.dateRange}} class.
         br
 
-        +formGroup('Host', 'scheduled-request-host')
+        +formGroup("Student's Unit", 'scheduled-request-host')
             .input-group
                 .input-group-addon.w15
                     +icon('puzzle-piece')
                 .input-group-selectize
-                    select(selectize='Hosts', bind='HostId', remember='host')
+                    select(selectize='Hosts', bind='data.HostId', remember='host')
 
-        +formGroup('Students', 'scheduled-request-students')
+        +formGroup('Student Names', 'scheduled-request-students')
             .input-group
                 .input-group-addon.w15
                     +icon('student_hand')
                 .input-group-selectize
-                    select(selectize, bind='Students', multiple, max='{{data.openSeats}}', create)
+                    select(selectize, bind='data.Students', multiple, max='{{data.openSeats}}', create)
 
         br
 

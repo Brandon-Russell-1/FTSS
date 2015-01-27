@@ -1,0 +1,56 @@
+include ../mixins
+
+#embed.col-lg-7
+
+    br
+
+    #ftdStats
+
+        h3 Det {{::ftd.Det}} Last 12 Months
+
+        table.table.table-split(style='font-size:1.25em')
+            tr
+                td Instructor Hours
+                td {{::ftdStats.hours | number}}
+            tr
+                td Classes Taught
+                td {{::ftdStats.classes | number}}
+
+            tr
+                td Students
+                td {{::ftdStats.students | number}}
+
+    #ftdChart.am-fade.ng-enter
+        linechart(data='graph', options='graphOptions')
+
+
+
+#rightScroll.wrapped.col-lg-5
+
+        div
+
+            h3 {{groups.false.length}} Instructors
+
+            table.table.table-striped.table-expanded.table-hover
+
+                tbody
+
+                    tr.am-fade-and-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
+                                        ng-click='stats()',
+                                        id='row-{{row.Id}}')
+
+                        td: photo(size='75px', data='row', watch)
+
+                        td
+
+                            h4 {{::row.InstructorName}}
+
+                            br
+
+                            .chartMonths(ng-bind-html='::row.chart | trust_html')
+
+                            .clearfix
+                            br
+
+                            .pull-left.btn-success(ng-style='{width:row.annualEffectiveness+"%"}') &nbsp;
+                            .pull-left.italics.text-success &nbsp;{{::row.annualHours}} hours/yr

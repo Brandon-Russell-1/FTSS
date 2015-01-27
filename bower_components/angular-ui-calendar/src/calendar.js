@@ -197,7 +197,8 @@ angular.module('ui.calendar', [])
             eventsWatcher = controller.changeWatcher(controller.allEvents, controller.eventsFingerprint),
             options = null;
 
-	      FTSS.utils.initInstructorCalendar =  function (config) {
+          // Set a global action -- ugly hack much?
+	      utils.initInstructorCalendar =  function (config) {
 
 		      options = {eventSources: sources};
 

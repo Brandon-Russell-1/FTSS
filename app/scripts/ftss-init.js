@@ -23,7 +23,9 @@
 			'angularFileUpload',
 			'ngAnimate',
 			'ngSanitize',
-			'ui.calendar'
+			'ui.calendar',
+			'n3-line-chart',
+			'angular-loading-bar'
 		]);
 
 	/*
@@ -51,7 +53,9 @@
 						    'backlog',
 						    'hosts',
 						    'admin',
-						    'reset'
+						    'admin-instructors',
+						    'reset',
+						    'production-ftd'
 					    ];
 
 				while (routes.length) {
@@ -86,6 +90,11 @@
 	// Set the base SP collection used by FTSS
 	var base = 'https://cs1.eis.af.mil/sites/FTSS/';
 
+	if (FTSS.PREFETCH) {
+		FTSS.ng.value('SP_PREFETCH', FTSS.PREFETCH);
+		delete  FTSS.PREFETCH;
+	}
+
 	FTSS.ng.value('SP_CONFIG',
 
 	              PRODUCTION ?
@@ -96,30 +105,27 @@
 		              'offline'     : false,
 		              'baseURL'     : base + 'live/_vti_bin/ListData.svc/',
 		              'user'        : {'url': base + 'live/_vti_bin/UserGroup.asmx'},
-		              'cacheVersion': 19
+		              'cacheVersion': 25
 
 	              } : {
 
 		              // These are the ng-sharepoint parameters for the DEVELOPMENT version of FTSS
-		              'offline'     : true,
-		              'baseURL'     : base + 'development/_vti_bin/ListData.svc/',
-		              'user'        : {'url': base + 'development/_vti_bin/UserGroup.asmx'},
-		              'cacheVersion': 23
+		              'offline'     : false,
+		              'baseURL'     : base + 'dev2/_vti_bin/ListData.svc/',
+		              'user'        : {'url': base + 'dev2/_vti_bin/UserGroup.asmx'},
+		              'cacheVersion': 25
 
 	              });
 
 	// Default template for lo-dash _.template() function
 	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
-	// Init our utils objects as it is used in various other JS files
-	FTSS.utils = {};
-
 	// This probably doesn't belong here? :-D
 	FTSS.supportEmail = '372trs.trg.ftss@us.af.mil';
 	FTSS.J4Email = '982TRG.J4scheduling@us.af.mil';
 
 	// Helper variable for handling production vs development mode photos
-	FTSS.photoURL = PRODUCTION ? base + 'live/Bios/' : base + 'development/Bios/';
+	FTSS.photoURL = PRODUCTION ? base + 'live/Bios/' : base + 'dev2/Bios/';
 
 	// These are the default user preferences for the app
 	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {

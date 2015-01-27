@@ -1,4 +1,4 @@
-include ../__mixins
+include ../mixins
 
 - var columns = {'Class #':10, 'Start Date':10, Unit:15, Open:10, Requested:10, Notes: 30}
 
@@ -10,20 +10,20 @@ include ../__mixins
         .double.denied(hover='Request denied'): +icon('times')
         .double.cancelled(hover='Class cancelled'): +icon('exclamation-circle')
 
-    td {{row.TTMS}}
+    td {{::row.TTMS}}
 
-    td {{row.start}}
+    td {{::row.start}}
 
-    td {{row.request.Host.Unit}}
+    td {{::row.request.Host.Unit}}
 
-    td.double {{row.openSeats}}
+    td.double {{::row.openSeats}}
 
-    td.double {{row.request.Students.length}}
+    td.double {{::row.request.Students.length}}
 
     td
         p(ng-if='row.request.Notes')
 
-            span.italics {{row.request.Notes}}
+            span.italics {{::row.request.Notes}}
 
 
     td

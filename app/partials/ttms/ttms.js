@@ -10,10 +10,7 @@ FTSS.ng.controller(
 
 				    'sort'  : 'startMoment',
 				    'group' : 'course',
-				    'model' : 'ttms',
-
-				    // We only want classes with requests
-				    'filter': "TTMS eq null and Archived eq false"
+				    'model' : 'ttms'
 
 			    }),
 

@@ -12,55 +12,105 @@
 
 	var authorizationMatrix = {
 
-		'requirements': ['mtf',
-		                 'ftd'
-		],
+		    'admin': ['admin'],
 
-		'requests': ['approvers',
-		             'mtf',
-		             'ftd'
-		],
+		    'admin-instructors': ['admin'],
 
-		'manage-ftd'   : ['ftd', 'scheduling'],
-		'scheduled-ftd': ['ftd', 'scheduling'],
+		    'requirements': [
+			    'mtf',
+			    'ftd'
+		    ],
 
-		'backlog': ['approvers',
-		            'mtf',
-		            'ftd'
-		],
-		'hosts'  : ['mtf',
-		            'ftd'
-		],
-		'ttms'   : [
-			'scheduling'
-		]
+		    'requests': [
+			    'approvers',
+			    'mtf',
+			    'ftd'
+		    ],
 
-	};
+		    'manage-ftd'    : ['ftd', 'scheduling'],
+		    'scheduled-ftd' : ['ftd', 'scheduling', 'instructor'],
+		    'production-ftd': ['ftd', 'instructor'],
+
+		    'backlog': [
+			    'approvers',
+			    'mtf',
+			    'ftd'
+		    ],
+		    'hosts'  : [
+			    'mtf',
+			    'ftd'
+		    ],
+		    'ttms'   : [
+			    'scheduling'
+		    ]
+
+	    },
+
+	    isAdmin = false,
+
+	    groups = [],
+
+	    once = true;
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
-		var initSecurity = function (user) {
+		// Initialize our $scope variables
+		$scope.initInstructorRole = angular.noop;
+		$scope.roleClasses = '';
+		$scope.roleText = '';
 
-			var isAdmin = false,
 
-			    groups = user.groups;
+		/**
+		 * This eliminates the needless server calls for user/group info when developing FTSS.
+		 *
+		 * Yes, someone could easily spoof the global variable (if they paused the code during page load
+		 * and changed it.  However, this is all just client-view stuff anyway.  Additionally, doing so
+		 * would cause them more problems as it would force everything to read from a different SharePoint
+		 * site altogether.  Finally, we make a double check by validating the file name matches.
+		 *
+		 */
+		if (!PRODUCTION && location.pathname === '/dev.html') {
 
+			isAdmin = true;
 
-			if (user === 'DEVELOPER') {
+			$scope.roleClasses = 'admin';
 
-				isAdmin = true;
+			$scope.roleText = 'DEVELOPER MODE';
 
-				$scope.roleClasses = 'admin';
+			$scope.ftd = {
+				'Id'      : 9,
+				'LongName': 'Robins AFB (Det. 306)'
+			};
 
-				$scope.roleText = '*** DEVELOPER MODE ***';
+			completeSecurity();
 
-			} else {
+		} else {
+
+			// First try to check for the cached FTD settings (before the user data is loaded)
+			checkFTD();
+
+			// Load our user data into FTSS
+			SharePoint.user().then(initSecurity);
+
+		}
+
+		function initSecurity(user) {
+
+			$scope.myEmail = user.email || 'NO AFNET EMAIL FOUND';
+
+			// Check again if this is an FTD user (should only happen the first time for them)
+			checkFTD(user);
+
+			// Load the SP groups every time
+			SharePoint.groups().then(function (spGroups) {
 
 				// Extract the name of any groups the user is a member of
-				groups = groups.name ? [groups.name] : _.pluck(groups, 'name');
+				groups = groups.concat(spGroups.name ? [spGroups.name] : _.pluck(spGroups, 'name'));
 
+				// If no groups were found, just add our "guest" group
 				groups = groups.length ? groups : ['guest'];
 
+				// Check for the admin group
 				isAdmin = groups.indexOf('admin') > -1;
 
 				// Used to modify views based on roles
@@ -72,11 +122,83 @@
 					.replace('ftd', 'FTD Scheduler/Production Supervisor')
 					.replace('curriculum', 'Training/Curriculum Manager')
 					.replace('scheduling', 'J4 Scheduler')
-					.replace('approvers', 'Approver')
 					.replace('admin', 'Administrator')
+					.replace('instructor', 'FTD Member')
 					.replace('guest', 'Visitor');
 
+				// Finish the security code
+				completeSecurity();
+
+			});
+
+		}
+
+		/**
+		 *
+		 * @param user
+		 */
+		function checkFTD(user) {
+
+			if ($scope.ftd) {
+				return;
 			}
+
+			var email = (user && user.email || '').toLowerCase().trim(),
+
+			    ftd = JSON.parse(localStorage.ftssCachedFTD || false) ||
+
+			          _.find(caches.Instructors, function (test) {
+				          return email && test.InstructorEmail.toLowerCase().trim() === email;
+			          });
+
+			if (ftd) {
+
+				$scope.ftd = caches.Units ? caches.Units[ftd.UnitId] : ftd;
+
+				groups.push('instructor');
+
+				if (!localStorage.ftssCachedFTD) {
+					localStorage.ftssCachedFTD = JSON.stringify(
+						{
+							'Id'      : $scope.ftd.Id,
+							'LongName': $scope.ftd.LongName
+						}
+					);
+				}
+
+			} else {
+
+				$scope.initInstructorRole = function () {
+
+					checkFTD(user);
+
+					// Only notify the user if this is the first time this page load
+					if (once && $scope.hasRole('ftd') && !$scope.ftd) {
+
+						utils.errorHandler(
+							{
+								'stack': 'A user with FTD rights does not currently have an assigned FTD in FTSS.  ' +
+								       'Their details are listed below:\n\n' +
+								       'Name:  ' + user.name + '\n' +
+								       'Email: ' + user.email
+							});
+
+						utils.modal('no-assigned-ftd', $scope);
+
+					}
+
+					once = false;
+
+				};
+
+			}
+
+		}
+
+		/**
+		 * Complete security by binding $scope.hasRole(), $scope.isAuthorized() and then running doInitPage()
+		 */
+		function completeSecurity() {
 
 			/**
 			 * Test for a particular user role
@@ -95,9 +217,8 @@
 			};
 
 			/**
-			 * Performs page validation check, this is a private function to help keep things a little more protected
+			 * Performs page validation check
 			 *
-			 * @private
 			 */
 			$scope.isAuthorized = isAdmin ?
 
@@ -120,27 +241,6 @@
 
 			// Call doInitPage() as this might be the last item in the async chain to complete
 			_fn.doInitPage();
-
-		};
-
-		/**
-		 * This eliminates the needless server calls for user/group info when developing FTSS.
-		 *
-		 * Yes, someone could easily spoof the global variable (if they paused the code during page load
-		 * and changed it.  However, this is all just client-view stuff anyway.  Additionally, doing so
-		 * would cause them more problems as it would force everything to read from a different SharePoint
-		 * site altogether.  Finally, we make a double check by validating the file name matches.
-		 *
-		 */
-		if (PRODUCTION === false && location.pathname === '/dev.html') {
-
-			// We are assuming they are an admin and this is in development mode
-			initSecurity('DEVELOPER');
-
-		} else {
-
-			// Load our user data into FTSS
-			SharePoint.user($scope).then(initSecurity);
 
 		}
 

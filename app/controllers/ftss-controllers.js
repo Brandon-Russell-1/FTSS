@@ -9,11 +9,10 @@
  * @param opts
  * @returns {{$scope: *, bind: 'bind', initialize: 'initialize', process: 'process', scheduledClass: 'scheduledClass', postProcess: 'postProcess'}}
  *
- * @todo need some more commenting/cleanup in FTSS.controller
  */
 FTSS.controller = (function () {
 
-	var tagBox, $modal, SharePoint, $timeout, $alert;
+	var $modal, SharePoint, $timeout, $alert;
 
 	// Grab some angular variables for use later on
 	FTSS.ng.run(
@@ -48,22 +47,15 @@ FTSS.controller = (function () {
 			 *
 			 * @returns {{then: 'then'}}
 			 */
-			'bind': function (prop) {
+			'bind': function (watchTarget) {
 
-				// If loaded we only want to bind the first time
-
-				var single = !prop,
-
-				    page = $scope.fn.getPage();
-
-				// Default to cached mode & watch cleanSlate
-				prop = prop || 'cleanSlate';
+				var page = $scope.fn.getPage();
 
 				// The tagBox controls whether the search or tagBox are shown
-				$scope.$parent.tagBox = tagBox = !single;
+				FTSS.tagBox = !!watchTarget;
 
 				// Copy the model to a local variable for reuse without affecting the original model
-				model = angular.copy(FTSS.models[opts.model]);
+				model = FTSS.models(opts.model);
 
 				// Bind archive() & edit() to the scope in case they are needed
 				$scope.archive = actions.archive;
@@ -79,48 +71,35 @@ FTSS.controller = (function () {
 				return {
 					'then': function (callback) {
 
-						$scope.fn.doInitPage();
+						// If a watchTarget exists, and a $watch for it, otherwise, keeping on running (faster loads)
+						watchTarget ? $scope.$watch(watchTarget, watchAction) : watchAction(true);
 
-						// Create a $scope.$watch and unwatch = to the return value for unbinding
-						var unwatch = $scope.$watch(prop, function (watch) {
+						function watchAction(watch) {
+
+							// Attempt to call the page init again (async fun)
+							$scope.fn.doInitPage();
 
 							// Only act if there is a valid change to our watch
 							if (watch) {
 
 								var last;
 
+								/**
+								 * Re-request data from the server
+								 */
 								actions.reload = function () {
-
-									var finalize = function (data) {
-
-										if (!_.isEqual(data, last)) {
-
-											last = data;
-											callback && callback(data);
-
-										}
-
-									};
 
 									if (!opts.static) {
 
-										var filters = [];
+										var filters = model.params.$filter || [];
 
-										if (!opts.noFilter) {
+										opts.filter && filters.push(opts.filter);
 
-											opts.filter && filters.push(opts.filter);
+										watchTarget && filters.push(watch);
 
-											(prop === 'filter') && filters.push(watch);
+										model.params.$filter = filters.join(' and ');
 
-											model.params.$filter = filters.join(' and ');
-
-										}
-
-										SharePoint
-
-											.read(model)
-
-											.then(finalize);
+										SharePoint.read(model).then(finalize);
 
 									} else {
 
@@ -128,21 +107,42 @@ FTSS.controller = (function () {
 
 									}
 
+									/**
+									 * Pass to the async ops handler if there has been a change
+									 *
+									 * @param data
+									 */
+									function finalize(data) {
+
+										// Only continue if the data has changed
+										if (!_.isEqual(data, last)) {
+
+											// Keep a reference for future update checks
+											last = data;
+
+											// If a callback exists, add it to our async handler
+											callback && $scope.fn.addAsync(function () {
+												callback(data);
+											});
+
+										}
+
+									}
+
 								};
 
+								// Run our reload action now
 								actions.reload();
 
-								// If this is a bind-once and has been called, delete the watch
-								single && unwatch();
-
-								(opts.refresh > 1) && window.setInterval(actions.reload, opts.refresh * 1000);
+								// For auto-refreshing pages
+								(opts.refresh > 1) && window.setInterval(actions.reload, opts.refresh * 15000);
 
 							}
 
-						});
-
+						}
 					}
-				};
+
+				}
 
 			},
 
@@ -157,29 +157,12 @@ FTSS.controller = (function () {
 				// Pass the response to actions.data for access externally
 				actions.data = data;
 
-				/**
-				 * Updates the page count/overload class and passes user messages for no data
-				 *
-				 * @param count
-				 * @param overload
-				 */
-				$scope.counter = function (count, overload) {
-
-					$scope.$parent.count = count;
-					$scope.$parent.overload = overload;
-
-				};
-
 				// If there was no data found pass the User Empty Message and abort the operation
 				if (_.keys(data || {}).length < 1) {
 
 					// We must still pass a then() promise to prevent an error, we're just not executing the callback
 					return {
-						'then': function () {
-
-							$scope.fn.setLoaded();
-
-						}
+						'then': $scope.fn.setLoaded
 					};
 
 				} else {
@@ -215,12 +198,10 @@ FTSS.controller = (function () {
 				data = data || actions.data;
 
 				// If there is a defined data processor, then execute it against the data as well
-				process && _(data).each(process);
+				process && _.each(data, process);
 
-				// If this is a tagBox then we should call taghighlight as well
-				if (tagBox) {
-					utils.tagHighlight(data);
-				}
+				// Finally, do our tagHighlighting if this is a tagBox
+				FTSS.tagBox && utils.tagHighlight(data);
 
 				// Finally, send our data off to the post-processor
 				actions.postProcess(data);
@@ -293,7 +274,9 @@ FTSS.controller = (function () {
 								}
 
 								// reference for our searchText
-								var query = _.map(($scope.searchText.$ || '')
+								var counter = 0,
+
+								    query = _.map(($scope.searchText.$ || '')
 
 									                  // Convert " or " to a regex or
 									                  .replace(/\sor\s/gi, '|')
@@ -302,7 +285,7 @@ FTSS.controller = (function () {
 									                  .replace(/\sand\s/gi, ' ')
 
 									                  // Strip everything else out
-									                  .replace(/[^\w\s\|]/mg, '')
+									                  .replace(/[^\w\s\|\-\_]/mg, '')
 
 									                  // Split by spaces
 									                  .split(' '),
@@ -319,8 +302,8 @@ FTSS.controller = (function () {
 
 								// Reset groups, counter & count
 								$scope.groups = false;
-								$scope.counter('-', false);
-								$scope.count = 0;
+								$scope.count.value = '-';
+								$scope.count.overload = false;
 
 								// Create our sorted groups and put in our scope
 								$scope.groups = _(sifter)
@@ -346,16 +329,16 @@ FTSS.controller = (function () {
 									        })
 
 									// Trim our results
-									.first($scope.pageLimit)
+									.take($scope.pageLimit)
 
 									// Group the data by the given property
 									.groupBy(function (gp) {
 
-										         $scope.count++;
+										         counter++;
 
 										         return opts.group ?
-										                utils.deepRead(gp, opts.group) ||
-										                '' : false;
+										                utils.deepRead(gp, opts.group) || '' :
+										                false;
 									         })
 
 									.value();
@@ -363,10 +346,8 @@ FTSS.controller = (function () {
 								opts.finalProcess && opts.finalProcess($scope.groups);
 
 								// Update the scope counter + overload indicator
-								$scope.counter($scope.count, $scope.count !== sifter.length);
-
-								// Finally, do our tagHighlighting if this is a tagBox
-								tagBox && utils.tagHighlight(data);
+								$scope.count.value = counter;
+								$scope.count.overload = (counter !== sifter.length);
 
 								// Perform final loading
 								$scope.fn.setLoaded(function () {
@@ -649,11 +630,11 @@ FTSS.controller = (function () {
 						// Keep a copy of the original data for comparison
 						old = actions.data[scope.data.Id] || {};
 
-						// angular.copy() so we don't overwrite the original model
-						fields = angular.copy(model.params.$select);
+						// Reference l
+						fields = FTSS.models(opts.model).params.$select;
 
 						//  Compare each field from the list of fields to the old data
-						_(fields).each(function (field) {
+						_.each(fields, function (field) {
 
 							var data = scope.data[field];
 

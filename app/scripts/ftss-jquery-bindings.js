@@ -50,10 +50,10 @@
 	 */
 	pasteAction = function (e) {
 
-		e.stopImmediatePropagation();
 
 		if (FTSS.pasteAction) {
 
+			e.stopImmediatePropagation();
 			e.preventDefault();
 			FTSS.pasteAction((window.clipboardData || e.originalEvent.clipboardData).getData('Text'));
 

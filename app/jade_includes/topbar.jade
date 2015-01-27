@@ -1,0 +1,47 @@
+include ../partials/mixins
+
+header.navbar.navbar-inverse
+
+    .navbar-header
+        span.navbar-brand
+            span.white: +icon('af_logo')
+            span.text#ftss FTSS |&nbsp
+            span.text#ftd(ng-if='ftd', ng-cloak) {{ftd.LongName}} -&nbsp;
+            span.text#roleText(ng-cloak) {{roleText || 'Getting roles...'}}
+
+    ul.nav.navbar-nav.pull-right.hidden-xs
+
+        li
+            .support(bs-popover,
+                        left,
+                        ng-click='fn.doMakeBitly()',
+                        animation='am-flip-x',
+                        hover='topbar-share',
+                        content-template='/partials/bitly.html',
+                        data-placement='bottom-right',
+                        container='body',
+                        no-arrow)
+                +icon('share')
+
+        li
+            .support(tabindex='-1',
+                        bs-popover,
+                        left,
+                        container='body',
+                        content-template='/partials/user-settings.html',
+                        data-placement='bottom-right',
+                        animation='am-flip-x',
+                        hover='topbar-settings',
+                        no-arrow)
+                +icon('sliders')
+
+        li
+            .support(data-content-template='/partials/support.html',
+                        left,
+                        data-placement='left',
+                        bs-aside='aside',
+                        container='body',
+                        animation='am-slide-left',
+                        hover='topbar-help',
+                        no-arrow)
+                +icon('question')

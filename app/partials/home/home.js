@@ -1,4 +1,4 @@
-/*global utils, caches, FTSS, _, moment */
+/*global caches, FTSS, _ */
 
 (function () {
 
@@ -6,49 +6,23 @@
 
 	FTSS.ng.controller(
 		'homeController',
+		[
+			'$scope',
+			function ($scope) {
 
-		['$scope',
+				// We will be using the flickr slides how on this page
+				$scope.toggleSlides = true;
 
-		 'SharePoint',
+				// Add to the async handler in case this returns first (likely)
+				$scope.fn.addAsync(function () {
 
-		 function ($scope, SharePoint) {
+					$scope.courseUpdates = _.filter(caches.MasterCourseList, 'updated');
 
-			 SharePoint
+					$scope.fn.setLoaded();
 
-				 .read(FTSS.models.updates)
+				});
 
-				 .then(function (data) {
-
-					       $scope.updates = _(data)
-
-						       .sortBy('Created')
-
-						       .reverse()
-
-						       .map(function (d) {
-							            d.date = moment(d.Created).fromNow();
-							            return d;
-						            })
-
-						       .value();
-
-				       });
-
-			 var complete = function (loaded) {
-
-				 if (loaded) {
-					 $scope.courseUpdates = _.filter(caches.MasterCourseList, 'updated');
-
-					 utils.loading(false);
-				 }
-
-			 };
-
-			 $scope.cleanSlate ? complete(true) : $scope.$parent.$watch('cleanSlate', complete);
-
-			 $scope.toggleSlides = true;
-
-		 }
+			}
 		]);
 
 

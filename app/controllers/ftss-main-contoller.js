@@ -24,11 +24,40 @@
 			'$routeParams',
 			'$timeout',
 			'$http',
+			'$route',
 			function ($scope, $location, SharePoint, $routeParams, $timeout, $http) {
 
-				$scope.cleanSlate = false;
+				var jobs = [],
+
+				    /**
+				     * Determines if the page load is complete
+				     *
+				     * @returns {boolean}
+				     */
+				    checkState = function () {
+
+					    return (!!$scope.isAuthorized && (!!FTSS.search || !!$scope.loaded));
+
+				    };
 
 				var _fn = $scope.fn = {
+
+					/**
+					 * Collects async operations that are only executed once the page is initialized
+					 *
+					 * @param job
+					 */
+					'addAsync': function (job) {
+
+						// If already loaded, just execute immediately
+						if (checkState()) {
+							$timeout(job);
+							utils.loading(false);
+						} else {
+							jobs.push(job);
+						}
+
+					},
 
 					/**
 					 * Disables the page spinner/loading functions and marks everything as complete
@@ -38,10 +67,15 @@
 
 						callback && callback();
 
-						utils.loading(false);
-						$scope.loaded = true;
+						$timeout(function () {
+							$scope.loaded = true;
+						});
 
-					},
+						utils.loading(false);
+
+					}
+
+					,
 
 					/**
 					 * Used to create a permaLink for a given page for bookmarking/sharing
@@ -54,7 +88,9 @@
 							$scope.permaLink += '/' + btoa($scope.searchText.$);
 						}
 
-					},
+					}
+
+					,
 
 					/**
 					 * Gets the current page
@@ -62,7 +98,9 @@
 					 */
 					'getPage': function () {
 						return $location.path().split('/')[1];
-					},
+					}
+
+					,
 
 					/**
 					 * Performs our page navigation function
@@ -81,21 +119,27 @@
 
 						});
 
-					},
+					}
+
+					,
 
 					/**
 					 * Toggles data well collapses
 					 */
 					'doToggleCollapse': function () {
 						$scope.wellCollapse = $scope.wellCollapse ? '' : 'collapsed';
-					},
+					}
+
+					,
 
 					/**
 					 * Toggles data archive visibility
 					 */
 					'doToggleArchive': function () {
 						$scope.showArchive = $scope.showArchive ? '' : 'archived';
-					},
+					}
+
+					,
 
 					/**
 					 * Generates short URLs using the USA.gov API for generating go.usa.gov links
@@ -137,7 +181,9 @@
 								                              page).split('://')[1];
 
 							      });
-					},
+					}
+
+					,
 
 					/**
 					 * Performs the final page initialization.  This is called by multiple async operations so we must
@@ -145,15 +191,20 @@
 					 */
 					'doInitPage': function () {
 
-						if ($scope.isAuthorized && (FTSS.search || $scope.loaded)) {
+						if (checkState()) {
 
 							if (!$scope.isAuthorized()) {
 
 								_fn.doNavigate('home');
+								return;
 
 							}
 
-							if ($scope.tagBox) {
+							$scope.initInstructorRole();
+
+							$scope.tagBox = FTSS.tagBox;
+
+							if (FTSS.tagBox) {
 
 								FTSS.filters.$refresh();
 
@@ -173,23 +224,6 @@
 									    FTSS.search.$control_input.focus();
 
 								    };
-
-								if (!pending) {
-
-									var ftd = localStorage['FTSS-selectize-ftd'],
-									    host = localStorage['FTSS-selectize-host'];
-
-									pending = ftd || host ? {} : false;
-
-									if (ftd && validFilters.u) {
-										pending.u = [ftd];
-									}
-
-									if (host && validFilters.h) {
-										pending.h = [host];
-									}
-
-								}
 
 								if (pending) {
 
@@ -237,14 +271,14 @@
 								} else {
 
 									emptyFinish();
+
 								}
 
-							} else {
+							}
 
-								$timeout(function () {
-									$scope.cleanSlate = true;
-								});
-
+							// Finally, run through all our async jobs
+							while (jobs.length) {
+								$timeout(jobs.shift());
 							}
 
 						}
@@ -268,9 +302,6 @@
 						return;
 					}
 
-					// Fire our page listener for Google Analytics
-					PRODUCTION && window.ga && window.ga('send', 'pageview', {page: $location.path()});
-
 					// Start the loading feedback
 					utils.loading(true);
 
@@ -281,8 +312,10 @@
 
 					// Reset some basic view settings
 					$scope.pageLimit = FTSS.prefs.limit;
-					$scope.count = '-';
-					$scope.overload = false;
+					$scope.count = {
+						'value'    : '-',
+						'overload': false
+					};
 					$scope.filter = false;
 					$scope.searchText = {};
 					$scope.showArchive = false;
@@ -290,6 +323,7 @@
 
 					FTSS.selectizeInstances = {};
 					FTSS.pasteAction = false;
+					FTSS.tagBox = false;
 
 				});
 

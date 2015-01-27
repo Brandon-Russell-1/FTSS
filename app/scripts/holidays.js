@@ -17,7 +17,7 @@
 	 *
 	 * @parms flat bool
 	 */
-	FTSS.utils.getDownDays = (function () {
+	utils.getDownDays = (function () {
 
 		// Class for our events
 		var className = 'downDay',
@@ -71,7 +71,7 @@
 			    });
 
 			    // Add the family days to the array
-			    _(familyDays).each(function (day) {
+			    _.each(familyDays, function (day) {
 
 				    set.push(
 					    {

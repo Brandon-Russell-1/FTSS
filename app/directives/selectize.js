@@ -22,13 +22,17 @@
 			opts,
 
 			{
-				'labelField'  : opts.label || 'label',
-				'maxItems'    : 1,
-				'options'     : (!opts.watch && scope.$parent[opts.select] || options[opts.select]) || null,
-				'plugins'     : opts.maxItems > 1 ? [
+				'labelField': opts.label || 'label',
+				'maxItems': 1,
+				'options': (!opts.watch &&
+				            scope.$parent[opts.select] ||
+				            options[opts.select] ||
+				            caches[opts.select]) ||
+				null,
+				'plugins': opts.maxItems > 1 ? [
 					'remove_button'
 				] : null,
-				'onChange'    : function (val) {
+				'onChange': function (val) {
 
 					// Do not run when initializing the value
 					if (loaded) {
@@ -38,16 +42,26 @@
 						// So that Angular will update the model immediately rather than waiting until we click somewhere else
 						timeout(function () {
 
-							var oldVal = scope.data[opts.field],
+							var oldVal = utils.deepRead(scope, opts.field),
 
-							    newVal = (val && val.map && !isNaN(val[0]) ? val.map(Number) : Number(val)) ||
-							             val ||
-							             null;
+							    newVal = (val && val.map && !isNaN(val[0]) ?
+
+							              val.map(Number) : Number(val)) || val || null;
 
 							// Update the field with the value(s)
 							if (oldVal !== newVal) {
 
-								scope.data[opts.field] = newVal;
+								// Split our dotted notation into an array
+								var test = opts.field.split('.'),
+
+								    // Save the last property
+								    prop = test.pop(),
+
+								    // Get a reference to the parent object/scope
+								    item = test.length ? utils.deepRead(scope, test) : scope;
+
+								// Write the changes to the child property on the parent object
+								item[prop] = newVal;
 
 								// This will allow us to retain the last used setting for faster pre-filling of data
 								if (opts.remember) {
@@ -64,7 +78,7 @@
 								} else {
 
 									// Flip the $dirty flag on this modal
-									modal.$setDirty();
+									modal && modal.$setDirty();
 
 									// Add ng-dirty class manually as we aren't really a ngForm control
 									self.$control.addClass('ng-dirty');
@@ -113,7 +127,7 @@
 						loaded = remember;
 
 						// Set the value based on the current model
-						self.setValue(utils.deepRead(scope, 'data.' + opts.field) || remember);
+						self.setValue(utils.deepRead(scope, opts.field) || remember);
 
 						self.refreshOptions(false);
 
@@ -187,7 +201,7 @@
 					doSearch(this.getValue());
 				},
 
-				// The primrary initiazlier for the searchbox, performs async operations with ng-SharePoint
+				// The primary initializer for the search box, performs async operations with ng-SharePoint
 				'onInitialize'   : function () {
 
 					// Async counter
@@ -202,7 +216,7 @@
 					    loaded = function (data, group, text) {
 
 						    // Destroy all archived data because it is completely useless to us...
-						    _(data).each(function (row, key) {
+						    _.each(data, function (row, key) {
 
 							    row.Archived && delete data[key];
 
@@ -222,9 +236,9 @@
 								         var Id, txt;
 
 								         Id = (v.Id || v);
-								         txt = text && text.call ? text(v) : v;
+								         txt = text(v);
 
-								         v.search = (v.text || txt).toLowerCase();
+								         v.search = v.text || txt.text;
 
 								         return {
 									         'Id'      : Id,
@@ -263,26 +277,30 @@
 
 							    // Add the options to our searchBox
 							    that.addOption(tagBoxOpts);
-							    /*
-							     _(caches.Units).each(function(unit) {
 
-							     _(unit.Courses_JSON).each(function(course) {
+							    _.each(caches.Units, function (unit) {
 
-							     caches.MasterCourseList[course].Units[unit.Id] = unit;
-
-							     });
-
-							     });*/
-
-							    _(caches.Units).each(function (unit) {
-
-								    _(unit.Courses_JSON).each(function (course) {
+								    _.each(unit.Courses_JSON, function (course) {
 
 									    unit.Courses.push(caches.MasterCourseList[course]);
 
 								    });
 
 								    unit.Instructors = _.where(caches.Instructors, {'UnitId': unit.Id});
+
+							    });
+
+							    _.each(caches.Hosts, function (host) {
+
+								    var ftd = caches.Units[host.FTD] || {};
+
+								    host.label = '<b>' +
+								                 host.Unit +
+								                 '</b><right>' +
+								                 (ftd.Det || 'No FTD') +
+								                 '</right>';
+
+								    return host.Unit;
 
 							    });
 
@@ -299,173 +317,145 @@
 
 					    };
 
-					SharePoint
+					SharePoint.read(FTSS.models('catalog')).then(loadCourses);
 
-						.read(FTSS.models.catalog)
+					SharePoint.read(FTSS.models('units')).then(loadUnits);
 
-						.then(function (response) {
+					SharePoint.read(FTSS.models('hosts')).then(loadHosts);
 
-							      // Pull the unique IMDS course codes into the cache
-							      caches.imds = {};
-							      caches.IMDS = [];
+					SharePoint.read(FTSS.models('instructors')).then(loadInstructors);
 
-							      _(response).each(function (r) {
+					function loadCourses(response) {
 
-								      if (r.IMDS) {
-									      caches.IMDS.push(r.IMDS);
-									      caches.imds[r.IMDS] = r.Id;
-								      }
+						// Add MCL to Selectize with row callback
+						loaded(response, 'MasterCourseList', function (v) {
 
-							      });
+							// Save for later  our unit listings
+							v.Units = [];
 
-							      // Add MCL to Selectize with row callback
-							      loaded(response, 'MasterCourseList', function (v) {
+							/**
+							 * Generates string format for dropdown display
+							 *
+							 * "<div><h5>U2I<em> - J4AMP2A6X6 A41B</em></h5><small>U-2S ELECTRICAL AND ENVIRONMENTAL SYSTEMS</small></div>"
+							 *
+							 * @type {*|string}
+							 */
+							v.label = [
+								'<div><h5>',
+								v.PDS,
+								'<em> - ',
+								v.Number,
+								'</em></h5>',
+								'<small>',
+								v.Title,
+								'</small></div>'
+							].join('');
 
-								      // Save for later  our unit listings
-								      v.Units = [];
+							/**
+							 * Generates string format for full-text search
+							 *
+							 * "U2I J4AMP2A6X6 A41B U-2S ELECTRICAL AND ENVIRONMENTAL SYSTEMS"
+							 *
+							 * @type {*|string}
+							 */
+							v.text = [
+								v.PDS,
+								v.Number,
+								v.Title
+							].join(' ');
 
-								      /**
-								       * Generates string format for dropdown display
-								       *
-								       * "<div><h5>U2I<em> - J4AMP2A6X6 A41B</em></h5><small>U-2S ELECTRICAL AND ENVIRONMENTAL SYSTEMS</small></div>"
-								       *
-								       * @type {*|string}
-								       */
-								      v.label = [
-									      '<div><h5>',
-									      v.PDS,
-									      '<em> - ',
-									      v.Number,
-									      '</em></h5>',
-									      '<small>',
-									      v.Title,
-									      '</small></div>'
-								      ].join('');
+							return v.text;
+						});
 
-								      /**
-								       * Generates string format for full-text search
-								       *
-								       * "U2I J4AMP2A6X6 A41B U-2S ELECTRICAL AND ENVIRONMENTAL SYSTEMS"
-								       *
-								       * @type {*|string}
-								       */
-								      v.text = [
-									      v.PDS,
-									      v.Number,
-									      v.Title
-								      ].join(' ');
+					}
 
-								      return v.text;
-							      });
+					function loadUnits(response) {
 
-						      });
+						// Add Units to Selectize with row callback
+						loaded(response, 'Units', function (v) {
 
-					SharePoint
+							v.Courses = [];
 
-						.read(FTSS.models.units)
+							// Use Det # to determine squadron 2XX for 372 TRS / 3XX for 373 TRS
+							v.Squadron = v.Det < 300 ? '372 TRS' : '373 TRS';
 
-						.then(function (response) {
+							/**
+							 * Generates string for label full-text search
+							 *
+							 * "Nellis 213 372 TRS"
+							 *
+							 * @type {*|string}
+							 */
+							v.text = [
+								v.Base,
+								v.Det,
+								v.Squadron,
+								v.LCode
+							].join(' ');
 
-							      // Add Units to Selectize with row callback
-							      loaded(response, 'Units', function (v) {
+							/**
+							 * Generates string for Selectize display
+							 *
+							 * "Nellis<em> (Det. 213)</em>"
+							 *
+							 * @type {*|string}
+							 */
+							v.label = [
+								'<b>',
+								v.Base,
+								'</b><right>&nbsp;(Det ',
+								v.Det,
+								')</right>'
+							].join('');
 
-								      v.Courses = [];
+							/**
+							 * Generates LongName property for use throughout app
+							 *
+							 * "Nellis (Det. 213)"
+							 *
+							 * @type {*|string}
+							 */
+							v.LongName = [
+								v.Base,
+								' (Det. ',
+								v.Det,
+								')'
+							].join('');
 
-								      // Use Det # to determine squadron 2XX for 372 TRS / 3XX for 373 TRS
-								      v.Squadron = v.Det < 300 ? '372 TRS' : '373 TRS';
+							return v.text;
 
-								      /**
-								       * Generates string for label full-text search
-								       *
-								       * "Nellis 213 372 TRS"
-								       *
-								       * @type {*|string}
-								       */
-								      v.text = [
-									      v.Base,
-									      v.Det,
-									      v.Squadron,
-									      v.LCode
-								      ].join(' ');
+						});
 
-								      /**
-								       * Generates string for Selectize display
-								       *
-								       * "Nellis<em> (Det. 213)</em>"
-								       *
-								       * @type {*|string}
-								       */
-								      v.label = [
-									      '<b>',
-									      v.Base,
-									      '</b><right>&nbsp;(Det ',
-									      v.Det,
-									      ')</right>'
-								      ].join('');
+					}
 
-								      /**
-								       * Generates LongName property for use throughout app
-								       *
-								       * "Nellis (Det. 213)"
-								       *
-								       * @type {*|string}
-								       */
-								      v.LongName = [
-									      v.Base,
-									      ' (Det. ',
-									      v.Det,
-									      ')'
-								      ].join('');
+					function loadHosts(hosts) {
 
-								      return v.text;
+						loaded(hosts, 'Hosts', function (host) {
 
-							      });
+							host.Text = host.Unit;
 
-							      SharePoint
+							return host.Unit;
 
-								      .read(FTSS.models.hosts)
+						});
 
-								      .then(function (hosts) {
+					}
 
-									            loaded(hosts, 'Hosts', function (v) {
+					function loadInstructors(response) {
 
-										            var ftd = caches.Units[v.FTD] || {};
+						loaded(response, 'Instructors', function (val) {
 
-										            v.Text = v.Unit;
+							// Fix for stupid SP bug--I hate SP
+							val.InstructorEmail = val.InstructorEmail ?
+							                      val.InstructorEmail.replace('mailto:', '') :
+							                      '';
 
-										            v.label = '<b>' +
-										                      v.Unit +
-										                      '</b><right>' +
-										                      (ftd.Det || 'No FTD') +
-										                      '</right>';
+							val.label = val.InstructorName;
 
-										            return v.Unit;
+							return val.InstructorName;
 
-									            });
+						});
 
-								            });
-						      });
-
-					SharePoint
-
-						.read(FTSS.models.instructors)
-
-						.then(function (response) {
-
-							      loaded(response, 'Instructors', function (val) {
-
-								      // Fix for stupid SP bug--I hate SP
-								      val.InstructorEmail = val.InstructorEmail ?
-								                            val.InstructorEmail.replace('mailto:', '') :
-								                            '';
-
-								      val.label = val.InstructorName;
-
-								      return val.InstructorName;
-
-							      });
-
-						      });
+					}
 
 				}
 			};
@@ -557,7 +547,9 @@
 
 						// Strange bug we need to look into later on, just try/catch for now...
 						try {
-							selectize = FTSS.selectizeInstances[opts.field] = $(element).selectize(opts)[0].selectize;
+							selectize
+							= FTSS.selectizeInstances[opts.field || attrs.selectize]
+							= $(element).selectize(opts)[0].selectize;
 						} catch (e) {}
 
 						selectize && scope.modal && scope.modal

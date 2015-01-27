@@ -15,6 +15,10 @@
 			'$templateCache',
 			function ($timeout, $templateCache) {
 
+				var templateEvent = _.template($templateCache.get('/partials/resource-view-event.html')),
+
+				    templateMonth = _.template('<td colspan="{{colspan}}">{{month}}</td>');
+
 				return {
 					'restrict'   : 'E',
 					'templateUrl': '/partials/resource-view-layout.html',
@@ -24,9 +28,11 @@
 
 						scope.$watch('$parent.groups', function (groups) {
 
+							if (!groups) {return}
+
 							var html = {}, events = [], min, minClone, max, dayBase,
 
-							    downDays = FTSS.utils.getDownDays(true),
+							    downDays = utils.getDownDays(true),
 
 							    // Check if this is a weekend, holiday or nothing
 							    specialDay = function (day) {
@@ -37,7 +43,7 @@
 							    };
 
 							// Make a flat copy of our data for date range detection
-							_(groups).each(function (group) {
+							_.each(groups, function (group) {
 								events = events.concat(group);
 							});
 
@@ -61,7 +67,9 @@
 							// Create the list of days and months
 							while (minClone < max) {
 
-								var month = minClone.add(1, 'days').format('MMM YYYY');
+								var month = minClone.add(1, 'days').format('MMM YYYY'),
+
+									className = specialDay(minClone);
 
 								if (!html.months[month]) {
 
@@ -75,12 +83,12 @@
 
 								html.months[month].colspan++;
 
-								dayBase.push(specialDay(minClone));
+								dayBase.push(className);
 
 								html.days += [
 
 									'<td class="',
-									specialDay(minClone),
+									className,
 									'">',
 									minClone.format('D'),
 									'<br>',
@@ -100,14 +108,14 @@
 
 							_(html.months).sortBy('sort').each(function (month) {
 
-								html.monthHeader += _.template('<td colspan="{{colspan}}">{{month}}</td>', month)
+								html.monthHeader += templateMonth(month);
 
-							});
+							}).value();
 
 							html.monthHeader += '</tr>;';
 							html.dayHeader = '<tr class="header days">' + html.days + '</tr>';
 
-							_(groups).each(function (instructor) {
+							_.each(groups, function (instructor) {
 
 								instructor.html = '';
 
@@ -151,7 +159,7 @@
 								photo && utils.fetchPhoto(photo, fillImage);
 
 								// Iterate over each event
-								_(instructor).each(function (event) {
+								_.each(instructor, function (event) {
 
 									// We subtract one to include the date the class starts
 									var start = event.startMoment.diff(min, 'days') - 1,
@@ -164,7 +172,9 @@
 									if (unavailable) {
 
 										// This creates the HTML for our unavailable blocks
-										instructor.html += '<td class="unavailable" colspan="' +
+										instructor.html += '<td hover="' +
+										                   event.Instructor.InstructorName +
+										                   ' not available for teaching." class="unavailable" colspan="' +
 										                   event.Days +
 										                   '" id="' +
 										                   event.Id +
@@ -186,25 +196,19 @@
 										// Trim the instructor name if days are shorter than 12
 										event.name = event.Days > 12 ? event.Instructor.InstructorName : '';
 
-										// Identify under-min seats
-										event.className = (event.allocatedSeats <
-										                   event.Course.Min) ? 'short' : event.className;
+										event.className =
 
-										// Add trainingSession class if TTMS contains TS
-										if (event.TTMS && event.TTMS.indexOf('TS') > -1) {
-											event.className = 'trainingSession';
-										}
+											// Id short classes
+											(event.allocatedSeats < event.Course.Min) ? 'short' :
+
+											// Add trainingSession class if TTMS contains TS
+											((event.TTMS || '').toUpperCase().indexOf('TS') > -1) ? 'trainingSession' :
+
+											// Match MTT classes
+											event.MTT ? 'mtt' : event.className;
 
 										// Add our html to the event
-										instructor.html += '<td class="mark ' + event.className + '" colspan="' +
-										                   event.Days +
-										                   '" id="' +
-										                   event.Id +
-										                   '">' +
-
-										                   _.template($templateCache.get('/partials/resource-view-event.html'),
-										                              event) +
-										                   '</td>';
+										instructor.html += templateEvent(event);
 
 									}
 
@@ -225,33 +229,38 @@
 							// Bind the edit function (single click in this case)
 							scope.doClick = function () {
 
-								// Dirty hack to get the current class without a million extra data binds
-								var row = _.find(events, {Id: parseInt($('td:hover').attr('id'))});
+								if (scope.$parent.canEdit) {
 
-								// complete binding to the edit action with our data
-								row && scope.$parent.edit.call({'row': row}, false);
+									// Dirty hack to get the current class without a million extra data binds
+									var row = _.find(events, {Id: parseInt($('td:hover').attr('id'))});
+
+									// complete binding to the edit action with our data
+									row && scope.$parent.edit.call({'row': row}, false);
+
+								}
 
 							};
 
-							html.render = html.monthHeader + html.dayHeader;
+							html.render = '';
 
 							html.spacer = '<tr class="spacer"><td></td></tr>';
 
-							_(html.instructors).sortBy('name').each(function (instructor) {
+							_(html.instructors).sortBy('name').each(function (instructor, index) {
 
-								html.render += html.spacer +
-								               '<tr class="event">' +
+								// For extra large groups,
+								if (index % 10 < 1 &&
+								    (html.instructors.length < 5 || (html.instructors.length - index) > 5)) {
+									html.render += html.monthHeader + html.dayHeader + html.spacer;
+								}
+
+								html.render += '<tr class="event">' +
 								               instructor.html +
-								               '</tr>';
+								               '</tr>' +
+								               html.spacer;
 
-							});
+							}).value();
 
-							if (html.instructors.length > 8) {
-
-								html.render += html.spacer +
-								               (html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
-
-							}
+							html.render += (html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
 
 							scope.html = html.render;
 

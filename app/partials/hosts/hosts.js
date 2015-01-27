@@ -11,7 +11,19 @@ FTSS.ng.controller(
 
 				'sort' : 'Unit',
 				'group': 'det.LongName',
-				'model': 'hosts'
+				'model': 'hosts',
+
+				'edit': function(scope) {
+
+					scope.$watch('data.FTD', function(ftd) {
+
+						if (ftd) {
+							scope.data.Location = caches.Units[ftd].Location;
+						}
+
+					})
+
+				}
 
 			});
 

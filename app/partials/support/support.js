@@ -15,7 +15,7 @@
 			'$timeout',
 			function ($scope, SharePoint, $timeout) {
 
-				var model = FTSS.models.support,
+				var model = FTSS.models('support'),
 
 				    page = FTSS._fn.getPage(),
 

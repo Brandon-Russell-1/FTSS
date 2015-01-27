@@ -1,0 +1,37 @@
+include ../partials/mixins
+
+#searchButtons.no-pad.pull-right(style='width:100px')
+
+    span#toggleExpand(ng-click='fn.doToggleCollapse()', hover='button-collapse', class='btn btn-default', left)
+        +icon('expand')
+        +icon('collapse')
+
+    span#toggleArchive(ng-click='fn.doToggleArchive()', hover='button-archive', class='btn btn-default', left)
+        +icon('trash_hide')
+        +icon('trash_show')
+
+#searchContainer(ng-class='{tagBox:tagBox, singleTag:singleTag}')
+
+    #stats
+        span.badge(ng-class='{overload:count.overload}', hover='record-count', bottom)
+            | {{count.value}}
+            span    ⃰
+
+    #tagBox(explain='tagBoxTip', top, no-arrow)
+
+        select.hide(selectize='appInit',
+                    multiple,
+                    style='width:100%',
+                    autofocus="autofocus",
+                    tabindex='0')
+
+    #fakeSearchButton.btn.btn-info.white(hover='tagBox-button', top, no-arrow)
+        +icon('arrow-right')
+
+    #searchBox(explain='searchBoxTip', top, no-arrow)
+
+        input.search.search-large(type='search',
+                                    ng-model='searchText.$',
+                                    placeholder='Type here to search within this page.',
+                                    tabindex='-1',
+                                    required)

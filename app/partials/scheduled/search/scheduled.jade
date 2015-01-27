@@ -1,4 +1,4 @@
-include ../../__mixins
+include ../../mixins
 include ../__scheduled-mixins
 
 .wrapped.noAdd(ng-class='{autoApprove:autoApprove}')
@@ -12,21 +12,21 @@ include ../__scheduled-mixins
 
             h4
 
-                span.archiveExclude.btn(class='btn-{{row.className}}', ng-click='request(row)') {{row.openSeats}} Open
+                span.archiveExclude.btn(class='btn-{{::row.className}}', ng-click='request(row)') {{::row.openSeats}} Open
 
                 span(style='letter-spacing: .1em')
 
-                    span &nbsp;{{row.Course.PDS}} -&nbsp;
+                    span &nbsp;{{::row.Course.PDS}} -&nbsp;
 
-                    a(href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{row.Course.Number}}',
-                        target='_blank') {{row.Course.Number}}
+                    a(href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{::row.Course.Number}}',
+                        target='_blank') {{::row.Course.Number}}
 
-                    span.italics {{row.TTMSText}}
+                    span.italics {{::row.TTMSText}}
 
-                    span.rollupOnly &nbsp;@ {{row.FTD.LongName}}
+                    span.rollupOnly &nbsp;@ {{::row.FTD.LongName}}
 
                     span.pull-right
-                        | {{row.dateRange}}
+                        | {{::row.dateRange}}
                         +icon('calendar_range')
 
             hr.rollup
@@ -37,7 +37,7 @@ include ../__scheduled-mixins
 
                     table.table.table-split
 
-                        thead: tr: th.truncate(colspan='3') {{row.Course.Title}}
+                        thead: tr: th.truncate(colspan='3') {{::row.Course.Title}}
 
                         tbody
 
@@ -48,37 +48,37 @@ include ../__scheduled-mixins
                             tr
                                 td Location
                                 td
-                                    a(href='https://www.google.com/maps/@{{row.FTD.Location | nospace}},15z',
+                                    a(href='https://www.google.com/maps/@{{::row.locationCoords | nospace}},15z',
                                         target='_blank',
-                                        hover="<img style='width:400px;height:300px' src='{{row.map}}'/>")
+                                        hover="<img style='width:400px;height:300px' src='{{::row.map}}'/>")
 
-                                        | {{row.FTD.LongName}}
+                                        | {{::row.locationName}}
 
-                                    a.no-border.pull-right(href='mailto:{{row.mailFTD}}',
+                                    a.no-border.pull-right(href='mailto:{{::row.mailFTD}}',
                                     hover='Contact the FTD about this class.')
                                         +icon('envelope')
 
-                                    p {{row.FTD.Phone}}
+                                    p {{::row.FTD.Phone}}
 
 
                             tr(ng-if='row.Instructor.InstructorName')
                                 td Instructor
-                                td {{row.Instructor.InstructorName}}
-                                    a.no-border.pull-right(href='mailto:{{row.mailInstructor}}',
+                                td {{::row.Instructor.InstructorName}}
+                                    a.no-border.pull-right(href='mailto:{{::row.mailInstructor}}',
                                                             ng-if='row.mailInstructor',
                                                             hover='Contact the instructor about this course.')
                                         +icon('envelope')
                             tr
                                 td Days
-                                td {{row.Course.Days}}
+                                td {{::row.Course.Days}}
                             tr
                                 td Hours
-                                td {{row.Course.Hours}}
+                                td {{::row.Course.Hours}}
 
                             tr
 
                                 td Notes
-                                td#notes {{row.ClassNotes}}
+                                td#notes {{::row.ClassNotes}}
 
 
             .col-lg-2.pull-right.text-right
@@ -90,31 +90,31 @@ include ../__scheduled-mixins
                         tbody
                             tr(hover='scheduled-seats-host', left, ng-if='row.Host')
                                 td Host
-                                td.text-center {{row.Host}}
+                                td.text-center {{::row.Host}}
 
                             tr(hover='scheduled-seats-non-host', left, ng-if='row.Other')
                                 td Non-host
-                                td.text-center {{row.Other}}
+                                td.text-center {{::row.Other}}
 
                             tr(ng-if='row.approvedSeats', left, hover='scheduled-seats-approved')
                                 td Approved
-                                td.text-center {{row.approvedSeats}}
+                                td.text-center {{::row.approvedSeats}}
 
                             tr.italics(ng-if='row.pendingSeats', hover='scheduled-seats-pending', left)
                                 td Pending
-                                td.text-center {{row.pendingSeats}}
+                                td.text-center {{::row.pendingSeats}}
 
                             tr(style='border-top:2px solid;')
                                 td Minimum
-                                td.text-center {{row.Course.Min}}
+                                td.text-center {{::row.Course.Min}}
 
                             tr
                                 td Maximum
-                                td.text-center {{row.Course.Max}}
+                                td.text-center {{::row.Course.Max}}
 
                             tr(style='border-top:2px solid;')
                                 td Available
-                                td.text-center {{row.openSeats}}
+                                td.text-center {{::row.openSeats}}
 
 
             .clearfix

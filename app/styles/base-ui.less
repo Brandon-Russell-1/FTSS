@@ -17,6 +17,10 @@ body {
 	position: relative;
 }
 
+body > :not(#setupMessage) {
+	display: block !important;
+}
+
 h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4 {
 	display: block;
 	line-height: inherit;
@@ -94,6 +98,8 @@ a, a:hover {
 
 .modal-backdrop.am-fade {
 	background: rgba(0, 0, 0, 0.85);
+	z-index: 999;
+	bottom: 0;
 }
 
 #consent {

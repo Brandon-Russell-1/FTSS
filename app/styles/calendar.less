@@ -1,3 +1,10 @@
+@import (reference) "mixins.less";
+
+.fc-sun, .fc-sat {
+	opacity: .5;
+	background-color: #f3f3f3;
+}
+
 .fc-resizer {
 	border-bottom-right-radius: 3px;
 	border-top-right-radius: 3px;
@@ -119,15 +126,6 @@
 
 /*********************************************/
 
-@classFull: linear-gradient(to right, rgba(70, 184, 218, .95) 25%, rgba(70, 184, 218, .5) 100%);
-@classOpenSeats: linear-gradient(to right, rgba(76, 174, 76, .95) 25%, rgba(76, 174, 76, .6) 100%);
-@classOverBooked: linear-gradient(to right, rgba(217, 83, 79, .95) 25%, rgba(217, 83, 79, .5) 100%);
-@classUnderBooked: linear-gradient(to right, rgba(240, 173, 78, .95) 25%, rgba(240, 173, 78, .5) 100%);
-@classMTT: linear-gradient(to right, rgba(157, 43, 255, 0.82) 25%, rgba(157, 43, 255, .5) 100%);
-@classTrainingSession: linear-gradient(to right, rgba(38, 179, 172, 0.94) 25%, rgba(38, 179, 172, .5) 100%);
-@classHover: linear-gradient(to right, rgba(50, 50, 50, .95) 25%, rgba(50, 50, 50, .5) 100%);
-@instructorUnavailable: linear-gradient(to right, rgba(170, 170, 170, .95) 25%, rgba(170, 170, 170, .5) 100%);
-
 #resourceView {
 	width: 100%;
 	table {
@@ -140,7 +138,7 @@
 			height: 35px;
 		}
 		.mark {
-			background: @classOpenSeats #fff;;
+			background: @classOpenSeats #fff;
 			border: 1px solid #777;
 			border-left: 3px solid #555;
 			padding: 0;
@@ -161,15 +159,15 @@
 	}
 
 	.mtt {
-		background: @classMTT
+		background: @classMTT!important;
 	}
 
 	.unavailable {
-		background: @instructorUnavailable;
+		background: @instructorUnavailable!important;
 	}
 
 	.trainingSession {
-		background: @classTrainingSession;
+		background: @classTrainingSession!important;
 	}
 
 	.spacer {
@@ -274,7 +272,7 @@
 	}
 	.mark:hover {
 		z-index: 20;
-		background: @classHover;
+		background: @classHover!important;
 		box-shadow: 0 0 15px 2px rgba(50, 50, 50, 0.7);
 
 		.mask-img {

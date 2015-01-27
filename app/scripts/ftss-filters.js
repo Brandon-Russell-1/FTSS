@@ -11,30 +11,18 @@
 			    'u': 'UnitId',
 			    'c': 'CourseId'
 		    },
-		    'scheduled-ftd': {
-			    'u': 'UnitId'
-		    },
-		    'requests'     : {
-			    'u': 'UnitId'
-		    },
 		    'requirements' : {
 			    'h': 'HostId',
 			    'u': 'UnitId'
 		    },
 		    'backlog'      : {
 			    'h': 'HostId'
-		    },
-		    'manage-ftd'   : {
-			    'u': 'UnitId'
 		    }
 	    },
 
 	    max = {
 		    'backlog'      : 1,
-		    'requirements' : 1,
-		    'requests'     : 1,
-		    'scheduled-ftd': 1,
-		    'manage-ftd'   : 1
+		    'requirements' : 1
 	    };
 
 	filters.map = function () {
@@ -71,7 +59,7 @@
 				FTSS.search.userOptions = {};
 
 				// Add everything else back in that is a valid filter for this page
-				_(userOptions).each(function (opt, key) {
+				_.each(userOptions, function (opt, key) {
 
 					if (_.contains(validFilters, key.charAt(0))) {
 						FTSS.search.options[key] = _.clone(options[key]);
@@ -118,12 +106,7 @@
 
 					_.each(tags[key], function (tag) {
 
-						fTemp.push(
-							[
-								map,
-								'eq',
-								tag
-							].join(' '));
+						fTemp.push(map + ' eq ' + tag);
 
 					});
 

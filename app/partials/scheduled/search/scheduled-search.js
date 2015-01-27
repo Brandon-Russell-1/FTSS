@@ -6,20 +6,87 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'$modal',
-		'SharePoint',
-		function ($scope, $modal, SharePoint) {
+		function ($scope, $modal) {
 
 			var self = FTSS.controller($scope, {
 
-				    'sort' : 'Start',
-				    'group': 'Course.Number',
-				    'model': 'scheduled'
+				'sort' : 'Start',
+				'group': 'Course.Number',
+				'model': 'scheduledSearch'
 
-			    }),
+			});
 
-			    today = moment();
+			$scope.request = function () {
 
-			$scope.request = utils.requestSeats($scope, $modal, self);
+				var row = this;
+
+				if ($scope.canRequest && row.openSeats > 0 || $scope.autoApprove) {
+
+					var scope = $scope.$new();
+
+					scope.data = row;
+
+					scope.data.Students = [];
+
+					scope.close = $modal(
+						{
+
+							'scope'          : scope,
+							'backdrop'       : 'static',
+							'contentTemplate': '/partials/modal-request-seats.html'
+
+						}).destroy;
+
+					scope.submit = function () {
+
+						if (!$scope.autoApprove) {
+
+							// Send our email notification to the FTD
+							utils.sendEmail(
+								{
+									'to'     : row.FTD.Email,
+									'subject': 'New Seat Request for ' + row.Course.PDS,
+									'body'   : caches.Hosts[scope.data.HostId].Unit +
+									         ' has requested ' +
+									         scope.data.Students.length +
+									         ' seats for the ' +
+									         row.dateRange +
+									         ' class:' +
+									         '\n\n' + scope.data.Students.join('\n') +
+									         '\n\n' + scope.data.Notes
+								});
+
+						}
+
+						row.Requests_JSON = row.Requests_JSON || [];
+
+						row.Requests_JSON.push(
+							[
+								// Status
+								scope.autoApprove ? 2 : 1,
+
+								// Students Array
+								scope.data.Students,
+
+								// Notes
+								scope.data.Notes,
+
+								// Host ID
+								scope.data.HostId
+							]);
+
+						self._update(scope, {
+
+							'cache'        : true,
+							'__metadata'   : row.__metadata,
+							'Requests_JSON': row.Requests_JSON
+
+						}, scope.close);
+
+					};
+				}
+
+			};
 
 			self
 
@@ -28,34 +95,52 @@ FTSS.ng.controller(
 				.then(function (data) {
 
 					      $scope.autoApprove = $scope.hasRole
-					      (['ftd',
-					        'scheduling'
-					       ]);
-
-					      $scope.canRequest = $scope.hasRole(
-						      ['mtf',
+					      ([
 						       'ftd',
 						       'scheduling'
-						      ]);
+					       ]);
 
-					      self.initialize(data).then(function (row, key, collection) {
+					      $scope.canRequest = $scope.hasRole
+					      ([
+						       'mtf',
+						       'ftd',
+						       'scheduling'
+					       ]);
 
-						      // Delete if this class is cancelled or just unavailability
-						      if (!row.CourseId || row.Archived) {
+					      self.initialize(data).then(function (row) {
 
-							      delete collection[row.Id];
+						      utils.processScheduledRow(row);
+
+						      // Hide full classes by default
+						      row.Archived = (row.openSeats < 1);
+
+						      // The URL for our mailTo link
+						      row.mailFTD = row.FTD.Email +
+						                    '?subject=FTSS Class Inquiry for ' +
+						                    row.Course.PDS +
+						                    ' Class #' +
+						                    row.TTMS;
+
+						      if (row.MTT) {
+
+							      row.locationName = row.MTT;
+							      row.locationCoords = caches.geodataFlat[row.MTT].toString()
 
 						      } else {
 
-							      utils.processScheduledRow(row);
+							      row.locationName = row.FTD.LongName;
+							      row.locationCoords = row.FTD.Location;
 
-							      row.Archived = row.openSeats < 1;
-
-							      // Also delete if this is an old class
-							      if (row.startMoment.diff(today, 'days') < 0) {
-								      delete collection[row.Id];
-							      }
 						      }
+
+						      // This is the hover image for each FTD
+						      row.map = row.locationCoords ?
+
+						                'https://maps.googleapis.com/maps/api/staticmap?' +
+						                'sensor=false&size=400x300&zoom=5&markers=color:red|' +
+						                row.locationCoords.replace(/\s/g, '')
+
+							      : '';
 
 					      });
 

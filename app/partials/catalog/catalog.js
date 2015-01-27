@@ -24,7 +24,7 @@ FTSS.ng.controller(
 					if (scope.data.Id && scope.data.Number !== self.data[scope.data.Id].Number) {
 
 						// Copy the model from FTSS.models
-						var model = angular.copy(FTSS.models.courseInvalidate);
+						var model = FTSS.models('courseInvalidate');
 
 						// Search the schedule for active/built classes that match this CourseId
 						model.params.$filter = [
@@ -42,7 +42,7 @@ FTSS.ng.controller(
 							    collection = [];
 
 							// Iterate over results
-							_(result).each(function (test) {
+							_.each(result, function (test) {
 
 								// Ignore old classes
 								if (today < moment(test.Start)) {
@@ -106,7 +106,7 @@ FTSS.ng.controller(
 
 							            d.Units = [];
 
-							            _(caches.Units).each(function (u) {
+							            _.each(caches.Units, function (u) {
 
 								            if (u.Courses_JSON.indexOf(d.Id) > -1) {
 

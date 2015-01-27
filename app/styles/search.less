@@ -35,11 +35,14 @@
 	}
 }
 
-.optgroup.mastercourselist {
-	width: ~'calc(98% - 225px)';
-	.optgroup-header {
-		content: 'Course';
-	}
+.optgroup[data-group="Units"] {
+	min-width: 40%!important;
+}
+.optgroup[data-group="MasterCourseList"] {
+	width: 100%!important;
+}
+.optgroup[data-group="Units"] + .optgroup[data-group="MasterCourseList"] {
+	width: 60%!important;
 	.option {
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -215,7 +218,10 @@ right {
 	}
 }
 
-.multi .selected h5:before, .multi .optgroup:not(.mastercourselist) .selected:before, .single .selected:before {
+.multi .selected h5:before,
+.multi .optgroup:not(.mastercourselist) .selected:before,
+.single .selected:before {
+	float: left;
 	content: "\2713\00a0\00a0";
 }
 

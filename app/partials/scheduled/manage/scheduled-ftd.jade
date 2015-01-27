@@ -1,7 +1,8 @@
-include ../../__mixins
+include ../../mixins
 include ../__scheduled-mixins
 
-+addButton('Create Class')
+div(ng-if='canEdit')
+    +addButton('Create Class')
 
 .wrapped.addNew
 

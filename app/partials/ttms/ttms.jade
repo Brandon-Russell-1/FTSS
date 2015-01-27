@@ -1,14 +1,14 @@
-include ../__mixins
+include ../mixins
 
 - var columns = {Location: 20, Dates:20, Notes: 50}
 
 +tableHeader(false, columns, 'ttms')
 
     td.topFix
-        b {{row.FTD.LCode}}:&nbsp;
-        span {{row.FTD.LongName}}
+        b {{::row.FTD.LCode}}:&nbsp;
+        span {{::row.FTD.LongName}}
 
-    td.bold.topFix {{row.dateRange}}
+    td.bold.topFix {{::row.dateRange}}
 
     td
 
@@ -20,7 +20,7 @@ include ../__mixins
 
         p(ng-if='row.ClassNotes')
             b FTD Notes:&nbsp;
-            span.italics {{row.ClassNotes}}
+            span.italics {{::row.ClassNotes}}
 
     td
 
