@@ -69,7 +69,7 @@
 		 * site altogether.  Finally, we make a double check by validating the file name matches.
 		 *
 		 */
-		if (PRODUCTION === 'asdf' && location.pathname === '/dev.html') {
+		if (!PRODUCTION && location.pathname === '/dev.html') {
 
 			isAdmin = true;
 
