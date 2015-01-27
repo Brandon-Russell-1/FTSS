@@ -1,0 +1,34 @@
+include mixins
+
+.modal-header.caps.bg-danger.text-danger
+    h3
+        +icon('frown-o')
+        | No FTD Assigned
+
+.modal-body
+
+    p.
+        Sorry for the trouble, but it looks like you have the FTD Scheduler role without an assigned FTD.
+        FTSS now requires every user with the FTD scheduler role to be assigned to their FTD.  If someone else in
+        your FTD has proper access, they can assign you simply by adding you as an instructor and entering
+        your AFNET email address:
+
+    h4 {{myEmail}}
+
+    br
+
+    p.
+        If you are not currently assigned to an FTD (such as a CM/TM at Sheppard AFB or host unit scheduler),
+        the features you require are currently being finished and should be availabe soon.
+
+    br
+    br
+    br
+
+    p.italics.
+        The FTSS team has been notified about your problem and should be getting in touch with you soon to
+        resolve the issue.  Thank you for your patience!
+
+.modal-footer
+
+    button.btn.btn-default(ng-click='close()') Okay

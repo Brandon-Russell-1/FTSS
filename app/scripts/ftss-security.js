@@ -49,6 +49,7 @@
 	    isAdmin = false,
 
 	    groups = [];
+		once = true;
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
@@ -67,7 +68,7 @@
 		 * site altogether.  Finally, we make a double check by validating the file name matches.
 		 *
 		 */
-		if (PRODUCTION === false && location.pathname === '/dev.html') {
+		if (PRODUCTION === 'asdf' && location.pathname === '/dev.html') {
 
 			isAdmin = true;
 
@@ -94,6 +95,8 @@
 
 		function initSecurity(user) {
 
+			$scope.myEmail = user.email || 'NO AFNET EMAIL FOUND';
+
 			// Check again if this is an FTD user (should only happen the first time for them)
 			checkFTD(user);
 
@@ -119,7 +122,7 @@
 					.replace('curriculum', 'Training/Curriculum Manager')
 					.replace('scheduling', 'J4 Scheduler')
 					.replace('admin', 'Administrator')
-					.replace('instructor', 'FTD Instructor/Supervisor')
+					.replace('instructor', 'FTD Member')
 					.replace('guest', 'Visitor');
 
 				// Finish the security code
@@ -139,10 +142,12 @@
 				return;
 			}
 
-			var ftd = JSON.parse(localStorage.ftssCachedFTD || false) ||
+			var email = (user && user.email || '').toLowerCase().trim(),
+
+			    ftd = JSON.parse(localStorage.ftssCachedFTD || false) ||
 
 			          _.find(caches.Instructors, function (test) {
-				          return test.InstructorEmail.toLowerCase() === (user.email || '').toLowerCase();
+				          return email && test.InstructorEmail.toLowerCase().trim() === email;
 			          });
 
 			if (ftd) {
@@ -165,6 +170,23 @@
 				$scope.initInstructorRole = function () {
 
 					checkFTD(user);
+
+					// Only notify the user if this is the first time this page load
+					if (once && $scope.hasRole('ftd') && !$scope.ftd) {
+
+						utils.errorHandler(
+							{
+								'stack': 'A user with FTD rights does not currently have an assigned FTD in FTSS.  ' +
+								       'Their details are listed below:\n\n' +
+								       'Name:  ' + user.name + '\n' +
+								       'Email: ' + user.email
+							});
+
+						utils.modal('no-assigned-ftd', $scope);
+
+					}
+
+					once = false;
 
 				};
 
