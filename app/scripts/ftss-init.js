@@ -100,7 +100,7 @@
 		              'offline'     : false,
 		              'baseURL'     : base + 'live/_vti_bin/ListData.svc/',
 		              'user'        : {'url': base + 'live/_vti_bin/UserGroup.asmx'},
-		              'cacheVersion': 23
+		              'cacheVersion': 25
 
 	              } : {
 
@@ -108,7 +108,7 @@
 		              'offline'     : false,
 		              'baseURL'     : base + 'dev2/_vti_bin/ListData.svc/',
 		              'user'        : {'url': base + 'dev2/_vti_bin/UserGroup.asmx'},
-		              'cacheVersion': 23
+		              'cacheVersion': 25
 
 	              });
 
