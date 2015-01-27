@@ -16,7 +16,6 @@
 
 	};
 
-	}());
 
 	FTSS.ng.run(
 		[
@@ -207,7 +206,8 @@
 
 									'__metadata': 'ErrorLog',
 									'Page'      : window.location.hash,
-									'Stack'     : err.stack
+									'Stack'     : err.stack || (new Error()).stack,
+									'Contents'  : JSON.stringify(err, null, 2)
 
 								});
 
