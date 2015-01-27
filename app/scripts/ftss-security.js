@@ -50,7 +50,7 @@
 
 	    groups = [],
 
-		once = true;
+	    once = true;
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
@@ -246,6 +246,4 @@
 
 	};
 
-}()
-)
-;
+}());
