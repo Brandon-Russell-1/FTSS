@@ -157,19 +157,6 @@ FTSS.controller = (function () {
 				// Pass the response to actions.data for access externally
 				actions.data = data;
 
-				/**
-				 * Updates the page count/overload class and passes user messages for no data
-				 *
-				 * @param count
-				 * @param overload
-				 */
-				$scope.counter = function (count, overload) {
-
-					$scope.$parent.count = count;
-					$scope.$parent.overload = overload;
-
-				};
-
 				// If there was no data found pass the User Empty Message and abort the operation
 				if (_.keys(data || {}).length < 1) {
 
@@ -313,8 +300,8 @@ FTSS.controller = (function () {
 
 								// Reset groups, counter & count
 								$scope.groups = false;
-								$scope.counter('-', false);
-								$scope.count = 0;
+								$scope.count.value = '-';
+								$scope.count.overload = false;
 
 								// Create our sorted groups and put in our scope
 								$scope.groups = _(sifter)
@@ -345,7 +332,7 @@ FTSS.controller = (function () {
 									// Group the data by the given property
 									.groupBy(function (gp) {
 
-										         $scope.count++;
+										         counter++;
 
 										         return opts.group ?
 										                utils.deepRead(gp, opts.group) || '' :
@@ -357,7 +344,7 @@ FTSS.controller = (function () {
 								opts.finalProcess && opts.finalProcess($scope.groups);
 
 								// Update the scope counter + overload indicator
-								$scope.counter($scope.count, $scope.count !== sifter.length);
+								$scope.count.value = counter;
 
 								// Perform final loading
 								$scope.fn.setLoaded(function () {

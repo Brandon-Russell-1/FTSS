@@ -312,8 +312,10 @@
 
 					// Reset some basic view settings
 					$scope.pageLimit = FTSS.prefs.limit;
-					$scope.count = '-';
-					$scope.overload = false;
+					$scope.count = {
+						'value'    : '-',
+						'overload': false
+					};
 					$scope.filter = false;
 					$scope.searchText = {};
 					$scope.showArchive = false;

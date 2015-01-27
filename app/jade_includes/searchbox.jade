@@ -13,8 +13,8 @@ include ../partials/mixins
 #searchContainer(ng-class='{tagBox:tagBox, singleTag:singleTag}')
 
     #stats
-        span.badge(ng-class='{overload:overload}', hover='record-count', bottom)
-            | {{count}}
+        span.badge(ng-class='{overload:count.overload}', hover='record-count', bottom)
+            | {{count.value}}
             span    ⃰
 
     #tagBox(explain='tagBoxTip', top, no-arrow)
