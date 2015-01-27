@@ -20,7 +20,8 @@
 			'SharePoint',
 			'$alert',
 			'$location',
-			function ($timeout, SharePoint, $alert, $location) {
+			'$modal',
+			function ($timeout, SharePoint, $alert, $location, $modal) {
 
 				/**
 				 * Performs nested property lookups without eval or switch(e.length), removed try {} catch(){}
@@ -495,6 +496,19 @@
 					}
 
 				};
+
+				utils.modal = function (template, $scope) {
+
+					var scope = $scope.$new();
+
+					scope.modal = $modal({
+						                     contentTemplate: '/partials/' + template + '.html', scope: scope,
+						                     show           : true
+					                     });
+
+					scope.close = scope.modal.destroy;
+
+				},
 
 				/**
 				 * Our app-wide alert notification system, this will eventually replace all the other message garbage polluting MainController
