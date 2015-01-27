@@ -5,9 +5,7 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		'$modal',
-		'SharePoint',
-		function ($scope, $modal, SharePoint) {
+		function ($scope) {
 
 			// Increase the default page limit to 100 for this view
 			$scope.pageLimit = 100;
@@ -115,7 +113,7 @@ FTSS.ng.controller(
 								    scope.data.startMoment = event.start;
 
 								    // Update the model's start date
-								    scope.data.Start = event.start.format('YYYY-MM-DD');
+								    scope.data.Start =utils.startDayCreator(event.start);
 
 								    // Update our end date for the modal view
 								    scope.data.endMoment = event.end;

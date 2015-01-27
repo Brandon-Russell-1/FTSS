@@ -2,15 +2,19 @@
 
 (function () {
 
-	utils.startDayFinder = (function () {
+	y2k = moment('2000-01-01', 'YYYY-MM-DD');
 
-		start = moment('2000-01-01', 'YYYY-MM-DD');
+	utils.startDayFinder = function (days) {
 
-		return function (days) {
+		return y2k.clone().add(days, 'days');
 
-			return start.clone().add(days, 'days');
+	};
 
-		}
+	utils.startDayCreator = function (start) {
+
+		return start.diff(y2k, 'days') + 1;
+
+	};
 
 	}());
 
