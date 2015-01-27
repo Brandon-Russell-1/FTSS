@@ -48,7 +48,8 @@
 
 	    isAdmin = false,
 
-	    groups = [];
+	    groups = [],
+
 		once = true;
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
