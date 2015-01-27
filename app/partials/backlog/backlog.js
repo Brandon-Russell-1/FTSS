@@ -41,7 +41,7 @@ FTSS.ng.controller(
 					$scope.flatData = [];
 
 					// Make a flat copy of our data forth main list
-					_(groups).each(function (group) {
+					_.each(groups, function (group) {
 						$scope.flatData = $scope.flatData.concat(group);
 					});
 
@@ -85,7 +85,7 @@ FTSS.ng.controller(
 
 					};
 
-					_(courses).each(function (course) {
+					_.each(courses, function (course) {
 
 						// This just limits how many students are visible by default
 						course.limit = 3;
@@ -168,7 +168,7 @@ FTSS.ng.controller(
 					};
 
 					// Iterate over each course in the modal and parse/add to oDataCall
-					_(scope.courses).each(function (course) {
+					_.each(scope.courses, function (course) {
 
 						var req = [
 							    // Course
@@ -193,7 +193,7 @@ FTSS.ng.controller(
 						delete course.requirements;
 
 						// Iterate through all the students and add to the 898 and stats respectively
-						_(course.students).each(function (requirement) {
+						_.each(course.students, function (requirement) {
 
 							requirement.selected = false;
 
@@ -267,13 +267,13 @@ FTSS.ng.controller(
 				$scope.history = {};
 
 				// Iterate over our stats data--this will tell us if a user has already been submitted before and track our history
-				_(backlogStats).each(function (stat) {
+				_.each(backlogStats, function (stat) {
 
 					// This will let us have multiple 898's for one month
 					var history = $scope.history[stat.Month] = $scope.history[stat.Month] || {};
 
 					// Iterate over all the courses in an 898
-					_(stat.Data_JSON).each(function (course, id) {
+					_.each(stat.Data_JSON, function (course, id) {
 
 						// Build our list of trainee requests so we don't show prior requests still in the AAA
 						$scope.old[id] = $scope.old[id] ? $scope.old[id].concat(course[1]) : course[1];
@@ -323,7 +323,7 @@ FTSS.ng.controller(
 
 					$scope.month,
 
-					($scope.count > 0),
+					($scope.count.value > 0),
 
 					$scope.groups ? _.all($scope.flatData, function (course) {
 
@@ -413,7 +413,7 @@ FTSS.ng.controller(
 					}
 
 					// Iterate over all the requirements
-					_(text).each(function (c, k) {
+					_.each(text, function (c, k) {
 
 						// This should always work--but just in case, get our course data from the course catalog
 						//var course = _.findWhere(caches.MasterCourseList, {'IMDS': k}) || {};
@@ -437,11 +437,11 @@ FTSS.ng.controller(
 					});
 
 					// This will loop over each FTD and add itself to any courses in our list
-					_(caches.Units).each(function (u) {
+					_.each(caches.Units, function (u) {
 
 						var unit = angular.copy(u);
 
-						_(unit.Courses_JSON).each(function (c) {
+						_.each(unit.Courses_JSON, function (c) {
 
 							var course = courses[c];
 

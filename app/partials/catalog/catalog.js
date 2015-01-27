@@ -42,7 +42,7 @@ FTSS.ng.controller(
 							    collection = [];
 
 							// Iterate over results
-							_(result).each(function (test) {
+							_.each(result, function (test) {
 
 								// Ignore old classes
 								if (today < moment(test.Start)) {
@@ -106,7 +106,7 @@ FTSS.ng.controller(
 
 							            d.Units = [];
 
-							            _(caches.Units).each(function (u) {
+							            _.each(caches.Units, function (u) {
 
 								            if (u.Courses_JSON.indexOf(d.Id) > -1) {
 

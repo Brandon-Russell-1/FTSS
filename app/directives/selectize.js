@@ -216,7 +216,7 @@
 					    loaded = function (data, group, text) {
 
 						    // Destroy all archived data because it is completely useless to us...
-						    _(data).each(function (row, key) {
+						    _.each(data, function (row, key) {
 
 							    row.Archived && delete data[key];
 
@@ -278,9 +278,9 @@
 							    // Add the options to our searchBox
 							    that.addOption(tagBoxOpts);
 
-							    _(caches.Units).each(function (unit) {
+							    _.each(caches.Units, function (unit) {
 
-								    _(unit.Courses_JSON).each(function (course) {
+								    _.each(unit.Courses_JSON, function (course) {
 
 									    unit.Courses.push(caches.MasterCourseList[course]);
 
@@ -290,7 +290,7 @@
 
 							    });
 
-							    _(caches.Hosts).each(function (host) {
+							    _.each(caches.Hosts, function (host) {
 
 								    var ftd = caches.Units[host.FTD] || {};
 

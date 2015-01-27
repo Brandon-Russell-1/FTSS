@@ -251,9 +251,9 @@
 						    map = FTSS.filters.map();
 
 						// First, generate the array of tags to test against
-						_(FTSS.tags).each(function (tag, key) {
+						_.each(FTSS.tags, function (tag, key) {
 
-							_(tag).each(function (t) {
+							_.each(tag, function (t) {
 
 								if (map[key]) {
 
@@ -271,10 +271,10 @@
 
 						// Perform tests against all data using the test[] already created,
 						// _.all() stops once all tags are marked (if applicable)
-						_(data).all(function (req) {
+						_.all(data, function (req) {
 
 							// Must use _.each() in case a data item matches multiple tags
-							_(test).each(function (t, k) {
+							_.each(test, function (t, k) {
 
 								/**
 								 *  If field and testValue match, add Matched class and delete test-- we shouldn't touch the DOM

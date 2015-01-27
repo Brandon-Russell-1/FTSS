@@ -58,7 +58,7 @@
 				    .replace(/\n+/gm, '\n');
 
 			// Iterate over each line
-			_(parsed.split('\n')).each(function (s) {
+			_.each(parsed.split('\n'), function (s) {
 
 				s
 

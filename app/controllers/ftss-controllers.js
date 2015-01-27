@@ -198,7 +198,7 @@ FTSS.controller = (function () {
 				data = data || actions.data;
 
 				// If there is a defined data processor, then execute it against the data as well
-				process && _(data).each(process);
+				process && _.each(data, process);
 
 				// Finally, do our tagHighlighting if this is a tagBox
 				FTSS.tagBox && utils.tagHighlight(data);
@@ -274,7 +274,9 @@ FTSS.controller = (function () {
 								}
 
 								// reference for our searchText
-								var query = _.map(($scope.searchText.$ || '')
+								var counter = 0,
+
+								    query = _.map(($scope.searchText.$ || '')
 
 									                  // Convert " or " to a regex or
 									                  .replace(/\sor\s/gi, '|')
@@ -327,7 +329,7 @@ FTSS.controller = (function () {
 									        })
 
 									// Trim our results
-									.first($scope.pageLimit)
+									.take($scope.pageLimit)
 
 									// Group the data by the given property
 									.groupBy(function (gp) {
@@ -345,6 +347,7 @@ FTSS.controller = (function () {
 
 								// Update the scope counter + overload indicator
 								$scope.count.value = counter;
+								$scope.count.overload = (counter !== sifter.length);
 
 								// Perform final loading
 								$scope.fn.setLoaded(function () {
@@ -631,7 +634,7 @@ FTSS.controller = (function () {
 						fields = FTSS.models(opts.model).params.$select;
 
 						//  Compare each field from the list of fields to the old data
-						_(fields).each(function (field) {
+						_.each(fields, function (field) {
 
 							var data = scope.data[field];
 

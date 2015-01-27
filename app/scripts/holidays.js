@@ -71,7 +71,7 @@
 			    });
 
 			    // Add the family days to the array
-			    _(familyDays).each(function (day) {
+			    _.each(familyDays, function (day) {
 
 				    set.push(
 					    {

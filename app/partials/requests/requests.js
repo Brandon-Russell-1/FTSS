@@ -28,9 +28,9 @@ FTSS.ng.controller(
 
 					      var collection = [];
 
-					      _(data).each(function (group) {
+					      _.each(data, function (group) {
 
-						      _(group.Requests_JSON).each(function (request, index) {
+						      _.each(group.Requests_JSON, function (request, index) {
 
 							      var row = _.clone(group);
 
@@ -141,7 +141,7 @@ FTSS.ng.controller(
 
 									            row.Archived = true;
 
-									            _(group).each(function (r) {
+									            _.each(group, function (r) {
 
 										            r.__metadata.etag = resp.headers('ETag');
 										            r.Requests_JSON = row.Requests_JSON;

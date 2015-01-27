@@ -144,7 +144,7 @@ FTSS.ng.controller(
 							      // add the data back to the scope
 							      row.history = stat;
 
-							      _(stat).each(function (course) {
+							      _.each(stat, function (course) {
 
 								      var hours = course.Hours || course.Course.Hours;
 
@@ -195,7 +195,7 @@ FTSS.ng.controller(
 								                   item.text +
 								                   '</i></b>';
 
-							      });
+							      }).value();
 
 							      // A rough estimate of instructor time utilization
 							      row.annualEffectiveness = Math.floor(row.annualHours / 19.2);
@@ -204,7 +204,7 @@ FTSS.ng.controller(
 
 					$scope.ftdStats = ftdStats;
 
-					_(ftdStats.graph).each(function (month) {
+					_.each(ftdStats.graph, function (month) {
 
 						month.utilization = (month.students / month.available) * 100 || 0;
 

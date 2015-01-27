@@ -59,7 +59,7 @@
 				FTSS.search.userOptions = {};
 
 				// Add everything else back in that is a valid filter for this page
-				_(userOptions).each(function (opt, key) {
+				_.each(userOptions, function (opt, key) {
 
 					if (_.contains(validFilters, key.charAt(0))) {
 						FTSS.search.options[key] = _.clone(options[key]);
