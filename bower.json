@@ -24,7 +24,8 @@
     "angular-ui-calendar": "~0.9.0",
     "n3-line-chart": "latest",
     "angular-loading-bar": "~0.6.0",
-    "comma-separated-values": "~3.6.1"
+    "comma-separated-values": "~3.6.1",
+    "FileSaver": "*"
   },
   "overrides": {
     "angular-mocks": {
