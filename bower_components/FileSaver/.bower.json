@@ -1,5 +1,6 @@
 {
   "name": "FileSaver",
+  "main": "FileSaver.js",
   "homepage": "https://github.com/eligrey/FileSaver.js",
   "_release": "24b303f492",
   "_resolution": {

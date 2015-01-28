@@ -17,7 +17,9 @@
 
 				var templateEvent = _.template($templateCache.get('/partials/resource-view-event.html')),
 
-				    templateMonth = _.template('<td colspan="{{colspan}}">{{month}}</td>');
+				    templateMonth = _.template('<td colspan="{{colspan}}">{{month}}</td>'),
+
+				    dayFormat = 'MM-DD-YYYY';
 
 				return {
 					'restrict'   : 'E',
@@ -63,13 +65,14 @@
 
 							scope.resourceEvents = [];
 							scope.photoCache = {};
+							scope.csv = [];
 
 							// Create the list of days and months
 							while (minClone < max) {
 
 								var month = minClone.add(1, 'days').format('MMM YYYY'),
 
-									className = specialDay(minClone);
+								    className = specialDay(minClone);
 
 								if (!html.months[month]) {
 
@@ -165,11 +168,23 @@
 									var start = event.startMoment.diff(min, 'days') - 1,
 
 									    // Detect instructor unavailability
-									    unavailable = event.CourseId < 1;
+									    unavailable = event.CourseId < 1,
+
+									    csv = {};
 
 									createTDs(start);
 
+									csv['Instructor'] = event.Instructor.InstructorName || 'Unassigned';
+									csv['Start Date'] = event.startMoment.format(dayFormat);
+									csv['End Date'] = event.endMoment.format(dayFormat);
+									csv['MTT'] = event.MTT;
+
 									if (unavailable) {
+
+										csv['TTMS Class #'] = '';
+										csv['PDS Code'] = '';
+										csv['Course #'] = 'UNAVAILABLE';
+										csv['Course Title'] = 'Instructor not available to teach';
 
 										// This creates the HTML for our unavailable blocks
 										instructor.html += '<td hover="' +
@@ -183,6 +198,13 @@
 										                   '</div></td>';
 
 									} else {
+
+										csv['TTMS Class #'] = event.TTMS || '';
+										csv['PDS Code'] = event.Course.PDS;
+										csv['Course #'] = event.Course.Number;
+										csv['Course Title'] = event.Course.Title;
+										csv['Host Seats'] = event.Host;
+										csv['Open Seats'] = event.openSeats;
 
 										// Attempt to use cached bioPhoto
 										event.bioPhoto = bioPhoto;
@@ -198,22 +220,26 @@
 
 										event.className =
 
-											// Id short classes
-											(event.allocatedSeats < event.Course.Min) ? 'short' :
+										// Id short classes
+										(event.allocatedSeats < event.Course.Min) ? 'short' :
 
 											// Add trainingSession class if TTMS contains TS
-											((event.TTMS || '').toUpperCase().indexOf('TS') > -1) ? 'trainingSession' :
+										((event.TTMS || '').toUpperCase().indexOf('TS') > -1) ? 'trainingSession' :
 
 											// Match MTT classes
-											event.MTT ? 'mtt' : event.className;
+										event.MTT ? 'mtt' : event.className;
 
 										// Add our html to the event
 										instructor.html += templateEvent(event);
 
 									}
 
+									csv['Notes'] = event.ClassNotes;
+
 									// Increment the day counter
 									count += event.Days;
+
+									scope.csv.push(csv);
 
 								});
 
@@ -225,6 +251,24 @@
 								html.instructors.push(instructor);
 
 							});
+
+							scope.$parent.export = function () {
+
+								var csvData = new CSV(scope.csv, {header: true}).encode(),
+
+								    blob = new Blob([decodeURIComponent(encodeURI(csvData))], {
+									    type: "text/csv;charset=utf-8;"
+								    }),
+
+								    fileName = [
+									    scope.$parent.ftd.LongName,
+									    ' Scheduling Data - ',
+									    moment().format(),
+									    '.csv'].join('');
+
+								saveAs(blob, fileName);
+
+							};
 
 							// Bind the edit function (single click in this case)
 							scope.doClick = function () {
