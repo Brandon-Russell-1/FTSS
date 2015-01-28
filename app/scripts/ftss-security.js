@@ -59,7 +59,6 @@
 		$scope.roleClasses = '';
 		$scope.roleText = '';
 
-
 		/**
 		 * This eliminates the needless server calls for user/group info when developing FTSS.
 		 *
@@ -199,6 +198,45 @@
 		 * Complete security by binding $scope.hasRole(), $scope.isAuthorized() and then running doInitPage()
 		 */
 		function completeSecurity() {
+
+			/**
+			 * Allow switching FTDs for certain users
+			 */
+			$scope.switchFTD = function () {
+
+				// Only allow admins to do this
+				if ($scope.hasRole('admin')) {
+
+					// Create an object that will pass up from the child scope
+					$scope.newFTD = {};
+
+					// Launch the modal dialog
+					utils.modal('switch-ftd', $scope);
+
+					// Watch our newFTD variable
+					$scope.$watch('newFTD.id', function (id) {
+
+						if (id) {
+
+							// Update the localStorage variable
+							localStorage.ftssCachedFTD = JSON.stringify(
+								{
+									'Id'      : caches.Units[id].Id,
+									'LongName': caches.Units[id].LongName
+								}
+							);
+
+							// Reload the page
+							location.reload();
+
+						}
+
+					});
+
+
+				}
+
+			};
 
 			/**
 			 * Test for a particular user role
