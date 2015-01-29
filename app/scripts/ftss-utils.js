@@ -179,8 +179,6 @@
 							window.location = '#home';
 							window.location.reload(true);
 
-							console && console.log('Cache flush okay.');
-
 						});
 
 					} catch (e) {
@@ -196,6 +194,8 @@
 				 * @param err
 				 */
 				utils.errorHandler = function (err) {
+
+					console && console.log(err);
 
 					if (PRODUCTION) {
 
