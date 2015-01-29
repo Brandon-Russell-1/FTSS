@@ -63,13 +63,20 @@
 					// Remove the next item from the array
 					var route = routes.shift();
 
-					// Route based on name / linker / search to a controller of nameController
-					$routeProvider.when('/' + route + '/:link?/:search?', {
+					if (route !== 'reset') {
+						// Route based on name / linker / search to a controller of nameController
+						$routeProvider.when('/' + route + '/:link?/:search?', {
 
-						'templateUrl': '/partials/' + route + '.html',
-						'controller' : route + 'Controller'
+							'templateUrl': '/partials/' + route + '.html',
+							'controller' : route + 'Controller'
 
-					});
+						});
+
+					} else {
+
+						$routeProvider.when('/reset', {});
+
+					}
 
 				}
 
@@ -110,7 +117,7 @@
 	              } : {
 
 		              // These are the ng-sharepoint parameters for the DEVELOPMENT version of FTSS
-		              'offline'     : true,
+		              'offline'     : false,
 		              'baseURL'     : base + 'dev2/_vti_bin/ListData.svc/',
 		              'user'        : {'url': base + 'dev2/_vti_bin/UserGroup.asmx'},
 		              'cacheVersion': 25

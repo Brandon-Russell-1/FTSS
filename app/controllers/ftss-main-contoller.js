@@ -287,6 +287,15 @@
 
 				};
 
+
+				if ($location.path() === '/reset') {
+
+					$scope.ABORT = true;
+					utils.masterReset();
+					return;
+
+				}
+
 				// Setup our SP group-based security
 				FTSS.security(SharePoint, $scope, _fn);
 
@@ -294,13 +303,6 @@
 				 * Starts the loading indicators on navigation begin
 				 */
 				$scope.$on('$locationChangeStart', function () {
-
-					// This is a reset handler to flush cache/reset user settings
-					if (_fn.getPage() === 'reset') {
-						$scope.ABORT = true;
-						setTimeout(utils.masterReset, 500);
-						return;
-					}
 
 					// Start the loading feedback
 					utils.loading(true);
@@ -313,7 +315,7 @@
 					// Reset some basic view settings
 					$scope.pageLimit = FTSS.prefs.limit;
 					$scope.count = {
-						'value'    : '-',
+						'value'   : '-',
 						'overload': false
 					};
 					$scope.filter = false;
