@@ -26,13 +26,11 @@ include ../../mixins
                     td
 
                         b.form-control(contenteditable,
-                                        blur,
                                         ng-model='row.InstructorName',
                                         onEnter='inlineUpdate("InstructorName")',
                                         placeholder='Member, i.e. SSgt John Doe')
 
                         .form-control(contenteditable,
-                                        blur,
                                         ng-model='row.InstructorEmail',
                                         onEnter='inlineUpdate("InstructorEmail")',
                                         placeholder='Email address')
