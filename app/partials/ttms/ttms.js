@@ -6,11 +6,13 @@ FTSS.ng.controller(
 		'$scope',
 		function ($scope) {
 
+			$scope.pageLimit = 999;
+
 			var self = FTSS.controller($scope, {
 
-				    'sort'  : 'startMoment',
-				    'group' : 'course',
-				    'model' : 'ttms'
+				    'sort' : 'startMoment',
+				    'group': 'course',
+				    'model': 'ttms'
 
 			    }),
 
