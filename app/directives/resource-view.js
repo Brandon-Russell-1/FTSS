@@ -15,20 +15,24 @@
 			'$templateCache',
 			function ($timeout, $templateCache) {
 
-				var templateEvent = _.template($templateCache.get('/partials/resource-view-event.html')),
-
-				    templateMonth = _.template('<td colspan="{{colspan}}">{{month}}</td>'),
-
-				    dayFormat = 'MM-DD-YYYY';
-
 				return {
 					'restrict'   : 'E',
 					'templateUrl': '/partials/resource-view-layout.html',
 					'replace'    : true,
 					'scope'      : {},
-					'link'       : function (scope, $el) {
+					'link'       : function (scope, $el, $attr) {
 
-						scope.$watch('$parent.groups', function (groups) {
+						var templateEvent = _.template($templateCache.get($attr.template ||
+						                                                  '/partials/resource-view-event.html')),
+
+						    templateMonth = _.template('<td colspan="{{colspan}}">{{month}}</td>'),
+
+						    dayFormat = 'MM-DD-YYYY',
+
+						    watch = '$parent.' + ($attr.bind || 'groups');
+
+
+						scope.$watch(watch, function (groups) {
 
 							if (!groups) {return}
 
@@ -264,7 +268,8 @@
 									    scope.$parent.ftd.LongName,
 									    ' Scheduling Data - ',
 									    moment().format(),
-									    '.csv'].join('');
+									    '.csv'
+								    ].join('');
 
 								saveAs(blob, fileName);
 
@@ -304,7 +309,9 @@
 
 							}).value();
 
-							html.render += (html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
+							if (html.instructors.length > 9) {
+								html.render += (html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
+							}
 
 							scope.html = html.render;
 
