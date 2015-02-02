@@ -97,7 +97,7 @@
 					// Write data to the model
 					function read() {
 
-						var txt = element.text().replace(/[^\w.#,*?@[\]()!=]/mg, ' ');
+						var txt = element.text();
 
 						txt && ngModel.$setViewValue(txt);
 
