@@ -19,11 +19,11 @@ div(ng-class='{addNew:addNew}')
                                 'You must enter a name',
                                 'instructors-name')
 
-                +formGroupText('Email',
+                +formGroupText('AFNET Email or Account Id',
                                 'row.InstructorEmail',
-                                'email',
-                                false,
-                                'Please enter a valid email address',
+                                'text',
+                                true,
+                                'You must enter an email or account #',
                                 'instructors-email')
 
             .col-lg-3
@@ -100,15 +100,13 @@ div(ng-class='{addNew:addNew}')
                             br.archiveOnly
 
                             b.form-control(contenteditable,
-                                            blur,
                                             ng-model='row.InstructorName',
                                             onEnter='inlineUpdate("InstructorName")',
                                             placeholder='Member, i.e. SSgt John Doe')
 
                             .form-control(contenteditable,
-                                            blur,
                                             ng-model='row.InstructorEmail',
                                             onEnter='inlineUpdate("InstructorEmail")',
-                                            placeholder='Email address')
+                                            placeholder='AFNET Email or Account ID')
 
                         td.w5: +actions(false, false, true, 'member')
