@@ -1,0 +1,33 @@
+td(class='mark',  colspan='{{Days}}', id='{{Id}}')
+
+    div(class='{{Instructor.Photo}}') {{bioPhoto}}
+
+    span.pds {{pds}}&nbsp;
+    span.instructor <i>{{FTD.LongName}}</i>
+
+    .details
+
+        .container
+
+            h5.border-bottom
+                b {{Course.PDS}} - {{Course.Number}}&nbsp;&nbsp;&nbsp;
+                i {{TTMS}}
+                b.pull-right {{dateRange}}
+
+            .clearfix
+
+            .col-lg-3.btn.btn-success {{openSeats}} Seats Open
+
+            .col-lg-8
+
+                .wideText {{Course.Title}}
+
+                i {{Instructor.InstructorName}}
+
+            br
+
+            .clearfix
+
+            p {{ClassNotes}}
+
+            .clearfix

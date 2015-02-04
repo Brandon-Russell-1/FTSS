@@ -124,6 +124,7 @@
 
 		    'scheduledSearch': {
 
+			    'cache' : !PRODUCTION,
 			    'source': 'Scheduled',
 			    'params': {
 				    '$filter': [

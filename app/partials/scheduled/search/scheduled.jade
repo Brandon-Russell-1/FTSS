@@ -1,132 +1,85 @@
 include ../../mixins
-include ../__scheduled-mixins
 
 .wrapped.noAdd(ng-class='{autoApprove:autoApprove}')
 
     +userInstructions('scheduled', true)
 
-    +grouping()
+    .group(ng-repeat='(header, group) in groups')
 
-        .well(ng-repeat='row in group track by row.Id',
+        .lead(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
+
+            span {{::group[0].Course.PDS}} -&nbsp;
+
+            a(href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{::group[0].Course.Number}}',
+                target='_blank') {{::group[0].Course.Number}}
+
+            span.pull-right {{group.length}}
+
+        .lead.italics(style='letter-spacing: .1em;font-size: 1.2em;') {{::group[0].Course.Title}}
+
+        // --------------------------------------------------------
+
+        resource-view(ng-if='wellCollapse', bind='group.instructors', template='/partials/resource-view-event-search.html')
+
+        // --------------------------------------------------------
+
+        .clearfix
+
+        .row(ng-if='!wellCollapse', ng-repeat='row in group track by row.Id',
         ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}')
 
-            h4
+            .btn.btn-success.openSeats(ng-click='row.request()') {{::row.openSeats}}
 
-                span.archiveExclude.btn(class='btn-{{::row.className}}', ng-click='request(row)') {{::row.openSeats}} Open
+            .well.well-sm
 
-                span(style='letter-spacing: .1em')
+                .pull-left(style='width:185px')
+                        photo.img-rounded(ng-if='row.Instructor.Photo', size='150px', shape='rectangle', data='row.Instructor')
+                        | &nbsp;
 
-                    span &nbsp;{{::row.Course.PDS}} -&nbsp;
+                .pull-left(style='width:calc(95% - 160px)')
 
-                    a(href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{::row.Course.Number}}',
-                        target='_blank') {{::row.Course.Number}}
+                    .double
+                        | {{::row.dateRange}}&nbsp;
 
-                    span.italics {{::row.TTMSText}}
+                        span.lightText at&nbsp;
 
-                    span.rollupOnly &nbsp;@ {{::row.FTD.LongName}}
+                        a(href='https://www.google.com/maps/@{{::row.locationCoords | nospace}},15z',
+                            target='_blank',
+                            hover="<h4>{{::row.FTD.Phone}}</h4><img style='width:400px;height:300px' src='{{::row.map}}'/>") {{::row.locationName}}
 
-                    span.pull-right
-                        | {{::row.dateRange}}
-                        +icon('calendar_range')
+                        .pull-right.lightText {{::row.Instructor.InstructorName}}
 
-            hr.rollup
+                    p.notes {{::row.ClassNotes}}
 
-            .rollup
+                    .requestActions
 
-                .col-lg-8.pull-left
+                        hr
 
-                    table.table.table-split
+                        .pull-left.lightCourseNumber(ng-if='!autoApprove')  # {{::row.TTMS}} -&nbsp;
+                        .pull-left: p.form-control.wideText(ng-if='autoApprove',
+                                                                    contenteditable,
+                                                                    ng-model='row.TTMS',
+                                                                    onEnter='row.updateTTMS()',
+                                                                    placeholder='Class #')
 
-                        thead: tr: th.truncate(colspan='3') {{::row.Course.Title}}
+                        .pull-left.lightCourseNumber &nbsp;{{::row.Course.PDS}} - {{::row.Course.Number}}
 
-                        tbody
+                        .pull-right.invert(ng-if='row.allocatedSeats')
 
-                            tr(ng-if='row.Instructor.Photo')
-                                td(rowspan='8', colspan='1', style='border-right: none;width:185px;padding-top: 20px')
-                                    photo.img-rounded(size='150px', shape='rectangle', data='row.Instructor')
+                                .btn.btn-info.btn-labeled.btn-muted(ng-click='row.showStudents()')
+                                    span.btn-label: +icon('student_hand')
+                                    | Students ({{::row.allocatedSeats}})
 
-                            tr
-                                td Location
-                                td
-                                    a(href='https://www.google.com/maps/@{{::row.locationCoords | nospace}},15z',
-                                        target='_blank',
-                                        hover="<img style='width:400px;height:300px' src='{{::row.map}}'/>")
+                        .pull-right.invert
 
-                                        | {{::row.locationName}}
+                                .btn.btn-success.btn-labeled.btn-muted(ng-click='row.request()')
+                                    span.btn-label: +icon('plus-circle')
+                                    | Request Seats
 
-                                    a.no-border.pull-right(href='mailto:{{::row.mailFTD}}',
-                                    hover='Contact the FTD about this class.')
-                                        +icon('envelope')
+                        .pull-right.invert
 
-                                    p {{::row.FTD.Phone}}
-
-
-                            tr(ng-if='row.Instructor.InstructorName')
-                                td Instructor
-                                td {{::row.Instructor.InstructorName}}
-                                    a.no-border.pull-right(href='mailto:{{::row.mailInstructor}}',
-                                                            ng-if='row.mailInstructor',
-                                                            hover='Contact the instructor about this course.')
-                                        +icon('envelope')
-                            tr
-                                td Days
-                                td {{::row.Course.Days}}
-                            tr
-                                td Hours
-                                td {{::row.Course.Hours}}
-
-                            tr
-
-                                td Notes
-                                td#notes {{::row.ClassNotes}}
-
-
-            .col-lg-2.pull-right.text-right
-
-                    table.table.table-split
-
-                        thead: tr: th.text-right(colspan='2') TRAINING SEATS
-
-                        tbody
-                            tr(hover='scheduled-seats-host', left, ng-if='row.Host')
-                                td Host
-                                td.text-center {{::row.Host}}
-
-                            tr(hover='scheduled-seats-non-host', left, ng-if='row.Other')
-                                td Non-host
-                                td.text-center {{::row.Other}}
-
-                            tr(ng-if='row.approvedSeats', left, hover='scheduled-seats-approved')
-                                td Approved
-                                td.text-center {{::row.approvedSeats}}
-
-                            tr.italics(ng-if='row.pendingSeats', hover='scheduled-seats-pending', left)
-                                td Pending
-                                td.text-center {{::row.pendingSeats}}
-
-                            tr(style='border-top:2px solid;')
-                                td Minimum
-                                td.text-center {{::row.Course.Min}}
-
-                            tr
-                                td Maximum
-                                td.text-center {{::row.Course.Max}}
-
-                            tr(style='border-top:2px solid;')
-                                td Available
-                                td.text-center {{::row.openSeats}}
-
-
-            .clearfix
-
-            .requestActions.archiveExclude
-
-                hr
-
-                .pull-right.invert
-
-                        .btn.btn-success.btn-labeled.btn-muted(ng-click='request(row)', ng-if='row.openSeats && canRequest || autoApprove')
-                            span.btn-label: +icon('plus-circle')
-                            | Request Seats
+                            a.btn.btn-primary.btn-labeled.btn-muted(href='mailto:{{::row.mailFTD}}')
+                                span.btn-label: +icon('envelope')
+                                | Contact FTD
 
                 .clearfix

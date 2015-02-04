@@ -29,6 +29,82 @@
 	}
 }
 
+#scheduled {
+
+	.openSeats {
+		font-size: 2em;
+		position: absolute;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+		right: 89.5%;
+		width: 4%;
+	}
+
+	.lead {
+		font-weight: 500;
+	}
+
+	.row:hover {
+		.lightCourseNumber {
+			color: #333!important;
+		}
+	}
+
+	#mainView .well {
+		margin-left: 10%;
+		width: 90%;
+		border-top-left-radius: 0;
+		position: relative;
+
+		.requestActions, .double {
+			position: absolute;
+			bottom: 15px;
+			right: 10px;
+			left: 185px;
+
+			hr {
+				margin-bottom: 10px;
+				margin-top: 10px;
+			}
+
+		}
+
+		.notes {
+			min-height: 1.5em;
+			margin-top: 2.5em;
+			margin-bottom: 5em;
+			font-style: italic;
+		}
+
+		.double {
+			font-weight: 600;
+			top: 10px;
+			bottom: auto;
+
+			.lightText {
+				font-weight: 300;
+			}
+		}
+
+		.lightCourseNumber {
+			color: #bbb;
+			font-size: 1.5em;
+			font-weight: 100;
+			letter-spacing: .1em;
+			line-height: 1.8em;
+		}
+
+	}
+
+	#resourceView {
+		width: 100%;
+		overflow-x: auto;
+		overflow-y: visible;
+		padding-left: 5%;
+	}
+
+}
+
 input#ttms {
 	position: absolute;
 	width: 100px;

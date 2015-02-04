@@ -1,0 +1,28 @@
+include ../../mixins
+
+form.form-horizontal(name='modal')
+
+    .modal-header.caps
+        h3
+            +icon('student_hand')
+            | View Registered Students
+
+    #requestSeats.modal-body
+
+        .lead This class has {{::requestView.allocatedSeats}} reserved seats.
+
+        table.table.table-split
+
+            tbody
+
+                tr(hover='scheduled-seats-host', right)
+                    td Reserved Host Seats
+                    td.text-center {{::requestView.Host}}
+
+                tr(hover='scheduled-seats-non-host', right)
+                    td Other Reserved Seats
+                    td.text-center {{::requestView.Other}}
+
+        +registeredStudents('students')
+
+    .modal-footer: .btn.btn-default(ng-click='close()') Continue

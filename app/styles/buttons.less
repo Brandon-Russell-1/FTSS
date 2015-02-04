@@ -99,7 +99,10 @@
 	display: inline !important;
 }
 
-body.archived #toggleArchive .icon.trash_hide, #toggleArchive .icon.trash_show, body.collapsed #toggleExpand .icon.expand, #toggleExpand .icon.collapse {
+body.archived #toggleArchive .icon.trash_hide,
+#toggleArchive .icon.trash_show,
+body.collapsed #toggleExpand .icon.expand,
+#toggleExpand .icon.collapse {
 	display: none !important;
 }
 
@@ -111,11 +114,14 @@ traverse {
 	}
 }
 
-.table-hover tbody tr .btn-muted, .well .btn-muted {
+.table-hover tbody tr .btn-muted,
+.row .btn-muted {
 	transition: opacity 500ms ease;
+	color: #fff;
 }
 
-.table-hover tbody tr:not(:hover) .btn-muted, .well:not(:hover) .btn-muted {
+.table-hover tbody tr:not(:hover) .btn-muted,
+.row:not(:hover) .btn-muted {
 	color: #111;
 	background-color: transparent;
 	opacity: .2;
