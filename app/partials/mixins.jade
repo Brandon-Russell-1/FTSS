@@ -228,3 +228,24 @@ mixin confirmPopover(className, title, text, action)
                     .btn.btn-default.btn-sm(ng-click='$hide()') No, cancel
 
             .clearfix
+
+
+mixin registeredStudents(bind)
+
+    .well.well-sm(ng-repeat='request in ' + bind)
+
+        .bold.border-bottom(class='text-{{request.statusClass}}')
+            | {{request.status}} ({{request.students.length}})
+            .pull-right {{request.unit.Text}}
+
+        dl.dl-horizontal
+            dt Student(s)
+            dd(ng-repeat='student in request.students') {{student}}
+
+            dt Notes
+            dd.italics {{request.notes}}
+
+            dt Response
+            dd.wideText {{request.response}}
+
+        .clearfix

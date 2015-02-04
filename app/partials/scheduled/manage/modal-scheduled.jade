@@ -152,23 +152,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
 
                 br
 
-                .well.well-sm(ng-repeat='request in data.requests')
-
-                    .bold.border-bottom(class='text-{{request.statusClass}}')
-                        | {{request.status}} ({{request.students.length}})
-                        .pull-right {{request.unit.Text}}
-
-                    dl.dl-horizontal
-                        dt Student(s)
-                        dd(ng-repeat='student in request.students') {{student}}
-
-                        dt Notes
-                        dd.italics {{request.notes}}
-
-                        dt Response
-                        dd.wideText {{request.response}}
-
-                    .clearfix
+                +registeredStudents('data.requests')
 
         .clearfix
 
