@@ -1,33 +1,26 @@
 include mixins
 
-.modal-header.caps.bg-danger.text-danger
-    h3
-        +icon('frown-o')
-        | No FTD Assigned
+form.form-horizontal(name='modal')
 
-.modal-body
+    .modal-header.caps.bg-warning.text-warning
+        h3
+            +icon('exclamation-circle')
+            | No Assigned FTD
 
-    p.
-        Sorry for the trouble, but it looks like you have the FTD Scheduler role without an assigned FTD.
-        FTSS now requires every user with the FTD scheduler role to be assigned to their FTD.  If someone else in
-        your FTD has proper access, they can assign you simply by adding you as an instructor and entering
-        your AFNET email address:
+    .modal-body
 
-    h4 {{myEmail}}
+        .lead.
+            Sorry for the trouble, but it looks like you have the FTD Scheduler role without an assigned FTD.
+            Please choose your current FTD from the list below.
 
-    br
+        select(selectize='Units', bind='newFTD.id', placeholder='Choose an FTD to switch to')
 
-    p.lead You may be able to fix this yourself using the link below:
+        .text-info.info.italics
+            +icon('info-circle')
+            small If you are not assigned to an FTD in the 982 TRG, please let us know ASAP.
 
-    .row.text-center
-        a.lead(href='https://cs1.eis.af.mil/sites/ftss#reset') https://cs1.eis.af.mil/sites/ftss#reset
+        br
+        br
 
-    br
-
-    p.italics.
-        The FTSS team has been notified about your problem and should be getting in touch with you soon to
-        resolve the issue.  Thank you for your patience!
-
-.modal-footer
-
-    button.btn.btn-default(ng-click='close()') Okay
+        p.italics.
+            The FTSS team has been notified about this and will work to ensure you don't see this message again.

@@ -48,9 +48,7 @@
 
 	    isAdmin = false,
 
-	    groups = [],
-
-	    once = true;
+	    groups = [];
 
 	FTSS.security = function (SharePoint, $scope, _fn) {
 
@@ -95,7 +93,7 @@
 
 		function initSecurity(user) {
 
-			$scope.myEmail = user.email || 'NO AFNET EMAIL FOUND';
+			$scope.myEmail = user.email || user.loginname;
 
 			// Check again if this is an FTD user (should only happen the first time for them)
 			checkFTD(user);
@@ -142,28 +140,44 @@
 				return;
 			}
 
-			var email = (user && user.email || '').toLowerCase().trim(),
+			// Check for email and loginname
+			var identifier = user ?
 
+			                 [
+				                 (user.email || '').toLowerCase().trim() || false,
+				                 (user.loginname || '').toLowerCase().trim() || false
+			                 ].filter(function (e) {return e}) : [],
+
+			    // First try to load from localStorage, otherwise attempt to load from cache
 			    ftd = JSON.parse(localStorage.ftssCachedFTD || false) ||
 
-			          _.find(caches.Instructors, function (test) {
-				          return email && test.InstructorEmail.toLowerCase().trim() === email;
-			          });
+			          (caches.Instructors && identifier.length && _(caches.Instructors)
+
+				          // Remove empty accounts
+				          .filter('InstructorEmail')
+
+				          // Try to perform our match against the array elements
+				          .find(function (test) {
+
+					                var check = test.InstructorEmail.toLowerCase().trim();
+					                return (identifier.indexOf(check) > -1);
+
+				                }));
 
 			if (ftd) {
 
-				$scope.ftd = caches.Units ? caches.Units[ftd.UnitId] : ftd;
+				// Load the $scope.ftd variable
+				$scope.ftd = caches.Units ? caches.Units[ftd.UnitId || ftd.Id] : ftd;
 
+				// Add the "instructor" group to this user
 				groups.push('instructor');
 
-				if (!localStorage.ftssCachedFTD) {
-					localStorage.ftssCachedFTD = JSON.stringify(
-						{
-							'Id'      : $scope.ftd.Id,
-							'LongName': $scope.ftd.LongName
-						}
-					);
-				}
+				// Push this back to localStorage for future use
+				localStorage.ftssCachedFTD = JSON.stringify(
+					{
+						'Id'      : $scope.ftd.Id,
+						'LongName': $scope.ftd.LongName
+					});
 
 			} else {
 
@@ -172,21 +186,20 @@
 					checkFTD(user);
 
 					// Only notify the user if this is the first time this page load
-					if (once && $scope.hasRole('ftd') && !$scope.ftd) {
+					if ($scope.hasRole('ftd') && !$scope.ftd) {
 
+						// Log the error
 						utils.errorHandler(
 							{
 								'stack': 'A user with FTD rights does not currently have an assigned FTD in FTSS.  ' +
 								       'Their details are listed below:\n\n' +
 								       'Name:  ' + user.name + '\n' +
-								       'Email: ' + user.email
+								       'Email or Account: ' + (user.email || user.loginname)
 							});
 
 						utils.modal('no-assigned-ftd', $scope);
 
 					}
-
-					once = false;
 
 				};
 
@@ -205,13 +218,13 @@
 			$scope.switchFTD = function () {
 
 				// Only allow admins to do this
-				if ($scope.hasRole('admin')) {
+				if ($scope.hasRole('ftd')) {
 
 					// Create an object that will pass up from the child scope
 					$scope.newFTD = {};
 
 					// Launch the modal dialog
-					utils.modal('switch-ftd', $scope);
+					utils.modal(isAdmin ? 'switch-ftd' : 'no-assigned-ftd', $scope);
 
 					// Watch our newFTD variable
 					$scope.$watch('newFTD.id', function (id) {
