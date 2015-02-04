@@ -70,7 +70,7 @@ include ../../mixins
                                     span.btn-label: +icon('student_hand')
                                     | Students ({{::row.allocatedSeats}})
 
-                        .pull-right.invert
+                        .pull-right.invert(ng-if='canRequest')
 
                                 .btn.btn-success.btn-labeled.btn-muted(ng-click='row.request()')
                                     span.btn-label: +icon('plus-circle')
