@@ -11,19 +11,7 @@ FTSS.ng.controller(
 
 				'sort' : 'Unit',
 				'group': 'det.LongName',
-				'model': 'hosts',
-
-				'edit': function(scope) {
-
-					scope.$watch('data.FTD', function(ftd) {
-
-						if (ftd) {
-							scope.data.Location = caches.Units[ftd].Location;
-						}
-
-					})
-
-				}
+				'model': 'hosts'
 
 			});
 
@@ -44,6 +32,7 @@ FTSS.ng.controller(
 							            // Add the FTD data if this unit has one assigned
 							            if (d.FTD) {
 								            d.det = caches.Units[d.FTD];
+								            d.Location = d.det.Location;
 								            d.search += d.det.search;
 							            }
 
