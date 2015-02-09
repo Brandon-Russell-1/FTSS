@@ -15,6 +15,8 @@ html(lang='en', ng-app='FTSS')
 
         |<!--[if IE]><meta http-equiv="refresh" content="0;URL='legacy.html'"><![endif]-->
 
+        +initScripts(false)
+
         style(type='text/css').
             body > :not(#setupMessage) {
                 display: none!important;
@@ -51,6 +53,8 @@ html(lang='en', ng-app='FTSS')
                 color: #fff;
                 padding: 15px;
             }
+
+
 
         link(rel='stylesheet', href='css/app.css')
 

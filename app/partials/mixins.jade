@@ -1,4 +1,4 @@
-mixin iniScripts(production)
+mixin initScripts(production)
 
     script.
 
@@ -27,7 +27,7 @@ mixin iniScripts(production)
             window.FTSS = {};
             window.utils = {};
             window.caches = {};
-            window.PRODUCTION = #{PRODUCTION};
+            window.PRODUCTION = #{production};
 
             if (Function('/*@cc_on return document.documentMode===10@*/')()) {
                 document.documentElement.className += ' ie10';
