@@ -4,9 +4,9 @@ div(ng-class='{addNew:addNew}')
 
     +addButton('Add Member', 'addInstructor()')
 
-    #add-aside.add-button(ng-file-drop='onFileSelect($files)')
+    #add-aside.add-button(ng-file-drop, ng-file-change='onFileSelect($files)')
 
-        form(name='modal')
+    form(name='modal')
 
             +userInstructions('add-instructor')
 
