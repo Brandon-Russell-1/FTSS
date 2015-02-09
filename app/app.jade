@@ -62,11 +62,10 @@ html(lang='en', ng-app='FTSS')
         img#bg2
         #bgText
 
-        #setupMessage Setting up FTSS...
+        #setupMessage Please wait, getting a couple files before we get started (about 450 KBs).
 
         ng-include(src='"/partials/layout.html"')
 
-        #spinner(ng-cloak)
-            +spinner()
+        #spinner(ng-cloak): +spinner()
 
-        script(src='https://s3.amazonaws.com/ftss/live.js?2015.01.25')
+        img(src='https://d2jjzg0gg2bs3z.cloudfront.net/mark.gif')
