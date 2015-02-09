@@ -4,12 +4,24 @@
 
 	y2k = moment('2000-01-01', 'YYYY-MM-DD');
 
+	utils.todayNumber = moment();
+
+	/**
+	 *
+	 * @param days
+	 * @returns {*}
+	 */
 	utils.startDayFinder = function (days) {
 
 		return y2k.clone().add(days, 'days');
 
 	};
 
+	/**
+	 *
+	 * @param start
+	 * @returns {*}
+	 */
 	utils.startDayCreator = function (start) {
 
 		return start.diff(y2k, 'days') + 1;
