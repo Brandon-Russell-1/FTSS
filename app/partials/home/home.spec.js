@@ -1,19 +1,22 @@
 describe('Controller: homeController', function () {
-	var ctrl, scope;
 
-	beforeEach(module('FTSS'));
-
-	// Initialize the controller and scope
-	beforeEach(inject(function ($controller, $rootScope) {
-		scope = $rootScope.$new();
-		ctrl = $controller('homeController', {
-			$scope: scope
-		});
-
-	}));
+	var __ = setupController('home', null, {
+		'fn': {
+			'addAsync': function(callback) {
+				callback();
+			},
+			'setLoaded': function() {
+				__.$scope.loaded = true;
+			}
+		}
+	});
 
 	it('should turn on the slides', function () {
-		expect(scope.toggleSlides).toEqual(true);
+		expect(__.$scope.toggleSlides).toBe(true);
+	});
+
+	it('should finish loading the page', function () {
+		expect(__.$scope.loaded).toBe(true);
 	});
 
 });

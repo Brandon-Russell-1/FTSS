@@ -119,7 +119,7 @@
 	              } : {
 
 		              // These are the ng-sharepoint parameters for the DEVELOPMENT version of FTSS
-		              'offline'     : true,
+		              'offline'     : false,
 		              'baseURL'     : base + 'dev2/_vti_bin/ListData.svc/',
 		              'user'        : {'url': base + 'dev2/_vti_bin/UserGroup.asmx'},
 		              'cacheVersion': 25
