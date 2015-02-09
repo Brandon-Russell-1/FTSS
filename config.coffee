@@ -21,7 +21,8 @@ exports.config =
           'app/scripts/ftss-init.js'
         ]
         after : [
-          'app/scripts/dodconsent.js'
+          'app/scripts/dodconsent.js',
+          'vendor/lib_log.js'
         ]
 
     stylesheets:

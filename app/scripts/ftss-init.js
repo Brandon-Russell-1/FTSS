@@ -8,6 +8,8 @@
 
 	"use strict";
 
+	_TIMER.add('live-app');
+
 	/**
 	 * Create the Angular module & declare dependencies
 	 *

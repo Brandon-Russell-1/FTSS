@@ -27,6 +27,8 @@
 			'$route',
 			function ($scope, $location, SharePoint, $routeParams, $timeout, $http) {
 
+				_TIMER.add('mainController');
+
 				var jobs = [],
 
 				    /**
@@ -65,6 +67,8 @@
 					 */
 					'setLoaded': function (callback) {
 
+						_TIMER.add('setLoaded');
+
 						callback && callback();
 
 						$timeout(function () {
@@ -73,9 +77,7 @@
 
 						utils.loading(false);
 
-					}
-
-					,
+					},
 
 					/**
 					 * Used to create a permaLink for a given page for bookmarking/sharing
@@ -88,9 +90,7 @@
 							$scope.permaLink += '/' + btoa($scope.searchText.$);
 						}
 
-					}
-
-					,
+					},
 
 					/**
 					 * Gets the current page
@@ -98,9 +98,7 @@
 					 */
 					'getPage': function () {
 						return $location.path().split('/')[1];
-					}
-
-					,
+					},
 
 					/**
 					 * Performs our page navigation function
@@ -119,27 +117,21 @@
 
 						});
 
-					}
-
-					,
+					},
 
 					/**
 					 * Toggles data well collapses
 					 */
 					'doToggleCollapse': function () {
 						$scope.wellCollapse = $scope.wellCollapse ? '' : 'collapsed';
-					}
-
-					,
+					},
 
 					/**
 					 * Toggles data archive visibility
 					 */
 					'doToggleArchive': function () {
 						$scope.showArchive = $scope.showArchive ? '' : 'archived';
-					}
-
-					,
+					},
 
 					/**
 					 * Generates short URLs using the USA.gov API for generating go.usa.gov links
@@ -181,15 +173,16 @@
 								                              page).split('://')[1];
 
 							      });
-					}
 
-					,
+					},
 
 					/**
 					 * Performs the final page initialization.  This is called by multiple async operations so we must
 					 * make several checks before running.
 					 */
 					'doInitPage': function () {
+
+						_TIMER.add('doInitPage');
 
 						if (checkState()) {
 

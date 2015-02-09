@@ -1,3 +1,41 @@
+mixin iniScripts(production)
+
+    script.
+
+        (function() {
+
+            "use strict";
+
+            var log = [];
+
+            window._TIMER = {
+                'add': function (text) {
+                    var entry = [text, Math.floor(window.performance.now())];
+                    console && console.log(entry);
+                    log.push(entry);
+                },
+                'get': function () {
+                    console && console.log(log);
+                    return log;
+                }
+            };
+
+            _TIMER.add('html');
+
+            document.cookie = 'DodNoticeConsent=1';
+
+            window.FTSS = {};
+            window.utils = {};
+            window.caches = {};
+            window.PRODUCTION = #{PRODUCTION};
+
+            if (Function('/*@cc_on return document.documentMode===10@*/')()) {
+                document.documentElement.className += ' ie10';
+            }
+
+        }());
+
+
 //- icon mixin to create our SVG icons
 mixin icon(tag, viewbox)
 
