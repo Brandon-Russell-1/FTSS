@@ -324,14 +324,11 @@
 
 				$scope.$on('$routeChangeSuccess', function () {
 
-					// The second parameter of the URL is a search
-					var search = $routeParams.search && atob($routeParams.search) || false;
-
 					// Calculate the page/link portion of the permaLink
 					$scope.permaLink = _fn.getPage() !== 'home' && $routeParams.link || '';
 
 					// Allow search to come from URl
-					$scope.searchText.$ = search || '';
+					$scope.searchText.$ = $routeParams.search ? atob($routeParams.search) : '';
 
 				});
 
