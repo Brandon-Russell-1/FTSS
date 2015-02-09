@@ -119,9 +119,14 @@ FTSS.ng.controller(
 
 			self.bind().then(function (data) {
 
-				var UnitId = $scope.ftd.Id;
+				var UnitId = $scope.ftd.Id,
 
-				$scope.data = angular.copy(caches.Units[UnitId]);
+				    scopeData = caches.Units[UnitId];
+
+				$scope.__metadata = scopeData.__metadata;
+				$scope.Courses_JSON = scopeData.Courses_JSON;
+				$scope.Phone = scopeData.Phone;
+				$scope.Email = scopeData.Email;
 
 				// Only include instructors for this unit
 				data = angular.copy(_.filter(data, {'UnitId': UnitId}));

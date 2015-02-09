@@ -70,7 +70,7 @@
 
 								}
 
-								// Optional inline updates
+								// Optional inline updates (does not work with deep bindings)
 								if (opts.inline && scope.inlineUpdate) {
 
 									scope.inlineUpdate.call(scope, opts.field);
@@ -136,7 +136,7 @@
 
 					};
 
-					scope.$watch('data.Id', setup);
+					scope.$watch(opts.field, setup);
 
 				}
 			});
@@ -541,7 +541,7 @@
 							    };
 
 							// Our watch binding
-							scope.$watch('data.' + attrs.watch, refresh);
+							scope.$watch(attrs.watch, refresh);
 
 						}
 
