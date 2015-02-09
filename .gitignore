@@ -23,3 +23,6 @@ vendor/prefetch.js
 app/assets/prefetch.js
 
 app/assets/prefetch.min.js
+
+coverage
+coverage/*
