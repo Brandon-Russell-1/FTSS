@@ -87,7 +87,7 @@ div(ng-class='{addNew:addNew}')
 
                     tr.am-slide-right(ng-repeat='row in groups.false track by row.Id',
                                         ng-class='{archived:row.Archived}',
-                                        ng-file-drop='onFileSelect($files)')
+                                        ng-file-drop, ng-file-change='onFileSelect($files)')
 
                         td.drag-target
 
