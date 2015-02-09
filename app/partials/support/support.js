@@ -17,7 +17,7 @@
 
 				var model = FTSS.models('support'),
 
-				    page = FTSS._fn.getPage(),
+				    page = $scope.fn.getPage(),
 
 				    update,
 
