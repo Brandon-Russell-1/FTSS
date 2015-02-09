@@ -18,43 +18,7 @@ html(lang='en', ng-app='FTSS')
         +initScripts(true)
 
         style(type='text/css').
-            body > :not(#setupMessage) {
-                display: none!important;
-            }
-
-            html, body {
-                height: 100%;
-                width: 100%;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                overflow: hidden;
-                position: absolute;
-            }
-
-            body {
-                background-color: #f7f7f7;
-                font-family: 'Open Sans', sans-serif;
-                margin: 0;
-                padding: 0;
-                position: relative;
-            }
-
-            [ng-cloak]  {
-                display: none !important;
-            }
-            #setupMessage {
-                position: absolute;
-                background: #222;
-                top: 0;
-                left: 0;
-                right: 0;
-                color: #fff;
-                padding: 15px;
-            }
-
-        link(rel='stylesheet', href='https://s3.amazonaws.com/ftss/live.css?2015.01.25')
+            body > :not(#setupMessage){display:none!important}html,body{height:100%;width:100%;top:0;right:0;bottom:0;left:0;overflow:hidden;position:absolute}body{background-color:#f7f7f7;font-family:'Open Sans',sans-serif;margin:0;padding:0;position:relative}[ng-cloak]{display:none!important}#setupMessage{position:absolute;background:#222;top:0;left:0;right:0;color:#fff;padding:15px}
 
     body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}} {{roleClasses}}')
 
