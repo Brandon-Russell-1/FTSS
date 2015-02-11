@@ -40,8 +40,7 @@ FTSS.ng.controller(
 									'subject': 'J4 Scheduling Update for ' + data.Course.PDS,
 									'body'   : _.template('The following notes were left by Sheppard for the ' +
 									                      '{{Course.PDS}} class with dates of {{dateRange}}:' +
-									                      '\n\n{{J4Notes}}',
-									                      data)
+									                      '\n\n{{J4Notes}}')(data)
 								});
 
 						}
