@@ -119,19 +119,25 @@ FTSS.ng.controller(
 
 									      if (!$scope.autoApprove) {
 
+										      var email = {
+
+											      'host'    : caches.Hosts[scope.data.HostId].Unit,
+											      'seats'   : scope.data.Students.length,
+											      'dates'   : row.dateRange,
+											      'students': scope.data.Students.join('\n'),
+											      'notes'   : scope.data.Notes
+
+
+										      };
+
 										      // Send our email notification to the FTD
 										      utils.sendEmail(
 											      {
 												      'to'     : row.FTD.Email,
 												      'subject': 'New Seat Request for ' + row.Course.PDS,
-												      'body'   : caches.Hosts[scope.data.HostId].Unit +
-												               ' has requested ' +
-												               scope.data.Students.length +
-												               ' seats for the ' +
-												               row.dateRange +
-												               ' class:' +
-												               '\n\n' + scope.data.Students.join('\n') +
-												               '\n\n' + scope.data.Notes
+												      'body'   : _.template('{{host}} has requested {{seats}} seats for the ' +
+												                            '{{dates}} class: \n\n {{students}}\n\n {{notes}}',
+												                            email)()
 											      });
 
 									      }
