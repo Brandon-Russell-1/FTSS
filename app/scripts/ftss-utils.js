@@ -132,7 +132,7 @@
 					row.requestCount = seats[1] + seats[2] + seats[3];
 					row.allocatedSeats = seats[2] + row.Host + row.Other;
 
-					row.openSeats = row.Course.Max - row.allocatedSeats - row.pendingSeats;
+					row.openSeats = row.Course.Max - row.allocatedSeats;
 				};
 
 				/**
