@@ -218,7 +218,7 @@
 
 									'__metadata': 'ErrorLog',
 									'Page'      : window.location.hash,
-									'Stack'     : err.stack || (new Error()).stack,
+									'Stack'     : err.stack || (new Error()).stack || null,
 									'Contents'  : JSON.stringify(err, null, 2)
 
 								});
