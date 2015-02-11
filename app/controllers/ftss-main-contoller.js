@@ -27,7 +27,7 @@
 			'$route',
 			function ($scope, $location, SharePoint, $routeParams, $timeout, $http) {
 
-				_TIMER.add('mainController');
+				_TIMER.add('main');
 
 				var jobs = [],
 
@@ -67,7 +67,7 @@
 					 */
 					'setLoaded': function (callback) {
 
-						_TIMER.add('setLoaded');
+						_TIMER.add('loaded');
 
 						callback && callback();
 
@@ -182,7 +182,7 @@
 					 */
 					'doInitPage': function () {
 
-						_TIMER.add('doInitPage');
+						_TIMER.add('init');
 
 						if (checkState()) {
 
@@ -330,11 +330,41 @@
 					// Allow search to come from URl
 					$scope.searchText.$ = $routeParams.search ? atob($routeParams.search) : '';
 
+					logNavigation();
+
 				});
 
 				FTSS._fn = _fn;
 
 				utils.flickr();
+
+				/**
+				 * Sends user navigation and page-load statistics to our audit list
+				 */
+				function logNavigation() {
+
+					// Wrap in a try/catch as this is just some extra logging info
+					try {
+
+						// Only apply to production app
+						if (PRODUCTION) {
+
+							// Create the basic data to send
+							var send = {
+								'__metadata': 'Audit',
+								'P'         : location.hash
+							};
+
+							FTSS.performance(send);
+
+							// Send to SP without showing loading bar
+							SharePoint.create(send, null, {'ignoreLoadingBar': true});
+
+						}
+
+					} catch (e) {}
+
+				}
 
 			}
 		]);

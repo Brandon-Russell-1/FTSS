@@ -1,9 +1,5 @@
 include partials/mixins
 
--linkCSS  = 'live.css?2015.02.10'
--linkApp  = 'live-app.js?2015.02.10b'
--linkLib  = 'live-libs.js?2015.02.10'
-
 doctype html
 
 html(lang='en', ng-app='FTSS')
@@ -19,12 +15,12 @@ html(lang='en', ng-app='FTSS')
 
         |<!--[if IE]><meta http-equiv="refresh" content="0;URL='legacy.html'"><![endif]-->
 
-        +initScripts(true, false)
+        +initScripts(true, true)
 
         style(type='text/css').
             body > :not(#setupMessage),script{display:none!important}html,body{height:100%;width:100%;top:0;right:0;bottom:0;left:0;overflow:hidden;position:absolute}body{background-color:#f7f7f7;font-family:'Open Sans',sans-serif;margin:0;padding:0;position:relative}[ng-cloak]{display:none!important}#setupMessage{position:absolute;background:#222;top:0;left:0;right:0;color:#fff;padding:15px}.slow a{color:#4cae4c!important;font-size:1.15em}
 
-        link(href='https://d2jjzg0gg2bs3z.cloudfront.net/' + linkCSS, rel='stylesheet')
+        link(href='/sites/ftss/failover/live.css', rel='stylesheet')
 
     body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}} {{roleClasses}}')
 
@@ -32,15 +28,15 @@ html(lang='en', ng-app='FTSS')
         img#bg2
         #bgText
 
-        #setupMessage Please wait, getting a couple files before we get started (about 450 KBs).
+        #setupMessage ***Fallback Site***  Please wait, getting a couple files before we get started (about 450 KBs).
 
         ng-include(src='"/partials/layout.html"')
 
         #spinner(ng-cloak): +spinner()
 
-        img(src='https://d2jjzg0gg2bs3z.cloudfront.net/mark.gif')
+        img(src='https://d2jjzg0gg2bs3z.cloudfront.net/mark.gif?failover')
 
-        script(src='https://d2jjzg0gg2bs3z.cloudfront.net/' + linkLib)
-        script(src='https://d2jjzg0gg2bs3z.cloudfront.net/' + linkApp)
+        script(src='/sites/ftss/failover/live-libs.js' )
+        script(src='/sites/ftss/failover/live-app.js')
 
         script(style='display:none!important') fallback();

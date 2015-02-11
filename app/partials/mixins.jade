@@ -1,36 +1,95 @@
-mixin initScripts(production)
+mixin initScripts(production, noFallback)
 
     script.
 
-        (function() {
+        (function () {
 
             "use strict";
 
-            var log = [];
+            var log = [],
 
+                noFallback = #{noFallback};
+
+            // setup our timer functions
             window._TIMER = {
                 'add': function (text) {
-                    var entry = [text, Math.floor(window.performance.now())];
-                    console && console.log(entry);
-                    log.push(entry);
+                    log.push(text + ':   ' + Math.floor(window.performance.now()));
                 },
                 'get': function () {
-                    console && console.log(log);
-                    return log;
+                    return JSON.stringify(log, null, 2);
                 }
             };
 
+            // indicate the HTML file load time
             _TIMER.add('html');
 
+            // helper for EIS
             document.cookie = 'DodNoticeConsent=1';
 
+            // init globals
             window.FTSS = {};
             window.utils = {};
             window.caches = {};
             window.PRODUCTION = #{production};
 
+            // add a class for IE 10
             if (Function('/*@cc_on return document.documentMode===10@*/')()) {
                 document.documentElement.className += ' ie10';
+            }
+
+
+            if (!noFallback) {
+
+                window.fallback = function (force) {
+
+                    // Let the user do a hard-reload
+                    if (force) {
+                        window.location = window.location.href.replace('app.html', 'failover.html');
+                        return;
+                    }
+
+                    // Fallback to SharePoint
+                    if (!window.angular || !FTSS.ng) {
+                        add('script', '#{linkLib}');
+                        add('script', '#{linkApp}');
+                        add('link', '#{linkCSS}');
+                    }
+
+                    // Dynamically add tags to our page
+                    function add(tag, src) {
+
+                        var el = document.createElement(tag);
+
+                        src = '/sites/ftss/failover/' + src;
+
+                        if (tag === 'script') {
+
+                            el.src = src;
+
+                        } else {
+
+                            el.rel = 'stylesheet';
+                            el.type = 'text/css';
+                            el.href = src;
+
+                        }
+
+                        document.getElementsByTagName('head')[0].appendChild(el);
+
+                    }
+
+                }
+
+                // In case of very slow downloads (not blocked, but throttled), give the user an
+                window.slowLoad = setTimeout(function () {
+
+                    var msg = document.getElementById('setupMessage');
+
+                    msg.className = 'slow';
+                    msg.innerHTML = '<a onclick="fallback(true)">Page loading slow?  Click here to load from an alternate site.</a>';
+
+                }, 15000);
+
             }
 
         }());
@@ -91,7 +150,7 @@ mixin tableHeader(addNew, columns, instructions)
     if addNew
         +addButton('Add ' + addNew)
 
-    .wrapped(class=addNew?'addNew':'noAdd')
+    .wrapped(class=addNew ? 'addNew' : 'noAdd')
 
         +userInstructions(instructions, true)
 
@@ -122,7 +181,7 @@ mixin tableBody(columns)
 mixin googleMap(small, thumb)
     if small
         a.no-toggle(href='https://www.google.com/maps/@{{row.Location | nospace}},12z', target='_blank', right, ng-show='row.Location',
-            hover="<img style='width:600px;height:500px' src='https://maps.google.com/maps/api/staticmap?center={{row.Location | nospace}}&zoom=12&size=600x500&sensor=false'/>")
+        hover="<img style='width:600px;height:500px' src='https://maps.google.com/maps/api/staticmap?center={{row.Location | nospace}}&zoom=12&size=600x500&sensor=false'/>")
 
             if thumb
                 img.img-thumbnail(src=thumb)
@@ -147,10 +206,10 @@ mixin actions(view, edit, archive, label)
 
         if archive
             span.btn.btn-sm.btn-danger.btn-muted.no-archive(
-                bs-popover,
-                placement='left',
-                container='body',
-                template='/partials/popover-archive-' + label +'.html')
+            bs-popover,
+            placement='left',
+            container='body',
+            template='/partials/popover-archive-' + label + '.html')
 
                 +icon('trash_hide')
 
@@ -200,7 +259,7 @@ mixin modalFooter(submitText, defaultShow)
             | Please wait, sending data...
 
         .btn.btn-success.btn-labeled(ng-click='submit()',
-                                    ng-hide='modal.$invalid || submitted || !modal.$dirty || ' + defaultShow)
+        ng-hide='modal.$invalid || submitted || !modal.$dirty || ' + defaultShow)
 
             span.btn-label.white
                 +icon('check-circle')
@@ -216,7 +275,7 @@ mixin modalFooter(submitText, defaultShow)
 
 mixin formGroup(label,explain, placement)
 
-    .form-group(explain=explain, placement=placement||'left')
+    .form-group(explain=explain, placement=placement || 'left')
         label.col-lg-2.control-label= label
         .col-lg-10
             block
@@ -249,7 +308,7 @@ mixin confirmPopover(className, title, text, action)
 
         .arrow
 
-        h3.popover-title(class='text-'+className)= title
+        h3.popover-title(class='text-' + className)= title
 
         .popover-content
 
@@ -261,7 +320,7 @@ mixin confirmPopover(className, title, text, action)
 
                 .pull-right
 
-                    .btn.btn-sm(class='btn-'+className, ng-click= action) Yes, continue
+                    .btn.btn-sm(class='btn-' + className, ng-click= action) Yes, continue
 
                     .btn.btn-default.btn-sm(ng-click='$hide()') No, cancel
 
