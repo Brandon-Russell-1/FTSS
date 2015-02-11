@@ -29,6 +29,8 @@ include ../mixins
     td
         .pull-right
 
+            span.btn.btn-sm.btn-info.btn-muted(ng-click='row.showStudents()'): +icon('student_hand')
+
             span.btn.btn-sm.btn-success.btn-muted.no-archive(
                 hover='Approve seat request',
                 bs-popover,
