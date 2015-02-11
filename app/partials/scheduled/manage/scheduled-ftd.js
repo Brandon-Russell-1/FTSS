@@ -42,28 +42,37 @@ FTSS.ng.controller(
 
 								    oldVal = self.data[newVal.Id] || {};
 
-								switch (true) {
+								if (!isNew && scope.data.TTMS) {
 
-									// Course start/end days have changed
-									case(oldVal.Start !== newVal.Start):
-									case(oldVal.Days !== newVal.Day):
-										/*
+									switch (true) {
 
-										 utils.sendEmail(
-										 {
-										 'to'     : FTSS.J4Email,
-										 'subject': 'Scheduled Class Change',
-										 'body'   : ''
+										// Course start/end days have changed
+										case(oldVal.Start !== newVal.Start):
+										case(oldVal.Days !== newVal.Days):
 
-										 });
-										 */
+											utils.cacheFiller(newVal);
+											scope.data.newDateRange = newVal.dateRange;
 
-										break;
+											utils.sendEmail(
+												{
+													'to'     : FTSS.J4Email,
+													'subject': 'Scheduled Class Change',
+													'body'   : _.template(
+														'The following class dates were changed:\n\n' +
+														'{{Course.Number}}{{TTMS}} at {{ftd.LongName}} ({{ftd.LCode}})\n\n' +
+														'Original: {{dateRange}}\n',
+														'Updated: {{newDateRange}}',
+														scope.data)()
 
-									// Course is archived for the first time
-									case (!oldVal.Archived && newVal.Archived):
+												});
+											break;
 
-										break;
+										// Course is archived for the first time
+										case (!oldVal.Archived && newVal.Archived):
+
+											break;
+
+									}
 
 								}
 
@@ -113,7 +122,7 @@ FTSS.ng.controller(
 								    scope.data.startMoment = event.start;
 
 								    // Update the model's start date
-								    scope.data.Start =utils.startDayCreator(event.start);
+								    scope.data.Start = utils.startDayCreator(event.start);
 
 								    // Update our end date for the modal view
 								    scope.data.endMoment = event.end;
@@ -248,9 +257,9 @@ FTSS.ng.controller(
 
 									// Reset a few things first @todo:  need to replace with a regex later on
 									scope.data.TTMS = (scope.data.TTMS || '')
-														.replace('TS', '')
-														.replace('OLD', '')
-														.replace('*', '');
+										.replace('TS', '')
+										.replace('OLD', '')
+										.replace('*', '');
 
 									scope.data.MTT = null;
 
