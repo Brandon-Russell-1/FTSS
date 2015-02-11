@@ -56,9 +56,8 @@
 		[
 			'$routeProvider',
 			'$modalProvider',
-			'$datepickerProvider',
 			'$locationProvider',
-			function ($routeProvider, $modalProvider, $datepickerProvider, $locationProvider) {
+			function ($routeProvider, $modalProvider, $locationProvider) {
 
 				// Our route list for various pages/actions
 				var routes =

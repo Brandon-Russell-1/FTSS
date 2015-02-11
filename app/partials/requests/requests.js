@@ -39,9 +39,7 @@ FTSS.ng.controller(
 							      }
 
 							      if (request[0] > 1) {
-
 								      row.Archived = true;
-
 							      }
 
 							      row.styles = [
@@ -52,11 +50,13 @@ FTSS.ng.controller(
 
 							      row.Index = index;
 
-							      row.request = _.zipObject(['Status',
-							                                 'Students',
-							                                 'Notes',
-							                                 'HostId'
-							                                ], request);
+							      row.request = _.zipObject(
+								      [
+									      'Status',
+									      'Students',
+									      'Notes',
+									      'HostId'
+								      ], request);
 
 							      row.request.Host = caches.Hosts[row.request.HostId] || {'Text': 'Invalid Host'};
 
@@ -73,6 +73,15 @@ FTSS.ng.controller(
 							      ].join(' ');
 
 							      row.Id = row.Id + '.' + index;
+
+							      row.showStudents = function () {
+
+								      $scope.requestView = row;
+								      $scope.students = utils.requestDecode(row.Requests_JSON);
+
+								      utils.modal('modal-display-students', $scope);
+
+							      };
 
 							      collection.push(row);
 
@@ -117,23 +126,19 @@ FTSS.ng.controller(
 
 									            if (row.request.Host.Email) {
 
+										            row.status = {'2': ' Approved', '3': ' Denied'}[status];
+										            row.students = row.request.Students.join('\n');
+										            row.response = response || 'None.';
+
 										            utils.sendEmail(
 											            {
 												            'to': row.request.Host.Email,
-
-												            'subject': 'FTD Seat Request Response for ' +
-												                       row.Course.PDS,
-
-												            'body': 'Seat request for class ' +
-												                    (row.TTMS || ' with dates of ' + row.dateRange) +
-												                    {'2': ' Approved', '3': ' Denied'}[status] +
-												                    '\n\n' +
-												                    row.request.Students.join('\n') +
-												                    '\n\n' +
-												                    (response ? 'FTD: ' + response : '')
+												            'subject': 'FTD Seat Request Response for ' + row.Course.PDS,
+												            'body': _.template(
+													            'Seat request for {{Course.Number}} ({{dateRange}}) {{status}}.' +
+													            '\n\n{{row.students}}\n\nFTD Notes:{{response}}')()
 											            }
-										            )
-										            ;
+										            );
 
 									            }
 
@@ -162,7 +167,6 @@ FTSS.ng.controller(
 						      ;
 
 					      };
-
 
 					      self.initialize(collection).then();
 

@@ -33,7 +33,7 @@
 
 						    offsetTitle = 311,
 
-						    formData = _.template(header, data),
+						    formData = _.template(header)(data),
 
 						    courseData = '';
 
@@ -43,7 +43,7 @@
 							course.offsetTitle = offsetTitle;
 							course.cafmcl = course.priority ? 'yes' : 'no';
 
-							courseData += _.template(courseRow, course)
+							courseData += _.template(courseRow)(course)
 
 								.replace(/_INDEX_/g, course.course.Id);
 
