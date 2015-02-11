@@ -87,7 +87,7 @@ FTSS.ng.controller(
 
 				var send = $scope.row;
 
-				send.UnitId = $scope.data.Id;
+				send.UnitId = $scope.ftd.Id;
 				send.cache = true;
 				send.__metadata = 'Instructors';
 
