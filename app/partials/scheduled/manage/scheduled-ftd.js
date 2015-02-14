@@ -22,6 +22,7 @@ FTSS.ng.controller(
 						'group'         : 'Instructor.InstructorName',
 						'model'         : 'scheduled',
 						'modalPlacement': 'wide',
+						'noEmptyGroup'  : true,
 
 						'filter': 'UnitId eq ' + $scope.ftd.Id,
 
