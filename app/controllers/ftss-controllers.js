@@ -337,7 +337,8 @@ FTSS.controller = (function () {
 										         counter++;
 
 										         return opts.group ?
-										                utils.deepRead(gp, opts.group) || '' :
+										                utils.deepRead(gp, opts.group) ||
+										                (opts.noEmptyGroup ? counter : '') :
 										                false;
 									         })
 
