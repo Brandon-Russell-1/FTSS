@@ -594,7 +594,7 @@ FTSS.controller = (function () {
 			 */
 			'inlineUpdate': function (field, callback) {
 
-				var scope = this.row || this.data,
+				var scope = this.row || this.data || this,
 
 				    send = {
 					    'cache'     : true,
