@@ -188,15 +188,6 @@
 					// Only notify the user if this is the first time this page load
 					if ($scope.hasRole('ftd') && !$scope.ftd) {
 
-						// Log the error
-						utils.errorHandler(
-							{
-								'stack': 'A user with FTD rights does not currently have an assigned FTD in FTSS.  ' +
-								       'Their details are listed below:\n\n' +
-								       'Name:  ' + user.name + '\n' +
-								       'Email or Account: ' + (user.email || user.loginname)
-							});
-
 						utils.modal('no-assigned-ftd', $scope);
 
 					}
