@@ -60,16 +60,26 @@ FTSS.ng.controller(
 													'subject': 'Scheduled Class Change',
 													'body'   : _.template(
 														'The following class dates were changed:\n\n' +
-														'{{Course.Number}}{{TTMS}} at {{ftd.LongName}} ({{ftd.LCode}})\n\n' +
-														'Original: {{dateRange}}\n',
-														'Updated: {{newDateRange}}',
-														scope.data)()
-
+														'{{Course.Number}}{{TTMS}} at {{FTD.LongName}} ({{FTD.LCode}})\n\n' +
+														'Original: {{dateRange}}\n' +
+														'Updated: {{newDateRange}}')
+													(scope.data)
 												});
+
 											break;
 
 										// Course is archived for the first time
 										case (!oldVal.Archived && newVal.Archived):
+
+											utils.sendEmail(
+												{
+													'to'     : FTSS.J4Email,
+													'subject': 'Scheduled Class Cancelled',
+													'body'   : _.template(
+														'The following class was cancelled:\n\n' +
+														'{{Course.Number}}{{TTMS}} at {{FTD.LongName}} ({{FTD.LCode}})\n\n')
+													(scope.data)
+												});
 
 											break;
 

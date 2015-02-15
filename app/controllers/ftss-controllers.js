@@ -468,6 +468,10 @@ FTSS.controller = (function () {
 						'cache'     : true
 					};
 
+					data.Archived = !data.Archived;
+
+					opts.beforeSubmit && opts.beforeSubmit(this);
+
 					// Call sharePoint.update() with our data and handle the success/failure response
 					SharePoint.update(send).then(function (resp) {
 
@@ -481,8 +485,6 @@ FTSS.controller = (function () {
 
 							// Update the etag so we can rewrite this data again during the session if we want
 							data.__metadata.etag = resp.headers('etag');
-
-							data.Archived = !data.Archived;
 
 							// Copy the updated back to the original dataset
 							actions.data[data.Id] = angular.copy(data);
