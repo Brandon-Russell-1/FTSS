@@ -23,8 +23,26 @@
 
 	    lastWeek = moment().add(-1, 'weeks');
 
-	utils.requestEncode = function (request) {
+	utils.requestEncode = function (requests) {
 
+		return _.map(requests, function (request) {
+
+			return [
+				// Status
+				statusMap.indexOf(request.status),
+
+				// Students Array
+				request.students,
+
+				// Notes
+				request.notes,
+
+				// Host ID
+				caches.Hosts.indexOf(request.unit)
+
+			];
+
+		});
 
 	};
 
@@ -71,7 +89,7 @@
 
 			// Setup the search params
 			row.search = [
-				row.Instructor.InstructorName ,
+				row.Instructor.InstructorName,
 				'unavailable',
 				row.startMoment.format('MMMM'),
 				row.ClassNotes
@@ -119,7 +137,7 @@
 			row.Archived = row.Archived || row.endMoment.isBefore(lastWeek);
 
 			// Hide the J4 notes if they have the leading #
-			row.J4Notes =  (row.J4Notes && row.J4Notes[0] === '#') ? '' : row.J4Notes;
+			row.J4Notes = (row.J4Notes && row.J4Notes[0] === '#') ? '' : row.J4Notes;
 
 		}
 
