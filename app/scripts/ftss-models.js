@@ -116,7 +116,9 @@
 					    'ClassNotes',
 					    'J4Notes',
 					    'TTMS',
-					    'MTT'
+					    'MTT',
+				        'TS',
+				        'NA'
 				    ]
 			    }
 
@@ -129,7 +131,7 @@
 			    'params': {
 				    '$filter': [
 					    'Archived eq false',
-					    'CourseId gt 1',
+					    '(CourseId gt 1 or TS ne null)',
 					    'Start ge ' + _today
 				    ],
 				    '$select': [
@@ -143,7 +145,8 @@
 					    'Other',
 					    'Requests_JSON',
 					    'ClassNotes',
-					    'TTMS'
+					    'TTMS',
+				        'TS'
 				    ]
 			    }
 
@@ -154,9 +157,14 @@
 			    'source': 'Scheduled',
 			    'params': {
 				    '$filter': [
+					    // Only items needing action
 					    'TTMS eq null',
-					    'Archived eq false',
-					    'Start gt ' + _today
+					    // Only items starting after today
+					    'Start gt ' + _today,
+					    // Ignore unavailability and training sessions
+					    'CourseId gt 1',
+					    // Ignore cancelled classes
+					    'Archived eq false'
 				    ],
 				    '$select': [
 					    'UnitId',

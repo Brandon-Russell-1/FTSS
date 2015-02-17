@@ -172,7 +172,7 @@
 									var start = event.startMoment.diff(min, 'days') - 1,
 
 									    // Detect instructor unavailability
-									    unavailable = event.CourseId < 1,
+									    unavailable = event.NA,
 
 									    csv = {};
 
@@ -224,14 +224,16 @@
 
 										event.className =
 
-										// Id short classes
-										(event.allocatedSeats < event.Course.Min) ? 'short' :
+										// Match MTT classes
+										event.MTT ? 'mtt' :
 
 											// Add trainingSession class if TTMS contains TS
-										((event.TTMS || '').toUpperCase().indexOf('TS') > -1) ? 'trainingSession' :
+										event.TS ? 'trainingSession' :
 
-											// Match MTT classes
-										event.MTT ? 'mtt' : event.className;
+											// Id short classes
+										(event.allocatedSeats < event.Course.Min) ? 'short' :
+
+										event.className;
 
 										// Add our html to the event
 										instructor.html += templateEvent(event);

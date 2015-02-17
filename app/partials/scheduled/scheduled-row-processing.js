@@ -55,10 +55,7 @@
 	utils.processScheduledRow = function (row) {
 
 		// For fake courses (unavalability events), we only need to load a few pieces of data
-		if (!row.CourseId || row.CourseId < 1) {
-
-			// Make sure the CourseId is -1, it will be null coming from the server
-			row.CourseId = -1;
+		if (row.NA) {
 
 			// Add our class for this event
 			row.className = 'ignore';

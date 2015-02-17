@@ -3,7 +3,7 @@ td(class='mark {{className}}',  colspan='{{Days}}', id='{{Id}}')
     div(class='{{Instructor.Photo}}') {{bioPhoto}}
 
     span.pds {{pds}}&nbsp;
-    span.instructor <i>{{ttms}}</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{name}}
+    span.instructor <i>{{ttms}}</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{MTT}}</b>
 
     .details
 
@@ -27,8 +27,7 @@ td(class='mark {{className}}',  colspan='{{Days}}', id='{{Id}}')
 
             .clearfix
 
-            .col-lg-3
-                span.archiveExclude(class='btn btn-{{className}}') {{openSeats}} Open
+            .col-lg-3.double {{allocatedSeats}}
 
             dl.dl-horizontal.col-lg-3
                 dt Min

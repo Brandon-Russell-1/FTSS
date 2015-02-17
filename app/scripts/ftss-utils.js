@@ -111,6 +111,13 @@
 						row.HostUnit = caches.Hosts[row.HostId];
 					}
 
+					if (row.TS) {
+						row.Course = {
+							'PDS'   : 'TS',
+							'Number': row.TS
+						}
+					}
+
 					row.Instructor = caches.Instructors[row.InstructorId] || {};
 
 					row.startMoment = utils.startDayFinder(row.Start);

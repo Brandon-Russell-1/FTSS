@@ -13,11 +13,6 @@
 	line-height: 2.5em;
 }
 
-#scheduled-ftd .setUnavailable .hideSetUnavailable,
-#scheduled-ftd .setUnavailable #rightPanel .nav {
-	visibility: hidden;
-}
-
 #scheduled-ftd {
 	.item {
 		em {
@@ -27,6 +22,29 @@
 			display: none;
 		}
 	}
+
+	.setUnavailable .hideSetUnavailable,
+	.setUnavailable #rightPanel .nav {
+
+		display: none;
+	}
+
+	.setUnavailable #instructorPhoto {
+		margin-top: 0;
+	}
+
+	#instructorPhoto {
+		margin-top: 4.5em;
+	}
+
+	#courseSelector {
+
+		.selectize-dropdown {
+			min-width: 750px;
+		}
+
+	}
+
 }
 
 #scheduled {
@@ -46,7 +64,7 @@
 
 	.row:hover {
 		.lightCourseNumber {
-			color: #333!important;
+			color: #333 !important;
 		}
 	}
 
@@ -102,7 +120,6 @@
 		overflow-y: visible;
 		padding-left: 5%;
 	}
-
 }
 
 input#ttms {

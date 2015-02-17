@@ -256,15 +256,20 @@
 
     #scheduled-seats-pending These are seats that are still pending FTD approval.
 
+    #scheduled-edit-ts Type the Training Session course number
+
     #scheduled-edit-ftd Choose the FTD that is hosting this class
 
     #scheduled-edit-course Choose the course that is being scheduled
 
-    #scheduled-edit-instructor (Optional) Choose the instructor for this scheduled class
+    #scheduled-edit-instructor Choose the instructor for this scheduled class or unavailability
 
     #scheduled-edit-dates Identify the class start and stop dates
 
     #scheduled-edit-notes (Optional) Type any special notes for this scheduled class
+
+    #scheduled-edit-na-notes (Optional) Type a description of the unavailability
+        example Example: Leave local area or TDY to Paradise
 
     #scheduled-edit-reserved
         | Enter any previously-established seat reservations.  If you are not using FTSS for the 898 process, you will
@@ -284,15 +289,10 @@
 
     #scheduled-request-notes (Optional) Add any additional notes for this request.
 
-    #scheduled-edit-ttms
-        | Type or edit the TTMS class #.  Typically this is created by the J4 schedulers after the class is built.  This
-        | field is also used to track special types of events:
-
-        br
-
-        example * = Unavailable
-        example OLD = Historical class
-        example TS = Training session
+    #scheduled-edit-ttms.
+        Type or edit the TTMS class #.  Typically this is created by the J4 schedulers after the class is built.  You
+        can create a new class with text in this field for it to not show up for J4 (center-gen).  Later, you can empty
+        this text box for J4 to see it and generate the class #.
 
     // Seats Requests Page =================================================================================================
 

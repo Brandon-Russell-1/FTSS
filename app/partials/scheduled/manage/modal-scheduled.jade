@@ -1,6 +1,6 @@
 include ../../mixins
 
-form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0),uglyGreenButton:isNew}')
+form.form-horizontal(name='modal', ng-class='{setUnavailable:data.na,uglyGreenButton:isNew}')
 
     .modal-header.caps
         h3(ng-show='createData')
@@ -28,7 +28,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
 
         .col-lg-6
 
-            .col-lg-4(style='margin-top: 4.5em;')
+            #instructorPhoto.col-lg-4
                 photo.img-rounded(size='135px', shape='rectangle', data='data.InstructorId', watch)
 
             .col-lg-8
@@ -39,23 +39,31 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                         li Type
                         li.pull-right
                             select.form-control(
+                                ng-disabled='!isNew',
                                 ng-change='selectType()',
                                 ng-model='recordType',
                                 ng-options='o for o in recordTypes')
 
-                .row(ng-show='data.MTT')
+                .row(ng-show='data.mtt')
                     +formGroup(' Location')
                         .input-group
                             .input-group-addon.w15:  +icon('location')
                             .input-group-selectize(explain='scheduled-edit-mtt', right)
                                 select(selectize='geodata', bind='data.MTT')
 
-                .row
+                .row(ng-if='data.ts')
+                    +formGroup(' TS Course')
+                        .input-group
+                            .input-group-addon.w15:  +icon('books')
+                            input.form-control(ng-model='data.TS',explain='scheduled-edit-ts', right)
+
+                #courseSelector.row(ng-show='data.rc||data.mtt')
                     +formGroup('Course')
                         .input-group
                             .input-group-addon.w15:  +icon('books')
                             .input-group-selectize(explain='scheduled-edit-course', right)
-                                select(selectize='coursesDropdown',
+                                select(ng-disabled='!isNew',
+                                        selectize='coursesDropdown',
                                         bind='data.CourseId',
                                         remember='course')
 
@@ -72,20 +80,29 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                                         remember='instructor',
                                         label='InstructorName')
 
-                .row.hideSetUnavailable
+                .row(ng-if='data.na')
+                    +formGroup('Details')
+                        .input-group
+                            textarea.form-control(type='text',
+                                                    ng-model='data.ClassNotes',
+                                                    explain='scheduled-edit-na-notes',
+                                                    right)
+
+                .row(ng-if='!data.na')
 
                     +formGroup('Length')
 
                         .input-group.pull-left.w40
-                            .form-control(style='background: #fafafa;cursor: not-allowed;') {{AcademicDays}}
+                            .form-control(style='background: #fafafa;cursor: not-allowed;') {{data.Course.Days}}
                             .input-group-addon Academic Days
 
                         .input-group.pull-right.w40
                             input.form-control(ng-model='data.Hours',
-                            type='number',
-                            min='0',
-                            explain='scheduled-edit-hours-deviation',
-                            top)
+                                                type='number',
+                                                min='0',
+                                                explain='scheduled-edit-hours-deviation',
+                                                placeholder='{{data.Course.Hours}}',
+                                                top)
                             .input-group-addon Hours
 
 
@@ -112,22 +129,22 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
                                                 top)
                             .input-group-addon Non-Host
 
-                #modalScheduledOpenSeats.hideSetUnavailable
+                #modalScheduledOpenSeats(ng-show='data.CourseId')
                     strong {{getOpenSeats()}}&nbsp;
                     span ({{data.Course.Min}} Min / {{data.Course.Max}} Max)
-
 
             .clearfix
 
             hr(style='margin-top:5px')
 
-            +formGroup('Notes')
-                .input-group
-                    textarea.form-control(type='text',
-                                            ng-model='data.ClassNotes',
-                                            style='height:150px',
-                                            explain='scheduled-edit-notes',
-                                            right)
+            .hideSetUnavailable
+                +formGroup('Notes')
+                    .input-group
+                        textarea.form-control(type='text',
+                                                ng-model='data.ClassNotes',
+                                                style='height:150px',
+                                                explain='scheduled-edit-notes',
+                                                right)
 
             .hideSetUnavailable
 
@@ -138,7 +155,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:(data.CourseId < 0)
 
         #rightPanel.col-lg-6(bs-tabs)
 
-            div(ng-class='{addEvent:data.CourseId}', bs-pane, title='Schedule')
+            div(ng-class='{addEvent:data.CourseId||data.na||data.TS}', bs-pane, title='Schedule')
 
                 br
 

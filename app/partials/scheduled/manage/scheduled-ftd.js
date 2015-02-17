@@ -29,13 +29,11 @@ FTSS.ng.controller(
 						'beforeSubmit': function (scope, isNew) {
 
 							// For creating instructor unavailability
-							if (isNew && scope.data.CourseId < 0) {
+							if (scope.data.NA) {
 
 								delete scope.data.Host;
 								delete scope.data.Other;
 								delete scope.data.CourseId;
-
-								scope.data.TTMS = '*';
 
 							} else {
 
@@ -81,8 +79,6 @@ FTSS.ng.controller(
 													(scope.data)
 												});
 
-											break;
-
 									}
 
 								}
@@ -105,7 +101,7 @@ FTSS.ng.controller(
 							var getDates = function () {
 
 								    // Handle unique titles for leave/class
-								    var title = scope.data.CourseId < 0 ? 'UNAVAILABLE' : 'THIS COURSE';
+								    var title = scope.data.NA ? 'UNAVAILABLE' : 'THIS COURSE';
 
 								    return scope.data.startMoment &&
 								           scope.data.startMoment.isValid() ?
@@ -144,9 +140,7 @@ FTSS.ng.controller(
 								    // Let the view know of our changes
 								    scope.modal.$setDirty();
 
-							    },
-
-							    hoursOverride = scope.data.Hours;
+							    };
 
 							// If this is a new class, pre-fill the reserved seats with 0
 							if (isNew) {
@@ -181,12 +175,12 @@ FTSS.ng.controller(
 										.map(function (row) {
 
 											     return {
-												     'title': (caches.MasterCourseList[row.CourseId] ||
-												               {}).PDS ||
-												     'UNAVAILABLE',
-												     'start': row.startMoment,
-												     'end': row.endMoment.clone().add(1,
-												                                      'days'),
+												     'title': row.CourseId ?
+												              caches.MasterCourseList[row.CourseId].PDS :
+												              'UNAVAILABLE',
+
+												     'start'    : row.startMoment,
+												     'end'      : row.endMoment.clone().add(1, 'days'),
 												     'className': 'info'
 											     }
 
@@ -219,6 +213,9 @@ FTSS.ng.controller(
 								// Only attempt this if a CourseID exists
 								if (scope.data.CourseId > 0) {
 
+									// Update the course for this model
+									scope.data.Course = caches.MasterCourseList[scope.data.CourseId];
+
 									var requests = _(scope.data.Requests_JSON).reduce(function (count, request) {
 
 										    // Only count seats pending (1) or approved (2) against total
@@ -226,7 +223,7 @@ FTSS.ng.controller(
 
 									    }, 0),
 
-									    open = (caches.MasterCourseList[scope.data.CourseId].Max -
+									    open = (scope.data.Course.Max -
 									            (scope.data.Host || 0) -
 									            (scope.data.Other || 0) -
 									            requests);
@@ -241,6 +238,14 @@ FTSS.ng.controller(
 
 								} else {
 
+									scope.data.Course = {
+										'Days': 'n/a',
+										'Max' : 0,
+										'Min' : 0
+									};
+
+									scope.data.Hours = null;
+
 									return '';
 
 								}
@@ -252,106 +257,67 @@ FTSS.ng.controller(
 							// Wrap this in a closure simply for organization--we'll probably move out of here later on
 							(function () {
 
-								// Collection of modes for type of classes to create
+								// Short-hand/field equivalent to our recordTypes list
+								var records = ['rc', 'mtt', 'ts', 'na'];
+
 								scope.recordTypes = [
 									'Regular Class',
-									'Training Session',
 									'Mobile Training Team',
-									'Instructor Unavailability',
-									'Historical Class Entry'
+									'Training Session',
+									'Leave/TDY/Etc'
 								];
 
 								// Our shortcut helpers for building different types of classes
 								scope.selectType = function () {
 
-									var courseSelect = FTSS.selectizeInstances['data.CourseId'];
+									// Get our current index for this selection
+									var record = getRecordIndex();
 
-									// Reset a few things first @todo:  need to replace with a regex later on
-									scope.data.TTMS = (scope.data.TTMS || '')
-										.replace('TS', '')
-										.replace('OLD', '')
-										.replace('*', '');
+									// Reset our fields
+									records.forEach(function (record) {
 
-									scope.data.MTT = null;
+										scope.data[record] = false;
+										scope.data[record.toUpperCase()] = null;
 
-									// Change off of unavailability
-									if (scope.data.CourseId < 1) {
-										courseSelect.setValue(scope.$parent.coursesDropdown[1].Id);
+									});
+
+									// Call our selectize Instance
+									(record > 1) && FTSS.selectizeInstances['data.CourseId'].setValue(-1);
+
+									if (record === 3) {
+										scope.data.NA = true;
 									}
 
-									switch (getRecord()) {
-
-										case 1:
-											scope.data.TTMS = 'TS';
-											break;
-
-										case 2:
-											scope.data.MTT = true;
-											break;
-
-										// Create a leave/tdy/cto unavailable date range
-										case 3:
-											courseSelect.setValue(-1);
-											break;
-
-										// Create historical data
-										case 4:
-											scope.data.TTMS = 'OLD';
-											break;
-
-									}
+									// Mark our current recordType as true
+									scope.data[records[record]] = true;
 
 								};
 
-								switch (true) {
+								// Set the current recordType
+								scope.recordType = scope.recordTypes[
 
-									case isNew:
-										return setRecord(0);
+									// Regular class for new items
+									isNew ? 0 :
 
-									case ((scope.data.TTMS || '').indexOf('TS') > -1):
-										return setRecord(1);
+										// MTT
+									scope.data.MTT ? 1 :
 
-									case (scope.data.TTMS === 'OLD'):
-										return setRecord(4);
+										// Training Session
+									scope.data.TS ? 2 :
 
-									case (scope.data.CourseId < 1):
-										return setRecord(3);
+										// Leave/TDY, otherwise regular class
+									scope.data.NA ? 3 : 0
 
-									case (!!scope.data.MTT):
-										return setRecord(2);
+									];
 
-									default:
-										setRecord(0);
-								}
+								// Setup for our current config
+								scope.data[records[getRecordIndex()]] = true;
 
-								function getRecord() {
+								function getRecordIndex() {
 									return scope.recordTypes.indexOf(scope.recordType);
 								}
 
-								function setRecord(val) {
-									scope.recordType = scope.recordTypes[val];
-								}
-
 							}());
-
-
-							// Update our data to match the new course
-							scope.$watch('data.CourseId', function (id) {
-
-								// If this is a valid course only
-								if (id > 0) {
-
-									var course = caches.MasterCourseList[id] || {};
-
-									// We are binding this to scope vs scope.data since it isn't a part of the SP data (just a local thing)
-									scope.AcademicDays = course.Days || '-';
-
-									// Just overwrite whatever the user specified since they changed courses
-									scope.data.Hours = hoursOverride || course.Hours;
-
-								}
-
-							});
 
 							// Wait until the modal is visible
 							scope.$on('modal.show', function () {
@@ -384,13 +350,11 @@ FTSS.ng.controller(
 										'dayClick': function (start) {
 
 											// Only continue if this is a new and has a course selected
-											if (isNew && _.isNumber(scope.data.CourseId)) {
+											if (isNew &&
+											    (scope.data.Course || scope.data.na || scope.data.TS)) {
 
-												// Reference the course
-												var course = caches.MasterCourseList[scope.data.CourseId] || {},
-
-												    // copy the days
-												    days = Number(course.Days || 1),
+												// copy the days
+												var days = Number(scope.data.Course.Days || 1),
 
 												    // get the end date
 												    end = start.clone(),
@@ -461,13 +425,6 @@ FTSS.ng.controller(
 
 					// Load our unit data based on the dropdown
 					$scope.unit = angular.copy(caches.Units[$scope.ftd.Id]);
-
-					// Add our fake "instructor unavailable placeholder
-					$scope.unit.Courses.unshift(
-						{
-							'Id'   : -1,
-							'label': '<div><h5>*** Instructor Unavailable to Teach ***</h5></div>'
-						});
 
 					// Bind the unit.courses to coursesDropdown for selectize
 					$scope.coursesDropdown = $scope.unit.Courses;

@@ -127,7 +127,6 @@ FTSS.ng.controller(
 											      'students': scope.data.Students.join('\n'),
 											      'notes'   : scope.data.Notes
 
-
 										      };
 
 										      // Send our email notification to the FTD
