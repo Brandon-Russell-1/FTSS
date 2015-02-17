@@ -136,7 +136,7 @@ FTSS.ng.controller(
 												            'subject': 'FTD Seat Request Response for ' + row.Course.PDS,
 												            'body': _.template(
 													            'Seat request for {{Course.Number}} ({{dateRange}}) {{status}}.' +
-													            '\n\n{{row.students}}\n\nFTD Notes:{{response}}')()
+													            '\n\n{{row.students}}\n\nFTD Notes:{{response}}')(row)
 											            }
 										            );
 

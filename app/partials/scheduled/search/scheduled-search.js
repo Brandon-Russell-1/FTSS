@@ -117,26 +117,43 @@ FTSS.ng.controller(
 
 								      scope.submit = function () {
 
-									      if (!$scope.autoApprove) {
+									      var email = {
 
-										      var email = {
+										      'host'      : caches.Hosts[scope.data.HostId].Unit,
+										      'seats'     : scope.data.Students.length,
+										      'dates'     : row.dateRange,
+										      'students'  : scope.data.Students.join('\n'),
+										      'notes'     : scope.data.Notes,
+										      'recipients': row.FTD.Email + ';' + caches.Hosts[scope.data.HostId].Email
 
-											      'host'    : caches.Hosts[scope.data.HostId].Unit,
-											      'seats'   : scope.data.Students.length,
-											      'dates'   : row.dateRange,
-											      'students': scope.data.Students.join('\n'),
-											      'notes'   : scope.data.Notes
+									      };
 
-										      };
+									      if ($scope.autoApprove) {
 
-										      // Send our email notification to the FTD
+										      // Send our auto-approval notification
 										      utils.sendEmail(
 											      {
-												      'to'     : row.FTD.Email,
+												      'to'     : email.recipients,
+												      'subject': 'Automatic Seat Approval for ' + row.Course.PDS,
+												      'body'   : _.template(
+													      '{{seats}} seats were approved for the {{host}}.\n\n' +
+													      'Dates:  {{dates}}\n\n' +
+													      'Students:\n{{students}}\n\n' +
+													      '{{notes}}')(email)
+											      });
+
+									      }
+									      else {
+
+										      // Send our  request notification
+										      utils.sendEmail(
+											      {
+												      'to'     : email.recipients,
 												      'subject': 'New Seat Request for ' + row.Course.PDS,
-												      'body'   : _.template('{{host}} has requested {{seats}} seats for the ' +
-												                            '{{dates}} class: \n\n {{students}}\n\n {{notes}}',
-												                            email)()
+												      'body'   : _.template(
+													      'The {{host}} has requested {{seats}} seats for the ' +
+													      '{{dates}} class: \n\n {{students}}\n\n {{notes}}\n\n\n' +
+													      'View this request: https://cs1.eis.af.mil/sites/ftss#requests')(email)
 											      });
 
 									      }
@@ -166,7 +183,8 @@ FTSS.ng.controller(
 
 									      }, scope.close);
 
-								      };
+								      }
+								      ;
 							      }
 
 						      };
