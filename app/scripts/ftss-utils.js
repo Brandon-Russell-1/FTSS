@@ -127,19 +127,21 @@
 
 					                (row.Days > 0 ? (' - ' + row.endMoment.format('D MMM YYYY') ) : '');
 
+					row.approvedSeats = 0;
+					row.pendingSeats = 0;
+					row.deniedSeats = 0;
+					row.requestCount = 0;
 
-					var seats = _.reduce(row.Requests_JSON || [], function (memo, r) {
-						memo[r[0]] += r[1].length;
-						return memo;
-					}, {'1': 0, '2': 0, '3': 0});
+					_.each(row.Requests_JSON, function (r) {
 
-					row.approvedSeats = seats[2];
-					row.pendingSeats = seats[1];
-					row.deniedSeats = seats[3];
-					row.requestCount = seats[1] + seats[2] + seats[3];
-					row.allocatedSeats = seats[2] + row.Host + row.Other;
+						row[['', 'pending', 'approved', 'denied'][r[0]] + 'Seats'] += r[1].length;
+						row.requestCount += r[1].length;
 
-					row.openSeats = row.Course.Max - row.allocatedSeats;
+					});
+
+					row.allocatedSeats = row.approvedSeats + row.Host + row.Other;
+					row.openSeats = row.Course.Max ? row.Course.Max - row.allocatedSeats : '';
+
 				};
 
 				/**
