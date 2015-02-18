@@ -50,7 +50,7 @@ FTSS.ng.controller(
 										case(oldVal.Days !== newVal.Days):
 
 											utils.cacheFiller(newVal);
-											scope.data.newDateRange = newVal.dateRange;
+											scope.data.oldDateRange = oldVal.dateRange;
 
 											utils.sendEmail(
 												{
@@ -59,8 +59,8 @@ FTSS.ng.controller(
 													'body'   : _.template(
 														'The following class dates were changed:\n\n' +
 														'{{Course.Number}}{{TTMS}} at {{FTD.LongName}} ({{FTD.LCode}})\n\n' +
-														'Original: {{dateRange}}\n' +
-														'Updated: {{newDateRange}}')
+														'Original: {{oldDateRange}}\n' +
+														'Updated: {{dateRange}}')
 													(scope.data)
 												});
 
