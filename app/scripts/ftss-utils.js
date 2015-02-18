@@ -28,6 +28,17 @@
 
 	};
 
+	utils.dateRange = function(row) {
+
+		row.startMoment = utils.startDayFinder(row.Start);
+		row.endMoment = row.startMoment.clone().add(row.Days - 1, 'days');
+
+		row.dateRange = row.startMoment.format('D MMM YYYY') +
+
+		                (row.Days > 0 ? (' - ' + row.endMoment.format('D MMM YYYY') ) : '');
+
+	};
+
 
 	FTSS.ng.run(
 		[
@@ -120,12 +131,7 @@
 
 					row.Instructor = caches.Instructors[row.InstructorId] || {};
 
-					row.startMoment = utils.startDayFinder(row.Start);
-					row.endMoment = row.startMoment.clone().add(row.Days - 1, 'days');
-
-					row.dateRange = row.startMoment.format('D MMM YYYY') +
-
-					                (row.Days > 0 ? (' - ' + row.endMoment.format('D MMM YYYY') ) : '');
+					utils.dateRange(row);
 
 					row.approvedSeats = 0;
 					row.pendingSeats = 0;
