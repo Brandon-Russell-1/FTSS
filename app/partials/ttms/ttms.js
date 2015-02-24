@@ -37,10 +37,11 @@ FTSS.ng.controller(
 							utils.sendEmail(
 								{
 									'to'     : data.FTD.Email,
-									'subject': 'J4 Scheduling Update for ' + data.Course.PDS,
+									'subject': [
+										'J4 Scheduling Update for', data.Course.PDS, '-', data.Course.Number
+									].join(' '),
 									'body'   : _.template('The following notes were left by Sheppard for the ' +
-									                      '{{Course.PDS}} class with dates of {{dateRange}}:' +
-									                      '\n\n{{J4Notes}}')(data)
+									                      '{{dateRange}} {{Course.PDS}} class:\n\n{{J4Notes}}')(data)
 								});
 
 						}

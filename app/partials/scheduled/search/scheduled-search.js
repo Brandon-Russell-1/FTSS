@@ -119,6 +119,7 @@ FTSS.ng.controller(
 
 									      var email = {
 
+										      'subject'   : row.Course.PDS + ' - ' + row.Course.Number,
 										      'host'      : caches.Hosts[scope.data.HostId].Unit,
 										      'seats'     : scope.data.Students.length,
 										      'dates'     : row.dateRange,
@@ -134,26 +135,30 @@ FTSS.ng.controller(
 										      utils.sendEmail(
 											      {
 												      'to'     : email.recipients,
-												      'subject': 'Automatic Seat Approval for ' + row.Course.PDS,
+												      'subject': 'Automatic Seat Approval for ' + email.subject,
 												      'body'   : _.template(
-													      '{{seats}} seats were approved for the {{host}}.\n\n' +
-													      'Dates:  {{dates}}\n\n' +
-													      'Students:\n{{students}}\n\n' +
-													      '{{notes}}')(email)
+													      [
+														      '{{seats}} seats were approved for the {{host}}.',
+														      'Dates:  {{dates}}',
+														      'Students:\n{{students}}',
+														      '{{notes}}'
+													      ].join('\n\n'))(email)
 											      });
 
-									      }
-									      else {
+									      } else {
 
 										      // Send our  request notification
 										      utils.sendEmail(
 											      {
 												      'to'     : email.recipients,
-												      'subject': 'New Seat Request for ' + row.Course.PDS,
+												      'subject': 'New Seat Request for ' + email.subject,
 												      'body'   : _.template(
-													      'The {{host}} has requested {{seats}} seats for the ' +
-													      '{{dates}} class: \n\n {{students}}\n\n {{notes}}\n\n\n' +
-													      'View this request: https://cs1.eis.af.mil/sites/ftss#requests')(email)
+													      [
+														      'The {{host}} has requested {{seats}} seats for the {{dates}} class:',
+														      '{{students}}',
+														      '{{notes}}\n',
+														      'View this request: https://cs1.eis.af.mil/sites/ftss#requests'
+													      ].join('\n\n'))(email)
 											      });
 
 									      }

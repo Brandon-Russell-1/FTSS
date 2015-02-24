@@ -2,11 +2,12 @@
 
 (function () {
 
-	y2k = moment('2000-01-01', 'YYYY-MM-DD');
+	var y2k = moment('2000-01-01', 'YYYY-MM-DD');
 
 	utils.todayNumber = moment();
 
 	/**
+	 * Convert a y2k day offset to the actual day
 	 *
 	 * @param days
 	 * @returns {*}
@@ -18,6 +19,7 @@
 	};
 
 	/**
+	 * Convert a moment to the y2k day offset
 	 *
 	 * @param start
 	 * @returns {*}
@@ -28,7 +30,12 @@
 
 	};
 
-	utils.dateRange = function(row) {
+	/**
+	 * Create a text date range from a start/end pair
+	 *
+	 * @param row
+	 */
+	utils.dateRange = function (row) {
 
 		row.startMoment = utils.startDayFinder(row.Start);
 		row.endMoment = row.startMoment.clone().add(row.Days - 1, 'days');
@@ -129,6 +136,9 @@
 						}
 					}
 
+					// The TTMS friendly link for this class
+					row.ttmsLink = row.Course && row.TTMS ? row.Course.Number + row.TTMS : '';
+
 					row.Instructor = caches.Instructors[row.InstructorId] || {};
 
 					utils.dateRange(row);
@@ -167,7 +177,8 @@
 								'__metadata': 'Notifier',
 								'To'        : send.to,
 								'Subject'   : send.subject,
-								'Body'      : '\n' + send.body + '\n\n\n\n' + 'http://go.usa.gov/HCAC'
+								'Body'      : '\n' + send.body.replace(/(undefined|null)/gi, ' ') +
+								            '\n\n\n\nhttp://go.usa.gov/HCAC'
 
 							});
 
