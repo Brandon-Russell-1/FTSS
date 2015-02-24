@@ -19,11 +19,7 @@
 	// Record our page load times only once and only for slow connections
 	FTSS.performance = (window.performance.now() > 9999) ? function (send) {
 
-		// only apply to 10 second load times
-		if (window.performance.now() > 9999) {
-			send.D = _TIMER.get();
-		}
-
+		send.D = _TIMER.get();
 		FTSS.performance = angular.noop;
 
 	} : angular.noop;
