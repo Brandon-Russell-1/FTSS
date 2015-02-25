@@ -5,7 +5,8 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		function ($scope) {
+		'notifier',
+		function ($scope, notifier) {
 
 			// Increase the default page limit to 100 for this view
 			$scope.pageLimit = 100;
@@ -48,36 +49,15 @@ FTSS.ng.controller(
 										// Course start/end days have changed
 										case(oldVal.Start !== newVal.Start):
 										case(oldVal.Days !== newVal.Days):
-
 											utils.cacheFiller(newVal);
 											scope.data.oldDateRange = oldVal.dateRange;
-
-											utils.sendEmail(
-												{
-													'to'     : FTSS.J4Email,
-													'subject': 'Scheduled Class Change',
-													'body'   : _.template(
-														'The following class dates were changed:\n\n' +
-														'{{Course.Number}}{{TTMS}} at {{FTD.LongName}} ({{FTD.LCode}})\n\n' +
-														'Original: {{oldDateRange}}\n' +
-														'Updated: {{dateRange}}')
-													(scope.data)
-												});
-
+											notifier.updateClass(scope.data);
 											break;
 
 										// Course is archived for the first time
 										case (!oldVal.Archived && newVal.Archived):
+											notifier.cancelClass(scope.data);
 
-											utils.sendEmail(
-												{
-													'to'     : FTSS.J4Email,
-													'subject': 'Scheduled Class Cancelled',
-													'body'   : _.template(
-														'The following class was cancelled:\n\n' +
-														'{{Course.Number}}{{TTMS}} at {{FTD.LongName}} ({{FTD.LCode}})\n\n')
-													(scope.data)
-												});
 
 									}
 

@@ -160,34 +160,6 @@
 
 				};
 
-				/**
-				 * Send Email notification
-				 *
-				 * Use to send email notification to a user.  The requester is automatically CC'd.
-				 * @param send Object Must have to, subject, body properties.
-				 */
-				utils.sendEmail = function (send) {
-
-					// Only create this if this if it is valid and we are running in production mode
-					if (PRODUCTION && send.to && send.subject && send.body) {
-
-						SharePoint.create(
-							{
-
-								'__metadata': 'Notifier',
-								'To'        : send.to,
-								'Subject'   : send.subject,
-								'Body'      : '\n' + send.body.replace(/(undefined|null)/gi, ' ') +
-								            '\n\n\n\nhttp://go.usa.gov/HCAC'
-
-							});
-
-					} else {
-						console && console.log(send);
-					}
-
-				};
-
 
 				/**
 				 * A simple watch destroyer for when we know we don't need all those dirty checks

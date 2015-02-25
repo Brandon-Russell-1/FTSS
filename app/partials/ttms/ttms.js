@@ -4,7 +4,8 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		function ($scope) {
+		'notifier',
+		function ($scope, notifier) {
 
 			$scope.pageLimit = 999;
 
@@ -31,20 +32,7 @@ FTSS.ng.controller(
 					} else {
 
 						// J4-specific request for internal messaging, prefix with '#' to not send an email, issue #12
-						if (data.J4Notes[0] !== '#') {
-
-							// Send any notes back to the FTD through email
-							utils.sendEmail(
-								{
-									'to'     : data.FTD.Email,
-									'subject': [
-										'J4 Scheduling Update for', data.Course.PDS, '-', data.Course.Number
-									].join(' '),
-									'body'   : _.template('The following notes were left by Sheppard for the ' +
-									                      '{{dateRange}} {{Course.PDS}} class:\n\n{{J4Notes}}')(data)
-								});
-
-						}
+						(data.J4Notes[0] !== '#') && notifier.j4Update(data);
 
 					}
 				});

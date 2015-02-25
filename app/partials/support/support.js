@@ -13,7 +13,8 @@
 			'$scope',
 			'SharePoint',
 			'$timeout',
-			function ($scope, SharePoint, $timeout) {
+			'notifier',
+			function ($scope, SharePoint, $timeout, notifier) {
 
 				var model = FTSS.models('support'),
 
@@ -55,25 +56,25 @@
 						send.Thread = comment.Id;
 
 						// Send the email notification to the user with the reply
-						utils.sendEmail(
+						notifier.generic(
 							{
 								'to'     : comment.CreatedBy.WorkEMail,
 								'subject': 'Help Page Reply',
 								'body'   : $scope.user.name +
-								           ' replied to your question or comment:\n\n' +
-								           comment.writeReply
+								         ' replied to your question or comment:\n\n' +
+								         comment.writeReply
 							}
 						);
 
 					} else {
 
-						utils.sendEmail(
+						notifier.generic(
 							{
 								'to'     : FTSS.supportEmail,
 								'subject': 'FTSS Support Question: ' + $scope.askQuestion.substring(0, 15) + '...',
 								'body'   : $scope.user.name +
-								           ' asked the following question on the ' +
-								           page + ' page:\n\n' + $scope.askQuestion
+								         ' asked the following question on the ' +
+								         page + ' page:\n\n' + $scope.askQuestion
 							}
 						);
 

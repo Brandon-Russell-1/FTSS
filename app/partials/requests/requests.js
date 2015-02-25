@@ -6,7 +6,8 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'SharePoint',
-		function ($scope, SharePoint) {
+		'notifier',
+		function ($scope, SharePoint, notifier) {
 
 			var self = FTSS.controller($scope, {
 
@@ -130,15 +131,7 @@ FTSS.ng.controller(
 										            row.students = row.request.Students.join('\n');
 										            row.response = response || 'None.';
 
-										            utils.sendEmail(
-											            {
-												            'to': row.request.Host.Email,
-												            'subject': 'FTD Seat Request Response for ' + row.Course.PDS,
-												            'body': _.template(
-													            'Seat request for {{Course.Number}} ({{dateRange}}) {{status}}.' +
-													            '\n\n{{row.students}}\n\nFTD Notes:{{response}}')(row)
-											            }
-										            );
+										            notifier.respondToRequest(row);
 
 									            }
 
@@ -155,8 +148,7 @@ FTSS.ng.controller(
 
 									            self.process();
 
-								            }
-								            else {
+								            } else {
 
 									            utils.alert.error('Please try again later.');
 

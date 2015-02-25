@@ -6,7 +6,8 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'$modal',
-		function ($scope, $modal) {
+		'notifier',
+		function ($scope, $modal, notifier) {
 
 			var self = FTSS.controller($scope, {
 
@@ -117,51 +118,21 @@ FTSS.ng.controller(
 
 								      scope.submit = function () {
 
-									      var email = {
+									      // Send our email notification out
+									      notifier[$scope.autoApprove ? 'autoApprove' : 'requestSeats'](
+										      {
 
-										      'subject'   : row.Course.PDS + ' - ' + row.Course.Number,
-										      'host'      : caches.Hosts[scope.data.HostId].Unit,
-										      'seats'     : scope.data.Students.length,
-										      'dates'     : row.dateRange,
-										      'students'  : scope.data.Students.join('\n'),
-										      'notes'     : scope.data.Notes,
-										      'recipients': row.FTD.Email + ';' + caches.Hosts[scope.data.HostId].Email
+											      'subject'   : row.Course.PDS + ' - ' + row.Course.Number,
+											      'host'      : caches.Hosts[scope.data.HostId].Unit,
+											      'seats'     : scope.data.Students.length,
+											      'dates'     : row.dateRange,
+											      'students'  : scope.data.Students.join('\n'),
+											      'notes'     : scope.data.Notes,
+											      'recipients': row.FTD.Email + ';' +
+											                  caches.Hosts[scope.data.HostId].Email
 
-									      };
-
-									      if ($scope.autoApprove) {
-
-										      // Send our auto-approval notification
-										      utils.sendEmail(
-											      {
-												      'to'     : email.recipients,
-												      'subject': 'Automatic Seat Approval for ' + email.subject,
-												      'body'   : _.template(
-													      [
-														      '{{seats}} seats were approved for the {{host}}.',
-														      'Dates:  {{dates}}',
-														      'Students:\n{{students}}',
-														      '{{notes}}'
-													      ].join('\n\n'))(email)
-											      });
-
-									      } else {
-
-										      // Send our  request notification
-										      utils.sendEmail(
-											      {
-												      'to'     : email.recipients,
-												      'subject': 'New Seat Request for ' + email.subject,
-												      'body'   : _.template(
-													      [
-														      'The {{host}} has requested {{seats}} seats for the {{dates}} class:',
-														      '{{students}}',
-														      '{{notes}}\n',
-														      'View this request: https://cs1.eis.af.mil/sites/ftss#requests'
-													      ].join('\n\n'))(email)
-											      });
-
-									      }
+										      }
+									      );
 
 									      row.Requests_JSON = row.Requests_JSON || [];
 
