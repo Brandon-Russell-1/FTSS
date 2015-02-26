@@ -1,18 +1,14 @@
-(function() {
+"use strict";
 
-	"use strict";
+window._TIMER = {
+	'add': Object,
+	'get': Object
+};
 
-	window._TIMER = {
-		'add': Object,
-		'get': Object
-	};
-
-	window.FTSS = {};
-	window.utils = {};
-	window.caches = {};
-	window.PRODUCTION = true;
-
-}());
+window.FTSS = {};
+window.utils = {};
+window.caches = {};
+window.PRODUCTION = true;
 
 
 // PhantomJS doesn't support this--and we don't really need it for testing
@@ -21,6 +17,33 @@ window.indexedDB = {
 	'open': Object
 
 };
+
+window.performance = {
+	'now': function() {}
+};
+
+function injector(deps) {
+
+	var self = {};
+
+	beforeEach(function () {
+
+		module('FTSS');
+
+		deps.forEach(function (dep) {
+			inject([
+				       dep,
+				       function (d) {
+					       self[dep] = d;
+				       }
+			       ]);
+		})
+
+	});
+
+	return self;
+
+}
 
 /**
  *
