@@ -10,6 +10,7 @@ node_modules
 .idea/*
 
 _public
+Collaboration Docs
 node_modules/*
 npm-debug.log
 
