@@ -117,18 +117,19 @@
 				 */
 				utils.cacheFiller = function (row) {
 
-					if (row.CourseId) {
-						row.Course = caches.MasterCourseList[row.CourseId];
-					}
+					// Try to add the course data
+					row.Course = caches.MasterCourseList[row.CourseId] || {};
 
-					if (row.UnitId) {
-						row.FTD = caches.Units[row.UnitId];
-					}
+					// Try to add the FTD
+					row.FTD = caches.Units[row.UnitId] || {};
 
-					if (row.HostId) {
-						row.HostUnit = caches.Hosts[row.HostId];
-					}
+					// Try to add the host unit data
+					row.HostUnit = caches.Hosts[row.HostId] || {};
 
+					// Try to add the instructor data
+					row.Instructor = caches.Instructors[row.InstructorId] || {};
+
+					// Add course data for TS
 					if (row.TS) {
 						row.Course = {
 							'PDS'   : 'TS',
@@ -139,9 +140,13 @@
 					// The TTMS friendly link for this class
 					row.ttmsLink = row.Course && row.TTMS ? row.Course.Number + row.TTMS : '';
 
-					row.Instructor = caches.Instructors[row.InstructorId] || {};
-
 					utils.dateRange(row);
+
+					// In case of invalid data, we'll do something about it
+					if (!row.Course.Id && !row.TS && !row.NA) {
+						row.Archived = true;
+						return;
+					}
 
 					row.approvedSeats = 0;
 					row.pendingSeats = 0;
