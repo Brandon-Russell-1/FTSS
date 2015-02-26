@@ -111,8 +111,6 @@
 				/**
 				 * Cache Filler adds any missing cache lookups
 				 *
-				 * @todo Still need to finish cleaning up the last part of this function
-				 *
 				 * @param row
 				 */
 				utils.cacheFiller = function (row) {
