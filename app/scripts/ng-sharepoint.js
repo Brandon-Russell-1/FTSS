@@ -1,1 +1,1 @@
-../../../../ng-SharePoint/build/ng-sharepoint.js
+../../../ng-SharePoint/build/ng-sharepoint.js
