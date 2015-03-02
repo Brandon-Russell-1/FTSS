@@ -7,8 +7,9 @@ FTSS.ng.controller(
 		'$scope',
 		'SharePoint',
 		'notifier',
-		function ($scope, SharePoint, notifier) {
+		'classProcessor',
 		'controllerHelper',
+		function ($scope, SharePoint, notifier, classProcessor, controllerHelper) {
 
 			var self = controllerHelper($scope, {
 
@@ -62,7 +63,7 @@ FTSS.ng.controller(
 
 							      row.request.Host = caches.Hosts[row.request.HostId] || {'Text': 'Invalid Host'};
 
-							      utils.cacheFiller(row);
+							      classProcessor.cacheFiller(row);
 
 							      row.search = [
 								      row.ClassNotes,

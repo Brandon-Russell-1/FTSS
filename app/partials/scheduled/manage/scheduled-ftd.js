@@ -7,7 +7,9 @@ FTSS.ng.controller(
 		'$scope',
 		'notifier',
 		'dateTools',
+		'classProcessor',
 		'controllerHelper',
+		function ($scope, notifier, dateTools, classProcessor, controllerHelper) {
 
 			// Increase the default page limit to 100 for this view
 			$scope.pageLimit = 100;
@@ -50,7 +52,7 @@ FTSS.ng.controller(
 										// Course start/end days have changed
 										case(oldVal.Start !== newVal.Start):
 										case(oldVal.Days !== newVal.Days):
-											utils.cacheFiller(newVal);
+											classProcessor.cacheFiller(newVal);
 											scope.data.oldDateRange = oldVal.dateRange;
 											notifier.updateClass(scope.data);
 											break;
@@ -233,7 +235,7 @@ FTSS.ng.controller(
 
 							};
 
-							scope.data.requests = utils.requestDecode(scope.data.Requests_JSON);
+							scope.data.requests = classProcessor.requestDecode(scope.data.Requests_JSON);
 
 							// Wrap this in a closure simply for organization--we'll probably move out of here later on
 							(function () {
@@ -413,7 +415,7 @@ FTSS.ng.controller(
 					$scope.canRequest = true;
 
 					// Finish data binding and processing
-					self.initialize(data).then(utils.processScheduledRow);
+					self.initialize(data).then(classProcessor.processRow);
 
 					// Get a copy of the data into rawSchedule for showing in modal
 					$scope.rawSchedule = _.reject(angular.copy(data), 'Archived');

@@ -7,7 +7,7 @@ FTSS.ng.controller(
 		'$scope',
 		'$timeout',
 		'SharePoint',
-		function ($scope, $timeout, SharePoint) {
+		'classProcessor',
 		'controllerHelper',
 		function ($scope, $timeout, SharePoint, classProcessor, controllerHelper) {
 
@@ -45,7 +45,7 @@ FTSS.ng.controller(
 						    .reject('Archived')
 
 						    // Load the cache data for every row (this one is a little expensive)
-						    .each(utils.cacheFiller)
+						    .each(classProcessor.cacheFiller)
 
 						    // Sort oldest to newest
 						    .sortBy('startMoment')

@@ -64,61 +64,6 @@
 					return uuid;
 				};
 
-				/**
-				 * Cache Filler adds any missing cache lookups
-				 *
-				 * @param row
-				 */
-				utils.cacheFiller = function (row) {
-
-					// Try to add the course data
-					row.Course = caches.MasterCourseList[row.CourseId] || {};
-
-					// Try to add the FTD
-					row.FTD = caches.Units[row.UnitId] || {};
-
-					// Try to add the host unit data
-					row.HostUnit = caches.Hosts[row.HostId] || {};
-
-					// Try to add the instructor data
-					row.Instructor = caches.Instructors[row.InstructorId] || {};
-
-					// Add course data for TS
-					if (row.TS) {
-						row.Course = {
-							'PDS'   : 'TS',
-							'Number': row.TS
-						}
-					}
-
-					// The TTMS friendly link for this class
-					row.ttmsLink = row.Course && row.TTMS ? row.Course.Number + row.TTMS : '';
-
-					utils.dateRange(row);
-
-					// In case of invalid data, we'll do something about it
-					if (!row.Course.Id && !row.TS && !row.NA) {
-						row.Archived = true;
-						return;
-					}
-
-					row.approvedSeats = 0;
-					row.pendingSeats = 0;
-					row.deniedSeats = 0;
-					row.requestCount = 0;
-
-					_.each(row.Requests_JSON, function (r) {
-
-						row[['', 'pending', 'approved', 'denied'][r[0]] + 'Seats'] += r[1].length;
-						row.requestCount += r[1].length;
-
-					});
-
-					row.allocatedSeats = row.approvedSeats + row.Host + row.Other;
-					row.openSeats = row.Course.Max ? row.Course.Max - row.allocatedSeats : '';
-
-				};
-
 
 				/**
 				 * Destroys all local caches and resets the app

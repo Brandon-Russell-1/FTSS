@@ -5,8 +5,9 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'notifier',
-		function ($scope, notifier) {
+		'classProcessor',
 		'controllerHelper',
+		function ($scope, notifier, classProcessor, controllerHelper) {
 
 			$scope.pageLimit = 999;
 
@@ -52,7 +53,7 @@ FTSS.ng.controller(
 					      self.initialize(data).then(function (row) {
 
 						      // Call cacheFiller to add extra cached data
-						      utils.cacheFiller(row);
+						      classProcessor.cacheFiller(row);
 
 						      // Track how many days until the class beings
 						      row.daysUntil = row.startMoment.diff(today, 'days');

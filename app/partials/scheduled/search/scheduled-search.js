@@ -50,7 +50,7 @@ FTSS.ng.controller(
 
 					      self.initialize(data).then(function (row) {
 
-						      utils.processScheduledRow(row);
+						      classProcessor.processRow(row);
 
 						      // Hide full classes by default
 						      row.Archived = (row.openSeats < 1);
