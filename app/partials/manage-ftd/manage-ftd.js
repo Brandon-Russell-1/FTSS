@@ -8,11 +8,12 @@ FTSS.ng.controller(
 		'$timeout',
 		'SharePoint',
 		'SP_CONFIG',
-		function ($scope, $timeout, SharePoint, SP_CONFIG) {
+		'controllerHelper',
+		function ($scope, $timeout, SharePoint, SP_CONFIG, controllerHelper) {
 
 			$scope.pageLimit = 50;
 
-			var self = FTSS.controller($scope, {
+			var self = controllerHelper($scope, {
 
 				'sort' : 'InstructorName',
 				'model': 'instructors',

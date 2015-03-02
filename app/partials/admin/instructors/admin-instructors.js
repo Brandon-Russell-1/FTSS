@@ -7,11 +7,12 @@ FTSS.ng.controller(
 		'$scope',
 		'$timeout',
 		'SharePoint',
-		function ($scope, $timeout, SharePoint) {
+		'controllerHelper',
+		function ($scope, $timeout, SharePoint, controllerHelper) {
 
 			$scope.pageLimit = 5000;
 
-			var self = FTSS.controller($scope, {
+			var self = controllerHelper($scope, {
 
 				'sort' : 'InstructorName',
 				'model': 'instructors',

@@ -7,9 +7,11 @@ FTSS.ng.controller(
 		'$scope',
 		'$modal',
 		'notifier',
-		function ($scope, $modal, notifier) {
+		'classProcessor',
+		'controllerHelper',
+		function ($scope, $modal, notifier, classProcessor, controllerHelper) {
 
-			var self = FTSS.controller($scope, {
+			var self = controllerHelper($scope, {
 
 				'sort' : 'Start',
 				'group': 'CourseId',

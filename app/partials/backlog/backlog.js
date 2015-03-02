@@ -6,8 +6,9 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'SharePoint',
-		'$timeout',
-		function ($scope, SharePoint) {
+		'$timeout',,
+		'controllerHelper',
+		function ($scope, SharePoint, controllerHelper) {
 
 			$scope.month = moment().add(3, 'months');
 
@@ -27,7 +28,7 @@ FTSS.ng.controller(
 
 			// TEMPORARY FOR DEV ONLY **************************
 
-			var self = FTSS.controller($scope, {
+			var self = controllerHelper($scope, {
 
 				'sort' : 'course.Number',
 				'group': 'detRequest.Base',

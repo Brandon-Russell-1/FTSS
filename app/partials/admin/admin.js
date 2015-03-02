@@ -13,9 +13,10 @@
 			'$scope',
 			'SharePoint',
 			'$timeout',
-			function ($scope, SharePoint, $timeout) {
+			'controllerHelper',
+			function ($scope, SharePoint, $timeout, controllerHelper) {
 
-				var self = FTSS.controller($scope, {
+				var self = controllerHelper($scope, {
 
 					'sort' : 'Created',
 					'group': 'Page',

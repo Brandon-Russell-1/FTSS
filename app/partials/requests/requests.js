@@ -8,8 +8,9 @@ FTSS.ng.controller(
 		'SharePoint',
 		'notifier',
 		function ($scope, SharePoint, notifier) {
+		'controllerHelper',
 
-			var self = FTSS.controller($scope, {
+			var self = controllerHelper($scope, {
 
 				'sort' : 'Start',
 				'group': 'Course.Number',

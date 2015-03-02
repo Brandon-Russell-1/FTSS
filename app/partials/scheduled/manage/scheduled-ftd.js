@@ -7,6 +7,7 @@ FTSS.ng.controller(
 		'$scope',
 		'notifier',
 		'dateTools',
+		'controllerHelper',
 
 			// Increase the default page limit to 100 for this view
 			$scope.pageLimit = 100;
@@ -17,7 +18,7 @@ FTSS.ng.controller(
 
 				var //unitId = $scope.ftd.Id, // || parseInt($scope.filter.match(/\d+/)[0]),
 
-					self = FTSS.controller($scope, {
+					self = controllerHelper($scope, {
 
 						'sort'          : 'startMoment',
 						'group'         : 'Instructor.InstructorName',

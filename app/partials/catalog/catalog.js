@@ -6,16 +6,17 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'SharePoint',
-		function ($scope, SharePoint) {
+		'controllerHelper',
+		function ($scope, SharePoint, controllerHelper) {
 
 			// Increase to 99 due to the simple binding
 			$scope.pageLimit = 99;
 
-			var self = FTSS.controller($scope, {
+			var self = controllerHelper($scope, {
 
-				'sort' : 'PDS',
-				'group': 'MDS',
-				'model': 'catalog',
+				'sort'        : 'PDS',
+				'group'       : 'MDS',
+				'model'       : 'catalog',
 
 				// Actions to perform prior the SP Post operation
 				'beforeSubmit': function (scope) {
@@ -54,10 +55,10 @@ FTSS.ng.controller(
 											'__metadata': test.__metadata,
 
 											// Tell ngSharePoint to add a cache field
-											'cache': true,
+											'cache'     : true,
 
 											// Erase the Class #
-											'TTMS': null
+											'TTMS'      : null
 
 										});
 
@@ -84,11 +85,7 @@ FTSS.ng.controller(
 				.then(function (data) {
 
 					      // Only permit special roles read/write access (still has server-level security)
-					      $scope.canEdit = $scope.hasRole(
-						      [
-							      'curriculum',
-							      'scheduling'
-						      ]);
+					      $scope.canEdit = $scope.hasRole(['curriculum', 'scheduling']);
 
 					      self
 

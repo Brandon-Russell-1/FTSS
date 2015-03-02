@@ -5,9 +5,10 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		function ($scope) {
+		'controllerHelper',
+		function ($scope, controllerHelper) {
 
-			var self = FTSS.controller($scope, {
+			var self = controllerHelper($scope, {
 
 				'sort' : 'Unit',
 				'group': 'det.LongName',
@@ -15,30 +16,22 @@ FTSS.ng.controller(
 
 			});
 
-			self
+			self.bind().then(function (data) {
 
-				.bind()
+				self.initialize(data).then(function (d) {
 
-				.then(function (data) {
+					d.search = d.Unit;
 
-					      self
+					// Add the FTD data if this unit has one assigned
+					if (d.FTD) {
+						d.det = caches.Units[d.FTD];
+						d.Location = d.det.Location;
+						d.search += d.det.search;
+					}
 
-						      .initialize(data)
+				});
 
-						      .then(function (d) {
-
-							            d.search = d.Unit;
-
-							            // Add the FTD data if this unit has one assigned
-							            if (d.FTD) {
-								            d.det = caches.Units[d.FTD];
-								            d.Location = d.det.Location;
-								            d.search += d.det.search;
-							            }
-
-						            });
-
-				      });
+			});
 
 		}
 	]);

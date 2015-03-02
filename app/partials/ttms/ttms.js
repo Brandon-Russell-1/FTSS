@@ -6,10 +6,11 @@ FTSS.ng.controller(
 		'$scope',
 		'notifier',
 		function ($scope, notifier) {
+		'controllerHelper',
 
 			$scope.pageLimit = 999;
 
-			var self = FTSS.controller($scope, {
+			var self = controllerHelper($scope, {
 
 				    'sort' : 'startMoment',
 				    'group': 'course',

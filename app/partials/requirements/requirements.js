@@ -6,9 +6,10 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'SharePoint',
-		function ($scope, SharePoint) {
+		'controllerHelper',
+		function ($scope, SharePoint, controllerHelper) {
 
-			var self = FTSS.controller($scope, {
+			var self = controllerHelper($scope, {
 
 				'sort' : 'Course.PDS',
 				'group': 'Month',
