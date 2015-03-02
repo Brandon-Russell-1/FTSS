@@ -6,7 +6,7 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'notifier',
-		function ($scope, notifier) {
+		'dateTools',
 
 			// Increase the default page limit to 100 for this view
 			$scope.pageLimit = 100;
@@ -109,7 +109,7 @@ FTSS.ng.controller(
 								    scope.data.startMoment = event.start;
 
 								    // Update the model's start date
-								    scope.data.Start = utils.startDayCreator(event.start);
+								    scope.data.Start = dateTools.startDayCreator(event.start);
 
 								    // Update our end date for the modal view
 								    scope.data.endMoment = event.end;
@@ -337,21 +337,16 @@ FTSS.ng.controller(
 												var days = Number(scope.data.Course.Days || 1),
 
 												    // get the end date
-												    end = start.clone(),
+												    end = start.clone();
 
-												    downDays = utils.getDownDays(true);
-
-												// loop through the days, sipping weekends
+												// loop through the days, skipping weekends
 												while (days > 1) {
 
 													// Add a day to our range
 													end.add(1, 'days');
 
 													// Only count this day if it is a weekday and not a down day
-													if (end.isoWeekday() < 6 &&
-													    downDays.indexOf(end.format('YYYY-MM-DD')) < 0) {
-														days--;
-													}
+													!datetools.isDownDay(end) && days--;
 
 												}
 

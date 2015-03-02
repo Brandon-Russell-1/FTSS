@@ -13,7 +13,8 @@
 		[
 			'$timeout',
 			'$templateCache',
-			function ($timeout, $templateCache) {
+			'dateTools',
+			function ($timeout, $templateCache, dateTools) {
 
 				return {
 					'restrict'   : 'E',
@@ -38,7 +39,7 @@
 
 							var html = {}, events = [], min, minClone, max, dayBase,
 
-							    downDays = utils.getDownDays(true),
+							    downDays = dateTools.downDaysSimple,
 
 							    // Check if this is a weekend, holiday or nothing
 							    specialDay = function (day) {

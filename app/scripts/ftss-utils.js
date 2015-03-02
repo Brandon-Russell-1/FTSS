@@ -2,50 +2,6 @@
 
 (function () {
 
-	var y2k = moment('2000-01-01', 'YYYY-MM-DD');
-
-	utils.todayNumber = moment();
-
-	/**
-	 * Convert a y2k day offset to the actual day
-	 *
-	 * @param days
-	 * @returns {*}
-	 */
-	utils.startDayFinder = function (days) {
-
-		return y2k.clone().add(days, 'days');
-
-	};
-
-	/**
-	 * Convert a moment to the y2k day offset
-	 *
-	 * @param start
-	 * @returns {*}
-	 */
-	utils.startDayCreator = function (start) {
-
-		return start.diff(y2k, 'days') + 1;
-
-	};
-
-	/**
-	 * Create a text date range from a start/end pair
-	 *
-	 * @param row
-	 */
-	utils.dateRange = function (row) {
-
-		row.startMoment = utils.startDayFinder(row.Start);
-		row.endMoment = row.startMoment.clone().add(row.Days - 1, 'days');
-
-		row.dateRange = row.startMoment.format('D MMM YYYY') +
-
-		                (row.Days > 0 ? (' - ' + row.endMoment.format('D MMM YYYY') ) : '');
-
-	};
-
 
 	FTSS.ng.run(
 		[
