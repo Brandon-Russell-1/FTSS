@@ -165,17 +165,6 @@
 
 
 				/**
-				 * A simple watch destroyer for when we know we don't need all those dirty checks
-				 */
-				utils.ignore = function (scope) {
-
-					$timeout(function () {
-						scope.$$watchers = [];
-					});
-
-				};
-
-				/**
 				 * Destroys all local caches and resets the app
 				 */
 				utils.masterReset = function () {

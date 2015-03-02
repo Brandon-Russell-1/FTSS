@@ -156,7 +156,6 @@
 							$scope.$watch($attrs.data + '.Photo', linker);
 						} else {
 							linker();
-							utils.ignore($scope);
 						}
 
 					}
