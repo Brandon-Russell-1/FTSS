@@ -9,12 +9,14 @@ FTSS.ng.controller(
 		'dateTools',
 		'classProcessor',
 		'controllerHelper',
-		function ($scope, notifier, dateTools, classProcessor, controllerHelper) {
+		'utilities',
+		'security',
+		function ($scope, notifier, dateTools, classProcessor, controllerHelper, utilities, security) {
 
 			// Increase the default page limit to 100 for this view
 			$scope.pageLimit = 100;
 
-			$scope.ftd ? getSchedule() : $scope.fn.addAsync(getSchedule);
+			$scope.ftd ? getSchedule() : utilities.addAsync(getSchedule);
 
 			function getSchedule() {
 
@@ -395,11 +397,7 @@ FTSS.ng.controller(
 
 				self.bind().then(function (data) {
 
-					$scope.canEdit = $scope.hasRole(
-						[
-							'ftd',
-							'scheduling'
-						]);
+					$scope.canEdit = security.hasRole(['ftd', 'scheduling']);
 
 					// Load our unit data based on the dropdown
 					$scope.unit = angular.copy(caches.Units[$scope.ftd.Id]);

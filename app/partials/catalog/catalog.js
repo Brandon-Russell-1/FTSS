@@ -7,7 +7,8 @@ FTSS.ng.controller(
 		'$scope',
 		'SharePoint',
 		'controllerHelper',
-		function ($scope, SharePoint, controllerHelper) {
+		'security',
+		function ($scope, SharePoint, controllerHelper, security) {
 
 			// Increase to 99 due to the simple binding
 			$scope.pageLimit = 99;
@@ -78,49 +79,41 @@ FTSS.ng.controller(
 
 			});
 
-			self
+			self.bind().then(function (data) {
 
-				.bind()
+				// Only permit special roles read/write access (still has server-level security)
+				$scope.canEdit = security.hasRole(['curriculum', 'scheduling']);
 
-				.then(function (data) {
+				self.initialize(data).then(function (d) {
 
-					      // Only permit special roles read/write access (still has server-level security)
-					      $scope.canEdit = $scope.hasRole(['curriculum', 'scheduling']);
+					d.search = [
+						d.PDS,
+						d.Number,
+						d.Title
+					].join(' ');
 
-					      self
+					d.MDS = d.Title.split(' ')[0];
 
-						      .initialize(data)
+					d.Units = [];
 
-						      .then(function (d) {
+					_.each(caches.Units, function (u) {
 
-							            d.search = [
-								            d.PDS,
-								            d.Number,
-								            d.Title
-							            ].join(' ');
+						if (u.Courses_JSON.indexOf(d.Id) > -1) {
 
-							            d.MDS = d.Title.split(' ')[0];
+							d.Units.push(u.label);
+							d.search += ' ' + u.search;
 
-							            d.Units = [];
+						}
 
-							            _.each(caches.Units, function (u) {
+					});
 
-								            if (u.Courses_JSON.indexOf(d.Id) > -1) {
+					if (d.Units) {
+						d.units = d.Units.sort().join('<br>');
+					}
 
-									            d.Units.push(u.label);
-									            d.search += ' ' + u.search;
-
-								            }
-
-							            });
-
-							            if (d.Units) {
-								            d.units = d.Units.sort().join('<br>');
-							            }
-
-						            });
+				});
 
 
-				      });
+			});
 		}
 	]);

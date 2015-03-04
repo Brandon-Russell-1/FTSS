@@ -9,7 +9,8 @@ FTSS.ng.controller(
 		'notifier',
 		'classProcessor',
 		'controllerHelper',
-		function ($scope, $modal, notifier, classProcessor, controllerHelper) {
+		'security',
+		function ($scope, $modal, notifier, classProcessor, controllerHelper, security) {
 
 			var self = controllerHelper($scope, {
 
@@ -35,18 +36,10 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
-					      $scope.autoApprove = $scope.hasRole
-					      ([
-						       'ftd',
-						       'scheduling'
-					       ]);
+					      $scope.autoApprove = security.hasRole(['ftd', 'scheduling']);
 
-					      $scope.canEdit = $scope.canRequest = $scope.hasRole
-					      ([
-						       'mtf',
-						       'ftd',
-						       'scheduling'
-					       ]);
+					      $scope.canEdit = $scope.canRequest =
+					      security.hasRole(['mtf', 'ftd', 'scheduling']);
 
 					      self.initialize(data).then(function (row) {
 

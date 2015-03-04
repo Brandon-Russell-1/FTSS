@@ -9,17 +9,19 @@ FTSS.ng.controller(
 		'SharePoint',
 		'classProcessor',
 		'controllerHelper',
-		function ($scope, $timeout, SharePoint, classProcessor, controllerHelper) {
+		'loading',
+		'utilities',
+		function ($scope, $timeout, SharePoint, classProcessor, controllerHelper, loading, utilities) {
 
 			$scope.pageLimit = 99;
 
 			var read = FTSS.models('scheduled');
 
-			$scope.ftd && getProductionData() || $scope.fn.addAsync(getProductionData);
+			$scope.ftd && getProductionData() || utilities.addAsync(getProductionData);
 
 			function getProductionData() {
 
-				utils.loading(true);
+				loading(true);
 
 				// Only include this unit
 				read.params.$filter = '(UnitId eq ' + $scope.ftd.Id + ')';
@@ -33,7 +35,7 @@ FTSS.ng.controller(
 			function buildProductionView(results) {
 
 				// Pass the rest of this op to our async collector just in case the caches aren't loaded yet
-				$scope.fn.addAsync(function () {
+				utilities.addAsync(function () {
 
 					var stats = _(results)
 
@@ -291,7 +293,7 @@ FTSS.ng.controller(
 						'columnsHGap': 15
 					};
 
-					utils.loading(false);
+					loading(false);
 
 				});
 

@@ -16,8 +16,10 @@ FTSS.ng.service('controllerHelper', [
 	'$modal',
 	'SharePoint',
 	'$timeout',
+	'security',
+	'utilities',
 
-	function ($modal, SharePoint, $timeout) {
+	function ($modal, SharePoint, $timeout, security, utilities) {
 
 		return function ($scope, opts) {
 
@@ -39,7 +41,7 @@ FTSS.ng.service('controllerHelper', [
 				 */
 				'bind': function (watchTarget) {
 
-					var page = $scope.fn.getPage();
+					var page = $scope.PAGE;
 
 					// The tagBox controls whether the search or tagBox are shown
 					FTSS.tagBox = !!watchTarget;
@@ -67,7 +69,7 @@ FTSS.ng.service('controllerHelper', [
 							function watchAction(watch) {
 
 								// Attempt to call the page init again (async fun)
-								$scope.fn.doInitPage();
+								utilities.initPage();
 
 								// Only act if there is a valid change to our watch
 								if (watch) {
@@ -111,7 +113,7 @@ FTSS.ng.service('controllerHelper', [
 												last = data;
 
 												// If a callback exists, add it to our async handler
-												callback && $scope.fn.addAsync(function () {
+												callback && utilities.addAsync(function () {
 													callback(data);
 												});
 
@@ -152,7 +154,7 @@ FTSS.ng.service('controllerHelper', [
 
 						// We must still pass a then() promise to prevent an error, we're just not executing the callback
 						return {
-							'then': $scope.fn.setLoaded
+							'then': utilities.setLoaded
 						};
 
 					} else {
@@ -259,7 +261,7 @@ FTSS.ng.service('controllerHelper', [
 								// The main limiting, filtering, grouping, sorting function our views
 								exec = function () {
 
-									if ($scope.abort) {
+									if (!security.isAuthorized()) {
 										return false;
 									}
 
@@ -288,7 +290,7 @@ FTSS.ng.service('controllerHelper', [
 									                  });
 
 									// Update our permalink for this custom view
-									$scope.fn.setPermaLink(false);
+									utilities.setPermaLink(false);
 
 									// Reset groups, counter & count
 									$scope.groups = false;
@@ -341,7 +343,7 @@ FTSS.ng.service('controllerHelper', [
 									$scope.count.overload = (counter !== sifter.length);
 
 									// Perform final loading
-									$scope.fn.setLoaded(function () {
+									utilities.setLoaded(function () {
 
 										// De-register the watcher if it exists
 										(FTSS.searchWatch || Function)();

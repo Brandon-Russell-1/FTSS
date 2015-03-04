@@ -145,7 +145,7 @@
 
 	custom = {
 
-		'appInit': function (scope, SharePoint) {
+		'appInit': function (scope, SharePoint, utilities) {
 
 			var sVal,
 
@@ -170,8 +170,8 @@
 
 						    tags[split[0]].push(Number(split[1]) || split[1]);
 
-						    scope.fn.setPermaLink(true);
-						    scope.fn.doNavigate();
+						    utilities.scope.setPermaLink(true);
+						    utilities.navigate();
 
 					    });
 
@@ -308,7 +308,7 @@
 							    FTSS.search = that;
 
 							    // Call completion now
-							    scope.fn.doInitPage();
+							    utilities.initPage();
 
 							    // This shows the page contents for anything still hiding...
 							    $('#pageActions .hide').removeClass('hide');
@@ -467,7 +467,8 @@
 	FTSS.ng.directive('selectize', [
 		'$timeout',
 		'SharePoint',
-		function ($timeout, SharePoint) {
+		'utilities',
+		function ($timeout, SharePoint, utilities) {
 
 			return {
 
@@ -503,7 +504,7 @@
 
 						} else {
 
-							opts = custom[attrs.selectize](scope, SharePoint, attrs.field);
+							opts = custom[attrs.selectize](scope, SharePoint, utilities);
 
 						}
 

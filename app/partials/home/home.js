@@ -8,19 +8,26 @@
 		'homeController',
 		[
 			'$scope',
-			function ($scope) {
+			'utilities',
+			'flickr',
+			function ($scope, utilities, flickr) {
+
+				// Init flickr service
+				flickr.init();
 
 				// We will be using the flickr slides how on this page
 				$scope.toggleSlides = true;
 
 				// Add to the async handler in case this returns first (likely)
-				$scope.fn.addAsync(function () {
+				utilities.addAsync(function () {
 
 					$scope.courseUpdates = _.filter(caches.MasterCourseList, 'updated');
 
-					$scope.fn.setLoaded();
+					utilities.setLoaded();
 
 				});
+
+				$scope.$on('$destroy', flickr.destroy);
 
 			}
 		]);

@@ -8,9 +8,10 @@
 			'$timeout',
 			'SharePoint',
 			'$alert',
-			'$location',
 			'$modal',
-			function ($timeout, SharePoint, $alert, $location, $modal) {
+			'utilities',
+			'sharepointFilters',
+			function ($timeout, SharePoint, $alert, $modal, utilities, sharepointFilters) {
 
 				/**
 				 * Performs nested property lookups without eval or switch(e.length), removed try {} catch(){}
@@ -153,7 +154,7 @@
 
 						var test = [],
 
-						    map = FTSS.filters.map();
+						    map = sharepointFilters.map();
 
 						// First, generate the array of tags to test against
 						_.each(FTSS.tags, function (tag, key) {
@@ -250,70 +251,59 @@
 
 					var scope = $scope.$new();
 
-					scope.modal = $modal({
-						                     contentTemplate: '/partials/' + template + '.html', scope: scope,
-						                     show           : true
-					                     });
+					scope.modal = $modal(
+						{
+							contentTemplate: '/partials/' + template + '.html',
+							scope          : scope,
+							show           : true
+						});
 
 					scope.close = scope.modal.destroy;
 
-				},
+				};
 
 				/**
 				 * Our app-wide alert notification system, this will eventually replace all the other message garbage polluting MainController
 				 */
-					utils.alert = (function () {
+				utils.alert = (function () {
 
-						var builder;
+					var builder;
 
-						builder = function (opts) {
+					builder = function (opts) {
 
-							$alert(_.defaults(opts || {}, {
-								'title'    : 'Record Updated!',
-								'content'  : 'Your changes were saved successfully.',
-								'placement': 'top-right',
-								'type'     : 'success',
-								'duration' : 3,
-								'show'     : true
-							}));
+						$alert(_.defaults(opts || {}, {
+							'title'    : 'Record Updated!',
+							'content'  : 'Your changes were saved successfully.',
+							'placement': 'top-right',
+							'type'     : 'success',
+							'duration' : 3,
+							'show'     : true
+						}));
 
-						};
+					};
 
-						return {
+					return {
 
-							'create': function () {
-								builder({'title': 'Record Created!'});
-							},
+						'create': function () {
+							builder({'title': 'Record Created!'});
+						},
 
-							'update': builder,
+						'update': builder,
 
-							'security': function () {
+						'error': function (err) {
 
-								builder({
-									        'title'    : 'Access Denied',
-									        'content'  : 'Sorry, you don\'t seem to have permissions to view this page',
-									        'placement': 'center',
-									        'type'     : 'danger',
-									        'duration' : 30
+							utils.errorHandler(err);
 
-								        });
+							builder({
+								        'type'    : 'danger',
+								        'title'   : 'Sorry, something went wrong!',
+								        'content' : "Please refresh the page and try again.",
+								        'duration': 20
+							        });
+						}
+					};
 
-							},
-
-							'error': function (err) {
-
-								utils.errorHandler(err);
-
-								builder({
-									        'type'    : 'danger',
-									        'title'   : 'Sorry, something went wrong!',
-									        'content' : "Please refresh the page and try again.",
-									        'duration': 20
-								        });
-							}
-						};
-
-					}());
+				}());
 
 
 			}

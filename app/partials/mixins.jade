@@ -121,7 +121,7 @@ mixin link(page, tag, name, roles)
         .pointer
             .arrow
             .arrow_border
-        span.link(ng-click='fn.doNavigate("' + page + '")')
+        span.link(ng-click='navigate("' + page + '")')
             +icon(tag)
             span= name
 

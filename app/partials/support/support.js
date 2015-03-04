@@ -14,11 +14,13 @@
 			'SharePoint',
 			'$timeout',
 			'notifier',
-			function ($scope, SharePoint, $timeout, notifier) {
+			'utilities',
+			'security',
+			function ($scope, SharePoint, $timeout, notifier, utilities, security) {
 
 				var model = FTSS.models('support'),
 
-				    page = $scope.fn.getPage(),
+				    page = $scope.PAGE,
 
 				    update,
 
@@ -47,7 +49,7 @@
 						'__metadata': 'Support',
 						'cache'     : true,
 						'Page'      : page,
-						'Staff'     : $scope.hasRole('admin'),
+						'Staff'     : security.hasRole('admin'),
 						'Comment'   : comment ? comment.writeReply : $scope.askQuestion
 					};
 
