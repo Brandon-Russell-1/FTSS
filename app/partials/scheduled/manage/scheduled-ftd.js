@@ -308,7 +308,7 @@ FTSS.ng.controller(
 							scope.$on('modal.show', function () {
 
 								// Init our calendar
-								utilities.initInstructorCalendar(
+								FTSS.initInstructorCalendar(
 									{
 
 										'allDayDefault': true,

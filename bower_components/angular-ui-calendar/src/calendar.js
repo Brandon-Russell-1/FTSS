@@ -198,7 +198,7 @@ angular.module('ui.calendar', [])
             options = null;
 
           // Set a global action -- ugly hack much?
-	      utils.initInstructorCalendar =  function (config) {
+	      FTSS.initInstructorCalendar =  function (config) {
 
 		      options = {eventSources: sources};
 
