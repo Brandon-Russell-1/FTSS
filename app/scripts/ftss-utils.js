@@ -204,48 +204,6 @@
 
 				};
 
-				/**
-				 * Handles the page loading indicators (mouse & spinner)
-				 * Always determines whether content is visible or not
-				 *
-				 * @param loading
-				 */
-				utils.loading = (function () {
-
-					var body = $('body')[0];
-
-					// Return our module pattern
-					return function (updateState) {
-
-						// Capture the current loading state
-						var loadingState = (body.className.indexOf('wait') > -1);
-
-						// Always tyr to close the search box
-						FTSS.search && FTSS.search.close();
-
-						// Only do something if the state has changed
-						if (loadingState !== updateState) {
-
-							if (updateState) {
-
-								body.className += ' wait';
-								document.body.style.cursor = 'wait';
-
-
-							} else {
-
-								body.className = body.className.replace('wait', '');
-								document.body.style.cursor = '';
-
-							}
-
-
-						}
-
-					};
-
-				}());
-
 				utils.distanceCalc = function (start, end) {
 
 					if (start && end) {
