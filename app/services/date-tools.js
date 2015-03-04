@@ -109,7 +109,8 @@ FTSS.ng.service('dateTools', [
 
 			row.dateRange = row.startMoment.format('D MMM YYYY') +
 
-			                (row.Days > 0 ? (' - ' + row.endMoment.format('D MMM YYYY') ) : '');
+			                // We need this because FullCalendar goes through to the next morning at 00:00
+			                (row.Days > 0 ? (' - ' + row.endMoment.clone().add(-1, 'days').format('D MMM YYYY') ) : '');
 
 		};
 

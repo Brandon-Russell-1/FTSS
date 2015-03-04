@@ -95,7 +95,7 @@ FTSS.ng.controller(
 									           {
 										           'title'           : title,
 										           'start'           : scope.data.startMoment,
-										           'end'             : scope.data.endMoment.clone().add(1, 'days'),
+										           'end'             : scope.data.endMoment.clone(),
 										           'className'       : 'success',
 										           'editable'        : true,
 										           'durationEditable': true,
@@ -110,17 +110,30 @@ FTSS.ng.controller(
 							    // Perform our date updates
 							    update = function (event) {
 
+								    /**
+								     * Full calendar sucks....we seriously need to get rid of it eventually.
+								     *
+								     * This is the best hack we can do for now as FC is not respecting local-only
+								     * (ambiguous date ranges) as it should.  Basically we let moment fix it for us
+								     * to prevent FC from generating UTC-based time that were breaking day calculations
+								     *
+								     * @type {string}
+								     */
+								    var format = 'YYYY-MM-DD',
+								        start = moment(event.start.format(format), format),
+								        end = moment(event.end.format(format), format);
+
 								    // Get the start date
-								    scope.data.startMoment = event.start;
+								    scope.data.startMoment = start;
 
 								    // Update the model's start date
-								    scope.data.Start = dateTools.startDayCreator(event.start);
+								    scope.data.Start = dateTools.startDayCreator(start);
 
 								    // Update our end date for the modal view
-								    scope.data.endMoment = event.end;
+								    scope.data.endMoment = end;
 
 								    // Get the number of days
-								    scope.data.Days = event.end.diff(event.start, 'days') + (event.offset || 0);
+								    scope.data.Days = end.diff(start, 'days');
 
 								    // Let the view know of our changes
 								    scope.modal.$setDirty();
@@ -165,7 +178,7 @@ FTSS.ng.controller(
 												              'UNAVAILABLE',
 
 												     'start'    : row.startMoment,
-												     'end'      : row.endMoment.clone().add(1, 'days'),
+												     'end'      : row.endMoment,
 												     'className': 'info'
 											     }
 
@@ -313,15 +326,14 @@ FTSS.ng.controller(
 													end.add(1, 'days');
 
 													// Only count this day if it is a weekday and not a down day
-													!datetools.isDownDay(end) && days--;
+													!dateTools.isDownDay(end) && days--;
 
 												}
 
-												// Update the model and notify the view, added offset for strange day count issue--needs another look later on
+												// Update the model and notify the view
 												update({
-													       'start' : start,
-													       'end'   : end,
-													       'offset': 1
+													       'start': start,
+													       'end'  : end
 												       });
 
 												// Add the updated event back to the calendar
@@ -352,7 +364,7 @@ FTSS.ng.controller(
 					$scope.searchText.$ = [
 						month.format(format),
 						month.add(1, 'months').format(format),
-						month.add(1, 'months').format(format),
+						month.add(1, 'months').format(format)
 					].join(' or ');
 
 				}
