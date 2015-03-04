@@ -83,8 +83,10 @@
 						// Route based on name / linker / search to a controller of nameController
 						$routeProvider.when('/' + route + '/:link?/:search?', {
 
-							'templateUrl': '/partials/' + route + '.html',
-							'controller' : route + 'Controller'
+							'templateUrl'         : '/partials/' + route + '.html',
+							'controller'          : route + 'Controller',
+							'reloadOnSearch'      : false,
+							'caseInsensitiveMatch': true
 
 						});
 
