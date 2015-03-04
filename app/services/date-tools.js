@@ -124,7 +124,7 @@ FTSS.ng.service('dateTools', [
 
 			return date.isoWeekday() > 5 ||
 
-			       _downDays.indexOf(date.format('YYYY-MM-DD'));
+			       _downDays[date.format('YYYY-MM-DD')];
 
 		};
 
