@@ -195,45 +195,7 @@ FTSS.ng.controller(
 							 */
 							scope.getOpenSeats = function (countOnly) {
 
-								// Only attempt this if a CourseID exists
-								if (scope.data.CourseId > 0) {
-
-									// Update the course for this model
-									scope.data.Course = caches.MasterCourseList[scope.data.CourseId];
-
-									var requests = _(scope.data.Requests_JSON).reduce(function (count, request) {
-
-										    // Only count seats pending (1) or approved (2) against total
-										    return (request[0] < 3) ? count + request[1].length : count;
-
-									    }, 0),
-
-									    open = (scope.data.Course.Max -
-									            (scope.data.Host || 0) -
-									            (scope.data.Other || 0) -
-									            requests);
-
-									return countOnly ? open :
-
-									       open < 0 ? 'Overbooked by ' + Math.abs(open) :
-
-									       open > 0 ? open + ' Open Seats' :
-
-									       'Class Full';
-
-								} else {
-
-									scope.data.Course = {
-										'Days': 'n/a',
-										'Max' : 0,
-										'Min' : 0
-									};
-
-									scope.data.Hours = null;
-
-									return '';
-
-								}
+								return classProcessor.getOpenSeats(scope.data, countOnly);
 
 							};
 
