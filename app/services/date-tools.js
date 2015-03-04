@@ -51,6 +51,11 @@ FTSS.ng.service('dateTools', [
 			    '2016-12-27': _familyDay
 		    };
 
+		/**
+		 * Calendar-friendly list of holidays and AETC down days
+		 *
+		 * @type {Array}
+		 */
 		this.downDays = _.map(_downDays, function (label, date) {
 
 			return {
@@ -61,6 +66,11 @@ FTSS.ng.service('dateTools', [
 
 		});
 
+		/**
+		 * Simple array of down days in the format YYYY-MM-DD
+		 *
+		 * @type {Array}
+		 */
 		this.downDaysSimple = _.keys(_downDays);
 
 		/**
