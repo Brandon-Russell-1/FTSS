@@ -7,7 +7,8 @@ FTSS.ng.controller(
 		'$scope',
 		'SharePoint',
 		'controllerHelper',
-		function ($scope, SharePoint, controllerHelper) {
+		'utilities',
+		function ($scope, SharePoint, controllerHelper, utilities) {
 
 			var self = controllerHelper($scope, {
 
@@ -233,14 +234,14 @@ FTSS.ng.controller(
 						// HTTP 204 is the status given for a successful update, there will be no body
 						if (resp.status === 204) {
 
-							utils.alert.update();
+							utilities.alert.update();
 
 							// Call actions.process() to reprocess the data by our controllers
 							self.reload();
 
 						} else {
 
-							utils.alert.error('Unable to approve or deny 898.');
+							utilities.alert.error('Unable to approve or deny 898.');
 
 						}
 

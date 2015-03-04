@@ -108,7 +108,7 @@ FTSS.ng.service('security', [
 				$rootScope.newFTD = {};
 
 				// Launch the modal dialog
-				utils.modal(_isAdmin ? 'switch-ftd' : 'no-assigned-ftd', $rootScope);
+				utilities.modal(_isAdmin ? 'switch-ftd' : 'no-assigned-ftd', $rootScope);
 
 				// Watch our newFTD variable
 				$rootScope.$watch('newFTD.id', function (id) {
@@ -260,7 +260,7 @@ FTSS.ng.service('security', [
 					// Only notify the user if this is the first time this page load
 					if (_self.hasRole('ftd') && !$rootScope.ftd) {
 
-						utils.modal('no-assigned-ftd', $rootScope);
+						utilities.modal('no-assigned-ftd', $rootScope);
 
 					}
 

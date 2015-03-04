@@ -15,95 +15,101 @@
 	FTSS.ng.directive(
 		'contenteditable',
 
-		function () {
-			return {
-				restrict: 'A', // only activate on element attribute
-				require : '?ngModel', // get a hold of NgModelController
-				link    : function (scope, element, attrs, ngModel) {
-					if (!ngModel) {
-						return;
-					} // do nothing if no ng-model
+		[
+			'utilities',
 
-					var onEnter = attrs.hasOwnProperty('onenter'),
+			function (utilities) {
 
-					    placeholder = attrs.placeholder,
+				return {
 
-					    original = utils.deepRead(scope, attrs.ngModel),
+					restrict: 'A', // only activate on element attribute
+					require : '?ngModel', // get a hold of NgModelController
+					link    : function (scope, element, attrs, ngModel) {
+						if (!ngModel) {
+							return;
+						} // do nothing if no ng-model
 
-					    run = function () {
+						var onEnter = attrs.hasOwnProperty('onenter'),
 
-						    (original !== ngModel.$viewValue) && scope.$eval(attrs.onenter);
+						    placeholder = attrs.placeholder,
 
-					    };
+						    original = utilities.deepRead(scope, attrs.ngModel),
 
-					// Specify how UI should be updated
-					ngModel.$render = function () {
-						element.text(ngModel.$viewValue || '');
-					};
+						    run = function () {
 
-					element.on('keydown', function (e) {
-						if (onEnter && e.which === 13) {
-							run();
-							e.preventDefault();
-							e.stopImmediatePropagation();
-						}
-					});
+							    (original !== ngModel.$viewValue) && scope.$eval(attrs.onenter);
 
-					// Listen for change events to enable binding
-					element.on('blur keyup change', function () {
-						scope.$apply(read);
-					});
+						    };
 
-					if (placeholder) {
-
-						var setPlaceholder = function () {
-
-							var model = utils.deepRead(scope, attrs.ngModel) || placeholder;
-
-							ngModel.$setViewValue(model);
-							ngModel.$render();
-
-							(model === placeholder) && element.addClass('placeholder');
-
+						// Specify how UI should be updated
+						ngModel.$render = function () {
+							element.text(ngModel.$viewValue || '');
 						};
 
-						element.on('focus', function () {
-
-							if (ngModel.$viewValue === placeholder) {
-
-								element.empty();
-								element.removeClass('placeholder');
-
-							}
-
-						});
-
-						element.on('blur', setPlaceholder);
-
-						setPlaceholder();
-
-					}
-
-					if (attrs.hasOwnProperty('blur')) {
-						element.on('blur', function () {
-							if (ngModel.$viewValue && ngModel.$viewValue !== placeholder) {
+						element.on('keydown', function (e) {
+							if (onEnter && e.which === 13) {
 								run();
+								e.preventDefault();
+								e.stopImmediatePropagation();
 							}
 						});
+
+						// Listen for change events to enable binding
+						element.on('blur keyup change', function () {
+							scope.$apply(read);
+						});
+
+						if (placeholder) {
+
+							var setPlaceholder = function () {
+
+								var model = utilities.deepRead(scope, attrs.ngModel) || placeholder;
+
+								ngModel.$setViewValue(model);
+								ngModel.$render();
+
+								(model === placeholder) && element.addClass('placeholder');
+
+							};
+
+							element.on('focus', function () {
+
+								if (ngModel.$viewValue === placeholder) {
+
+									element.empty();
+									element.removeClass('placeholder');
+
+								}
+
+							});
+
+							element.on('blur', setPlaceholder);
+
+							setPlaceholder();
+
+						}
+
+						if (attrs.hasOwnProperty('blur')) {
+							element.on('blur', function () {
+								if (ngModel.$viewValue && ngModel.$viewValue !== placeholder) {
+									run();
+								}
+							});
+						}
+
+						read(); // initialize
+
+						// Write data to the model
+						function read() {
+
+							var txt = element.text();
+
+							txt && ngModel.$setViewValue(txt);
+
+						}
 					}
-
-					read(); // initialize
-
-					// Write data to the model
-					function read() {
-
-						var txt = element.text();
-
-						txt && ngModel.$setViewValue(txt);
-
-					}
-				}
-			};
-		});
+				};
+			}
+		]);
 
 }());

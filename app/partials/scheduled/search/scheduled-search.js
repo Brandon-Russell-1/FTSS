@@ -10,7 +10,8 @@ FTSS.ng.controller(
 		'classProcessor',
 		'controllerHelper',
 		'security',
-		function ($scope, $modal, notifier, classProcessor, controllerHelper, security) {
+		'utilities',
+		function ($scope, $modal, notifier, classProcessor, controllerHelper, security, utilities) {
 
 			var self = controllerHelper($scope, {
 
@@ -163,9 +164,9 @@ FTSS.ng.controller(
 						      row.showStudents = function () {
 
 							      $scope.requestView = row;
-							      $scope.students = utils.requestDecode(row.Requests_JSON);
+							      $scope.students = utilities.requestDecode(row.Requests_JSON);
 
-							      utils.modal('modal-display-students', $scope);
+							      utilities.modal('modal-display-students', $scope);
 
 						      }
 

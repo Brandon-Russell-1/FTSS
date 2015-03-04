@@ -14,7 +14,9 @@
 			'$timeout',
 			'$templateCache',
 			'dateTools',
-			function ($timeout, $templateCache, dateTools) {
+			'utilities',
+
+			function ($timeout, $templateCache, dateTools, utilities) {
 
 				return {
 					'restrict'   : 'E',
@@ -164,7 +166,7 @@
 
 								    };
 
-								photo && utils.fetchPhoto(photo, fillImage);
+								photo && utilities.fetchPhoto(photo, fillImage);
 
 								// Iterate over each event
 								_.each(instructor, function (event) {

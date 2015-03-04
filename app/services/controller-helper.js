@@ -193,7 +193,7 @@ FTSS.ng.service('controllerHelper', [
 					process && _.each(data, process);
 
 					// Finally, do our tagHighlighting if this is a tagBox
-					FTSS.tagBox && utils.tagHighlight(data);
+					FTSS.tagBox && utilities.tagHighlight(data);
 
 					// Finally, send our data off to the post-processor
 					actions.postProcess(data);
@@ -317,7 +317,7 @@ FTSS.ng.service('controllerHelper', [
 
 										// Run sortBy first on our mapped data
 										.sortBy(function (srt) {
-											        return utils.deepRead(srt, opts.sort || false);
+											        return utilities.deepRead(srt, opts.sort || false);
 										        })
 
 										// Trim our results
@@ -329,7 +329,7 @@ FTSS.ng.service('controllerHelper', [
 											         counter++;
 
 											         return opts.group ?
-											                utils.deepRead(gp, opts.group) ||
+											                utilities.deepRead(gp, opts.group) ||
 											                (opts.noEmptyGroup ? counter : '') :
 											                false;
 										         })
@@ -473,7 +473,7 @@ FTSS.ng.service('controllerHelper', [
 								// If this is a modal, lets close it too
 								close && close();
 
-								utils.alert.update();
+								utilities.alert.update();
 
 								// Update the etag so we can rewrite this data again during the session if we want
 								data.__metadata.etag = resp.headers('etag');
@@ -486,7 +486,7 @@ FTSS.ng.service('controllerHelper', [
 
 							}
 
-						}, utils.alert.error);
+						}, utilities.alert.error);
 
 					}
 
@@ -529,14 +529,14 @@ FTSS.ng.service('controllerHelper', [
 						if (resp.status === 201) {
 
 							// Notify user of success
-							utils.alert.create();
+							utilities.alert.create();
 
 							// Perform final CRUD operations
 							actions._postCRUD(resp.data.d || resp.data, callback, noProcess);
 
 						}
 
-					}, utils.alert.error);
+					}, utilities.alert.error);
 
 				},
 
@@ -561,7 +561,7 @@ FTSS.ng.service('controllerHelper', [
 						if (resp.status === 204) {
 
 							// Notify user of success
-							utils.alert.update();
+							utilities.alert.update();
 
 							// Update the etag so we can rewrite this data again during the session if we want
 							data.__metadata.etag = resp.headers('etag');
@@ -571,11 +571,11 @@ FTSS.ng.service('controllerHelper', [
 
 						} else {
 
-							utils.alert.error('unknown update failure');
+							utilities.alert.error('unknown update failure');
 
 						}
 
-					}, utils.alert.error);
+					}, utilities.alert.error);
 
 
 				},

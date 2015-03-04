@@ -9,7 +9,8 @@ FTSS.ng.controller(
 		'SharePoint',
 		'SP_CONFIG',
 		'controllerHelper',
-		function ($scope, $timeout, SharePoint, SP_CONFIG, controllerHelper) {
+		'utilities',
+		function ($scope, $timeout, SharePoint, SP_CONFIG, controllerHelper, utilities) {
 
 			$scope.pageLimit = 50;
 
@@ -41,7 +42,7 @@ FTSS.ng.controller(
 						rawBuffer = result.target.result,
 
 						// Create a random file anem
-						rand = utils.generateUUID();
+						rand = utilities.generateUUID();
 
 					$.ajax({
 						       'url'        : SP_CONFIG.baseURL + 'Bios',
@@ -76,7 +77,7 @@ FTSS.ng.controller(
 							       }
 
 						       },
-						       error        : utils.alert.error
+						       error        : utilities.alert.error
 					       });
 				};
 

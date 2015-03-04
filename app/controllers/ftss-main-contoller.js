@@ -32,7 +32,7 @@
 				if ($location.path() === '/reset') {
 
 					$rootScope.ABORT = true;
-					utils.masterReset();
+					utilities.masterReset();
 					return;
 
 				}

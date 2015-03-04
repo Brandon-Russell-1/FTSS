@@ -31,85 +31,88 @@
 
 
 	FTSS.ng.run(
-		['$http',
-		 function ($http) {
+		[
+			'$http',
+			'utilities',
+			function ($http, utilities) {
 
-			 var cachedImages = {};
+				var cachedImages = {};
 
-			 utils.fetchPhoto = function (url, callback) {
+				utilities.fetchPhoto = function (url, callback) {
 
-				 if (cachedImages[url]) {
-					 callback(cachedImages[url]);
-					 return;
-				 }
+					if (cachedImages[url]) {
+						callback(cachedImages[url]);
+						return;
+					}
 
-				 var photo = FTSS.photoURL + '_w/' + url + '_jpg.jpg',
+					var photo = FTSS.photoURL + '_w/' + url + '_jpg.jpg',
 
-				     setImage = function (blob) {
+					    setImage = function (blob) {
 
-					     if (blob) {
+						    if (blob) {
 
-						     // Create and revoke ObjectURL
-						     var imgURL = 'data:image/jpeg;base64,' +
-						                  utils._arrayBufferToBase64(blob);
+							    // Create and revoke ObjectURL
+							    var imgURL = 'data:image/jpeg;base64,' +
+							                 utilities._arrayBufferToBase64(blob);
 
-						     cachedImages[url] = imgURL;
-						     callback(imgURL);
+							    cachedImages[url] = imgURL;
+							    callback(imgURL);
 
-					     } else {
-						     getImageFromWeb();
-					     }
+						    } else {
+							    getImageFromWeb();
+						    }
 
-				     },
+					    },
 
-				     getImageFromWeb = function () {
+					    getImageFromWeb = function () {
 
-					     $http(
-						     {
+						    $http(
+							    {
 
-							     'url'             : photo,
-							     'method'          : 'GET',
-							     'responseType'    : 'arraybuffer',
-							     'ignoreLoadingBar': true
+								    'url'             : photo,
+								    'method'          : 'GET',
+								    'responseType'    : 'arraybuffer',
+								    'ignoreLoadingBar': true
 
-						     })
+							    })
 
-						     .success(function (blob) {
+							    .success(function (blob) {
 
-							              setImage(blob);
+								             setImage(blob);
 
-							              db.transaction('images', 'readwrite')
-								              .objectStore('images')
-								              .put(blob, url);
+								             db.transaction('images', 'readwrite')
+									             .objectStore('images')
+									             .put(blob, url);
 
-						              });
+							             });
 
-				     };
+					    };
 
-				 // Retrieve the file that was just stored
-				 db.transaction('images')
-					 .objectStore('images')
-					 .get(url)
-					 .onsuccess = function (event) {
+					// Retrieve the file that was just stored
+					db.transaction('images')
+						.objectStore('images')
+						.get(url)
+						.onsuccess = function (event) {
 
-					 if (event.target.result) {
-						 setImage(event.target.result);
-					 } else {
-						 getImageFromWeb();
-					 }
+						if (event.target.result) {
+							setImage(event.target.result);
+						} else {
+							getImageFromWeb();
+						}
 
-				 };
+					};
 
-			 };
+				};
 
-		 }
+			}
 		]);
 
 	FTSS.ng.directive(
 		'photo',
 
 		[
-			function () {
+			'utilities',
+			function (utilities) {
 
 				return {
 					'restrict': 'E',
@@ -117,12 +120,12 @@
 					'link'    : function ($scope, $el, $attrs) {
 
 						var lastPhoto = false,
-						    
+
 						    shape = $attrs.shape || 'circle',
 
 						    linker = function () {
 
-							    var data = utils.deepRead($scope, $attrs.data) || {};
+							    var data = utilities.deepRead($scope, $attrs.data) || {};
 
 							    data = isNaN(data) ? data : caches.Instructors[data] || data;
 
@@ -139,7 +142,7 @@
 
 								    if (data.Photo) {
 
-									    utils.fetchPhoto(data.Photo, function (imgURL) {
+									    utilities.fetchPhoto(data.Photo, function (imgURL) {
 										    $el.find('img').attr('src', imgURL);
 									    });
 

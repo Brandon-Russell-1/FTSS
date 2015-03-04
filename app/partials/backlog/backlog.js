@@ -6,9 +6,10 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'SharePoint',
-		'$timeout',,
+		'$timeout',
 		'controllerHelper',
-		function ($scope, SharePoint, controllerHelper) {
+		'utilities',
+		function ($scope, SharePoint, controllerHelper, utilities) {
 
 			$scope.month = moment().add(3, 'months');
 
@@ -78,8 +79,8 @@ FTSS.ng.controller(
 
 							histories['m' + int] = month.month();
 							histories['d' + int] = month.format('MMM YY');
-							histories['b' + int] = utils.deepRead(history, course + '.built') || '';
-							histories['r' + int] = utils.deepRead(history, course + '.required') || '';
+							histories['b' + int] = utilities.deepRead(history, course + '.built') || '';
+							histories['r' + int] = utilities.deepRead(history, course + '.required') || '';
 
 						}
 
@@ -242,13 +243,13 @@ FTSS.ng.controller(
 							self.reload();
 
 							scope.close();
-							utils.alert.create();
+							utilities.alert.create();
 
 							scope.submitted = false;
 
 						} else {
 
-							utils.alert.error('Batch 898 Creation failure');
+							utilities.alert.error('Batch 898 Creation failure');
 
 						}
 
@@ -467,13 +468,13 @@ FTSS.ng.controller(
 									} else {
 
 										// Not local so attempt to do our Cartesian calculation for a distance estimate
-										var d = utils.distanceCalc($scope.host.Location, unit.Location) || 'unknown';
+										var d = utilities.distanceCalc($scope.host.Location, unit.Location) || 'unknown';
 
 										// If the results aren't valid, just set distanceInt to past the Sun--yes, overkill?
 										unit.distanceInt = parseInt(d, 10) || 99999999;
 
 										// we can't just use toLocale() thanks to our favorite browser (IE)...grrrr
-										unit.distance = utils.prettyNumber(d) + ' miles';
+										unit.distance = utilities.prettyNumber(d) + ' miles';
 
 									}
 

@@ -9,7 +9,8 @@ FTSS.ng.controller(
 		'notifier',
 		'classProcessor',
 		'controllerHelper',
-		function ($scope, SharePoint, notifier, classProcessor, controllerHelper) {
+		'utilities',
+		function ($scope, SharePoint, notifier, classProcessor, controllerHelper, utilities) {
 
 			var self = controllerHelper($scope, {
 
@@ -80,9 +81,9 @@ FTSS.ng.controller(
 							      row.showStudents = function () {
 
 								      $scope.requestView = row;
-								      $scope.students = utils.requestDecode(row.Requests_JSON);
+								      $scope.students = utilities.requestDecode(row.Requests_JSON);
 
-								      utils.modal('modal-display-students', $scope);
+								      utilities.modal('modal-display-students', $scope);
 
 							      };
 
@@ -137,7 +138,7 @@ FTSS.ng.controller(
 
 									            }
 
-									            utils.alert.update();
+									            utilities.alert.update();
 
 									            row.Archived = true;
 
@@ -152,7 +153,7 @@ FTSS.ng.controller(
 
 								            } else {
 
-									            utils.alert.error('Please try again later.');
+									            utilities.alert.error('Please try again later.');
 
 								            }
 

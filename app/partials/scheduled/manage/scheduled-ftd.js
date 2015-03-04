@@ -180,8 +180,8 @@ FTSS.ng.controller(
 
 								}
 
-								// Add our down days and holidays ot a different calendar
-								scope.eventsInstructor[1] = utils.getDownDays();
+								// Add our down days and holidays to a different calendar
+								scope.eventsInstructor[1] = dateTools.downDays;
 
 								// Finally, add our current class to a third calendar
 								scope.eventsInstructor[2] = getDates();
@@ -308,7 +308,7 @@ FTSS.ng.controller(
 							scope.$on('modal.show', function () {
 
 								// Init our calendar
-								utils.initInstructorCalendar(
+								utilities.initInstructorCalendar(
 									{
 
 										'allDayDefault': true,

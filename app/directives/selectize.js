@@ -11,7 +11,7 @@
 
 	var builder, custom, options = {}, timeout;
 
-	builder = function (scope, opts) {
+	builder = function (scope, opts, utilities) {
 
 		var loaded, modal;
 
@@ -42,7 +42,7 @@
 						// So that Angular will update the model immediately rather than waiting until we click somewhere else
 						timeout(function () {
 
-							var oldVal = utils.deepRead(scope, opts.field),
+							var oldVal = utilities.deepRead(scope, opts.field),
 
 							    newVal = (val && val.map && !isNaN(val[0]) ?
 
@@ -58,7 +58,7 @@
 								    prop = test.pop(),
 
 								    // Get a reference to the parent object/scope
-								    item = test.length ? utils.deepRead(scope, test) : scope;
+								    item = test.length ? utilities.deepRead(scope, test) : scope;
 
 								// Write the changes to the child property on the parent object
 								item[prop] = newVal;
@@ -127,7 +127,7 @@
 						loaded = remember;
 
 						// Set the value based on the current model
-						self.setValue(utils.deepRead(scope, opts.field) || remember);
+						self.setValue(utilities.deepRead(scope, opts.field) || remember);
 
 						self.refreshOptions(false);
 
@@ -500,7 +500,7 @@
 								'field'   : attrs.bind,
 								'create'  : attrs.hasOwnProperty('create'),
 								'maxItems': parseInt(attrs.max) || (attrs.hasOwnProperty('multiple') ? 999 : 1)
-							});
+							}, utilities);
 
 						} else {
 

@@ -82,7 +82,7 @@
 
 					}
 
-					send.Comment && SharePoint.create(send).then(update, utils.alert.error);
+					send.Comment && SharePoint.create(send).then(update, utilities.alert.error);
 
 					$scope.writeReply = '';
 					$scope.askQuestion = '';
