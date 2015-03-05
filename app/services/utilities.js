@@ -9,8 +9,9 @@ FTSS.ng.service('utilities', [
 	'sharepointFilters',
 	'$alert',
 	'$modal',
+	'$http',
 
-	function (loading, $timeout, $rootScope, $location, sharepointFilters, $alert, $modal) {
+	function (loading, $timeout, $rootScope, $location, sharepointFilters, $alert, $modal, $http) {
 
 		var _jobs = [],
 

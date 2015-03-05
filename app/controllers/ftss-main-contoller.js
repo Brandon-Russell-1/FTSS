@@ -78,6 +78,8 @@
 				// Copy navigate for view navigation action
 				$rootScope.navigate = utilities.navigate;
 
+				$rootScope.urlShortner = utilities.doMakeBitly;
+
 				/**
 				 * Sends user navigation and page-load statistics to our audit list
 				 */
