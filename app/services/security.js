@@ -83,7 +83,7 @@ FTSS.ng.service('security', [
 
 				_self.initComplete = true;
 
-				utilities.initPage();
+				utilities.initPage('security');
 
 			} else {
 
@@ -196,7 +196,7 @@ FTSS.ng.service('security', [
 
 				// Finish the security code
 				_self.initComplete = true;
-				utilities.initPage();
+				utilities.initPage('security');
 
 			});
 

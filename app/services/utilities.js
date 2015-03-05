@@ -14,18 +14,12 @@ FTSS.ng.service('utilities', [
 
 		var _jobs = [],
 
-		    /**
-		     * Determines if the page load is complete
-		     *
-		     * @returns {boolean}
-		     */
-		    _checkState = function () {
+		    _self = this,
 
-			    return (!!FTSS.search || !!$rootScope.loaded);
-
-		    },
-
-		    _self = this;
+		    _completed = {
+			    'selectize': false,
+			    'security' : false
+		    };
 
 		/**
 		 * Collects async operations that are only executed once the page is initialized
@@ -35,7 +29,7 @@ FTSS.ng.service('utilities', [
 		this.addAsync = function (job) {
 
 			// If already loaded, just execute immediately
-			if (_checkState()) {
+			if (_.all(_completed)) {
 				$timeout(job);
 				loading(false);
 			} else {
@@ -80,6 +74,7 @@ FTSS.ng.service('utilities', [
 		 * @param pg
 		 */
 		this.navigate = function (pg) {
+			console.log('nav');
 
 			$timeout(function () {
 
@@ -440,25 +435,29 @@ FTSS.ng.service('utilities', [
 		 * Performs the final page initialization.  This is called by multiple async operations so we must
 		 * make several checks before running.
 		 */
-		this.initPage = function () {
+		this.initPage = function (action) {
 
 			_TIMER.add('init');
 
-			if (_checkState()) {
+			_completed[action] = true;
+
+			if (_.all(_completed)) {
 
 				$rootScope.initInstructorRole();
 
 				$rootScope.tagBox = FTSS.tagBox;
+
+				_self.setPermaLink(true);
 
 				if (FTSS.tagBox) {
 
 					sharepointFilters.$refresh();
 
 					$rootScope.singleTag = FTSS.search.settings.maxItems < 2;
-
+debugger;
 					var validFilters = sharepointFilters.map(),
 
-					    pending = $rootScope.permaLink && JSON.parse(atob($rootScope.permaLink)),
+					    pending = $rootScope.$routeParams.link && JSON.parse(atob($rootScope.$routeParams.link)),
 
 					    /**
 					     * Handles pages with tagbox but no valid selected filters

@@ -170,7 +170,7 @@
 
 						    tags[split[0]].push(Number(split[1]) || split[1]);
 
-						    utilities.scope.setPermaLink(true);
+						    utilities.setPermaLink(true);
 						    utilities.navigate();
 
 					    });
@@ -308,7 +308,7 @@
 							    FTSS.search = that;
 
 							    // Call completion now
-							    utilities.initPage();
+							    utilities.initPage('selectize');
 
 							    // This shows the page contents for anything still hiding...
 							    $('#pageActions .hide').removeClass('hide');

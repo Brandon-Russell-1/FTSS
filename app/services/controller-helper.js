@@ -69,7 +69,7 @@ FTSS.ng.service('controllerHelper', [
 							function watchAction(watch) {
 
 								// Attempt to call the page init again (async fun)
-								utilities.initPage();
+								utilities.initPage('loaded');
 
 								// Only act if there is a valid change to our watch
 								if (watch) {

@@ -69,6 +69,7 @@
 					// Allow search to come from URl
 					$rootScope.searchText.$ = $routeParams.search ? atob($routeParams.search) : '';
 					$rootScope.PAGE = $location.path().split('/')[1];
+					$rootScope.$routeParams = $routeParams;
 
 					logNavigation();
 
