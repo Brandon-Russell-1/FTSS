@@ -451,10 +451,10 @@ FTSS.ng.service('utilities', [
 
 				if (FTSS.tagBox) {
 
-					sharepointFilters.$refresh();
+					sharepointFilters.refresh();
 
 					$rootScope.singleTag = FTSS.search.settings.maxItems < 2;
-debugger;
+
 					var validFilters = sharepointFilters.map(),
 
 					    pending = $rootScope.$routeParams.link && JSON.parse(atob($rootScope.$routeParams.link)),
@@ -493,7 +493,7 @@ debugger;
 
 						$timeout(function () {
 
-							var filter = sharepointFilters.$compile(tagMap);
+							var filter = sharepointFilters.compile(tagMap);
 
 							FTSS.search.setValue(valMap);
 

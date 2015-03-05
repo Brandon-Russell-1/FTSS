@@ -42,11 +42,10 @@ FTSS.ng.service('sharepointFilters', [
 		/**
 		 * When the view is updated, this will update the page-specific filters for tagBox or SearchBox
 		 */
-		this.$refresh = (function () {
+		this.refresh = (function () {
 
 			var options, userOptions, lastFilter;
 
-			// return the real function for filters.$refresh now that we have today cached in a closure
 			return function () {
 
 				var page = $location.path().split('/')[1];
@@ -98,45 +97,27 @@ FTSS.ng.service('sharepointFilters', [
 		 * @param tags Object
 		 * @returns {*}
 		 */
-		this.$compile = function (tags) {
+		this.compile = function (tags) {
 
-			try {
+			var maps = _self.map();
 
-				var maps = _self.map(),
+			return _(tags)
 
-				    filter = [];
+				.map(function (tagSet, key) {
 
-				if (tags) {
+					     var result = _(tagSet).map(function (tag) {
 
-					_.each(maps, function (map, key) {
+						     return maps[key] + ' eq ' + tag;
 
-						var fTemp = [];
+					     });
 
-						_.each(tags[key], function (tag) {
+					     return result && '(' + result.join(' or ') + ')';
 
-							fTemp.push(map + ' eq ' + tag);
+				     })
 
-						});
+				.filter()
 
-						if (fTemp.length) {
-
-							filter.push('(' + fTemp.join(' or ') + ')');
-
-						}
-
-					});
-
-					filter = filter.length > 0 ? filter.join(' and ') : '';
-
-					return filter;
-
-				}
-
-			} catch (e) {
-
-				return 'TAG COMPILATION ERROR';
-
-			}
+				.join(' and ');
 
 		};
 
