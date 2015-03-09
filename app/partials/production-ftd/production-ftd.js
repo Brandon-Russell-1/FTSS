@@ -13,7 +13,7 @@ FTSS.ng.controller(
 		'utilities',
 		function ($scope, $timeout, SharePoint, classProcessor, controllerHelper, loading, utilities) {
 
-			$scope.pageLimit = 99;
+			$scope.ftss.pageLimit = 99;
 
 			var read = FTSS.models('scheduled');
 

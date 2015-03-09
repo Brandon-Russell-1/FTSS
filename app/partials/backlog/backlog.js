@@ -261,7 +261,7 @@ FTSS.ng.controller(
 
 
 			// Bind to $scope.filter for now just because it's easy---but probably should be refactored in FTSS.controller
-			self.bind('filter').then(function (backlogStats) {
+			self.bind('ftss.filter').then(function (backlogStats) {
 
 				//$scope.data = {};
 
@@ -325,7 +325,7 @@ FTSS.ng.controller(
 
 					$scope.month,
 
-					($scope.count.value > 0),
+					($scope.ftss.itemCount.value > 0),
 
 					$scope.groups ? _.all($scope.flatData, function (course) {
 

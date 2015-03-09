@@ -157,7 +157,7 @@
 				    // Perform our search if it is valid and unique
 				    if (val && val.length > 0 && val !== sVal) {
 
-					    var tags = FTSS.tags = {};
+					    var tags = scope.ftss.tagMap = {};
 
 					    // Keep track of our last search value to prevent duplicate searches
 					    sVal = val;
@@ -170,7 +170,7 @@
 
 						    tags[split[0]].push(Number(split[1]) || split[1]);
 
-						    utilities.setPermaLink(true);
+						    utilities.setPermaLink();
 						    utilities.navigate();
 
 					    });
@@ -460,6 +460,45 @@
 				}
 			};
 
+		},
+
+		'people': function (scope, SharePoint) {
+
+			return {
+				'delimiter'   : '+',
+				'loadThrottle': 850,
+				'labelField'  : 'DISPLAYNAME',
+				'valueField'  : 'EMAIL',
+				'sortField'   : 'DISPLAYNAME',
+				'searchField' : 'DISPLAYNAME',
+				'persist'     : false,
+				'create'      : true,
+				'plugins'     : [
+					'remove_button'
+				],
+				'onChange'    : function (val) {
+
+					var data = this.options[val];
+
+					data && timeout(function () {
+
+						scope.row.name = data.DISPLAYNAME;
+						scope.row.email = data.EMAIL;
+
+					});
+
+				},
+				'load'        : function (query, callback) {
+
+					// Wait until we have at least five characters
+					if (query.length > 5) {
+
+						SharePoint.searchPeople(query).then(callback);
+
+					}
+
+				}
+			};
 		}
 
 	};

@@ -60,14 +60,13 @@ FTSS.ng.service('utilities', [
 		/**
 		 * Used to create a permaLink for a given page for bookmarking/sharing
 		 */
-		this.setPermaLink = function (includeSearch) {
+		this.setPermaLink = function () {
 
-			$rootScope.permaLink = FTSS.tags ? btoa(JSON.stringify(FTSS.tags)) : '';
+			$rootScope.permaLink =
+			btoa(JSON.stringify($rootScope.ftss.tagMap) || '') + '/' + btoa($rootScope.ftss.searchText);
 
-			if (includeSearch) {
-				$rootScope.permaLink += '/' + btoa($rootScope.searchText.$);
-			}
-
+			console.log('permalink: ' + $rootScope.permaLink);
+			console.trace();
 		};
 
 		/**
@@ -75,18 +74,13 @@ FTSS.ng.service('utilities', [
 		 * @param pg
 		 */
 		this.navigate = function (pg) {
-			console.log('nav');
 
-			$timeout(function () {
-
-				$location.path(
-					[
-						'',
-						pg || $rootScope.PAGE || '',
-						$rootScope.permaLink
-					].join('/'));
-
-			});
+			$location.path(
+				[
+					'',
+					pg || $rootScope.ftss.viewTitle || '',
+					$rootScope.permaLink
+				].join('/'));
 
 		};
 
@@ -94,12 +88,12 @@ FTSS.ng.service('utilities', [
 		 * Generates short URLs using the USA.gov API for generating go.usa.gov links
 		 *
 		 */
-		this.doMakeBitly = function () {
+		this.createLink = function () {
 
 			var page = encodeURIComponent(
 				[
 					'https://cs1.eis.af.mil/sites/FTSS#',
-					$rootScope.PAGE,
+					$rootScope.ftss.viewTitle,
 					$rootScope.permaLink
 				].join('/'));
 
@@ -341,7 +335,7 @@ FTSS.ng.service('utilities', [
 				    map = sharepointFilters.map();
 
 				// First, generate the array of tags to test against
-				_.each(FTSS.tags, function (tag, key) {
+				_.each($rootScope.ftss.tagMap, function (tag, key) {
 
 					_.each(tag, function (t) {
 
@@ -389,6 +383,13 @@ FTSS.ng.service('utilities', [
 
 		};
 
+		/**
+		 * Calculate distance between two coordinates
+		 *
+		 * @param start
+		 * @param end
+		 * @returns {number}
+		 */
 		this.distanceCalc = function (start, end) {
 
 			if (start && end) {
@@ -446,11 +447,7 @@ FTSS.ng.service('utilities', [
 
 				$rootScope.initInstructorRole();
 
-				$rootScope.tagBox = FTSS.tagBox;
-
-				_self.setPermaLink(true);
-
-				if (FTSS.tagBox) {
+				if ($rootScope.ftss.isTagBox) {
 
 					sharepointFilters.refresh();
 
@@ -458,7 +455,8 @@ FTSS.ng.service('utilities', [
 
 					var validFilters = sharepointFilters.map(),
 
-					    pending = $rootScope.$routeParams.link && JSON.parse(atob($rootScope.$routeParams.link)),
+					    // eval our link portion of the URL or fall back to false
+					    pending = JSON.parse(atob($rootScope.ftss.$routeParams.link || 'ZmFsc2U')),
 
 					    /**
 					     * Handles pages with tagbox but no valid selected filters
@@ -478,7 +476,7 @@ FTSS.ng.service('utilities', [
 
 						_.each(pending, function (filterItems, filterGroup) {
 
-							if (validFilters.hasOwnProperty(filterGroup)) {
+							if (validFilters[filterGroup]) {
 
 								_.each(filterItems, function (filter) {
 
@@ -492,26 +490,22 @@ FTSS.ng.service('utilities', [
 
 						});
 
-						$timeout(function () {
+						var filter = sharepointFilters.compile(tagMap);
 
-							var filter = sharepointFilters.compile(tagMap);
+						FTSS.search.setValue(valMap);
 
-							FTSS.search.setValue(valMap);
+						if (filter) {
 
-							if (filter) {
+							$rootScope.ftss.tagMap = tagMap;
+							$rootScope.ftss.filter = filter;
 
-								FTSS.tags = tagMap;
-								$rootScope.filter = filter;
+							FTSS.search.$control.find('.item').addClass('processed');
 
-								FTSS.search.$control.find('.item').addClass('processed');
+						} else {
 
-							} else {
+							emptyFinish();
 
-								emptyFinish();
-
-							}
-
-						});
+						}
 
 					} else {
 

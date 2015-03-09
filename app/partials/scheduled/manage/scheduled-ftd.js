@@ -14,7 +14,7 @@ FTSS.ng.controller(
 		function ($scope, notifier, dateTools, classProcessor, controllerHelper, utilities, security) {
 
 			// Increase the default page limit to 100 for this view
-			$scope.pageLimit = 100;
+			$scope.ftss.pageLimit = 100;
 
 			$scope.ftd ? getSchedule() : utilities.addAsync(getSchedule);
 
@@ -354,14 +354,14 @@ FTSS.ng.controller(
 				 * This is a helper to default to searching for only the next three months of scheduled classes.
 				 * The idea is to give the scheduler a more manageable set of data to work with.
 				 */
-				if (!$scope.searchText.$) {
+				if (!$scope.ftss.searchText) {
 
 					var format = 'MMMM',
 
 					    month = moment();
 
 					// Type the next three months as a search criteria, i.e. "January or February or March"
-					$scope.searchText.$ = [
+					$scope.ftss.searchText = [
 						month.format(format),
 						month.add(1, 'months').format(format),
 						month.add(1, 'months').format(format)

@@ -157,7 +157,7 @@ FTSS.ng.service('security', [
 		 */
 		this.isAuthorized = function () {
 
-			var page = _authorizationMatrix[$rootScope.PAGE];
+			var page = _authorizationMatrix[$rootScope.ftss.viewTitle];
 
 			return _isAdmin || !page || _.intersection(page, _groups).length > 0
 

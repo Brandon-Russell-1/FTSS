@@ -20,7 +20,7 @@
 
 				var model = FTSS.models('support'),
 
-				    page = $scope.PAGE,
+				    page = $scope.ftss.viewTitle,
 
 				    update,
 

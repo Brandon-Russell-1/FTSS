@@ -19,13 +19,13 @@ include ../../mixins
 
         // --------------------------------------------------------
 
-        resource-view(ng-if='wellCollapse', bind='group.instructors', template='/partials/resource-view-event-search.html')
+        resource-view(ng-if='ftss.showAlternateView', bind='group.instructors', template='/partials/resource-view-event-search.html')
 
         // --------------------------------------------------------
 
         .clearfix
 
-        .row(ng-if='!wellCollapse', ng-repeat='row in group track by row.Id',
+        .row(ng-if='!ftss.showAlternateView', ng-repeat='row in group track by row.Id',
         ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}')
 
             .btn.btn-success.openSeats(ng-click='row.request()') {{::row.openSeats}}

@@ -41,10 +41,7 @@ FTSS.ng.service('controllerHelper', [
 				 */
 				'bind': function (watchTarget) {
 
-					var page = $scope.PAGE;
-
-					// The tagBox controls whether the search or tagBox are shown
-					FTSS.tagBox = !!watchTarget;
+					var page = $scope.ftss.viewTitle;
 
 					// Copy the model to a local variable for reuse without affecting the original model
 					model = FTSS.models(opts.model);
@@ -118,6 +115,7 @@ FTSS.ng.service('controllerHelper', [
 												});
 
 											}
+
 
 										}
 
@@ -193,7 +191,7 @@ FTSS.ng.service('controllerHelper', [
 					process && _.each(data, process);
 
 					// Finally, do our tagHighlighting if this is a tagBox
-					FTSS.tagBox && utilities.tagHighlight(data);
+					$scope.ftss.isTagBox && utilities.tagHighlight(data);
 
 					// Finally, send our data off to the post-processor
 					actions.postProcess(data);
@@ -244,7 +242,7 @@ FTSS.ng.service('controllerHelper', [
 									.filter(function (test) {
 
 										        // Add if this object does not have an Archived property or if showArchive is enabled
-										        return !test.data.Archived || !!$scope.showArchive;
+										        return !test.data.Archived || !!$scope.ftss.showArchived;
 
 									        })
 
@@ -268,7 +266,7 @@ FTSS.ng.service('controllerHelper', [
 									// reference for our searchText
 									var counter = 0,
 
-									    query = _.map(($scope.searchText.$ || '')
+									    query = _.map(($scope.ftss.searchText || '')
 
 										                  // Convert " or " to a regex or
 										                  .replace(/\sor\s/gi, '|')
@@ -289,13 +287,10 @@ FTSS.ng.service('controllerHelper', [
 
 									                  });
 
-									// Update our permalink for this custom view
-									utilities.setPermaLink(false);
-
 									// Reset groups, counter & count
 									$scope.groups = false;
-									$scope.count.value = '-';
-									$scope.count.overload = false;
+									$scope.ftss.itemCount.value = '-';
+									$scope.ftss.itemCount.overload = false;
 
 									// Create our sorted groups and put in our scope
 									$scope.groups = _(sifter)
@@ -321,7 +316,7 @@ FTSS.ng.service('controllerHelper', [
 										        })
 
 										// Trim our results
-										.take($scope.pageLimit)
+										.take($scope.ftss.pageLimit)
 
 										// Group the data by the given property
 										.groupBy(function (gp) {
@@ -339,8 +334,8 @@ FTSS.ng.service('controllerHelper', [
 									opts.finalProcess && opts.finalProcess($scope.groups);
 
 									// Update the scope counter + overload indicator
-									$scope.count.value = counter;
-									$scope.count.overload = (counter !== sifter.length);
+									$scope.ftss.itemCount.value = counter;
+									$scope.ftss.itemCount.overload = (counter !== sifter.length);
 
 									// Perform final loading
 									utilities.setLoaded(function () {
@@ -349,11 +344,11 @@ FTSS.ng.service('controllerHelper', [
 										(FTSS.searchWatch || Function)();
 
 										// Create a watcher that monitors our searchText for changes
-										FTSS.searchWatch = $scope.$watch('searchText.$', watcher);
+										FTSS.searchWatch = $scope.$watch('ftss.searchText', watcher);
 
 										// De-register the watcher if it exists
 										(FTSS.archiveWatch || Function)();
-										FTSS.archiveWatch = $scope.$watch('showArchive', doProcess);
+										FTSS.archiveWatch = $scope.$watch('ftss.showArchived', doProcess);
 
 									});
 
@@ -386,26 +381,23 @@ FTSS.ng.service('controllerHelper', [
 					// the isNew boolean determines if this is a create or update action
 					return function (isNew, data) {
 
-						var scope;
-
-						// Create a new isolated scope for this modal
-						scope = $scope.$new(true);
-
-						// We handle add vs edit within the modal templates for simplicity
-						scope.createData = isNew || false;
-
 						// Create the angular-strap modal using this model's modal template
-						scope.modal = $modal({
+						var modal = $modal({
 							                     'placement'      : opts.modalPlacement || 'top',
-							                     'scope'          : scope,
+							                     'scope'          : $scope,
 							                     'backdrop'       : 'static',
 							                     'contentTemplate': '/partials/modal-' +
 							                                      (opts.modal || opts.model) +
 							                                      '.html'
-						                     });
+						                     }),
+
+						    scope = modal.$scope;
+
+						// We handle add vs edit within the modal templates for simplicity
+						scope.createData = isNew || false;
 
 						// Bind close to instance.destroy to remove this modal
-						scope.close = scope.modal.destroy;
+						scope.close = modal.destroy;
 
 						// Allow archiving within an edit modal
 						scope.archive = actions.archive;

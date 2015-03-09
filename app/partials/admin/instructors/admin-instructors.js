@@ -10,7 +10,7 @@ FTSS.ng.controller(
 		'controllerHelper',
 		function ($scope, $timeout, SharePoint, controllerHelper) {
 
-			$scope.pageLimit = 5000;
+			$scope.ftss.pageLimit = 5000;
 
 			var self = controllerHelper($scope, {
 

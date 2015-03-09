@@ -26,7 +26,7 @@ FTSS.ng.controller(
 
 			self
 
-				.bind('filter')
+				.bind('ftss.filter')
 
 				.then(function (data) {
 

@@ -23,9 +23,10 @@
 			'security',
 			'loading',
 			'utilities',
+			'sharepointFilters',
 			// Unused $route added to DI to fix nested view issue, https://github.com/angular/angular.js/issues/1213
 			'$route',
-			function ($rootScope, $location, $routeParams, security, loading, utilities, $route) {
+			function ($rootScope, $location, $routeParams, security, loading, utilities, sharepointFilters, $route) {
 
 				_TIMER.add('main');
 
@@ -43,42 +44,59 @@
 				/**
 				 * Starts the loading indicators on navigation begin
 				 */
-				$rootScope.$on('$locationChangeSuccess', function (event) {
+				$rootScope.$on('$locationChangeStart', function (event) {
 
 					// Start the loading feedback
 					loading(true);
 
-					// This allows the scope to know about the tagBox
-					$rootScope.noSearch = !FTSS.search;
+					$rootScope.ftss = {
 
-					// Reset some basic view settings
-					$rootScope.pageLimit = FTSS.prefs.limit;
-					$rootScope.count = {
-						'value'   : '-',
-						'overload': false
+						// Determine if we need to process tags for this view
+						'isTagBox'         : !!sharepointFilters.map(),
+
+						// Limit the results for a view
+						'pageLimit'        : FTSS.prefs.limit || 50,
+
+						// Toggle archived item visibility
+						'showArchived'     : false,
+
+						// Toggle alterate view layout
+						'showAlternateView': false,
+
+						// Contains our tag-based filters if used
+						'filter'           : false,
+
+						// The visible item count user feedback
+						'itemCount'        : {
+							'value'   : '-',
+							'overload': false
+						},
+
+						// The user full-text search
+						'searchText'       : atob($routeParams.search || ''),
+
+						//
+						'$routeParams'     : $routeParams,
+
+						'viewTitle'   : $location.path().split('/')[1],
+
+						// Copy navigate to the scope
+						'doNavigate'  : utilities.navigate,
+
+						// Copy createLink to the scope
+						'doCreateLink': utilities.createLink,
+
+						'doPermalink': utilities.setPermaLink
+
 					};
-					$rootScope.filter = false;
-					$rootScope.searchText = {};
-					$rootScope.showArchive = false;
-					$rootScope.wellCollapse = false;
 
 					FTSS.selectizeInstances = {};
 					FTSS.pasteAction = false;
-					FTSS.tagBox = false;
-
-					// Allow search to come from URl
-					$rootScope.searchText.$ = $routeParams.search ? atob($routeParams.search) : '';
-					$rootScope.PAGE = $location.path().split('/')[1];
-					$rootScope.$routeParams = $routeParams;
 
 					logNavigation();
 
 				});
 
-				// Copy navigate for view navigation action
-				$rootScope.navigate = utilities.navigate;
-
-				$rootScope.urlShortner = utilities.doMakeBitly;
 
 				/**
 				 * Sends user navigation and page-load statistics to our audit list

@@ -33,7 +33,7 @@ FTSS.ng.controller(
 
 			self
 
-				.bind('filter')
+				.bind('ftss.filter')
 
 				.then(function (data) {
 
@@ -164,7 +164,7 @@ FTSS.ng.controller(
 						      row.showStudents = function () {
 
 							      $scope.requestView = row;
-							      $scope.students = utilities.requestDecode(row.Requests_JSON);
+							      $scope.students = classProcessor.requestDecode(row.Requests_JSON);
 
 							      utilities.modal('modal-display-students', $scope);
 

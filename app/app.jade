@@ -15,7 +15,7 @@ html(lang='en', ng-app='FTSS')
         // (c) 2014 Jeff McCoy, http://linkedin.com/in/jeffsmccoy
 
         meta(charset='utf-8')
-        title(ng-bind-template='FTSS {{page()}}')
+        title(ng-bind-template='FTSS  {{page()}}')
 
         |<!--[if IE]><meta http-equiv="refresh" content="0;URL='legacy.html'"><![endif]-->
 
@@ -26,7 +26,7 @@ html(lang='en', ng-app='FTSS')
 
         link(href='https://d2jjzg0gg2bs3z.cloudfront.net/' + linkCSS, rel='stylesheet')
 
-    body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}} {{roleClasses}}')
+    body.wait(ng-controller='mainController', id='{{ftss.viewTitle}}', class='{{ftss.showArchived}} {{ftss.showAlternateView}} {{roleClasses}}')
 
         img#bg1
         img#bg2

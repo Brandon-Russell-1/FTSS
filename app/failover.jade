@@ -22,7 +22,7 @@ html(lang='en', ng-app='FTSS')
 
         link(href='/sites/ftss/failover/live.css', rel='stylesheet')
 
-    body.wait(ng-controller='mainController', id='{{fn.getPage()}}', class='{{showArchive}} {{wellCollapse}} {{roleClasses}}')
+    body.wait(ng-controller='mainController', id='{{ftss.viewTitle}}', class='{{ftss.showArchived}} {{ftss.showAlternateView}} {{roleClasses}}')
 
         img#bg1
         img#bg2

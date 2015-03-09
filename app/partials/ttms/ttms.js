@@ -9,7 +9,7 @@ FTSS.ng.controller(
 		'controllerHelper',
 		function ($scope, notifier, classProcessor, controllerHelper) {
 
-			$scope.pageLimit = 999;
+			$scope.ftss.pageLimit = 999;
 
 			var self = controllerHelper($scope, {
 

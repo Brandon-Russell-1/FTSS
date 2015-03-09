@@ -11,7 +11,7 @@ FTSS.ng.controller(
 		function ($scope, SharePoint, controllerHelper, security) {
 
 			// Increase to 99 due to the simple binding
-			$scope.pageLimit = 99;
+			$scope.ftss.pageLimit = 99;
 
 			var self = controllerHelper($scope, {
 
