@@ -12,19 +12,8 @@ div(ng-class='{addNew:addNew}')
 
             .col-lg-9.form-horizontal
 
-                +formGroupText('FTD Member',
-                                'row.InstructorName',
-                                'text',
-                                true,
-                                'You must enter a name',
-                                'instructors-name')
-
-                +formGroupText('AFNET Email or Account Id',
-                                'row.InstructorEmail',
-                                'text',
-                                true,
-                                'You must enter an email or account #',
-                                'instructors-email')
+                select(selectize='people')
+                h4 {{row.email}}
 
             .col-lg-3
                 .drag-target(hover='instructors-photo', left)
