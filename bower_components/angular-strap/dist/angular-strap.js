@@ -2105,7 +2105,7 @@ angular.module('mgcrea.ngStrap.modal', ['mgcrea.ngStrap.helpers.dimensions'])
         // Common vars
         var options = $modal.$options = angular.extend({}, defaults, config);
         $modal.$promise = fetchTemplate(options.template);
-        var scope = $modal.$scope = options.scope || $rootScope.$new();
+        var scope = $modal.$scope = options.scope && options.scope.$new() || $rootScope.$new();
         if(!options.element && !options.container) {
           options.container = 'body';
         }
