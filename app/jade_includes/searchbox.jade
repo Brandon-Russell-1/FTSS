@@ -31,7 +31,7 @@ include ../partials/mixins
         input.search.search-large(type='search',
                                     ng-model='ftss.searchText',
                                     ng-change='ftss.doPermalink()',
-                                    ng-model-options="{ debounce: 1000 }",
+                                    ng-model-options="{ debounce: 250 }",
                                     placeholder='Type here to search within this page.',
                                     tabindex='-1',
                                     required)

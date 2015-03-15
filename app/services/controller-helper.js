@@ -249,12 +249,12 @@ FTSS.ng.service('controllerHelper', [
 									.value();
 
 								// This will let us debounce our searches to speed up responsiveness
-								watcher = _.debounce(function (newVal, oldVal) {
+								watcher = function (newVal, oldVal) {
 
 									// Make sure the array of watchers are really different before running exec
 									!_.isEqual(newVal, oldVal) && $timeout(exec);
 
-								}, 300);
+								};
 
 								// The main limiting, filtering, grouping, sorting function our views
 								exec = function () {
