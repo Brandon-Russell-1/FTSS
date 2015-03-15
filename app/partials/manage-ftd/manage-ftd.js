@@ -41,7 +41,7 @@ FTSS.ng.controller(
 					var // Get the file buffer
 						rawBuffer = result.target.result,
 
-						// Create a random file anem
+						// Create a random file name
 						rand = utilities.generateUUID();
 
 					$.ajax({
@@ -119,16 +119,17 @@ FTSS.ng.controller(
 
 			};
 
+			$scope.updateFTD = function() {
+
+			self._update();
+
+			};
+
 			self.bind().then(function (data) {
 
-				var UnitId = $scope.ftd.Id,
+				var UnitId = $scope.ftd.Id;
 
-				    scopeData = caches.Units[UnitId];
-
-				$scope.__metadata = scopeData.__metadata;
-				$scope.Courses_JSON = scopeData.Courses_JSON;
-				$scope.Phone = scopeData.Phone;
-				$scope.Email = scopeData.Email;
+				$scope.det = caches.Units[UnitId];
 
 				// Only include instructors for this unit
 				data = angular.copy(_.filter(data, {'UnitId': UnitId}));
