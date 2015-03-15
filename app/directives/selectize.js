@@ -9,9 +9,9 @@
 
 	"use strict";
 
-	var builder, custom, options = {}, timeout;
+	var builder, custom, options = {}, timeout, utilities;
 
-	builder = function (scope, opts, utilities) {
+	builder = function (scope, opts) {
 
 		var loaded, modal;
 
@@ -145,7 +145,7 @@
 
 	custom = {
 
-		'appInit': function (scope, SharePoint, utilities) {
+		'appInit': function (scope, SharePoint) {
 
 			var sVal,
 
@@ -462,7 +462,7 @@
 
 		},
 
-		'people': function (scope, SharePoint) {
+		'people': function (scope, SharePoint, attrs) {
 
 			return {
 				'delimiter'   : '+',
@@ -473,18 +473,31 @@
 				'searchField' : 'DISPLAYNAME',
 				'persist'     : false,
 				'create'      : true,
+				'maxItems'    : parseInt(attrs.max) || 1,
 				'plugins'     : [
 					'remove_button'
 				],
 				'onChange'    : function (val) {
 
-					var data = this.options[val];
+					var options = this.options;
 
-					data && timeout(function () {
+					timeout(function () {
 
-						scope.row.name = data.DISPLAYNAME;
-						scope.row.email = data.EMAIL;
+						scope.data.Students = {};
 
+						_.each(val, function (student) {
+
+							var data = options[student];
+
+							scope.data.Students[data.DISPLAYNAME || val] = data.EMAIL || '';
+
+						});
+
+						scope.data.count = _.size(scope.data.Students);
+
+						/*	scope.row.name = data.DISPLAYNAME;
+						 scope.row.email = data.EMAIL;
+						 */
 					});
 
 				},
@@ -507,7 +520,7 @@
 		'$timeout',
 		'SharePoint',
 		'utilities',
-		function ($timeout, SharePoint, utilities) {
+		function ($timeout, SharePoint, _utilities_) {
 
 			return {
 
@@ -518,6 +531,7 @@
 				'link'    : function (scope, element, attrs) {
 
 					timeout = $timeout;
+					utilities = _utilities_;
 
 					timeout(function () {
 
@@ -539,11 +553,11 @@
 								'field'   : attrs.bind,
 								'create'  : attrs.hasOwnProperty('create'),
 								'maxItems': parseInt(attrs.max) || (attrs.hasOwnProperty('multiple') ? 999 : 1)
-							}, utilities);
+							});
 
 						} else {
 
-							opts = custom[attrs.selectize](scope, SharePoint, utilities);
+							opts = custom[attrs.selectize](scope, SharePoint, attrs);
 
 						}
 
