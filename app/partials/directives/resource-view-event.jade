@@ -21,35 +21,10 @@ td(class='mark {{className}}',  colspan='{{Days}}', id='{{Id}}')
             i {{Instructor.InstructorName}}
 
             br
-            br
-
-            b Seats
 
             .clearfix
 
-            .col-lg-3.double {{allocatedSeats}}
-
-            dl.dl-horizontal.col-lg-3
-                dt Min
-                dd {{Course.Min}}
-
-                dt Max
-                dd {{Course.Max}}
-
-            dl.dl-horizontal.col-lg-3
-                dt Host
-                dd {{Host}}
-
-                dt Non-host
-                dd {{Other}}
-
-            dl.dl-horizontal.col-lg-3
-
-                dt Approved
-                dd {{approvedSeats}}
-
-                dt Pending
-                dd {{pendingSeats}}
+            .col-lg-3.double {{allocatedSeats}} Students
 
             .clearfix
 

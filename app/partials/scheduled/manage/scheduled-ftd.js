@@ -212,8 +212,6 @@ FTSS.ng.controller(
 
 							};
 
-							scope.data.requests = classProcessor.requestDecode(scope.data.Requests_JSON);
-
 							// Wrap this in a closure simply for organization--we'll probably move out of here later on
 							(function () {
 

@@ -8,71 +8,9 @@ FTSS.ng.service('classProcessor', [
 
 		"use strict";
 
-		var _statusMap = [
-			    '',
-			    'Pending',
-			    'Approved',
-			    'Denied'
-		    ],
-
-		    _statusClass = [
-			    '',
-			    'info',
-			    'success',
-			    'danger'
-		    ],
-
-		    _lastWeek = moment().add(-1, 'weeks'),
+		var _lastWeek = moment().add(-1, 'weeks'),
 
 		    _self = this;
-
-		this.requestEncode = function (requests) {
-
-			return _.map(requests, function (request) {
-
-				return [
-					// Status
-					_statusMap.indexOf(request.status),
-
-					// Students Array
-					request.students,
-
-					// Notes
-					request.notes,
-
-					// Host ID
-					caches.Hosts.indexOf(request.unit)
-
-				];
-
-			});
-
-		};
-
-		this.requestDecode = function (requests) {
-
-			return _.map(requests, function (request) {
-
-				return {
-
-					'unit': caches.Hosts[request[3]],
-
-					'status': _statusMap[request[0]],
-
-					'statusClass': _statusClass[request[0]],
-
-					'notes': request[2],
-
-					'response': request[4],
-
-					'students': request[1]
-
-				}
-
-			});
-
-		};
-
 
 		/**
 		 * Cache Filler adds any missing cache lookups
@@ -112,20 +50,30 @@ FTSS.ng.service('classProcessor', [
 				return;
 			}
 
-			row.approvedSeats = 0;
-			row.pendingSeats = 0;
-			row.deniedSeats = 0;
-			row.requestCount = 0;
+			// Backwards-compatibility for classes built before this field was added
+			row.Approved = row.Approved || 0;
 
-			_.each(row.Requests_JSON, function (r) {
+			row.allocatedSeats = row.Approved + row.Host + row.Other;
+			row.openSeats = row.Course.Max ? row.Course.Max - row.allocatedSeats : '';
 
-				row[['', 'pending', 'approved', 'denied'][r[0]] + 'Seats'] += r[1].length;
-				row.requestCount += r[1].length;
+		};
+
+		/**
+		 * Simple request cache filler
+		 */
+		this.requestProcessor = function (requests) {
+
+			_.each(requests, function (row) {
+
+				row.Host = caches.Hosts[row.HostId] || {};
+
+				row.Unit = caches.Units[row.UnitId] || {};
+
+				row.count = _.size(row.Students_JSON);
 
 			});
 
-			row.allocatedSeats = row.approvedSeats + row.Host + row.Other;
-			row.openSeats = row.Course.Max ? row.Course.Max - row.allocatedSeats : '';
+			return requests;
 
 		};
 
@@ -210,17 +158,10 @@ FTSS.ng.service('classProcessor', [
 				// Update the course for this model
 				data.Course = caches.MasterCourseList[data.CourseId];
 
-				var requests = _(data.Requests_JSON).reduce(function (count, request) {
-
-					    // Only count seats pending (1) or approved (2) against total
-					    return (request[0] < 3) ? count + request[1].length : count;
-
-				    }, 0),
-
-				    open = (data.Course.Max -
-				            (data.Host || 0) -
-				            (data.Other || 0) -
-				            requests);
+				var open = data.Course.Max -
+				           (data.Host || 0) -
+				           (data.Other || 0) -
+				           (data.Approved || 0);
 
 				return countOnly ? open :
 

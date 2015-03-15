@@ -7,25 +7,23 @@ form.form-horizontal(name='modal')
 
     #requestSeats.modal-body
 
+        .alert.alert-info(ng-if='autoApprove') These students will be automatically approved based on your current roles in FTSS.
+
         p.lead
-            ng-pluralize(count='data.openSeats - data.Students.length',
+            ng-pluralize(count='data.openSeats - data.count',
                             when='{1:"There is only one seat ", 0: "There are no more seats ", "other":"There are {} seats "}')
             | available for the {{data.dateRange}} class.
         br
 
-        +formGroup("Student's Unit", 'scheduled-request-host')
-            .input-group
-                .input-group-addon.w15
-                    +icon('puzzle-piece')
-                .input-group-selectize
-                    select(selectize='Hosts', bind='data.HostId', remember='host')
+        h4: +icon('puzzle-piece', 'Requesting Unit')
+        div(explain='scheduled-request-host', right)
+            select(selectize='Hosts', bind='data.HostId', remember='host')
 
-        +formGroup('Student Names', 'scheduled-request-students')
-            .input-group
-                .input-group-addon.w15
-                    +icon('student_hand')
-                .input-group-selectize
-                    select(selectize, bind='data.Students', multiple, max='{{autoApprove ? null : data.openSeats}}', create)
+        br
+
+        h4: +icon('student_hand', 'Students')
+        div(explain='scheduled-request-students', right)
+            select.wide(selectize='people', max='{{autoApprove ? 99 : data.openSeats}}')
 
         br
 
@@ -35,14 +33,11 @@ form.form-horizontal(name='modal')
 
         br
 
-        h4.pull-right(ng-show='data.Students.length > 0')
-            +icon('info-circle')
-            | You are requesting
-            b(ng-pluralize, count='data.Students.length', when='{1:" one seat","other":" {} seats"}') .
+        h4.pull-right(ng-show='data.count > 0')
+            +icon('info-circle', 'You are requesting')
+            b(ng-pluralize, count='data.count', when='{1:" one seat","other":" {} seats"}').
 
         .clearfix
-
-        .alert.alert-info(ng-if='autoApprove') These students will be automatically approved because you have either Scheduler or FTD roles in FTSS.
 
     +modalFooter('Submit Request', '!data.HostId || data.Students.length < 1')
 

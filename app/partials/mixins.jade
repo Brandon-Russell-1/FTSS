@@ -96,7 +96,6 @@ mixin initScripts(production, noFallback)
 
 
 //- icon mixin to create our SVG icons
-mixin icon(tag, viewbox)
 mixin icon(tag, label, viewbox)
 
     //- wrap in a labl to give a little more CSS flexibility
@@ -327,17 +326,17 @@ mixin registeredStudents(bind)
     .well.well-sm(ng-repeat='request in ' + bind)
 
         .bold.border-bottom(class='text-{{request.statusClass}}')
-            | {{request.status}} ({{request.students.length}})
-            .pull-right {{request.unit.Text}}
+            | {{request.Status}} ({{request.count}})
+            .pull-right {{request.Host.Text}}
 
         dl.dl-horizontal
             dt Student(s)
-            dd(ng-repeat='student in request.students') {{student}}
+            dd(ng-repeat='(student, email) in request.Students_JSON') {{student}}
 
             dt Notes
-            dd.italics {{request.notes}}
+            dd.italics {{request.Notes}}
 
             dt Response
-            dd.wideText {{request.response}}
+            dd.wideText {{request.Response}}
 
         .clearfix

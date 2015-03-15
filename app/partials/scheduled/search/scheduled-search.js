@@ -11,7 +11,8 @@ FTSS.ng.controller(
 		'controllerHelper',
 		'security',
 		'utilities',
-		function ($scope, $modal, notifier, classProcessor, controllerHelper, security, utilities) {
+		'SharePoint',
+		function ($scope, $modal, notifier, classProcessor, controllerHelper, security, utilities, SharePoint) {
 
 			var self = controllerHelper($scope, {
 
@@ -39,8 +40,7 @@ FTSS.ng.controller(
 
 					      $scope.autoApprove = security.hasRole(['ftd', 'scheduling']);
 
-					      $scope.canEdit = $scope.canRequest =
-					      security.hasRole(['mtf', 'ftd', 'scheduling']);
+					      $scope.canEdit = $scope.canRequest = security.hasRole(['mtf', 'ftd', 'scheduling']);
 
 					      self.initialize(data).then(function (row) {
 
@@ -84,12 +84,10 @@ FTSS.ng.controller(
 						       */
 						      row.updateTTMS = $scope.autoApprove ? function () {
 
-							      var send = {
+							      self._update(row, {
 								      '__metadata': row.__metadata,
 								      'TTMS'      : row.TTMS
-							      };
-
-							      self._update(row, send);
+							      });
 
 						      } : angular.noop;
 
@@ -114,6 +112,27 @@ FTSS.ng.controller(
 
 								      scope.submit = function () {
 
+									      // Our sharepoint batch operation expects an array of operations
+									      var send = [
+										      {
+
+											      '__metadata': 'Requests',
+
+											      'ClassId': row.Id,
+
+											      'HostId': scope.data.HostId,
+
+											      'UnitId': row.UnitId,
+
+											      'Notes': scope.data.Notes,
+
+											      'Status': scope.autoApprove ? 'Aprv' : 'Dend',
+
+											      'Students_JSON': {}
+
+										      }
+									      ];
+
 									      // Send our email notification out
 									      notifier[$scope.autoApprove ? 'autoApprove' : 'requestSeats'](
 										      {
@@ -130,43 +149,38 @@ FTSS.ng.controller(
 										      }
 									      );
 
-									      row.Requests_JSON = row.Requests_JSON || [];
+									      if (scope.autoApprove) {
+										      send.push({
+											                'cache'     : true,
+											                '__metadata': row.__metadata,
+											                'Approved'  : row.Approved + scope.data.count
+										                })
+									      }
 
-									      row.Requests_JSON.push(
-										      [
-											      // Status
-											      scope.autoApprove ? 2 : 1,
+									      SharePoint.batch(send);
 
-											      // Students Array
-											      scope.data.Students,
+								      };
 
-											      // Notes
-											      scope.data.Notes,
-
-											      // Host ID
-											      scope.data.HostId
-										      ]);
-
-									      self._update(scope, {
-
-										      'cache'        : true,
-										      '__metadata'   : row.__metadata,
-										      'Requests_JSON': row.Requests_JSON
-
-									      }, scope.close);
-
-								      }
-								      ;
 							      }
 
 						      };
 
 						      row.showStudents = function () {
 
-							      $scope.requestView = row;
-							      $scope.students = classProcessor.requestDecode(row.Requests_JSON);
+							      var read = FTSS.models('requests');
 
-							      utilities.modal('modal-display-students', $scope);
+							      read.params.$filter = 'ClassId eq ' + row.Id;
+
+							      row.Approved ? SharePoint.read(read).then(loadModal) : loadModal();
+
+							      function loadModal(data) {
+
+								      $scope.requestView = row;
+								      $scope.students = classProcessor.requestProcessor(data);
+
+								      utilities.modal('modal-display-students', $scope);
+
+							      }
 
 						      }
 

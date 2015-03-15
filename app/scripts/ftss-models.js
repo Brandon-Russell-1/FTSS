@@ -17,16 +17,6 @@
 	    // Our internal collection of models--these are immutable! :-)
 	    _models = {
 
-		    'users': {
-			    'source': 'UserInformationList',
-			    'params': {
-				    '$select': [
-					    'Name',
-					    'WorkEMail'
-				    ]
-			    }
-		    },
-
 		    'catalog': {
 
 			    'cache' : true,
@@ -97,6 +87,44 @@
 
 		    },
 
+		    'requests': {
+
+			    'source': 'Requests',
+			    'params': {
+				    '$select': [
+					    'Status',
+					    'HostId',
+					    'Notes',
+					    'Response',
+					    'Students_JSON',
+					    'ClassId'
+				    ]
+			    }
+
+		    },
+
+		    'production': {
+
+			    'source': 'Scheduled',
+			    'params': {
+				    '$filter': [
+					    'Archived eq false',
+					    'NA eq false'
+				    ],
+				    '$select': [
+					    'Start',
+					    'Days',
+					    'CourseId',
+					    'Hours',
+					    'InstructorId',
+					    'Host',
+					    'Other',
+					    'Approved',
+					    'TS'
+				    ]
+			    }
+		    },
+
 		    'scheduled': {
 
 			    'cache' : true,
@@ -112,13 +140,13 @@
 					    'InstructorId',
 					    'Host',
 					    'Other',
-					    'Requests_JSON',
+					    'Approved',
 					    'ClassNotes',
 					    'J4Notes',
 					    'TTMS',
 					    'MTT',
-				        'TS',
-				        'NA'
+					    'TS',
+					    'NA'
 				    ]
 			    }
 
@@ -131,7 +159,7 @@
 			    'params': {
 				    '$filter': [
 					    'Archived eq false',
-					    '(CourseId gt 1 or TS ne null)',
+					    'NA eq false',
 					    'Start ge ' + _today
 				    ],
 				    '$select': [
@@ -143,10 +171,10 @@
 					    'InstructorId',
 					    'Host',
 					    'Other',
-					    'Requests_JSON',
+					    'Approved',
 					    'ClassNotes',
 					    'TTMS',
-				        'TS'
+					    'TS'
 				    ]
 			    }
 
