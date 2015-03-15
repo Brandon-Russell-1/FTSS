@@ -137,11 +137,9 @@
 
 				$el.popover('show');
 
-				if ($el[0].hasAttribute('no-arrow')) {
+				$el[0].hasAttribute('no-arrow') && $el.data('bs.popover').$tip.addClass('no-arrow');
 
-					$el.data('bs.popover').$tip.addClass('no-arrow');
-
-				}
+				$el[0].hasAttribute('hoverClass') && $el.data('bs.popover').$tip.addClass($el.attr('hoverClass'));
 
 			}
 
