@@ -7,7 +7,7 @@ form.form-horizontal(name='modal')
 
     #requestSeats.modal-body
 
-        .alert.alert-info(ng-if='autoApprove') These students will be automatically approved based on your current roles in FTSS.
+        .alert.alert-info(ng-if='autoApprove') Seats will be auto-approved based on your current roles in FTSS.
 
         p.lead
             ng-pluralize(count='data.openSeats - data.count',
