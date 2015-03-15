@@ -238,7 +238,7 @@
 								         Id = (v.Id || v);
 								         txt = text(v);
 
-								         v.search = v.text || txt.text;
+								         v.search = v.text || txt.text || txt;
 
 								         return {
 									         'Id'      : Id,
