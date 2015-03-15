@@ -62,11 +62,9 @@ FTSS.ng.service('utilities', [
 		 */
 		this.setPermaLink = function () {
 
-			$rootScope.permaLink =
-			btoa(JSON.stringify($rootScope.ftss.tagMap) || '') + '/' + btoa($rootScope.ftss.searchText);
+			$rootScope.permaLink = btoa(JSON.stringify($rootScope.ftss.tagMap) || '') +
+			                       '/' + btoa($rootScope.ftss.searchText);
 
-			console.log('permalink: ' + $rootScope.permaLink);
-			console.trace();
 		};
 
 		/**
@@ -75,12 +73,15 @@ FTSS.ng.service('utilities', [
 		 */
 		this.navigate = function (pg) {
 
-			$location.path(
-				[
-					'',
-					pg || $rootScope.ftss.viewTitle || '',
-					$rootScope.permaLink
-				].join('/'));
+			$timeout(function () {
+
+				loading(true);
+
+				$location.path('/' + (pg || $rootScope.ftss.viewTitle) +
+				               '/' + ($rootScope.permaLink || ''));
+
+			});
+
 
 		};
 
