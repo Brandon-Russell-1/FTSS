@@ -45,7 +45,9 @@ include ../../mixins
 
                         a(href='https://www.google.com/maps/@{{::row.locationCoords | nospace}},15z',
                             target='_blank',
-                            hover="<h4>{{::row.FTD.Phone}}</h4><img style='width:400px;height:300px' src='{{::row.map}}'/>") {{::row.locationName}}
+                            hover="<h4>{{::row.FTD.Phone}}</h4><img src='{{::row.map}}'/>",
+                            hoverClass='map',
+                            left) {{::row.locationName}}
 
                         .pull-right.lightText {{::row.Instructor.InstructorName}}
 
