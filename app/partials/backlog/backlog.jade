@@ -3,7 +3,7 @@ include ../mixins
 mixin wizardRow(text)
     +icon('check-square-o')
     +icon('times')
-    +icon('wait', '0 0 36 32')
+    +icon('wait', '', '0 0 36 32')
     span.text= text
     span.chevron
 
@@ -46,7 +46,7 @@ mixin wizardRow(text)
 
     .no-pad
 
-        #dragIcon:  +icon('insert')
+        #dragIcon: +icon('insert')
 
         +userInstructions('generate-898', true)
 

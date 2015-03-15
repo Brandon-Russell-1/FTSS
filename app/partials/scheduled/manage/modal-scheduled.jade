@@ -3,14 +3,10 @@ include ../../mixins
 form.form-horizontal(name='modal', ng-class='{setUnavailable:data.na,uglyGreenButton:isNew}')
 
     .modal-header.caps
-        h3(ng-show='createData')
-            +icon('plus-circle')
-            | Create Class / Unavailability
+        h3(ng-show='createData'): +icon('plus-circle', 'Create Class / Unavailability')
 
         h3(ng-hide='createData')
-            +icon('edit')
-
-            | Update&nbsp;
+            +icon('edit' ,'Update&nbsp;')
 
             a#courseLink(
                 href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{data.Course.Number}}',
@@ -162,8 +158,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.na,uglyGreenBu
                 #instructorCalendar(ui-calendar, ng-model='eventsInstructor')
 
                 .text-info.info.italics.pull-right
-                    +icon('info-circle')
-                    | Click on a day to choose the start date, drag or resize the course to update.
+                    +icon('info-circle', 'Click on a day to choose the start date, drag or resize the course to update.')
 
             div.hideSetUnavailable(bs-pane, title='Students')
 
@@ -178,8 +173,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.na,uglyGreenBu
                                         ng-if='!createData && !data.Archived',
                                         template='/partials/popover-cancel-class.html')
 
-                    span.btn-label: +icon('trash_hide')
-                    | Cancel Class
+                    span.btn-label: +icon('trash_hide', 'Cancel Class')
 
         .clearfix
 

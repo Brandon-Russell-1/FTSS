@@ -57,9 +57,7 @@ form.form-horizontal(name='modal')
         .row
 
             .col-lg-6
-                h4.light-bottom
-                    +icon('calendar_range')
-                    | Course Length
+                h4.light-bottom: +icon('calendar_range', 'Course Length')
                 .col-lg-6.no-pad(explain='catalog-days', left)
                     .input-group
                         input.form-control(ng-model='data.Days', type='number', min='1', max='120', required)
@@ -71,9 +69,7 @@ form.form-horizontal(name='modal')
                         .input-group-addon Hrs
 
             .col-lg-5.pull-right
-                h4.light-bottom
-                    +icon('student_hand')
-                    | Course Seat Limits
+                h4.light-bottom: +icon('student_hand', 'Course Seat Limits')
                 .col-lg-5.no-pad(explain='catalog-min', bottom)
                     .input-group
                         input.form-control(ng-model='data.Min', type='number', min='1', max='9', required)

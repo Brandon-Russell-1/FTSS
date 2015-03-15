@@ -15,7 +15,7 @@ div
                     li(ng-repeat='step in row.steps', class='{{step.status}}')
                         +icon('check-square-o')
                         +icon('times')
-                        +icon('wait', '0 0 36 32')
+                        +icon('wait', '', '0 0 36 32')
                         span.text {{step.text}}
                         span.chevron
 
@@ -25,8 +25,7 @@ div
                 .btnFake.white(class='btn-{{row.TDY ? "warning" : "info"}}')
                     span.bigLetter {{row.totalSeats}}
                     span(style='font-size:1.25em;position:relative;top:.15em;') {{row.FTD.LongName}}&nbsp;
-                    span(style='font-size:1.3em;position:relative;top:.25em;')
-                        +icon('plane')
+                    span(style='font-size:1.3em;position:relative;top:.25em;'): +icon('plane')
 
                 | &nbsp;&nbsp;
 
@@ -114,11 +113,9 @@ div
 
                 .pull-right.invert
                     .btn.btn-success.btn-labeled.btn-muted(bs-popover, data-placement='left', data-template='/partials/popover-approve.html')
-                        .btn-label.invert: +icon('approve')
-                        | Approve
+                        .btn-label.invert: +icon('approve', 'Approve')
 
                     .btn.btn-danger.btn-labeled.btn-muted(bs-popover, data-placement='left', data-template='/partials/popover-deny.html')
-                        .btn-label.invert: +icon('deny')
-                        | Deny
+                        .btn-label.invert: +icon('deny', 'Deny')
 
                 .clearfix

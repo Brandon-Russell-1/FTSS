@@ -3,9 +3,7 @@ include ../mixins
 form.form-horizontal(name='modal')
 
     .modal-header.caps
-        h3
-            +icon('plus-circle')
-            | {{data.Course.Number}} Seat Request
+        h3: +icon('plus-circle', '{{data.Course.Number}} Seat Request')
 
     #requestSeats.modal-body
 
@@ -32,9 +30,7 @@ form.form-horizontal(name='modal')
         br
 
         div(explain='scheduled-request-notes', right)
-            h4
-                +icon('edit')
-                | Comments
+            h4: +icon('edit', 'Comments')
             textarea.form-control(ng-model='data.Notes')
 
         br

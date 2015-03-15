@@ -97,6 +97,7 @@ mixin initScripts(production, noFallback)
 
 //- icon mixin to create our SVG icons
 mixin icon(tag, viewbox)
+mixin icon(tag, label, viewbox)
 
     //- wrap in a labl to give a little more CSS flexibility
     label(class='lbl-' + tag, attributes)
@@ -105,10 +106,12 @@ mixin icon(tag, viewbox)
         if viewbox
             svg.icon(class=tag + ' icon-' + tag, viewBox=viewbox)
                 use(xlink:href='#icon-' + tag)
+            =label
 
         else
             svg.icon(class=tag + ' icon-' + tag, viewBox='0 0 32 32')
                 use(xlink:href='#icon-' + tag)
+            =label
 
 mixin spinner()
     .spinner
@@ -233,16 +236,10 @@ mixin userInstructions(text, ignore)
 mixin modalHeader(create, update)
     .modal-header.caps
         if create
-            h3(ng-show='createData')
-                +icon('plus-circle')
-                | Add&nbsp;
-                =create
+            h3(ng-show='createData'): +icon('plus-circle', 'Add&nbsp;' + create)
 
         if update
-            h3(ng-hide='createData')
-                +icon('edit')
-                | Update&nbsp;
-                =update
+            h3(ng-hide='createData'): +icon('edit', 'Update&nbsp;' + update)
 
         block
 
@@ -261,8 +258,7 @@ mixin modalFooter(submitText, defaultShow)
         .btn.btn-success.btn-labeled(ng-click='submit()',
         ng-hide='modal.$invalid || submitted || !modal.$dirty || ' + defaultShow)
 
-            span.btn-label.white
-                +icon('check-circle')
+            span.btn-label.white: +icon('check-circle')
 
             if submitText
                 span.text &nbsp;
@@ -297,8 +293,7 @@ mixin formGroupIcon(label, model, type, required, helper, explain, ico, placemen
 
     +formGroup(label, explain, placement)
         .input-group
-            .input-group-addon.w15
-                +icon(ico)
+            .input-group-addon.w15: +icon(ico)
             +formGroupTail(model, type, required, helper)
 
 
