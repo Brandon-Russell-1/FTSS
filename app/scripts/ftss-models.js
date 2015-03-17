@@ -146,7 +146,8 @@
 					    'TTMS',
 					    'MTT',
 					    'TS',
-					    'NA'
+					    'NA',
+				        'Location'
 				    ]
 			    }
 

@@ -3,14 +3,15 @@ td(class='mark {{className}}',  colspan='{{Days}}', id='{{Id}}')
     div(class='{{Instructor.Photo}}') {{bioPhoto}}
 
     span.pds {{pds}}&nbsp;
-    span.instructor <i>{{ttms}}</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{MTT}}</b>
+    span.instructor {{name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{MTT}}</b>
+    span.location {{Location}}
 
     .details
 
         .container
 
             h5.border-bottom
-                b {{Course.PDS}} - {{Course.Number}}&nbsp;&nbsp;&nbsp;
+                b {{Course.Number}}&nbsp;&nbsp;&nbsp;
                 i {{TTMS}}
                 b.pull-right {{dateRange}}
 
@@ -24,13 +25,15 @@ td(class='mark {{className}}',  colspan='{{Days}}', id='{{Id}}')
 
             .clearfix
 
-            .col-lg-3.double {{allocatedSeats}} Students
-
-            .clearfix
-
             b FTD Notes
             p {{ClassNotes}}
 
             b J4 Notes
             p {{J4Notes}}
+
+            .pull-right.invert
+
+                .btn.btn-info.btn-labeled(ng-click='row.showStudents()')
+                    span.btn-label
+                    | Students ({{allocatedSeats}})
 

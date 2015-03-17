@@ -219,9 +219,6 @@
 										// Trim the PDS if days are less than 2
 										event.pds = event.Days > 2 ? event.Course.PDS : '';
 
-										// Trim the class # if days shorter than 4
-										event.ttms = event.TTMS && (event.Days > 4) ? '#' + event.TTMS : '';
-
 										// Trim the instructor name if days are shorter than 12
 										event.name = event.Days > 12 ? event.Instructor.InstructorName : '';
 
