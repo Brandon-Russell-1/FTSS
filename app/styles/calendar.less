@@ -159,15 +159,15 @@
 	}
 
 	.mtt {
-		background: @classMTT!important;
+		background: @classMTT !important;
 	}
 
 	.unavailable {
-		background: @instructorUnavailable!important;
+		background: @instructorUnavailable !important;
 	}
 
 	.trainingSession {
-		background: @classTrainingSession!important;
+		background: @classTrainingSession !important;
 	}
 
 	.spacer {
@@ -224,7 +224,8 @@
 			box-shadow: 0 0 10px rgba(50, 50, 50, 0.7);
 		}
 		.pds {
-			font-weight: 800;
+			font-size: 1.55em;
+			line-height: 1em;
 		}
 		span {
 			margin-left: 50px;
@@ -232,7 +233,7 @@
 			color: #fff;
 		}
 		span.instructor {
-			margin-left: 85px;
+			margin-left: 8.5em;
 			i {
 				font-weight: 700;
 				font-style: normal;
@@ -260,19 +261,10 @@
 			width: 95%;
 			white-space: normal;
 		}
-		dt {
-			width: 75px;
-			font-weight: 400;
-			font-style: italic;
-		}
-		dd {
-			margin-left: 85px;
-			font-weight: 700;
-		}
 	}
 	.mark:hover {
 		z-index: 20;
-		background: @classHover!important;
+		background: @classHover !important;
 		box-shadow: 0 0 15px 2px rgba(50, 50, 50, 0.7);
 
 		.mask-img {
@@ -282,7 +274,7 @@
 			margin-left: -85px;
 			z-index: 50;
 		}
-		.instructor {
+		.pds {
 			margin-left: 25px;
 		}
 		.details {
@@ -290,12 +282,7 @@
 			box-shadow: 0 0 15px 2px rgba(50, 50, 50, 0.7);
 			border: 1px solid #555;
 			max-height: 300px;
-			transition: all ease 250ms 1s;
-		}
-	}
-	.mark:Hover {
-		.pds {
-			opacity: 0;
+			transition: all ease 25ms 500ms;
 		}
 	}
 	.double {
