@@ -86,7 +86,13 @@
 						// Copy createLink to the scope
 						'doCreateLink': utilities.createLink,
 
-						'doPermalink': utilities.setPermaLink
+						'doPermalink': utilities.setPermaLink,
+
+						'doToggleState': function(name) {
+
+							$rootScope.ftss[name] = !$rootScope.ftss[name];
+
+						}
 
 					};
 

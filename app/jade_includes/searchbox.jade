@@ -2,15 +2,15 @@ include ../partials/mixins
 
 #searchButtons.no-pad.pull-right(style='width:100px')
 
-    span#toggleExpand(ng-click='fn.doToggleCollapse()', hover='button-collapse', class='btn btn-default', left)
+    span#toggleExpand(ng-click='ftss.doToggleState("showAlternateView")', hover='button-collapse', class='btn btn-default', left)
         +icon('expand')
         +icon('collapse')
 
-    span#toggleArchive(ng-click='fn.doToggleArchive()', hover='button-archive', class='btn btn-default', left)
+    span#toggleArchive(ng-click='ftss.doToggleState("showArchived")', hover='button-archive', class='btn btn-default', left)
         +icon('trash_hide')
         +icon('trash_show')
 
-#searchContainer(ng-class='{tagBox:ftss.isTagBox, singleTag:singleTag}')
+#searchContainer(ng-class='{tagBox:ftss.isTagBox, singleTag:ftss.singleTag}')
 
     #stats
         span.badge(ng-class='{overload:ftss.itemCount.overload}', hover='record-count', bottom)

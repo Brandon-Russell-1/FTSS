@@ -26,7 +26,10 @@ html(lang='en', ng-app='FTSS')
 
         link(href='https://d2jjzg0gg2bs3z.cloudfront.net/' + linkCSS, rel='stylesheet')
 
-    body.wait(ng-controller='mainController', id='{{ftss.viewTitle}}', class='{{ftss.showArchived}} {{ftss.showAlternateView}} {{roleClasses}}')
+    body.wait(ng-controller='mainController',
+                id='{{ftss.viewTitle}}',
+                ng-class='{archived:ftss.showArchived,collapsed:ftss.showAlternateView}',
+                class='{{roleClasses}}')
 
         img#bg1
         img#bg2
