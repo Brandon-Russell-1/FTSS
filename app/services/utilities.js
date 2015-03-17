@@ -10,8 +10,9 @@ FTSS.ng.service('utilities', [
 	'$alert',
 	'$modal',
 	'$http',
+	'dateTools',
 
-	function (loading, $timeout, $rootScope, $location, sharepointFilters, $alert, $modal, $http) {
+	function (loading, $timeout, $rootScope, $location, sharepointFilters, $alert, $modal, $http, dateTools) {
 
 		var _jobs = [],
 
@@ -416,6 +417,24 @@ FTSS.ng.service('utilities', [
 				return Math.ceil(R * c); // Distance in miles
 
 			}
+		};
+
+		/**
+		 * Delete old class data from the recordset before processing
+		 *
+		 * @param data
+		 * @param daysToKeep
+		 */
+		this.purgeOldClasses = function (data, daysToKeep) {
+
+			var limit = dateTools.startDayCreator(moment().add(0 - daysToKeep, 'days'));
+
+			 _.each(data, function (row) {
+
+				((row.Start + row.Days) < limit)  && delete data[row.Id];
+
+			});
+
 		};
 
 		/**

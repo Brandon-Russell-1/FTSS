@@ -8,9 +8,7 @@ FTSS.ng.service('classProcessor', [
 
 		"use strict";
 
-		var _lastWeek = moment().add(-1, 'weeks'),
-
-		    _self = this;
+		var _self = this;
 
 		/**
 		 * Cache Filler adds any missing cache lookups
@@ -134,9 +132,6 @@ FTSS.ng.service('classProcessor', [
 				row.J4Notes = (row.J4Notes && row.J4Notes[0] === '#') ? '' : row.J4Notes;
 
 			}
-
-			// Auto archive (in the view) older classes
-			row.Archived = row.Archived || row.endMoment.isBefore(_lastWeek);
 
 		};
 

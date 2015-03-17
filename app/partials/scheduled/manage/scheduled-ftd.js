@@ -369,6 +369,10 @@ FTSS.ng.controller(
 
 				self.bind().then(function (data) {
 
+					// Delete classes that ended more than 30 days aga
+					utilities.purgeOldClasses(data, 30);
+
+					// Identify editing rights
 					$scope.canEdit = security.hasRole(['ftd', 'scheduling']);
 
 					// Load our unit data based on the dropdown
