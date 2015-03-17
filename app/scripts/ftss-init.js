@@ -154,6 +154,19 @@
 	// Helper variable for handling production vs development mode photos
 	FTSS.photoURL = PRODUCTION ? base + 'live/Bios/' : base + 'dev2/Bios/';
 
+	if (!PRODUCTION) {
+
+		FTSS.ng.run([
+			            'SharePoint',
+			            function (SharePoint) {
+
+				            FTSS.SP = SharePoint;
+
+			            }
+		            ])
+
+	}
+
 	// These are the default user preferences for the app
 	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {
 
