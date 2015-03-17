@@ -88,11 +88,7 @@ FTSS.ng.service('classProcessor', [
 				// Try to load the instructor's data
 				row.Instructor = caches.Instructors[row.InstructorId] || {};
 
-				// Calculate the start time
-				row.startMoment = dateTools.startDayFinder(row.Start);
-
-				// Calculate the end time
-				row.endMoment = row.startMoment.clone().add(row.Days - 1, 'days');
+				dateTools.dateRange(row);
 
 				// Setup the search params
 				row.search = [
@@ -140,13 +136,13 @@ FTSS.ng.service('classProcessor', [
 					row.startMoment.format('MMMM')
 				].join(' ');
 
-				// Auto archive (in the view) older classes
-				row.Archived = row.Archived || row.endMoment.isBefore(_lastWeek);
-
 				// Hide the J4 notes if they have the leading #
 				row.J4Notes = (row.J4Notes && row.J4Notes[0] === '#') ? '' : row.J4Notes;
 
 			}
+
+			// Auto archive (in the view) older classes
+			row.Archived = row.Archived || row.endMoment.isBefore(_lastWeek);
 
 		};
 
