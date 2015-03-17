@@ -120,12 +120,6 @@ FTSS.ng.service('classProcessor', [
 				// Cleanup the TTMS presentation
 				row.TTMSText = row.TTMS ? ' - ' + row.TTMS : '';
 
-				row.title = [
-					row.Course.PDS,
-					row.Course.Number,
-					row.TTMS || 'Pending Class #'
-				].join(' - ');
-
 				// Setup our search fields for this view
 				row.search = [
 					row.ClassNotes,
