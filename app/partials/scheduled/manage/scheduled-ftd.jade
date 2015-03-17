@@ -12,4 +12,24 @@ div(ng-if='canEdit')
 
     +userInstructions('scheduled-ftd', true)
 
-    resource-view
+    resource-view(ng-if='!ftss.showAlternateView')
+
+    table.table.table-striped.table-hover(ng-if='ftss.showAlternateView')
+
+        thead
+
+            th Room
+            th Instructor
+            th Course
+            th Dates
+            th Seats
+
+        tbody
+
+            tr(ng-repeat='row in rawSchedule | orderBy:"Start"')
+
+                td {{row.Location}}
+                td {{row.Instructor.InstructorName}}
+                td {{row.Course.PDS}}
+                td {{row.dateRange}}
+                td {{row.Approved}}
