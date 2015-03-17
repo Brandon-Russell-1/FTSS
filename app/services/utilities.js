@@ -452,7 +452,7 @@ FTSS.ng.service('utilities', [
 
 					sharepointFilters.refresh();
 
-					$rootScope.singleTag = FTSS.search.settings.maxItems < 2;
+					$rootScope.ftss.singleTag = FTSS.search.settings.maxItems < 2;
 
 					var validFilters = sharepointFilters.map(),
 
