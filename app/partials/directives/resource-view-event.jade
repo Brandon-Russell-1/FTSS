@@ -1,3 +1,5 @@
+include ../mixins
+
 td(class='mark {{className}}',  colspan='{{Days}}', id='{{Id}}')
 
     div(class='{{Instructor.Photo}}') {{bioPhoto}}
@@ -19,21 +21,26 @@ td(class='mark {{className}}',  colspan='{{Days}}', id='{{Id}}')
 
             .wideText {{Course.Title}}
 
-            i {{Instructor.InstructorName}}
-
             br
 
+            .col-lg-4.white
+
+                .btn.btn-info.btn-labeled.btn-sm(ng-click='row.showStudents()')
+                    span.btn-label: +icon('student_hand')
+                    span View Students ({{allocatedSeats}})
+
+            .col-lg-8
+
+                i {{Instructor.InstructorName}}
+
+                br
+
+                p
+                    b FTD Notes:&nbsp;&nbsp;
+                    | {{ClassNotes}}
+
+                p
+                    b J4 Notes:&nbsp;&nbsp;
+                    | {{J4Notes}}
+
             .clearfix
-
-            b FTD Notes
-            p {{ClassNotes}}
-
-            b J4 Notes
-            p {{J4Notes}}
-
-            .pull-right.invert
-
-                .btn.btn-info.btn-labeled(ng-click='row.showStudents()')
-                    span.btn-label
-                    | Students ({{allocatedSeats}})
-
