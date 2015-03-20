@@ -237,10 +237,11 @@
 			font-size: 1.55em;
 			line-height: 1em;
 		}
-		span {
+		& > span {
 			margin-left: 50px;
 			margin-top: 10px;
 			color: #fff;
+			position: absolute;
 		}
 		span.instructor {
 			margin-left: 8.5em;
@@ -315,7 +316,7 @@ body.collapsed {
 	transition: all ease 250ms 500ms;
 }
 
-#resourceView .mark .details, #resourceView .mark span {
+#resourceView .mark .details {
 	position: absolute;
 }
 
