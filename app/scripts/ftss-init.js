@@ -53,7 +53,11 @@
 			'$routeProvider',
 			'$modalProvider',
 			'$locationProvider',
-			function ($routeProvider, $modalProvider, $locationProvider) {
+			'$compileProvider',
+			function ($routeProvider, $modalProvider, $locationProvider, $compileProvider) {
+
+				// Disable angular debugging for production mode
+				$compileProvider.debugInfoEnabled(!PRODUCTION);
 
 				// Our route list for various pages/actions
 				var routes =
