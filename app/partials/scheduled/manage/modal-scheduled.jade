@@ -40,14 +40,14 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.na,uglyGreenBu
                                 ng-options='o for o in recordTypes')
 
                 .row(ng-show='data.mtt')
-                    +formGroup(' Location')
+                    +formGroup('Location')
                         .input-group
                             .input-group-addon.w15:  +icon('location')
                             .input-group-selectize(explain='scheduled-edit-mtt', right)
                                 select(selectize='geodata', bind='data.MTT')
 
                 .row(ng-if='data.ts')
-                    +formGroup(' TS Course')
+                    +formGroup('TS Course')
                         .input-group
                             .input-group-addon.w15:  +icon('books')
                             input.form-control(ng-model='data.TS',explain='scheduled-edit-ts', right)
@@ -95,7 +95,6 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.na,uglyGreenBu
                                                     right)
 
                 .row(ng-if='!data.na')
-
                     +formGroup('Length')
 
                         .input-group.pull-left.w40
