@@ -25,33 +25,31 @@ include ../../mixins
 
         .clearfix
 
-        .row(ng-if='!ftss.showAlternateView', ng-repeat='row in group track by row.Id',
-        ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}')
+        .row(ng-if='!ftss.showAlternateView', ng-repeat='row in group track by row.Id')
 
             .btn.btn-success.openSeats(ng-click='row.request()') {{::row.openSeats}}
 
             .well.well-sm
 
-                .pull-left(style='width:185px')
-                        photo.img-rounded(ng-if='row.Instructor.Photo', size='150px', shape='rectangle', data='row.Instructor')
-                        | &nbsp;
+                .pull-left.circle: +bioPhoto('::row.bioPhoto', 'width:125px;height:125px')
 
-                .pull-left(style='width:calc(95% - 160px)')
+                .pull-right(style='width:calc(100% - 100px)')
 
                     .double
+
+                        .notes.btn-muted(ng-if='row.ClassNotes', hover='{{::row.ClassNotes}}'): +icon('info-circle')
+
                         | {{::row.dateRange}}&nbsp;
 
                         span.lightText at&nbsp;
 
-                        a(href='https://www.google.com/maps/@{{::row.locationCoords | nospace}},15z',
+                        a(href='https://www.google.com/maps/@{{::row.locationCoords}},15z',
                             target='_blank',
                             hover="<h4>{{::row.FTD.Phone}}</h4><img src='{{::row.map}}'/>",
                             hoverClass='map',
                             left) {{::row.locationName}}
 
                         .pull-right.lightText {{::row.Instructor.InstructorName}}
-
-                    p.notes {{::row.ClassNotes}}
 
                     .requestActions
 
@@ -68,20 +66,20 @@ include ../../mixins
 
                         .pull-right.invert(ng-if='row.allocatedSeats')
 
-                                .btn.btn-info.btn-labeled.btn-muted(ng-click='row.showStudents()')
-                                    span.btn-label: +icon('student_hand')
-                                    | Students ({{::row.allocatedSeats}})
+                            .btn.btn-info.btn-labeled.btn-muted(ng-click='row.showStudents()')
+                                span.btn-label: +icon('student_hand')
+                                | View Students ({{::row.allocatedSeats}})
 
                         .pull-right.invert(ng-if='canRequest')
 
-                                .btn.btn-success.btn-labeled.btn-muted(ng-click='row.request()')
-                                    span.btn-label: +icon('plus-circle')
-                                    | Request Seats
+                            .btn.btn-success.btn-labeled.btn-muted(ng-click='row.request()')
+                                span.btn-label: +icon('plus-circle')
+                                | Request Seats
 
                         .pull-right.invert
 
                             a.btn.btn-primary.btn-labeled.btn-muted(href='mailto:{{::row.mailFTD}}')
                                 span.btn-label: +icon('envelope')
-                                | Contact FTD
+                                | Email FTD
 
                 .clearfix

@@ -106,21 +106,20 @@ FTSS.ng.controller(
 					    },
 
 					    // The filtered list of instructors/members
-					    data = angular.copy(_.filter(caches.Instructors, {
+					    data = _.filter(caches.Instructors, {
 						    'UnitId'  : $scope.ftd.Id,
 						    'Archived': false
-					    })),
-
+					    }),
 
 					    // Load the controller
 					    self = controllerHelper($scope,
 
-					                           {
+					                            {
 
-						                           'sort' : 'InstructorName',
-						                           'modal': 'instructor-stats'
+						                            'sort' : 'InstructorName',
+						                            'modal': 'instructor-stats'
 
-					                           });
+					                            });
 
 					$scope.stats = self.edit();
 
@@ -133,6 +132,8 @@ FTSS.ng.controller(
 							      var stat = stats[row.Id],
 
 							          chart = buildMonths();
+
+							      classProcessor.setupBioPhoto(row, row.Photo);
 
 							      row.search = row.InstructorName;
 

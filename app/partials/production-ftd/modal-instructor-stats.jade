@@ -13,9 +13,7 @@ form.form-horizontal(name='modal')
 
         .row
 
-            .col-lg-4
-                photo.img-rounded(size='150px', shape='rectangle', data='data', watch, force)
-
+            .col-lg-4: +bioPhoto('data.bioPhoto', 'width:150px;height:185px')
 
             .col-lg-8
 

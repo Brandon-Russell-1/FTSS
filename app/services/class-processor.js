@@ -11,6 +11,21 @@ FTSS.ng.service('classProcessor', [
 		var _self = this;
 
 		/**
+		 * Generate bio photo for given object
+		 * @param row
+		 * @returns {string|*|bioPhoto}
+		 */
+		this.setupBioPhoto = function (row, link) {
+
+			link = link || (row.Instructor || {}).Photo;
+
+			row.bioPhoto = link ? FTSS.CDN + link + '.jpg' : '';
+
+			return row.bioPhoto;
+
+		};
+
+		/**
 		 * Cache Filler adds any missing cache lookups
 		 *
 		 * @param row
@@ -29,6 +44,7 @@ FTSS.ng.service('classProcessor', [
 			// Try to add the instructor data
 			row.Instructor = caches.Instructors[row.InstructorId] || {};
 
+
 			// Add course data for TS
 			if (row.TS) {
 				row.Course = {
@@ -41,6 +57,8 @@ FTSS.ng.service('classProcessor', [
 			row.ttmsLink = row.Course && row.TTMS ? row.Course.Number + row.TTMS : '';
 
 			dateTools.dateRange(row);
+
+			_self.setupBioPhoto(row);
 
 			// In case of invalid data, we'll do something about it
 			if (!row.Course.Id && !row.TS && !row.NA) {

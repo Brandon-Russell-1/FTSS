@@ -48,7 +48,6 @@
 
 #scheduled {
 
-
 	.popover.map {
 		padding: 0;
 		overflow: hidden;
@@ -74,7 +73,8 @@
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
 		right: 89.5%;
-		width: 4%;
+		width: 6%;
+		text-align: left;
 	}
 
 	.lead {
@@ -93,30 +93,27 @@
 		border-top-left-radius: 0;
 		position: relative;
 
-		.requestActions, .double {
+		.mask-img {
 			position: absolute;
-			bottom: 15px;
-			right: 10px;
-			left: 185px;
+			left: -30px;
+			top: -8%
+		}
 
+		.requestActions {
 			hr {
 				margin-bottom: 10px;
 				margin-top: 10px;
 			}
-
 		}
 
 		.notes {
-			min-height: 1.5em;
-			margin-top: 2.5em;
-			margin-bottom: 5em;
-			font-style: italic;
+			float: left;
+			margin-top: -.25em;
 		}
 
 		.double {
 			font-weight: 600;
 			top: 10px;
-			bottom: auto;
 
 			.lightText {
 				font-weight: 300;

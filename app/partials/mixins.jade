@@ -94,6 +94,9 @@ mixin initScripts(production, noFallback)
 
         }());
 
+mixin bioPhoto(link, style)
+    .mask-img(ng-if=link, style=style)
+        img(ng-src='{{' + link + '}}')
 
 //- icon mixin to create our SVG icons
 mixin icon(tag, label, viewbox)

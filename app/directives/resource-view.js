@@ -166,7 +166,6 @@
 
 								    };
 
-								photo && utilities.fetchPhoto(photo, fillImage);
 
 								// Iterate over each event
 								_.each(instructor, function (event) {

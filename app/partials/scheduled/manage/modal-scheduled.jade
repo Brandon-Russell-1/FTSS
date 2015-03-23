@@ -24,8 +24,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.na,uglyGreenBu
 
         .col-lg-6
 
-            #instructorPhoto.col-lg-4
-                photo.img-rounded(size='135px', shape='rectangle', data='data.InstructorId', watch)
+            #instructorPhoto.col-lg-4: +bioPhoto('data.bioPhoto', 'width:150px;height:185px')
 
             .col-lg-8
 
