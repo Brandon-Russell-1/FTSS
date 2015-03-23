@@ -37,32 +37,32 @@ include ../../mixins
 
                     .double
 
-                        .notes.btn-muted(ng-if='row.ClassNotes', hover='{{::row.ClassNotes}}'): +icon('info-circle')
+                        .pull-left {{::row.dateRange}}
 
-                        | {{::row.dateRange}}&nbsp;
+                        .notes.hideDefault(ng-if='row.ClassNotes', hover='{{::row.ClassNotes}}'): +icon('info-circle')
 
-                        span.lightText at&nbsp;
-
-                        a(href='https://www.google.com/maps/@{{::row.locationCoords}},15z',
+                        a.pull-right(href='https://www.google.com/maps/@{{::row.locationCoords}},15z',
                             target='_blank',
                             hover="<h4>{{::row.FTD.Phone}}</h4><img src='{{::row.map}}'/>",
                             hoverClass='map',
                             left) {{::row.locationName}}
 
-                        .pull-right.lightText {{::row.Instructor.InstructorName}}
+                        .pull-right.hideDefault.lightText {{::row.Instructor.InstructorName}}&nbsp|&nbsp;
+
+                        .clearfix
 
                     .requestActions
 
                         hr
 
-                        .pull-left.lightCourseNumber(ng-if='!autoApprove')  # {{::row.TTMS}} -&nbsp;
-                        .pull-left: p.form-control.wideText(ng-if='autoApprove',
+                        .pull-left.lightCourseNumber.hideDefault(ng-if='!autoApprove')  # {{::row.TTMS}} -&nbsp;
+                        .pull-left: p.form-control.wideText.hideDefault(ng-if='autoApprove',
                                                                     contenteditable,
                                                                     ng-model='row.TTMS',
                                                                     onEnter='row.updateTTMS()',
                                                                     placeholder='Class #')
 
-                        .pull-left.lightCourseNumber &nbsp;{{::row.Course.PDS}} - {{::row.Course.Number}}
+                        .pull-left.lightCourseNumber.hideDefault &nbsp;{{::row.Course.PDS}} - {{::row.Course.Number}}
 
                         .pull-right.invert(ng-if='row.allocatedSeats')
 
