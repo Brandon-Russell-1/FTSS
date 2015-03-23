@@ -180,17 +180,9 @@
 
 									createTDs(start);
 
-									csv['Instructor'] = event.Instructor.InstructorName || 'Unassigned';
-									csv['Start Date'] = event.startMoment.format(dayFormat);
-									csv['End Date'] = event.endMoment.format(dayFormat);
-									csv['MTT'] = event.MTT;
 
 									if (unavailable) {
 
-										csv['TTMS Class #'] = '';
-										csv['PDS Code'] = '';
-										csv['Course #'] = 'UNAVAILABLE';
-										csv['Course Title'] = 'Instructor not available to teach';
 
 										// This creates the HTML for our unavailable blocks
 										instructor.html += '<td hover="' +
@@ -205,12 +197,6 @@
 
 									} else {
 
-										csv['TTMS Class #'] = event.TTMS || '';
-										csv['PDS Code'] = event.Course.PDS;
-										csv['Course #'] = event.Course.Number;
-										csv['Course Title'] = event.Course.Title;
-										csv['Host Seats'] = event.Host;
-										csv['Open Seats'] = event.openSeats;
 
 										// Attempt to use cached bioPhoto
 										event.bioPhoto = bioPhoto;
@@ -239,7 +225,6 @@
 
 									}
 
-									csv['Notes'] = event.ClassNotes;
 
 									// Increment the day counter
 									count += event.Days;
@@ -257,24 +242,11 @@
 
 							});
 
-							scope.$parent.export = function () {
 
-								var csvData = new CSV(scope.csv, {header: true}).encode(),
 
-								    blob = new Blob([decodeURIComponent(encodeURI(csvData))], {
-									    type: "text/csv;charset=utf-8;"
-								    }),
 
-								    fileName = [
-									    scope.$parent.ftd.LongName,
-									    ' Scheduling Data - ',
-									    moment().format(),
-									    '.csv'
-								    ].join('');
 
-								saveAs(blob, fileName);
 
-							};
 
 							// Bind the edit function (single click in this case)
 							scope.doClick = function () {

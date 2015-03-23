@@ -10,6 +10,30 @@ FTSS.ng.service('classProcessor', [
 
 		var _self = this;
 
+
+		this.csvExport = function () {
+
+			scope.$parent.export = function () {
+
+				var csvData = new CSV(scope.csv, {header: true}).encode(),
+
+				    blob = new Blob([decodeURIComponent(encodeURI(csvData))], {
+					    type: "text/csv;charset=utf-8;"
+				    }),
+
+				    fileName = [
+					    scope.$parent.ftd.LongName,
+					    ' Scheduling Data - ',
+					    moment().format(),
+					    '.csv'
+				    ].join('');
+
+				saveAs(blob, fileName);
+
+			};
+
+		};
+
 		/**
 		 * Generate bio photo for given object
 		 * @param row
