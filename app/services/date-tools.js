@@ -115,16 +115,26 @@ FTSS.ng.service('dateTools', [
 		};
 
 		/**
-		 * Check if this is a down day or not (weekend/holiday/family day)
+		 * Check if this is a down day (holiday/family day)
 		 *
 		 * @param date
 		 * @returns boolean
 		 */
 		this.isDownDay = function (date) {
 
-			return date.isoWeekday() > 5 ||
+			return _downDays[date.format('YYYY-MM-DD')];
 
-			       _downDays[date.format('YYYY-MM-DD')];
+		};
+
+		/**
+		 * Check if this is a weekend
+		 *
+		 * @param date
+		 * @returns {boolean}
+		 */
+		this.isWeekend = function (date) {
+
+			return date.isoWeekday() > 5;
 
 		};
 

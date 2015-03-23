@@ -120,8 +120,8 @@ FTSS.ng.controller(
 								     * @type {string}
 								     */
 								    var format = 'YYYY-MM-DD',
-								        start = moment(event.start.format(format), format),
-								        end = moment(event.end.format(format), format);
+								    start = moment(event.start.format(format), format),
+								    end = moment(event.end.format(format), format);
 
 								    // Get the start date
 								    scope.data.startMoment = start;
@@ -324,7 +324,7 @@ FTSS.ng.controller(
 													end.add(1, 'days');
 
 													// Only count this day if it is a weekday and not a down day
-													!dateTools.isDownDay(end) && days--;
+													!dateTools.isWeekend(end) && !dateTools.isDownDay(end) && days--;
 
 												}
 
