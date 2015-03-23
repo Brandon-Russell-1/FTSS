@@ -14,9 +14,9 @@
 			'$timeout',
 			'$templateCache',
 			'dateTools',
-			'utilities',
+			'loading',
 
-			function ($timeout, $templateCache, dateTools, utilities) {
+			function ($timeout, $templateCache, dateTools, loading) {
 
 				return {
 					'restrict'   : 'E',
@@ -30,265 +30,238 @@
 
 						    templateMonth = _.template('<td colspan="{{colspan}}">{{month}}</td>'),
 
-						    dayFormat = 'MM-DD-YYYY',
+						    watch = '$parent.' + ($attr.bind || 'groups'),
 
-						    watch = '$parent.' + ($attr.bind || 'groups');
+						    tbody = $el.find('tbody')[0],
 
+						    last;
 
 						scope.$watch(watch, function (groups) {
 
-							if (!groups) {return}
+							if (!groups || _.isEqual(groups, last)) {return}
 
-							var html = {}, events = [], min, minClone, max, dayBase,
+							tbody.innerHTML = '';
 
-							    downDays = dateTools.downDaysSimple,
+							loading(true);
 
-							    // Check if this is a weekend, holiday or nothing
-							    specialDay = function (day) {
+							setTimeout(function () {
 
-								    return (day.isoWeekday() > 5) ? 'weekend' :
+								var html = {}, events = [], min, max, dayBase;
 
-								           (downDays.indexOf(day.format('YYYY-MM-DD')) > -1) ? 'downDay' : '';
-							    };
+								last = groups;
 
-							// Make a flat copy of our data for date range detection
-							_.each(groups, function (group) {
-								events = events.concat(group);
-							});
+								// Make a flat copy of our data for date range detection
+								_.each(groups, function (group) {
+									events = events.concat(group);
+								});
 
-							// Get the earliest start date, minus one day
-							min = moment(Math.min.apply(Math, _.pluck(events, 'startMoment'))).add(-1, 'days');
+								// Get the earliest start date, minus one day
+								min = moment(Math.min.apply(Math, _.pluck(events, 'startMoment'))).add(-1, 'days');
 
-							// Get the latest end date, plus one day
-							max = moment(Math.max.apply(Math, _.pluck(events, 'endMoment'))).add(1, 'days');
+								// Get the latest end date, plus one day
+								max = moment(Math.max.apply(Math, _.pluck(events, 'endMoment'))).add(1, 'days');
 
-							// Initialize our variables
-							minClone = min.clone();
-							html.months = {};
-							html.days = '';
-							html.instructors = [];
+								scope.resourceEvents = [];
 
-							dayBase = [];
+								buildHeaders();
 
-							scope.resourceEvents = [];
-							scope.photoCache = {};
-							scope.csv = [];
+								_.each(groups, function (instructor) {
 
-							// Create the list of days and months
-							while (minClone < max) {
+									instructor.html = '';
 
-								var month = minClone.add(1, 'days').format('MMM YYYY'),
+									var count = 0,
 
-								    className = specialDay(minClone);
+									    photo = instructor[0].Instructor.Photo,
 
-								if (!html.months[month]) {
+									    bioPhoto = photo ? '<div class="mask-img circle">' +
+									                       '<img src="' + FTSS.CDN + photo + '.jpg" /></div>' : '';
 
-									html.months[month] = {
-										'month'  : month,
-										'sort'   : parseInt(minClone.format('YYYYMM')),
-										'colspan': 0
-									};
+									// Iterate over each event
+									_.each(instructor, function (event) {
 
-								}
+										// We subtract one to include the date the class starts
+										var start = event.startMoment.diff(min, 'days') - 1;
 
-								html.months[month].colspan++;
+										createTDs(start);
 
-								dayBase.push(className);
+										if (event.NA) {
 
-								html.days += [
+											// This creates the HTML for our unavailable blocks
+											instructor.html += '<td hover="' +
+											                   event.Instructor.InstructorName +
+											                   ' not available for teaching." class="unavailable" colspan="' +
+											                   event.Days +
+											                   '" id="' +
+											                   event.Id +
+											                   '"><div class="details italics">' +
+											                   (event.ClassNotes || '') +
+											                   '</div></td>';
 
-									'<td class="',
-									className,
-									'">',
-									minClone.format('D'),
-									'<br>',
-									minClone.format('dd'),
-									'</td>'
+										} else {
 
-								].join('');
+											// Attempt to use cached bioPhoto
+											event.bioPhoto = bioPhoto;
 
-							}
+											// Trim the PDS if days are less than 2
+											event.pds = event.Days > 2 ? event.Course.PDS : '';
 
-							/**
-							 * The reusable html header (months/days)
-							 *
-							 * @type {string}
-							 */
-							html.monthHeader = '<tr class="header months">';
+											// Trim the instructor name if days are shorter than 12
+											event.name = event.Days > 12 ? event.Instructor.InstructorName : '';
 
-							_(html.months).sortBy('sort').each(function (month) {
+											event.className =
 
-								html.monthHeader += templateMonth(month);
+											// Match MTT classes
+											event.className = event.MTT ? 'mtt' :
 
-							}).value();
+												// Add trainingSession class if TTMS contains TS
+												              event.TS ? 'trainingSession' :
 
-							html.monthHeader += '</tr>;';
-							html.dayHeader = '<tr class="header days">' + html.days + '</tr>';
+													              // Id short classes
+												              (event.allocatedSeats < event.Course.Min) ? 'short' :
 
-							_.each(groups, function (instructor) {
+												              event.className;
 
-								instructor.html = '';
+											// Add our html to the event
+											instructor.html += templateEvent(event);
 
-								var count = 0,
+										}
 
-								    /**
-								     * Appends TD elements to our TR HTML until the specified end
-								     *
-								     * @param end
-								     */
-								    createTDs = function (end) {
+										// Increment the day counter
+										count += event.Days;
 
-									    while (count < end) {
+									});
 
-										    instructor.html += '<td class="' + dayBase[count++] + '"></td>';
+									// map our instructor's name
+									instructor.name = instructor[0].Instructor.InstructorName;
 
-									    }
+									createTDs(max.diff(min, 'days'));
 
-								    },
+									html.instructors.push(instructor);
 
-								    photo = instructor[0].Instructor.Photo,
+									/**
+									 * Appends TD elements to our TR HTML until the specified end
+									 *
+									 * @param end
+									 */
+									function createTDs(end) {
 
-								    bioPhoto,
+										while (count < end) {
 
-								    // We have to juggle the async nature of these calls completely outside the $digest cycle
-								    fillImage = function (imgURL) {
+											instructor.html += '<td class="' + dayBase[count++] + '"></td>';
 
-									    // Try to find the photos
-									    var $el = $('.' + photo),
-
-									        // Our html to replace the image with
-									        html = '<div class="mask-img circle">' +
-									               '<img src="' + imgURL + '" /></div>';
-
-									    bioPhoto = html;
-
-									    $el.html(html);
-
-								    };
-
-
-								// Iterate over each event
-								_.each(instructor, function (event) {
-
-									// We subtract one to include the date the class starts
-									var start = event.startMoment.diff(min, 'days') - 1,
-
-									    // Detect instructor unavailability
-									    unavailable = event.NA,
-
-									    csv = {};
-
-									createTDs(start);
-
-
-									if (unavailable) {
-
-
-										// This creates the HTML for our unavailable blocks
-										instructor.html += '<td hover="' +
-										                   event.Instructor.InstructorName +
-										                   ' not available for teaching." class="unavailable" colspan="' +
-										                   event.Days +
-										                   '" id="' +
-										                   event.Id +
-										                   '"><div class="details italics">' +
-										                   (event.ClassNotes || '') +
-										                   '</div></td>';
-
-									} else {
-
-
-										// Attempt to use cached bioPhoto
-										event.bioPhoto = bioPhoto;
-
-										// Trim the PDS if days are less than 2
-										event.pds = event.Days > 2 ? event.Course.PDS : '';
-
-										// Trim the instructor name if days are shorter than 12
-										event.name = event.Days > 12 ? event.Instructor.InstructorName : '';
-
-										event.className =
-
-										// Match MTT classes
-										event.MTT ? 'mtt' :
-
-											// Add trainingSession class if TTMS contains TS
-										event.TS ? 'trainingSession' :
-
-											// Id short classes
-										(event.allocatedSeats < event.Course.Min) ? 'short' :
-
-										event.className;
-
-										// Add our html to the event
-										instructor.html += templateEvent(event);
+										}
 
 									}
 
-
-									// Increment the day counter
-									count += event.Days;
-
-									scope.csv.push(csv);
-
 								});
 
-								// map our instructor's name
-								instructor.name = instructor[0].Instructor.InstructorName;
+								// Bind the edit function (single click in this case)
+								scope.doClick = function () {
 
-								createTDs(max.diff(min, 'days'));
+									if (scope.$parent.canEdit) {
 
-								html.instructors.push(instructor);
+										// Dirty hack to get the current class without a million extra data binds
+										var row = _.find(events, {Id: parseInt($('td:hover').attr('id'))});
+
+										// complete binding to the edit action with our data
+										row && scope.$parent.edit.call({'row': row}, false);
+
+									}
+
+								};
+
+								html.render = '';
+
+								html.spacer = '<tr class="spacer"><td></td></tr>';
+
+								_(html.instructors).sortBy('name').each(function (instructor, index) {
+
+									// For extra large groups,
+									if (index % 10 < 1 &&
+									    (html.instructors.length < 5 || (html.instructors.length - index) > 5)) {
+										html.render += html.monthHeader + html.dayHeader + html.spacer;
+									}
+
+									html.render += '<tr class="event">' +
+									               instructor.html +
+									               '</tr>' +
+									               html.spacer;
+
+								}).value();
+
+								if (html.instructors.length > 9) {
+									html.render +=
+									(html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
+								}
+
+								tbody.innerHTML = html.render;
+
+								loading(false);
+
+								function buildHeaders() {
+
+									// Initialize our variables
+									var minClone = min.clone();
+
+									html.months = {};
+									html.days = [];
+									html.instructors = [];
+
+									// Array of days to reference for classNames later on
+									dayBase = [];
+
+									// Create the list of days and months
+									while (minClone < max) {
+
+										// Add day to minClone and get the month
+										var month = minClone.add(1, 'days').format('MMM YYYY'),
+
+										    // Added classes for weekend or holidays
+										    className = dateTools.isWeekend(minClone) ? 'weekend' :
+
+										                dateTools.isDownDay(minClone) ? 'downDay' : '';
+
+										// Create the month if it doesn't exist
+										html.months[month] = html.months[month] || {
+											'month'  : month,
+											'sort'   : parseInt(minClone.format('YYYYMM'), 10),
+											'colspan': 0
+										};
+
+										// Increase the colspan by one to match days of month
+										html.months[month].colspan++;
+
+										// Add the class (weekend/downDay) to our the day array for later use
+										dayBase.push(className);
+
+										// Add our html to the html.days array (will be joined at the end)
+										html.days.push('<td class="', className, '">', minClone.format('D'),
+										               '<br>', minClone.format('dd'), '</td>')
+
+									}
+
+									/**
+									 * The reusable html header (months/days)
+									 *
+									 * @type {string}
+									 */
+									html.monthHeader = '<tr class="header months">';
+
+									_(html.months).sortBy('sort').each(function (month) {
+
+										html.monthHeader += templateMonth(month);
+
+									}).value();
+
+									html.monthHeader += '</tr>;';
+
+									html.dayHeader = '<tr class="header days">' + html.days.join('') + '</tr>';
+
+								}
 
 							});
 
-
-
-
-
-
-
-							// Bind the edit function (single click in this case)
-							scope.doClick = function () {
-
-								if (scope.$parent.canEdit) {
-
-									// Dirty hack to get the current class without a million extra data binds
-									var row = _.find(events, {Id: parseInt($('td:hover').attr('id'))});
-
-									// complete binding to the edit action with our data
-									row && scope.$parent.edit.call({'row': row}, false);
-
-								}
-
-							};
-
-							html.render = '';
-
-							html.spacer = '<tr class="spacer"><td></td></tr>';
-
-							_(html.instructors).sortBy('name').each(function (instructor, index) {
-
-								// For extra large groups,
-								if (index % 10 < 1 &&
-								    (html.instructors.length < 5 || (html.instructors.length - index) > 5)) {
-									html.render += html.monthHeader + html.dayHeader + html.spacer;
-								}
-
-								html.render += '<tr class="event">' +
-								               instructor.html +
-								               '</tr>' +
-								               html.spacer;
-
-							}).value();
-
-							if (html.instructors.length > 9) {
-								html.render += (html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
-							}
-
-							scope.html = html.render;
-
-						});
+						}, 25);
 					}
 
 				};
