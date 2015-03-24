@@ -106,10 +106,14 @@ FTSS.ng.controller(
 					    },
 
 					    // The filtered list of instructors/members
-					    data = _.filter(caches.Instructors, {
-						    'UnitId'  : $scope.ftd.Id,
-						    'Archived': false
-					    }),
+					    data = _(caches.Instructors)
+
+						    .filter({
+							            'UnitId'  : $scope.ftd.Id,
+							            'Archived': false
+						            })
+
+						    .cloneDeep(),
 
 					    // Load the controller
 					    self = controllerHelper($scope,
