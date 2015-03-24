@@ -8,9 +8,10 @@ FTSS.ng.controller(
 		'$timeout',
 		'SharePoint',
 		'SP_CONFIG',
+		'classProcessor',
 		'controllerHelper',
 		'utilities',
-		function ($scope, $timeout, SharePoint, SP_CONFIG, controllerHelper, utilities) {
+		function ($scope, $timeout, SharePoint, SP_CONFIG, classProcessor, controllerHelper, utilities) {
 
 			$scope.ftss.pageLimit = 50;
 
@@ -119,11 +120,8 @@ FTSS.ng.controller(
 
 			};
 
-			$scope.updateFTD = function() {
+			$scope.updateFTD = self._update;
 
-			self._update();
-
-			};
 
 			self.bind().then(function (data) {
 
@@ -136,6 +134,8 @@ FTSS.ng.controller(
 
 				// Complete the controller initialization
 				self.initialize(data).then(function (row) {
+
+					classProcessor.setupBioPhoto(row, row.Photo);
 
 					row.search = row.InstructorName;
 
