@@ -483,17 +483,17 @@
 
 					timeout(function () {
 
-						scope.data.Students = {};
+						scope.People = {};
 
-						_.each(val, function (student) {
+						_.each(val, function (person) {
 
-							var data = options[student];
+							var data = options[person];
 
-							scope.data.Students[data.DISPLAYNAME || val] = data.EMAIL || '';
+							scope.People[data.DISPLAYNAME || val] = data.EMAIL || '';
 
 						});
 
-						scope.data.count = _.size(scope.data.Students);
+						scope.peopleCount = _.size(scope.People);
 
 						/*	scope.row.name = data.DISPLAYNAME;
 						 scope.row.email = data.EMAIL;
