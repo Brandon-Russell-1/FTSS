@@ -123,10 +123,13 @@
 	// Set the base SP collection used by FTSS
 	var base = 'https://cs1.eis.af.mil/sites/FTSS/';
 
-	if (FTSS.PREFETCH) {
+	// Only bind the prefetch values in production mode
+	if (PRODUCTION && FTSS.PREFETCH) {
 		FTSS.ng.value('SP_PREFETCH', FTSS.PREFETCH);
-		delete  FTSS.PREFETCH;
 	}
+
+	// Flush to reduce memory burden
+	delete  FTSS.PREFETCH;
 
 	FTSS.ng.value('SP_CONFIG',
 
