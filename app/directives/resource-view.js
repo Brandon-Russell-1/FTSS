@@ -251,7 +251,7 @@
 
 									}).value();
 
-									html.monthHeader += '</tr>;';
+									html.monthHeader += '</tr>';
 
 									html.dayHeader = '<tr class="header days">' + html.days.join('') + '</tr>';
 
