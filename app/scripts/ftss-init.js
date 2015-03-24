@@ -54,10 +54,14 @@
 			'$modalProvider',
 			'$locationProvider',
 			'$compileProvider',
-			function ($routeProvider, $modalProvider, $locationProvider, $compileProvider) {
+			'$sceDelegateProvider',
+			function ($routeProvider, $modalProvider, $locationProvider, $compileProvider, $sceDelegateProvider) {
 
 				// Disable angular debugging for production mode
 				$compileProvider.debugInfoEnabled(!PRODUCTION);
+
+				// Allow AF Portal iframe
+				$sceDelegateProvider.resourceUrlWhitelist(['self', new RegExp('^https://www.my.af.mil/.+$')]);
 
 				// Our route list for various pages/actions
 				var routes =

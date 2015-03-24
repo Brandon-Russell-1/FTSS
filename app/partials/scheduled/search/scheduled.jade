@@ -8,10 +8,7 @@ include ../../mixins
 
         .lead(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
 
-            span {{::group[0].Course.PDS}} -&nbsp;
-
-            a(href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{::group[0].Course.Number}}',
-                target='_blank') {{::group[0].Course.Number}}
+            span {{::group[0].Course.PDS}} - {{::group[0].Course.Number}}
 
             span.pull-right {{group.length}}
 
@@ -55,14 +52,17 @@ include ../../mixins
 
                         hr
 
-                        .pull-left.lightCourseNumber.hideDefault(ng-if='!autoApprove')  # {{::row.TTMS}} -&nbsp;
-                        .pull-left: p.form-control.wideText.hideDefault(ng-if='autoApprove',
+                        .pull-left.lightCourseNumber.hideDefault.btn.btn-link(bs-modal='modal',
+                                template='/partials/etca.html') &nbsp;{{::row.Course.PDS}} - {{::row.Course.Number}}
+
+                        .pull-left.lightCourseNumber.hideDefault(ng-if='!autoApprove') &nbsp;&nbsp# {{::row.TTMS}}
+
+                        .pull-left
+                            p.form-control.wideText.hideDefault(ng-if='autoApprove',
                                                                     contenteditable,
                                                                     ng-model='row.TTMS',
                                                                     onEnter='row.updateTTMS()',
                                                                     placeholder='Class #')
-
-                        .pull-left.lightCourseNumber.hideDefault &nbsp;{{::row.Course.PDS}} - {{::row.Course.Number}}
 
                         .pull-right.invert(ng-if='row.allocatedSeats')
 

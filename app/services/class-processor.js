@@ -68,6 +68,9 @@ FTSS.ng.service('classProcessor', [
 			// Try to add the instructor data
 			row.Instructor = caches.Instructors[row.InstructorId] || {};
 
+			row.etca = row.Course && row.TTMS ?
+			           'https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id=' + row.Course.Number :
+			           '';
 
 			// Add course data for TS
 			if (row.TS) {
@@ -76,9 +79,6 @@ FTSS.ng.service('classProcessor', [
 					'Number': row.TS
 				}
 			}
-
-			// The TTMS friendly link for this class
-			row.ttmsLink = row.Course && row.TTMS ? row.Course.Number + row.TTMS : '';
 
 			dateTools.dateRange(row);
 
