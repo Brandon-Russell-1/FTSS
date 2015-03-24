@@ -64,17 +64,9 @@ include ../../mixins
                                                                     onEnter='row.updateTTMS()',
                                                                     placeholder='Class #')
 
-                        .pull-right.invert(ng-if='row.allocatedSeats')
+                        edit-students.pull-right.invert
 
-                            .btn.btn-info.btn-labeled.btn-muted(ng-click='row.showStudents()')
-                                span.btn-label: +icon('student_hand')
-                                | View Students ({{::row.allocatedSeats}})
-
-                        .pull-right.invert(ng-if='canRequest')
-
-                            .btn.btn-success.btn-labeled.btn-muted(ng-click='row.request()')
-                                span.btn-label: +icon('plus-circle')
-                                | Request Seats
+                        request-seats.pull-right.invert
 
                         .pull-right.invert
 

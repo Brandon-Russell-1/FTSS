@@ -1,0 +1,45 @@
+include ../mixins
+
+form.form-horizontal(name='modal')
+
+    .modal-header.caps
+        h3: +icon('plus-circle', '{{row.Course.Number}} Seat Request')
+
+    #requestSeats.modal-body
+
+        .alert.alert-warning(ng-if='autoApprove') Seats will be auto-approved based on your current roles in FTSS.
+
+        h4.italics
+            | The {{row.dateRange}} class
+            ng-pluralize(count='row.openSeats - peopleCount',
+                            when='{1:" has one seat ", 0: " does not have any more seats ", "other":" has {} seats "}')
+            | available.
+
+        br
+
+        h4: +icon('puzzle-piece', 'Requesting Unit')
+        div(explain='scheduled-request-host', right)
+            select(selectize='Hosts', bind='HostId', remember='host')
+
+        br
+
+        h4: +icon('student_hand', 'Students')
+        div(explain='scheduled-request-students', right)
+            select.wide(selectize='people', max='{{autoApprove ? 99 : row.openSeats}}')
+
+        br
+
+        div(explain='scheduled-request-notes', right)
+            h4: +icon('edit', 'Comments')
+            textarea.form-control(ng-model='Notes')
+
+        br
+
+        h4.pull-right(ng-show='peopleCount > 0')
+            +icon('info-circle', 'You are requesting')
+            b(ng-pluralize, count='peopleCount', when='{1:" one seat","other":" {} seats"}').
+
+        .clearfix
+
+    +modalFooter('Submit Request', '!HostId || peopleCount < 1')
+

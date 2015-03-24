@@ -1,0 +1,5 @@
+include ../mixins
+
+.btn.btn-success.btn-labeled.btn-muted(ng-click='requestSeats()', ng-if='canRequest')
+    span.btn-label: +icon('plus-circle')
+    | Request Seats
