@@ -481,19 +481,21 @@
 
 					var options = this.options;
 
+					scope.data = scope.data || {};
+
 					timeout(function () {
 
-						scope.People = {};
+						scope.data.People = {};
 
 						_.each(val, function (person) {
 
 							var data = options[person];
 
-							scope.People[data.DISPLAYNAME || val] = data.EMAIL || '';
+							scope.data.People[data.DISPLAYNAME || val] = data.EMAIL || '';
 
 						});
 
-						scope.peopleCount = _.size(scope.People);
+						scope.data.peopleCount = _.size(scope.data.People);
 
 						/*	scope.row.name = data.DISPLAYNAME;
 						 scope.row.email = data.EMAIL;

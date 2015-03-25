@@ -11,7 +11,7 @@ form.form-horizontal(name='modal')
 
         h4.italics
             | The {{row.dateRange}} class
-            ng-pluralize(count='row.openSeats - peopleCount',
+            ng-pluralize(count='row.openSeats - data.peopleCount',
                             when='{1:" has one seat ", 0: " does not have any more seats ", "other":" has {} seats "}')
             | available.
 
@@ -19,7 +19,7 @@ form.form-horizontal(name='modal')
 
         h4: +icon('puzzle-piece', 'Requesting Unit')
         div(explain='scheduled-request-host', right)
-            select(selectize='Hosts', bind='HostId', remember='host')
+            select(selectize='Hosts', bind='data.HostId', remember='host')
 
         br
 
@@ -31,15 +31,15 @@ form.form-horizontal(name='modal')
 
         div(explain='scheduled-request-notes', right)
             h4: +icon('edit', 'Comments')
-            textarea.form-control(ng-model='Notes')
+            textarea.form-control(ng-model='data.Notes')
 
         br
 
-        h4.pull-right(ng-show='peopleCount > 0')
+        h4.pull-right(ng-show='data.peopleCount > 0')
             +icon('info-circle', 'You are requesting')
-            b(ng-pluralize, count='peopleCount', when='{1:" one seat","other":" {} seats"}').
+            b(ng-pluralize, count='data.peopleCount', when='{1:" one seat","other":" {} seats"}').
 
         .clearfix
 
-    +modalFooter('Submit Request', '!HostId || peopleCount < 1')
+    +modalFooter('Submit Request', '!data.HostId || data.peopleCount < 1')
 
