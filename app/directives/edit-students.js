@@ -1,8 +1,5 @@
 /*global FTSS, angular */
 
-/**
- *
- */
 (function () {
 
 	"use strict";
@@ -23,27 +20,32 @@
 					'templateUrl': '/partials/edit-students-button.html',
 					'replace'    : true,
 					'scope'      : true,
-					'link'       : function (scope, $el, $attr) {
+					'link'       : function (scope) {
 
 						scope.editStudents = function () {
 
-							var read = FTSS.models('requests');
+							// If we have any registered students, load them async
+							if (scope.row.Approved) {
 
-							read.params.$filter = 'ClassId eq ' + scope.row.Id;
+								var read = FTSS.models('requests');
 
-							scope.row.Approved ? SharePoint.read(read).then(loadModal) : loadModal();
+								read.params.$filter = 'ClassId eq ' + scope.row.Id;
 
-						};
+								SharePoint.read(read).then(function (requests) {
 
-						function loadModal(data) {
+									scope.loadingStudents = false;
+									scope.students = classProcessor.requestProcessor(requests);
 
-							scope.requestView = scope.row;
-							scope.students = classProcessor.requestProcessor(data);
+								});
 
+								scope.loadingStudents = true;
+
+							}
+
+							// Open our modal dialog
 							utilities.modal('modal-edit-students', scope);
 
-						}
-
+						};
 
 					}
 

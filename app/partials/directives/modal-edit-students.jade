@@ -7,7 +7,7 @@ form.form-horizontal(name='modal')
 
     #requestSeats.modal-body
 
-        .lead This class has {{::requestView.allocatedSeats}} reserved seats.
+        .lead This class has {{::row.allocatedSeats}} reserved seats.
 
         table.table.table-split
 
@@ -15,12 +15,14 @@ form.form-horizontal(name='modal')
 
                 tr(hover='scheduled-seats-host', right)
                     td Reserved Host Seats
-                    td.text-center {{::requestView.Host}}
+                    td.text-center {{::row.Host}}
 
                 tr(hover='scheduled-seats-non-host', right)
                     td Other Reserved Seats
-                    td.text-center {{::requestView.Other}}
+                    td.text-center {{::row.Other}}
 
-        +registeredStudents('students')
+        h4.italics(ng-if='loadingStudents') Please wait, loading the list of students...
+
+        div(ng-if='!loadingStudents'): +registeredStudents('students')
 
     .modal-footer: .btn.btn-default(ng-click='close()') Continue
