@@ -466,7 +466,7 @@
 
 			return {
 				'delimiter'   : '+',
-				'loadThrottle': 850,
+				'loadThrottle': 500,
 				'labelField'  : 'DISPLAYNAME',
 				'valueField'  : 'EMAIL',
 				'sortField'   : 'DISPLAYNAME',
