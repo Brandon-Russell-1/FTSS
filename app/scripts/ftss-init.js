@@ -114,7 +114,8 @@
 				// Defaults for angular-strop modal directive
 				angular.extend($modalProvider.defaults, {
 					'container': 'body',
-					'animation': 'am-fade-and-scale'
+					'animation': 'am-fade-and-scale',
+					'template' : '/partials/modal-template.html'
 				});
 
 			}
