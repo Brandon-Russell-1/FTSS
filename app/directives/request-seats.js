@@ -26,10 +26,13 @@
 					'scope'      : true,
 					'link'       : function ($scope) {
 
+						// We use .data because of child scopes with a modal
 						$scope.data = {};
 
+						// Action peformed when the user presses the request seat button
 						$scope.requestSeats = function () {
 
+							//  Action performed when the users presses submit
 							$scope.submit = function () {
 
 								// Our sharepoint batch operation expects an array of operations
@@ -78,10 +81,12 @@
 										            $scope.data.peopleCount
 									});
 
-								SharePoint.batch(send);
+								// Send the operation as a batch (similar to a SQL transaction) to ensure everything worked
+								SharePoint.batch(send).then();
 
 							};
 
+							// Open the modal
 							utilities.modal('modal-request-seats', $scope);
 
 						};
