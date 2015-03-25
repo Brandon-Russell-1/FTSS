@@ -104,23 +104,37 @@ FTSS.ng.service('notifier', [
 		 */
 		function sendEmail(send) {
 
+			var sendClean = {
+
+				'__metadata': 'Notifier',
+				'To'        : sanitize(send.to),
+				'Subject'   : sanitize(send.subject),
+				'Body'      : '\n' + sanitize(send.body) + '\n\n\n\nhttp://go.usa.gov/HCAC'
+
+			};
+
 			// Only create this if this if it is valid and we are running in production mode
 			if (PRODUCTION && send.to && send.subject && send.body) {
 
-				SharePoint.create(
-					{
-
-						'__metadata': 'Notifier',
-						'To'        : send.to,
-						'Subject'   : send.subject,
-						'Body'      : '\n' + send.body.replace(/(undefined|null)/gi, ' ') +
-						            '\n\n\n\nhttp://go.usa.gov/HCAC'
-
-					});
+				SharePoint.create(sendClean);
 
 			} else {
-				console && console.log(send);
+
+				console && console.log(sendClean);
+
 			}
+
+		}
+
+		/**
+		 * Santize any error before we send this data to SP
+		 *
+		 * @param field String
+		 * @returns String
+		 */
+		function sanitize(field) {
+
+			return field.replace(/(undefined|null|NaN)/gi, ' ');
 
 		}
 
