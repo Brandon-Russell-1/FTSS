@@ -25,7 +25,7 @@ form.form-horizontal(name='modal')
 
         h4: +icon('student_hand', 'Students')
         div(explain='scheduled-request-students', right)
-            select.wide(selectize='people', max='{{autoApprove ? 99 : row.openSeats}}')
+            select.wide(selectize='people', max='{{autoApprove ? 99 : row.openSeats}}', placeholder='Search by Last name, First name')
 
         br
 
