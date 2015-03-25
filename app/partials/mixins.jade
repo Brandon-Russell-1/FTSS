@@ -326,9 +326,9 @@ mixin confirmPopover(className, title, text, action)
 
 mixin registeredStudents(bind)
 
-    .well.well-sm(ng-repeat='request in ' + bind)
+    .well.well-sm(ng-repeat='request in #{bind}', class='alert-{{request.style}}')
 
-        .bold.border-bottom(class='text-{{request.statusClass}}')
+        .bold.border-bottom
             | {{request.Status}} ({{request.count}})
             .pull-right {{request.Host.Text}}
 

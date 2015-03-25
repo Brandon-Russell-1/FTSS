@@ -111,6 +111,12 @@ FTSS.ng.service('classProcessor', [
 
 				row.count = _.size(row.Students_JSON);
 
+				row.style = {
+					'Approved': 'success',
+					'Pending' : 'info',
+					'Denied'  : 'danger'
+				}[row.Status]
+
 			});
 
 			return requests;
