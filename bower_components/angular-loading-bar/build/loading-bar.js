@@ -184,12 +184,17 @@ angular.module('cfp.loadingBar', [])
        * Inserts the loading bar element into the dom, and sets it to 2%
        */
       function _start() {
+
         if (!$animate) {
           $animate = $injector.get('$animate');
         }
 
-        var $parent = $document.find($parentSelector).eq(0);
-        $timeout.cancel(completeTimeout);
+	      // FTSS customization
+        var $parent = $document.find('.modal-footer');
+
+	    $parent = ($parent.length ? $parent : $document.find($parentSelector)).eq(0);
+
+	    $timeout.cancel(completeTimeout);
 
         // do not continually broadcast the started event:
         if (started) {
