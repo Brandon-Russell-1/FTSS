@@ -16,32 +16,23 @@ FTSS.ng.service('loading', [
 		 */
 		return function (updateState) {
 
-			// Capture the current loading state
-			var loadingState = (body.className.indexOf('wait') > -1);
-
 			// Always tyr to close the search box
 			FTSS.search && FTSS.search.close();
 
-			// Only do something if the state has changed
-			if (loadingState !== updateState) {
+			if (updateState) {
 
-				if (updateState) {
+				body.className += ' wait';
+				document.body.style.cursor = 'wait';
 
-					body.className += ' wait';
-					document.body.style.cursor = 'wait';
-
-
-				} else {
-
-					body.className = body.className.replace('wait', '');
-					document.body.style.cursor = '';
-
-				}
-
-				$rootScope.loaded = !updateState;
-
+			} else {
+console.trace();
+				body.className = body.className.replace(/wait/g, '');
+				document.body.style.cursor = '';
 
 			}
+
+			$rootScope.loaded = !updateState;
+
 
 		};
 

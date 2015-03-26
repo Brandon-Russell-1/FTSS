@@ -33,7 +33,6 @@ FTSS.ng.service('utilities', [
 			// If already loaded, just execute immediately
 			if (_.all(_completed)) {
 				$timeout(job);
-				loading(false);
 			} else {
 				_jobs.push(job);
 			}
@@ -63,9 +62,14 @@ FTSS.ng.service('utilities', [
 		 */
 		this.setPermaLink = function () {
 
-			$rootScope.permaLink = btoa(JSON.stringify($rootScope.ftss.tagMap) || '') +
-			                       '/' + btoa($rootScope.ftss.searchText);
+			window.location.hash = [
 
+				'#',
+				$rootScope.ftss.viewTitle,
+				btoa(JSON.stringify($rootScope.ftss.tagMap) || ''),
+				btoa($rootScope.ftss.searchText)
+
+			].join('/')
 		};
 
 		/**
@@ -78,8 +82,9 @@ FTSS.ng.service('utilities', [
 
 				loading(true);
 
-				$location.path('/' + (pg || $rootScope.ftss.viewTitle) +
-				               '/' + ($rootScope.permaLink || ''));
+				$rootScope.ftss.searchText = '';
+
+				$location.path('/' + (pg || $rootScope.ftss.viewTitle));
 
 			});
 
@@ -245,7 +250,6 @@ FTSS.ng.service('utilities', [
 			return uuid;
 		};
 
-
 		/**
 		 * Destroys all local caches and resets the app
 		 */
@@ -335,6 +339,8 @@ FTSS.ng.service('utilities', [
 				var test = [],
 
 				    map = sharepointFilters.map();
+
+				FTSS.search.$control.find('.item').removeClass('matched');
 
 				// First, generate the array of tags to test against
 				_.each($rootScope.ftss.tagMap, function (tag, key) {
@@ -429,9 +435,9 @@ FTSS.ng.service('utilities', [
 
 			var limit = dateTools.startDayCreator(moment().add(0 - daysToKeep, 'days'));
 
-			 _.each(data, function (row) {
+			_.each(data, function (row) {
 
-				((row.Start + row.Days) < limit)  && delete data[row.Id];
+				((row.Start + row.Days) < limit) && delete data[row.Id];
 
 			});
 
@@ -452,12 +458,11 @@ FTSS.ng.service('utilities', [
 			return (x > 1000) ? (str[0] + '.' + str[1]).replace('.0', '') + 'K ' : str;
 		};
 
-
 		/**
 		 * Performs the final page initialization.  This is called by multiple async operations so we must
 		 * make several checks before running.
 		 */
-		this.initPage = function (action) {
+		this.initPage = function (action, pending) {
 
 			_TIMER.add('init');
 
@@ -475,9 +480,6 @@ FTSS.ng.service('utilities', [
 
 					var validFilters = sharepointFilters.map(),
 
-					    // eval our link portion of the URL or fall back to false
-					    pending = JSON.parse(atob($rootScope.ftss.$routeParams.link || 'ZmFsc2U')),
-
 					    /**
 					     * Handles pages with tagbox but no valid selected filters
 					     */
@@ -487,6 +489,9 @@ FTSS.ng.service('utilities', [
 						    FTSS.search.$control_input.focus();
 
 					    };
+
+					// eval our link portion of the URL or fall back to false
+					pending = JSON.parse(atob($rootScope.ftss.$routeParams.link || 'ZmFsc2U'));
 
 					if (pending) {
 

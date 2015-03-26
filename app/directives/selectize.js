@@ -9,7 +9,7 @@
 
 	"use strict";
 
-	var builder, custom, options = {}, timeout, utilities;
+	var builder, custom, options = {}, timeout, SharePoint, sharepointFilters, utilities;
 
 	builder = function (scope, opts) {
 
@@ -145,41 +145,41 @@
 
 	custom = {
 
-		'appInit': function (scope, SharePoint) {
+		'appInit': function (scope) {
 
-			var sVal,
+			var doSearch = function (val) {
 
-			    doSearch = function (val) {
+				// This causes our explain hover to go away and the field to lose focus (feels more natural)
+				FTSS.search.$control.blur();
 
-				    // This causes our explain hover to go away and the field to lose focus (feels more natural)
-				    FTSS.search.$control.blur();
+				// Perform our search if it is valid and unique
+				if (val.length) {
 
-				    // Perform our search if it is valid and unique
-				    if (val && val.length > 0 && val !== sVal) {
+					var tags = scope.ftss.tagMap = {};
 
-					    var tags = scope.ftss.tagMap = {};
+					_.each(val, function (v) {
 
-					    // Keep track of our last search value to prevent duplicate searches
-					    sVal = val;
+						var split = v.split(':');
 
-					    _.each(val, function (v) {
+						tags[split[0]] = tags[split[0]] || [];
 
-						    var split = v.split(':');
+						tags[split[0]].push(Number(split[1]) || split[1]);
 
-						    tags[split[0]] = tags[split[0]] || [];
+					});
 
-						    tags[split[0]].push(Number(split[1]) || split[1]);
+					timeout(function () {
 
-						    utilities.setPermaLink();
-						    utilities.navigate();
+						scope.ftss.ignoreNavigation = true;
+						utilities.setPermaLink();
+						scope.ftss.filter = sharepointFilters.compile(scope.ftss.tagMap);
 
-					    });
+					});
 
-				    }
+				}
 
-				    FTSS.search.$control.find('.item').addClass('processed');
+				FTSS.search.$control.find('.item').addClass('processed');
 
-			    };
+			};
 
 			return {
 				'valueField'     : 'id',
@@ -462,7 +462,7 @@
 
 		},
 
-		'people': function (scope, SharePoint, attrs) {
+		'people': function (scope, attrs) {
 
 			return {
 				'delimiter'   : '+',
@@ -521,8 +521,9 @@
 	FTSS.ng.directive('selectize', [
 		'$timeout',
 		'SharePoint',
+		'sharepointFilters',
 		'utilities',
-		function ($timeout, SharePoint, _utilities_) {
+		function ($timeout, _SharePoint_, _sharepointFiltes_, _utilities_) {
 
 			return {
 
@@ -533,7 +534,10 @@
 				'link'    : function (scope, element, attrs) {
 
 					timeout = $timeout;
+					SharePoint = _SharePoint_;
+					sharepointFilters = _sharepointFiltes_;
 					utilities = _utilities_;
+
 
 					timeout(function () {
 
@@ -559,7 +563,7 @@
 
 						} else {
 
-							opts = custom[attrs.selectize](scope, SharePoint, attrs);
+							opts = custom[attrs.selectize](scope, attrs);
 
 						}
 

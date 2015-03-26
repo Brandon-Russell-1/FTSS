@@ -18,8 +18,9 @@ FTSS.ng.service('controllerHelper', [
 	'$timeout',
 	'security',
 	'utilities',
+	'loading',
 
-	function ($modal, SharePoint, $timeout, security, utilities) {
+	function ($modal, SharePoint, $timeout, security, utilities, loading) {
 
 		return function ($scope, opts) {
 
@@ -65,9 +66,6 @@ FTSS.ng.service('controllerHelper', [
 
 							function watchAction(watch) {
 
-								// Attempt to call the page init again (async fun)
-								utilities.initPage('loaded');
-
 								// Only act if there is a valid change to our watch
 								if (watch) {
 
@@ -78,17 +76,22 @@ FTSS.ng.service('controllerHelper', [
 									 */
 									actions.reload = function () {
 
+										loading(true);
+
 										if (!opts.static) {
 
-											var filters = model.params.$filter || [];
+											// Clone the model so we don't corrupt our filters
+											var modelClone = _.cloneDeep(model),
+
+												filters = modelClone.params.$filter || [];
 
 											opts.filter && filters.push(opts.filter);
 
 											watchTarget && filters.push(watch);
 
-											model.params.$filter = filters.join(' and ');
+											modelClone.params.$filter = filters.join(' and ');
 
-											SharePoint.read(model).then(finalize);
+											SharePoint.read(modelClone).then(finalize);
 
 										} else {
 
@@ -148,11 +151,13 @@ FTSS.ng.service('controllerHelper', [
 					actions.data = data;
 
 					// If there was no data found pass the User Empty Message and abort the operation
-					if (_.keys(data || {}).length < 1) {
+					if (_.size(data) < 1) {
+
+						utilities.setLoaded();
 
 						// We must still pass a then() promise to prevent an error, we're just not executing the callback
 						return {
-							'then': utilities.setLoaded
+							'then': angular.noop
 						};
 
 					} else {

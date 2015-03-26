@@ -49,6 +49,13 @@
 					// Start the loading feedback
 					loading(true);
 
+					if ($rootScope.ftss && $rootScope.ftss.ignoreNavigation) {
+
+						delete $rootScope.ftss.ignoreNavigation;
+						return;
+
+					}
+
 					$rootScope.ftss = {
 
 						// Determine if we need to process tags for this view
@@ -88,7 +95,7 @@
 
 						'doPermalink': utilities.setPermaLink,
 
-						'doToggleState': function(name) {
+						'doToggleState': function (name) {
 
 							$rootScope.ftss[name] = !$rootScope.ftss[name];
 
@@ -100,6 +107,8 @@
 					FTSS.pasteAction = false;
 
 					logNavigation();
+
+					utilities.initPage();
 
 				});
 
