@@ -8,43 +8,34 @@
 	"use strict";
 
 	FTSS.ng.run(
-		['$timeout',
-		 '$modal',
-		 '$rootScope',
-		 function ($timeout, $modal, $rootScope) {
+		[
+			'$modal',
+			function ($modal) {
 
-			 if (true || PRODUCTION) {
+				// Check persistent storage for user agreement
+				if (!localStorage.consent) {
 
-				 $timeout(function () {
+					// Create the modal
+					FTSS.consent = $modal(
+						{
+							'contentTemplate'    : '/partials/dod-consent.html',
+							'keyboard'           : false,
+							'backdrop'           : 'static',
+							'animation'          : 'am-fade-and-scale',
+							'backgroundAnimation': 'am-fade',
+							'placement'          : 'center'
+						});
 
-					 if (!sessionStorage.consent) {
+					// Our agree action
+					FTSS.consent.$scope.agree = function () {
 
-						 var actions = $rootScope.$new();
+						localStorage.consent = true;
+						FTSS.consent.destroy();
 
-						 actions.agree = function () {
+					};
+				}
 
-							 sessionStorage.consent = true;
-							 FTSS.consent.hide();
-
-						 };
-
-						 FTSS.consent = $modal({
-							                       'scope'              : actions,
-							                       'contentTemplate'    : '/partials/dod-consent.html',
-							                       'keyboard'           : false,
-							                       'backdrop'           : 'static',
-							                       'animation'          : 'am-fade-and-scale',
-							                       'backgroundAnimation': 'am-fade',
-							                       'placement'          : 'center'
-						                       });
-
-					 }
-
-				 });
-
-			 }
-
-		 }
+			}
 		]
 	);
 
