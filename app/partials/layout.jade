@@ -5,7 +5,9 @@ div(style='display:none!important')
 include ../jade_includes/topbar
 include ../jade_includes/leftbar
 
-#content
+#content.wait
+
+    #spinner: +spinner()
 
     #pageActions(ng-cloak)
         include ../jade_includes/searchbox

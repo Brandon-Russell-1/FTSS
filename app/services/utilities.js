@@ -5,6 +5,7 @@ FTSS.ng.service('utilities', [
 	'loading',
 	'$timeout',
 	'$rootScope',
+	'$route',
 	'$location',
 	'sharepointFilters',
 	'$alert',
@@ -12,7 +13,7 @@ FTSS.ng.service('utilities', [
 	'$http',
 	'dateTools',
 
-	function (loading, $timeout, $rootScope, $location, sharepointFilters, $alert, $modal, $http, dateTools) {
+	function (loading, $timeout, $rootScope, $route, $location, sharepointFilters, $alert, $modal, $http, dateTools) {
 
 		var _jobs = [],
 
@@ -62,14 +63,23 @@ FTSS.ng.service('utilities', [
 		 */
 		this.setPermaLink = function () {
 
-			window.location.hash = [
+			var _originalRoute = $route.current,
 
-				'#',
-				$rootScope.ftss.viewTitle,
-				btoa(JSON.stringify($rootScope.ftss.tagMap) || ''),
-				btoa($rootScope.ftss.searchText)
+			    _once = $rootScope.$on('$locationChangeSuccess', function () {
 
-			].join('/')
+				    $route.current = _originalRoute;
+				    _once();
+
+			    });
+
+			$location.path(
+				[
+					$rootScope.ftss.viewTitle,
+					btoa(JSON.stringify($rootScope.ftss.tagMap) || ''),
+					btoa($rootScope.ftss.searchText || '')
+
+				].join('/'));
+
 		};
 
 		/**
@@ -338,9 +348,9 @@ FTSS.ng.service('utilities', [
 
 				var test = [],
 
-				    map = sharepointFilters.map();
+				    map = sharepointFilters.map(),
 
-				FTSS.search.$control.find('.item').removeClass('matched');
+				    matches = [];
 
 				// First, generate the array of tags to test against
 				_.each($rootScope.ftss.tagMap, function (tag, key) {
@@ -375,7 +385,7 @@ FTSS.ng.service('utilities', [
 						 */
 						if (!req.Archived && _self.deepRead(req, t.testField) === t.testValue) {
 
-							FTSS.search.$control.find('.item[data-value="' + t.id + '"]').addClass('matched');
+							matches.push(t.id);
 
 						}
 
@@ -383,6 +393,14 @@ FTSS.ng.service('utilities', [
 
 					// Always test to ensure there are still tags to test against, otherwise exit the loop
 					return (test.length > 0);
+
+				});
+
+				FTSS.search.$control.find('.matched').removeClass('matched');
+
+				_.each(matches, function (match) {
+
+					FTSS.search.$control.find('.item[data-value="' + match + '"]').addClass('matched');
 
 				});
 

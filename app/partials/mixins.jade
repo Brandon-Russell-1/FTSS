@@ -252,11 +252,6 @@ mixin modalFooter(submitText, defaultShow)
 
         block
 
-        .sending(ng-show='submitted')
-
-            +spinner()
-            | Please wait, sending data...
-
         .btn.btn-success.btn-labeled(ng-click='submit()',
         ng-hide='modal.$invalid || submitted || !modal.$dirty || ' + defaultShow)
 

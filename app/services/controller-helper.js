@@ -42,7 +42,9 @@ FTSS.ng.service('controllerHelper', [
 				 */
 				'bind': function (watchTarget) {
 
-					var page = $scope.ftss.viewTitle;
+					var page = $scope.ftss.viewTitle,
+
+					    last;
 
 					// Copy the model to a local variable for reuse without affecting the original model
 					model = FTSS.models(opts.model);
@@ -69,8 +71,6 @@ FTSS.ng.service('controllerHelper', [
 								// Only act if there is a valid change to our watch
 								if (watch) {
 
-									var last;
-
 									/**
 									 * Re-request data from the server
 									 */
@@ -83,7 +83,7 @@ FTSS.ng.service('controllerHelper', [
 											// Clone the model so we don't corrupt our filters
 											var modelClone = _.cloneDeep(model),
 
-												filters = modelClone.params.$filter || [];
+											    filters = modelClone.params.$filter || [];
 
 											opts.filter && filters.push(opts.filter);
 
@@ -111,6 +111,9 @@ FTSS.ng.service('controllerHelper', [
 
 												// Keep a reference for future update checks
 												last = data;
+
+												// Finally, do our tagHighlighting if this is a tagBox
+												$scope.ftss.isTagBox && utilities.tagHighlight(data);
 
 												// If a callback exists, add it to our async handler
 												callback && utilities.addAsync(function () {
@@ -194,9 +197,6 @@ FTSS.ng.service('controllerHelper', [
 
 					// If there is a defined data processor, then execute it against the data as well
 					process && _.each(data, process);
-
-					// Finally, do our tagHighlighting if this is a tagBox
-					$scope.ftss.isTagBox && utilities.tagHighlight(data);
 
 					// Finally, send our data off to the post-processor
 					actions.postProcess(data);
@@ -388,13 +388,13 @@ FTSS.ng.service('controllerHelper', [
 
 						// Create the angular-strap modal using this model's modal template
 						var modal = $modal({
-							                     'placement'      : opts.modalPlacement || 'top',
-							                     'scope'          : $scope,
-							                     'backdrop'       : 'static',
-							                     'contentTemplate': '/partials/modal-' +
-							                                      (opts.modal || opts.model) +
-							                                      '.html'
-						                     }),
+							                   'placement'      : opts.modalPlacement || 'top',
+							                   'scope'          : $scope,
+							                   'backdrop'       : 'static',
+							                   'contentTemplate': '/partials/modal-' +
+							                                    (opts.modal || opts.model) +
+							                                    '.html'
+						                   }),
 
 						    scope = modal.$scope;
 

@@ -26,7 +26,7 @@ html(lang='en', ng-app='FTSS')
 
         link(href='https://d2jjzg0gg2bs3z.cloudfront.net/' + linkCSS, rel='stylesheet')
 
-    body.wait(ng-controller='mainController',
+    body(ng-controller='mainController',
                 id='{{ftss.viewTitle}}',
                 ng-class='{archived:ftss.showArchived,collapsed:ftss.showAlternateView}',
                 class='{{roleClasses}}')
@@ -38,8 +38,6 @@ html(lang='en', ng-app='FTSS')
         #setupMessage Please wait, getting a couple files before we get started (about 450 KBs).
 
         ng-include(src='"/partials/layout.html"')
-
-        #spinner(ng-cloak): +spinner()
 
         img(src='https://d2jjzg0gg2bs3z.cloudfront.net/mark.gif')
 

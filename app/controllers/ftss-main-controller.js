@@ -11,6 +11,8 @@
 
 	"use strict";
 
+	var lastView;
+
 	/**
 	 * The main controller performs the initial caching functions as well as setting up other app-wide $rootScope objects
 	 */
@@ -44,17 +46,10 @@
 				/**
 				 * Starts the loading indicators on navigation begin
 				 */
-				$rootScope.$on('$locationChangeStart', function (event) {
+				$rootScope.$on('$routeChangeSuccess', function (currentRoute, previousRoute) {
 
 					// Start the loading feedback
 					loading(true);
-
-					if ($rootScope.ftss && $rootScope.ftss.ignoreNavigation) {
-
-						delete $rootScope.ftss.ignoreNavigation;
-						return;
-
-					}
 
 					$rootScope.ftss = {
 

@@ -6,8 +6,6 @@ FTSS.ng.service('loading', [
 
 	function ($rootScope) {
 
-		var body = $('body')[0];
-
 		/**
 		 * Handles the page loading indicators (mouse & spinner)
 		 * Always determines whether content is visible or not
@@ -16,17 +14,17 @@ FTSS.ng.service('loading', [
 		 */
 		return function (updateState) {
 
-			// Always tyr to close the search box
+			// Always try to close the search box
 			FTSS.search && FTSS.search.close();
 
 			if (updateState) {
 
-				body.className += ' wait';
+				document.getElementById('content').className = 'wait';
 				document.body.style.cursor = 'wait';
 
 			} else {
-console.trace();
-				body.className = body.className.replace(/wait/g, '');
+
+				document.getElementById('content').className = '';
 				document.body.style.cursor = '';
 
 			}

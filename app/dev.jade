@@ -58,7 +58,7 @@ html(lang='en', ng-app='FTSS')
 
         link(rel='stylesheet', href='css/app.css')
 
-    body.wait(ng-controller='mainController',
+    body(ng-controller='mainController',
                 id='{{ftss.viewTitle}}',
                 ng-class='{archived:ftss.showArchived,collapsed:ftss.showAlternateView}',
                 class='{{roleClasses}}')
@@ -70,9 +70,6 @@ html(lang='en', ng-app='FTSS')
         #setupMessage Setting up FTSS...
 
         ng-include(src='"/partials/layout.html"')
-
-        #spinner(ng-cloak)
-            +spinner()
 
         script(src='js/vendor.js')
         script(src='js/partials.js')

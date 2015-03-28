@@ -169,7 +169,6 @@
 
 					timeout(function () {
 
-						scope.ftss.ignoreNavigation = true;
 						utilities.setPermaLink();
 						scope.ftss.filter = sharepointFilters.compile(scope.ftss.tagMap);
 
