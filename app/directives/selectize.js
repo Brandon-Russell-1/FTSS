@@ -328,14 +328,8 @@
 							 * @type {*|string}
 							 */
 							v.label = [
-								'<div><h5>',
-								v.PDS,
-								'<em> - ',
-								v.Number,
-								'</em></h5>',
-								'<small>',
-								v.Title,
-								'</small></div>'
+								'<div><h5>', v.PDS, '<em> - ', v.Number, '<right>', v.MDS, '</right></em></h5>',
+								'<small>', v.Title, '</small></div>'
 							].join('');
 
 							/**
