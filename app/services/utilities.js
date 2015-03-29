@@ -94,7 +94,7 @@ FTSS.ng.service('utilities', [
 
 				$rootScope.ftss.searchText = '';
 
-				$location.path('/' + (pg || $rootScope.ftss.viewTitle));
+				$location.path('/' + pg);
 
 			});
 
