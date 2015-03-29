@@ -314,9 +314,10 @@ FTSS.ng.service('controllerHelper', [
 										// Map the data back as the controllers expect it
 										.map('data')
 
-										// Run sortBy first on our mapped data
+										// Run sortBy first on our mapped data (group + sort)
 										.sortBy(function (srt) {
-											        return utilities.deepRead(srt, opts.sort || false);
+											        return utilities.deepRead(srt, opts.group || false) +
+											               utilities.deepRead(srt, opts.sort || false);
 										        })
 
 										// Trim our results
