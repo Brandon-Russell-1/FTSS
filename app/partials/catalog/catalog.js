@@ -14,6 +14,8 @@ FTSS.ng.controller(
 			// Increase to 99 due to the simple binding
 			$scope.ftss.pageLimit = 99;
 
+			$scope.ftss.searchPlaceholder = 'Type here to search the catalog.  Examples: MDS:F-15, PDS:RFV, Robins.';
+
 			var self = controllerHelper($scope, {
 
 				'sort'        : 'PDS',

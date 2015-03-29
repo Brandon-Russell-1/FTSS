@@ -32,6 +32,6 @@ include ../partials/mixins
                                     ng-model='ftss.searchText',
                                     ng-change='ftss.doPermalink()',
                                     ng-model-options="{ debounce: 250 }",
-                                    placeholder='Type here to search within this page.',
+                                    placeholder='{{ftss.searchPlaceholder}}',
                                     tabindex='-1',
                                     required)
