@@ -11,8 +11,6 @@
 
 	"use strict";
 
-	var lastView;
-
 	/**
 	 * The main controller performs the initial caching functions as well as setting up other app-wide $rootScope objects
 	 */
@@ -46,7 +44,7 @@
 				/**
 				 * Starts the loading indicators on navigation begin
 				 */
-				$rootScope.$on('$routeChangeSuccess', function (currentRoute, previousRoute) {
+				$rootScope.$on('$routeChangeSuccess', function () {
 
 					// Start the loading feedback
 					loading(true);
@@ -77,10 +75,14 @@
 						// The user full-text search
 						'searchText'       : atob($routeParams.search || ''),
 
-						//
+						// Default text to show in the search box
+						'searchPlaceholder': 'Type here to search within this page.',
+
+						// Gives child scopes acces to our routes
 						'$routeParams'     : $routeParams,
 
-						'viewTitle'   : $location.path().split('/')[1],
+						// Our current view name
+						'viewTitle'   : $route.current.$$route.routeName,
 
 						// Copy navigate to the scope
 						'doNavigate'  : utilities.navigate,
