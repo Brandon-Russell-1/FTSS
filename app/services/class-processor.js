@@ -170,9 +170,11 @@ FTSS.ng.service('classProcessor', [
 					row.ClassNotes,
 					row.Course.text,
 					row.Instructor.InstructorName || 'needs instructor',
-					row.TTMS,
+					'ttms:' + row.TTMS,
 					row.FTD.text,
-					row.startMoment.format('MMMM')
+					row.startMoment.format('MMMM YYYY'),
+					'room:' + row.Location
+
 				].join(' ');
 
 				// Hide the J4 notes if they have the leading #
