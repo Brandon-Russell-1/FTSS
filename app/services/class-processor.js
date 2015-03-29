@@ -10,7 +10,6 @@ FTSS.ng.service('classProcessor', [
 
 		var _self = this;
 
-
 		this.csvExport = function () {
 
 			scope.$parent.export = function () {
