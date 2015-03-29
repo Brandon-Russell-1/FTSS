@@ -279,8 +279,7 @@ FTSS.ng.service('controllerHelper', [
 										                  // Convert " and " to our split and search
 										                  .replace(/\sand\s/gi, ' ')
 
-										                  // Strip everything else out
-										                  .replace(/[^\w\s\|\-\_\:]/mg, '')
+										                  .replace(/\*/gi, '[\\w-]+')
 
 										                  // Split by spaces
 										                  .split(' '),
