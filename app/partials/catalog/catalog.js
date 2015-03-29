@@ -8,7 +8,8 @@ FTSS.ng.controller(
 		'SharePoint',
 		'controllerHelper',
 		'security',
-		function ($scope, SharePoint, controllerHelper, security) {
+		'courseNumberParser',
+		function ($scope, SharePoint, controllerHelper, security, courseNubmerParser) {
 
 			// Increase to 99 due to the simple binding
 			$scope.ftss.pageLimit = 99;
@@ -86,13 +87,15 @@ FTSS.ng.controller(
 
 				self.initialize(data).then(function (d) {
 
+					// Ger our official MDS for this course
+					d.MDS = courseNubmerParser(d.Number);
+
 					d.search = [
-						d.PDS,
+						'mds:' + d.MDS,
+						'pds:' + d.PDS,
 						d.Number,
 						d.Title
 					].join(' ');
-
-					d.MDS = d.Title.split(' ')[0];
 
 					d.Units = [];
 

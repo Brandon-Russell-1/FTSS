@@ -1,11 +1,10 @@
 include ../mixins
 
-#leftContainer
-
 - var columns = {Course:100}
 
-    div(ng-if='canEdit')
-        +addButton('Add Course')
+#leftContainer
+
+    div(ng-if='canEdit'): +addButton('Add Course')
 
     .wrapped
 
@@ -24,7 +23,6 @@ include ../mixins
                                             ng-class='{archived:row.Archived}',
                                             ng-dblclick='canEdit && edit(false)',
                                             id='row-{{::row.Id}}')
-
 
                             td.uppercase
 
@@ -46,8 +44,7 @@ include ../mixins
                                                 +icon('instructor')
                                     .pull-right.archiveOnly(style='margin-right:10%') *** ARCHIVED COURSE ***
 
-                                .row
-                                    .col-lg-12.peek {{::row.Title}}
+                                .row: .col-lg-12.peek {{::row.Title}}
 
 
-    iframe(name='etca', ng-if='count') {{::FocusCourse}}'
+    iframe(name='etca') {{::FocusCourse}}

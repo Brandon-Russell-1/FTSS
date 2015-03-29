@@ -280,7 +280,7 @@ FTSS.ng.service('controllerHelper', [
 										                  .replace(/\sand\s/gi, ' ')
 
 										                  // Strip everything else out
-										                  .replace(/[^\w\s\|\-\_]/mg, '')
+										                  .replace(/[^\w\s\|\-\_\:]/mg, '')
 
 										                  // Split by spaces
 										                  .split(' '),

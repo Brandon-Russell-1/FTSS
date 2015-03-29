@@ -9,7 +9,7 @@
 
 	"use strict";
 
-	var builder, custom, options = {}, timeout, SharePoint, sharepointFilters, utilities;
+	var builder, custom, options = {}, timeout, SharePoint, sharepointFilters, utilities, courseNumberParser;
 
 	builder = function (scope, opts) {
 
@@ -210,7 +210,7 @@
 					    CACHE_COUNT = 4,
 
 					    // Because of some funky async + closures we need to store a copy of this for action
-					    that = this,
+					    _self = this,
 
 					    loaded = function (data, group, text) {
 
@@ -228,30 +228,23 @@
 						    // .replace('m', 'c') is a really bad hack but needed to not break course lookups :-/
 						    var id = group.toLowerCase().charAt(0).replace('m', 'c') + ':';
 
-						    options[group] = _.chain(data)
+						    options[group] = _.map(data, function (v) {
 
-							    .map(function (v) {
+							    var Id, txt;
 
-								         var Id, txt;
+							    Id = (v.Id || v);
+							    txt = text(v);
 
-								         Id = (v.Id || v);
-								         txt = text(v);
+							    return {
+								    'Id'      : Id,
+								    'id'      : id + Id,
+								    'optgroup': group,
+								    'label'   : v.label || txt,
+								    'data'    : v,
+								    'search'  : v.text || txt.text || txt
+							    };
 
-								         v.search = v.text || txt.text || txt;
-
-								         return {
-									         'Id'      : Id,
-									         'id'      : id + Id,
-									         'optgroup': group,
-									         'label'   : v.label || txt,
-									         'data'    : v,
-									         'search'  : v.search
-								         };
-
-							         })
-
-							    // _.chain() requires value() to get the resultant dataset
-							    .value();
+						    });
 
 						    var headers = {
 							    'Units'           : 'FTD',
@@ -260,7 +253,7 @@
 						    };
 
 						    // Add the option group (header) to our searchBox
-						    that.addOptionGroup(group, {
+						    _self.addOptionGroup(group, {
 							    'label': headers[group] || group,
 							    'value': group
 						    });
@@ -275,7 +268,7 @@
 							                options.Hosts);
 
 							    // Add the options to our searchBox
-							    that.addOption(tagBoxOpts);
+							    _self.addOption(tagBoxOpts);
 
 							    _.each(caches.Units, function (unit) {
 
@@ -299,18 +292,13 @@
 								                 (ftd.Det || 'No FTD') +
 								                 '</right>';
 
-								    return host.Unit;
-
 							    });
 
 							    // Copy that(this) back to FTSS.search
-							    FTSS.search = that;
+							    FTSS.search = _self;
 
 							    // Call completion now
 							    utilities.initPage('selectize');
-
-							    // This shows the page contents for anything still hiding...
-							    $('#pageActions .hide').removeClass('hide');
 
 						    }
 
@@ -331,6 +319,8 @@
 
 							// Save for later  our unit listings
 							v.Units = [];
+
+							v.MDS = courseNumberParser(v.Number);
 
 							/**
 							 * Generates string format for dropdown display
@@ -358,7 +348,8 @@
 							 * @type {*|string}
 							 */
 							v.text = [
-								v.PDS,
+								'pds:' + v.PDS,
+								'mds:' + v.MDS,
 								v.Number,
 								v.Title
 							].join(' ');
@@ -522,7 +513,8 @@
 		'SharePoint',
 		'sharepointFilters',
 		'utilities',
-		function ($timeout, _SharePoint_, _sharepointFiltes_, _utilities_) {
+		'courseNumberParser',
+		function ($timeout, _SharePoint_, _sharepointFiltes_, _utilities_, _courseNumberParser_) {
 
 			return {
 
@@ -536,6 +528,7 @@
 					SharePoint = _SharePoint_;
 					sharepointFilters = _sharepointFiltes_;
 					utilities = _utilities_;
+					courseNumberParser = _courseNumberParser_;
 
 
 					timeout(function () {
