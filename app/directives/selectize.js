@@ -246,16 +246,14 @@
 
 						    });
 
-						    var headers = {
-							    'Units'           : 'FTD',
-							    'MasterCourseList': 'Course',
-							    'Hosts'           : 'Host Unit'
-						    };
-
 						    // Add the option group (header) to our searchBox
 						    _self.addOptionGroup(group, {
-							    'label': headers[group] || group,
-							    'value': group
+							    'label'  : {
+								    'Units'           : 'FTD',
+								    'MasterCourseList': 'Course',
+								    'Hosts'           : 'Host Unit'
+							    }[group] || group,
+							    'value'  : group
 						    });
 
 						    // Keep track of our async loads and fire once they are all done (not using $q.all())
@@ -422,7 +420,7 @@
 
 						loaded(hosts, 'Hosts', function (host) {
 
-							host.Text = host.Unit;
+							host.text = host.Unit;
 
 							return host.Unit;
 
@@ -435,9 +433,7 @@
 						loaded(response, 'Instructors', function (val) {
 
 							// Fix for stupid SP bug--I hate SP
-							val.InstructorEmail = val.InstructorEmail ?
-							                      val.InstructorEmail.replace('mailto:', '') :
-							                      '';
+							val.InstructorEmail = (val.InstructorEmail || '').replace('mailto:', '');
 
 							val.label = val.InstructorName;
 
