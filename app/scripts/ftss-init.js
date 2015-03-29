@@ -98,7 +98,8 @@
 							'templateUrl'         : '/partials/' + route + '.html',
 							'controller'          : route + 'Controller',
 							'reloadOnSearch'      : false,
-							'caseInsensitiveMatch': true
+							'caseInsensitiveMatch': true,
+							'routeName'           : route
 
 						});
 
