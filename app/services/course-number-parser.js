@@ -6,6 +6,7 @@ FTSS.ng.service('courseNumberParser', [
 
 		// Current as of 1 April 2015
 		var _mdsTable = {
+			'F3': 'Faculty Development',
 			'00': 'A-10',
 			'01': 'B-1B',
 			'02': 'B-2',
