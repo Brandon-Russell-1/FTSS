@@ -55,7 +55,8 @@
 			'$locationProvider',
 			'$compileProvider',
 			'$sceDelegateProvider',
-			function ($routeProvider, $modalProvider, $locationProvider, $compileProvider, $sceDelegateProvider) {
+			'cfpLoadingBarProvider',
+			function ($routeProvider, $modalProvider, $locationProvider, $compileProvider, $sceDelegateProvider, cfpLoadingBarProvider) {
 
 				// Disable angular debugging for production mode
 				$compileProvider.debugInfoEnabled(!PRODUCTION);
@@ -63,24 +64,26 @@
 				// Allow AF Portal iframe
 				$sceDelegateProvider.resourceUrlWhitelist(['self', new RegExp('^https://www.my.af.mil/.+$')]);
 
+				// Disable the spinner globally
+				cfpLoadingBarProvider.includeSpinner = false;
+
 				// Our route list for various pages/actions
-				var routes =
-					    [
-						    'home',
-						    'requirements',
-						    'scheduled',
-						    'scheduled-ftd',
-						    'ttms',
-						    'requests',
-						    'catalog',
-						    'manage-ftd',
-						    'backlog',
-						    'hosts',
-						    'admin',
-						    'admin-instructors',
-						    'reset',
-						    'production-ftd'
-					    ];
+				var routes = [
+					'home',
+					'requirements',
+					'scheduled',
+					'scheduled-ftd',
+					'ttms',
+					'requests',
+					'catalog',
+					'manage-ftd',
+					'backlog',
+					'hosts',
+					'admin',
+					'admin-instructors',
+					'reset',
+					'production-ftd'
+				];
 
 				while (routes.length) {
 
@@ -88,6 +91,7 @@
 					var route = routes.shift();
 
 					if (route !== 'reset') {
+
 						// Route based on name / linker / search to a controller of nameController
 						$routeProvider.when('/' + route + '/:link?/:search?', {
 
