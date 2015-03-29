@@ -396,6 +396,7 @@ FTSS.ng.service('utilities', [
 
 				});
 
+				FTSS.search.$control.find('.item').addClass('processed');
 				FTSS.search.$control.find('.matched').removeClass('matched');
 
 				_.each(matches, function (match) {
@@ -541,8 +542,6 @@ FTSS.ng.service('utilities', [
 
 							$rootScope.ftss.tagMap = tagMap;
 							$rootScope.ftss.filter = filter;
-
-							FTSS.search.$control.find('.item').addClass('processed');
 
 						} else {
 

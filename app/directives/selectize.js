@@ -170,7 +170,7 @@
 					timeout(function () {
 
 						utilities.setPermaLink();
-						scope.ftss.filter = sharepointFilters.compile(scope.ftss.tagMap);
+						scope.ftss.filter = sharepointFilters.compile(tags);
 
 					});
 

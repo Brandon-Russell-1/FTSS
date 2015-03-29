@@ -48,6 +48,8 @@ FTSS.ng.service('sharepointFilters', [
 
 			return function () {
 
+				FTSS.search.clear(true);
+
 				var page = $location.path().split('/')[1];
 
 				// Temporary list of valid filter keys for this page

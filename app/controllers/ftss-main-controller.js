@@ -24,7 +24,6 @@
 			'loading',
 			'utilities',
 			'sharepointFilters',
-			// Unused $route added to DI to fix nested view issue, https://github.com/angular/angular.js/issues/1213
 			'$route',
 			function ($rootScope, $location, $routeParams, security, loading, utilities, sharepointFilters, $route) {
 
@@ -66,6 +65,9 @@
 						// Contains our tag-based filters if used
 						'filter'           : false,
 
+						// Reset our search content
+						'tagMap'           : [],
+
 						// The visible item count user feedback
 						'itemCount'        : {
 							'value'   : '-',
@@ -82,13 +84,13 @@
 						'$routeParams'     : $routeParams,
 
 						// Our current view name
-						'viewTitle'   : $route.current.$$route.routeName,
+						'viewTitle'        : $route.current.$$route.routeName,
 
 						// Copy navigate to the scope
-						'doNavigate'  : utilities.navigate,
+						'doNavigate'       : utilities.navigate,
 
 						// Copy createLink to the scope
-						'doCreateLink': utilities.createLink,
+						'doCreateLink'     : utilities.createLink,
 
 						'doPermalink': utilities.setPermaLink,
 
