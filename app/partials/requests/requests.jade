@@ -10,17 +10,17 @@ include ../mixins
         .double.denied(hover='Request denied'): +icon('times')
         .double.cancelled(hover='Class cancelled'): +icon('exclamation-circle')
 
-    td {{::row.TTMS}}
+    td {{::row.Class.TTMS}}
 
-    td {{::row.dateRange}}
+    td {{::row.Class.dateRange}}
 
-    td {{::row.request.Host.Unit}}
+    td {{::row.Class.HostUnit.Unit}}
 
-    td.double {{::row.openSeats}}
+    td.double {{::row.Class.openSeats}}
 
-    td.double {{::row.request.Students.length}}
+    td.double {{::row.seatCount}}
 
-    td.italics {{::row.request.Notes}}
+    td.italics {{::row.Notes}}
 
     td
         .pull-right

@@ -91,13 +91,26 @@
 
 			    'source': 'Requests',
 			    'params': {
+				    '$filter': [
+				        "Status eq 'Pending'"
+				    ],
+				    '$expand': [
+					    'Class'
+				    ],
 				    '$select': [
 					    'Status',
 					    'HostId',
+					    'UnitId',
 					    'Notes',
 					    'Response',
 					    'Students_JSON',
-					    'ClassId'
+					    'Class/TTMS',
+					    'Class/CourseId',
+					    'Class/Start',
+					    'Class/Days',
+					    'Class/Host',
+					    'Class/Other',
+					    'Class/Approved'
 				    ]
 			    }
 
