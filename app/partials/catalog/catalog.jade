@@ -19,10 +19,10 @@ include ../mixins
                     thead: th Course
 
                     tbody
-                        tr.traverse(ng-repeat='row in group track by row.Id',
-                                            ng-class='{archived:row.Archived}',
-                                            ng-dblclick='canEdit && edit(false)',
-                                            id='row-{{::row.Id}}')
+                        tr.am-slide-top.traverse(ng-repeat='row in group track by row.Id',
+                                                            ng-class='{archived:row.Archived}',
+                                                            ng-dblclick='canEdit && edit(false)',
+                                                            id='row-{{::row.Id}}')
 
                             td.uppercase
 
