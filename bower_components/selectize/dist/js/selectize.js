@@ -2382,7 +2382,7 @@
 		openOnFocus: true,
 		maxOptions: 1000,
 		maxItems: null,
-		hideSelected: null,
+		hideSelected: false,
 		addPrecedence: false,
 		selectOnTab: true,
 		preload: false,
