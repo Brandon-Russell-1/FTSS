@@ -88,16 +88,17 @@ FTSS.ng.service('utilities', [
 		 */
 		this.navigate = function (pg) {
 
-			$timeout(function () {
+			loading(true);
 
-				loading(true);
+			// The visible item count user feedback
+			$rootScope.ftss.itemCount = {
+				'value'   : '-',
+				'overload': false
+			};
 
-				$rootScope.ftss.searchText = '';
+			$rootScope.ftss.searchText = '';
 
-				$location.path('/' + pg);
-
-			});
-
+			$location.path('/' + pg);
 
 		};
 
