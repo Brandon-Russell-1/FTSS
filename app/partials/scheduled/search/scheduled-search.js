@@ -38,8 +38,10 @@ FTSS.ng.controller(
 
 				$scope.canEdit = $scope.canRequest = security.hasRole(['mtf', 'ftd', 'scheduling']);
 
+				// Reference for course headers:  IMDS: XXXXX    G081: XXXXX
 				$scope.imds_g081 = {};
 
+				// Generate the IMDS/G081 mappings once (rather than multiple times for each class)
 				_(data).pluck('CourseId').unique().each(function (id) {
 
 					var course = caches.MasterCourseList[id];
