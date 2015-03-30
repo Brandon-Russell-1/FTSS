@@ -40,6 +40,24 @@
 				// Setup our SP group-based security
 				security.initialize();
 
+				$rootScope.ftss = {
+
+					// Copy navigate to the scope
+					'doNavigate'  : utilities.navigate,
+
+					// Copy createLink to the scope
+					'doCreateLink': utilities.createLink,
+
+					'doPermalink': utilities.setPermaLink,
+
+					'doToggleState': function (name) {
+
+						$rootScope.ftss[name] = !$rootScope.ftss[name];
+
+					}
+
+				};
+
 				/**
 				 * Starts the loading indicators on navigation begin
 				 */
@@ -48,61 +66,44 @@
 					// Start the loading feedback
 					loading(true);
 
-					$rootScope.ftss = {
+					// Determine if we need to process tags for this view
+					$rootScope.ftss.isTagBox = !!sharepointFilters.map();
 
-						// Determine if we need to process tags for this view
-						'isTagBox'         : !!sharepointFilters.map(),
+					// Limit the results for a view
+					$rootScope.ftss.pageLimit = FTSS.prefs.limit || 50;
 
-						// Limit the results for a view
-						'pageLimit'        : FTSS.prefs.limit || 50,
+					// Toggle archived item visibility
+					$rootScope.ftss.showArchived = false;
 
-						// Toggle archived item visibility
-						'showArchived'     : false,
+					// Toggle alterate view layout
+					$rootScope.ftss.showAlternateView = false;
 
-						// Toggle alterate view layout
-						'showAlternateView': false,
+					// Contains our tag-based filters if used
+					$rootScope.ftss.filter = false;
 
-						// Contains our tag-based filters if used
-						'filter'           : false,
+					// Reset our search content
+					$rootScope.ftss.tagMap = [];
 
-						// Reset our search content
-						'tagMap'           : [],
-
-						// The visible item count user feedback
-						'itemCount'        : {
-							'value'   : '-',
-							'overload': false
-						},
-
-						// The user full-text search
-						'searchText'       : atob($routeParams.search || ''),
-
-						// Default text to show in the search box
-						'searchPlaceholder': 'Type here to search within this page.',
-
-						// Gives child scopes acces to our routes
-						'$routeParams'     : $routeParams,
-
-						// Our current view name
-						'viewTitle'        : $route.current.$$route.routeName,
-
-						// Copy navigate to the scope
-						'doNavigate'       : utilities.navigate,
-
-						// Copy createLink to the scope
-						'doCreateLink'     : utilities.createLink,
-
-						'doPermalink': utilities.setPermaLink,
-
-						'doToggleState': function (name) {
-
-							$rootScope.ftss[name] = !$rootScope.ftss[name];
-
-						}
-
+					// The visible item count user feedback
+					$rootScope.ftss.itemCount = {
+						'value'   : '-',
+						'overload': false
 					};
 
+					// The user full-text search
+					$rootScope.ftss.searchText = atob($routeParams.search || '');
+
+					// Default text to show in the search box
+					$rootScope.ftss.searchPlaceholder = 'Type here to search within this page.';
+
+					// Gives child scopes acces to our routes
+					$rootScope.ftss.$routeParams = $routeParams;
+
+					// Our current view name
+					$rootScope.ftss.viewTitle = $route.current.$$route.routeName;
+
 					FTSS.selectizeInstances = {};
+
 					FTSS.pasteAction = false;
 
 					logNavigation();
