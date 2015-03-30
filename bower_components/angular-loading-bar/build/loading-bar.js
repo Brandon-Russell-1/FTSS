@@ -190,7 +190,7 @@ angular.module('cfp.loadingBar', [])
         }
 
 	      // FTSS customization
-        var $parent = $document.find('.modal-footer');
+        var $parent = $document.find('.modal-body');
 
 	    $parent = ($parent.length ? $parent : $document.find($parentSelector)).eq(0);
 
