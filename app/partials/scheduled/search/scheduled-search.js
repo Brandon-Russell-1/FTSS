@@ -17,7 +17,7 @@ FTSS.ng.controller(
 			var self = controllerHelper($scope, {
 
 				'sort' : 'Start',
-				'group': 'CourseId',
+				'group': 'Header',
 				'model': 'scheduledSearch',
 
 				'finalProcess': function (groups) {
@@ -32,68 +32,80 @@ FTSS.ng.controller(
 
 			});
 
-			self
+			self.bind('ftss.filter').then(function (data) {
 
-				.bind('ftss.filter')
+				$scope.autoApprove = security.hasRole(['ftd', 'scheduling']);
 
-				.then(function (data) {
+				$scope.canEdit = $scope.canRequest = security.hasRole(['mtf', 'ftd', 'scheduling']);
 
-					      $scope.autoApprove = security.hasRole(['ftd', 'scheduling']);
+				$scope.imds_g081 = {};
 
-					      $scope.canEdit = $scope.canRequest = security.hasRole(['mtf', 'ftd', 'scheduling']);
+				_(data).pluck('CourseId').unique().each(function (id) {
 
-					      self.initialize(data).then(function (row) {
+					var course = caches.MasterCourseList[id];
 
-						      classProcessor.processRow(row);
+					$scope.imds_g081[id] = [
+						course.IMDS && 'IMDS: ' + course.IMDS,
+						course.G081 && 'G081: ' + course.G081
+					].join('    ');
 
-						      // Hide full classes by default
-						      row.Archived = (row.openSeats < 1);
+				}).value();
 
-						      // The URL for our mailTo link
-						      row.mailFTD = row.FTD.Email +
-						                    '?subject=FTSS Class Inquiry for ' +
-						                    row.Course.PDS +
-						                    ' Class #' +
-						                    row.TTMS;
+				self.initialize(data).then(function (row) {
 
-						      if (row.MTT) {
+					classProcessor.processRow(row);
 
-							      row.locationName = row.MTT;
-							      row.locationCoords = caches.geodataFlat[row.MTT].toString()
+					// Create a grouping header for this view
+					row.Header = row.Course.PDS + ' - ' + row.Course.Number + ' (' + row.Course.MDS + ')';
 
-						      } else {
+					// Hide full classes by default
+					row.Archived = (row.openSeats < 1);
 
-							      row.locationName = row.FTD.LongName;
-							      row.locationCoords = row.FTD.Location;
+					// The URL for our mailTo link
+					row.mailFTD = row.FTD.Email +
+					              '?subject=FTSS Class Inquiry for ' +
+					              row.Course.PDS +
+					              ' Class #' +
+					              row.TTMS;
 
-						      }
+					if (row.MTT) {
 
-						      // This is the hover image for each FTD
-						      row.map = row.locationCoords ?
+						row.locationName = row.MTT;
+						row.locationCoords = caches.geodataFlat[row.MTT].toString()
 
-						                'https://maps.googleapis.com/maps/api/staticmap?' +
-						                'sensor=false&size=400x300&zoom=5&markers=color:red|' +
-						                row.locationCoords.replace(/\s/g, '')
+					} else {
 
-							      : '';
+						row.locationName = row.FTD.LongName;
+						row.locationCoords = row.FTD.Location;
 
-						      /**
-						       * Allows J4/FTD members the ability to edit the Class # directly
-						       *
-						       * @type {Function}
-						       */
-						      row.updateTTMS = $scope.autoApprove ? function () {
+					}
 
-							      self._update(row, {
-								      '__metadata': row.__metadata,
-								      'TTMS'      : row.TTMS
-							      });
+					// This is the hover image for each FTD
+					row.map = row.locationCoords ?
 
-						      } : angular.noop;
+					          'https://maps.googleapis.com/maps/api/staticmap?' +
+					          'sensor=false&size=400x300&zoom=5&markers=color:red|' +
+					          row.locationCoords.replace(/\s/g, '')
 
-					      });
+						: '';
 
-				      });
+					/**
+					 * Allows J4/FTD members the ability to edit the Class # directly
+					 *
+					 * @type {Function}
+					 */
+					row.updateTTMS = $scope.autoApprove ? function () {
+
+						self._update(row, {
+							'__metadata': row.__metadata,
+							'TTMS'      : row.TTMS
+						});
+
+					} : angular.noop;
+
+				});
+
+			});
 
 		}
 	])

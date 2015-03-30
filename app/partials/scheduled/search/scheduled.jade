@@ -8,11 +8,16 @@ include ../../mixins
 
         .lead(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
 
-            span {{::group[0].Course.PDS}} - {{::group[0].Course.Number}}
+            span {{::header}}
 
             span.pull-right {{group.length}}
 
-        .lead.italics(style='letter-spacing: .1em;font-size: 1.2em;') {{::group[0].Course.Title}}
+        .lead(style='letter-spacing: .1em;font-size: 1.2em;')
+            .pull-left.italics {{::group[0].Course.Title}}
+            .pull-right {{::imds_g081[group[0].CourseId]}}
+
+        br
+        br
 
         // --------------------------------------------------------
 
