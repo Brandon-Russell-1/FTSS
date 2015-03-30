@@ -250,7 +250,7 @@
 						    _self.addOptionGroup(group, {
 							    'label'  : {
 								    'Units'           : 'FTD',
-								    'MasterCourseList': 'Course',
+								    'MasterCourseList': 'Course<right>MDS</right>',
 								    'Hosts'           : 'Host Unit'
 							    }[group] || group,
 							    'value'  : group
