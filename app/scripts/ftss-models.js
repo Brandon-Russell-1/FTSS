@@ -104,6 +104,7 @@
 					    'Notes',
 					    'Response',
 					    'Students_JSON',
+					    'Class/Id',
 					    'Class/TTMS',
 					    'Class/CourseId',
 					    'Class/Start',

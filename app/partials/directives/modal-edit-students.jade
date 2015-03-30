@@ -2,12 +2,11 @@ include ../mixins
 
 form.form-horizontal(name='modal')
 
-    .modal-header.caps
-        h3: +icon('student_hand', 'View Registered Students')
+    .modal-header.caps: h3: +icon('student_hand', 'View Registered Students')
 
     #requestSeats.modal-body
 
-        h4.italics This class has {{::row.allocatedSeats}} reserved seats.
+        h4.italics This class has {{::data.allocatedSeats}} reserved seats.
 
         br
 
@@ -17,11 +16,11 @@ form.form-horizontal(name='modal')
 
                 tr(hover='scheduled-seats-host', right)
                     td Reserved Host Seats
-                    td.text-center {{::row.Host}}
+                    td.text-center {{::data.Host}}
 
                 tr(hover='scheduled-seats-non-host', right)
                     td Other Reserved Seats
-                    td.text-center {{::row.Other}}
+                    td.text-center {{::data.Other}}
 
         h4.italics(ng-if='loadingStudents') Please wait, loading the list of students...
 

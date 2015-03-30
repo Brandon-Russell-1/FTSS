@@ -25,17 +25,16 @@ include ../mixins
     td
         .pull-right
 
-            span.btn.btn-sm.btn-info.btn-muted(ng-click='row.showStudents()'): +icon('student_hand')
+            span#edit: edit-students
 
             span.btn.btn-sm.btn-success.btn-muted.no-archive(
                 hover='Approve seat request',
                 bs-popover,
-                placement='left',
+                left,
                 template='/partials/popover-approve-request.html'): +icon('check')
 
-            span.btn.btn-sm.btn-warning.btn-muted.no-archive(
+            span.btn.btn-sm.btn-danger.btn-muted.no-archive(
                 hover='Deny seat request',
-                no-arrow,
                 bs-popover,
-                placement='left',
+                left,
                 template='/partials/popover-deny-request.html'): +icon('times')

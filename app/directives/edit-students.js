@@ -22,14 +22,16 @@
 					'scope'      : true,
 					'link'       : function (scope) {
 
+						scope.data = scope.row.Class || scope.row;
+
 						scope.editStudents = function () {
 
 							// If we have any registered students, load them async
-							if (scope.row.Approved) {
+							if (scope.data.Approved) {
 
 								var read = FTSS.models('requests');
 
-								read.params.$filter = 'ClassId eq ' + scope.row.Id;
+								read.params.$filter = 'ClassId eq ' + scope.data.Id;
 
 								SharePoint.read(read).then(function (requests) {
 

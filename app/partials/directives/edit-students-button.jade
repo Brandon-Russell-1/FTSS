@@ -1,5 +1,9 @@
 include ../mixins
 
-.btn.btn-info.btn-labeled.btn-muted(ng-click='editStudents()', ng-if='row.allocatedSeats')
+.btn.btn-info.btn-labeled.btn-muted(ng-click='editStudents()',
+                                    ng-if='data.allocatedSeats',
+                                    hover='edit-students',
+                                    left
+                                    )
     span.btn-label: +icon('student_hand')
-    | View Students ({{::row.allocatedSeats}})
+    span.btn-text View Students ({{::data.allocatedSeats}})
