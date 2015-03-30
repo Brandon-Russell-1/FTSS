@@ -24,7 +24,7 @@ include ../../mixins
 
         .row(ng-if='!ftss.showAlternateView', ng-repeat='row in group track by row.Id')
 
-            .btn.btn-success.openSeats(ng-click='row.request()') {{::row.openSeats}}
+            .btn.btn-success.openSeats(ng-click='requestSeats()') {{::row.openSeats}}
 
             .well.well-sm
 

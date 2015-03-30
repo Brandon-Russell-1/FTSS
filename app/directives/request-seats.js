@@ -26,11 +26,15 @@
 					'scope'      : true,
 					'link'       : function ($scope) {
 
+						if (!$scope.canRequest) {
+							return;
+						}
+
 						// We use .data because of child scopes with a modal
 						$scope.data = {};
 
-						// Action peformed when the user presses the request seat button
-						$scope.requestSeats = function () {
+						// Action performed when the user presses the request seat button (use $parent for external use)
+						$scope.$parent.requestSeats = function () {
 
 							//  Action performed when the users presses submit
 							$scope.submit = function () {
