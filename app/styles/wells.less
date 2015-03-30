@@ -29,29 +29,6 @@
 	transition: all 500ms;
 }
 
-.collapsed {
-	.well {
-		max-height: 35px !important;
-		overflow: hidden;
-		margin-bottom: 5px;
-		padding: 0 15px;
-	}
-	h4 {
-		font-weight: 100;
-	}
-}
-
-.well .rollup, .collapsed .well .rollupOnly {
-	opacity: 1;
-	transition: opacity 500ms ease;
-}
-
-.collapsed .well .rollup,
-.well .rollupOnly {
-	opacity: 0;
-	transition: opacity 500ms ease;
-}
-
 .row:hover .well {
 	a:not(.btn) {
 		color: #428bca;

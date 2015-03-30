@@ -24,7 +24,7 @@ html(lang='en', ng-app='FTSS')
 
     body(ng-controller='mainController',
                 id='{{ftss.viewTitle}}',
-                ng-class='{archived:ftss.showArchived,collapsed:ftss.showAlternateView}',
+                ng-class='{archived:ftss.showArchived,alternateView:ftss.showAlternateView}',
                 class='{{roleClasses}}')
         img#bg1
         img#bg2

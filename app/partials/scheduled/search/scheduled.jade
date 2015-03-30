@@ -1,7 +1,7 @@
 include ../../mixins
 
 .wrapped.noAdd(ng-class='{autoApprove:autoApprove}')
-
+    +icon('collapse')
     +userInstructions('scheduled', true)
 
     .group(ng-repeat='(header, group) in groups')

@@ -95,14 +95,17 @@
 	cursor: pointer !important;
 }
 
-#toggleArchive .icon.trash_hide, body.archived #toggleArchive .icon.trash_show, #toggleExpand .icon.expand, body.collapsed #toggleExpand .icon.collapse {
+#toggleArchive .icon.trash_hide,
+body.archived #toggleArchive .icon.trash_show,
+#toggleExpand .icon.expand-arrow,
+body.alternateView #toggleExpand .icon.collapse-arrow {
 	display: inline !important;
 }
 
 body.archived #toggleArchive .icon.trash_hide,
 #toggleArchive .icon.trash_show,
-body.collapsed #toggleExpand .icon.expand,
-#toggleExpand .icon.collapse {
+body.alternateView #toggleExpand .icon.expand-arrow,
+#toggleExpand .icon.collapse-arrow {
 	display: none !important;
 }
 
