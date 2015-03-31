@@ -3,8 +3,8 @@ include ../partials/mixins
 #searchButtons.no-pad.pull-right(style='width:100px')
 
     span#toggleExpand(ng-click='ftss.doToggleState("showAlternateView")', hover='button-collapse', class='btn btn-default', left)
-        +icon('expand-arrow')
-        +icon('collapse-arrow')
+        +icon('flip-view')
+        +icon('flip-view-alt')
 
     span#toggleArchive(ng-click='ftss.doToggleState("showArchived")', hover='button-archive', class='btn btn-default', left)
         +icon('trash_hide')

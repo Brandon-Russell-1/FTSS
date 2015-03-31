@@ -97,16 +97,24 @@
 
 #toggleArchive .icon.trash_hide,
 body.archived #toggleArchive .icon.trash_show,
-#toggleExpand .icon.expand-arrow,
-body.alternateView #toggleExpand .icon.collapse-arrow {
+#toggleExpand .icon.flip-view-alt,
+body.alternateView #toggleExpand .icon.flip-view {
 	display: inline !important;
 }
 
 body.archived #toggleArchive .icon.trash_hide,
 #toggleArchive .icon.trash_show,
-body.alternateView #toggleExpand .icon.expand-arrow,
-#toggleExpand .icon.collapse-arrow {
+body.alternateView #toggleExpand .icon.flip-view-alt,
+#toggleExpand .icon.flip-view {
 	display: none !important;
+}
+#toggleExpand {
+	padding: 3px !important;
+	margin-top: -5px !important;
+
+	.icon {
+		font-size: 1.5em !important;
+	}
 }
 
 traverse {
@@ -173,3 +181,4 @@ traverse {
 .checkbox:not(.active) .yes, .checkbox.active .no {
 	display: none;
 }
+
