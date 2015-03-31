@@ -1,26 +1,23 @@
 include ../mixins
 
 mixin miniLink(page, tag, name)
-    span.link(ng-click='ftss.doNavigate("' + page + '")')
-        +icon(tag)
-        span= name
+    span.link(ng-click='ftss.doNavigate("' + page + '")'): +icon(tag, name)
 
 
 mixin panelGroup(ico, title, type)
     .panel(class='panel-' + type + ' text-' + type)
 
-        .panel-heading
-            h4.panel-title
-                +icon(ico, title)
+        .panel-heading: h4.panel-title: +icon(ico, title)
 
-        .panel-body
-            block
+        .panel-body: block
 
-#slideshowToggle(hover='Toggle viewing the AF Week in Photos.', no-arrow, ng-click='toggleSlides = !toggleSlides')
-    +icon('camera')
+#slideshowToggle(flickr,
+                    hover='Toggle viewing the AF Week in Photos.',
+                    no-arrow,
+                    ng-click='toggleSlides = !toggleSlides'): +icon('camera')
 
 .wrapped(style='top:-4em;padding-top:1em;overflow:hidden',
-            ng-class='{"showContent":toggleSlides}')
+            ng-class='{"showContent":!toggleSlides}')
 
     .jumbotron('style="margin:-25px;padding:10px;padding-left:25px"')
         h1 Field Training Scheduling System

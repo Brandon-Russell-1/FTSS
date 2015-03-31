@@ -9,14 +9,7 @@
 		[
 			'$scope',
 			'utilities',
-			'flickr',
-			function ($scope, utilities, flickr) {
-
-				// Init flickr service
-				flickr.init();
-
-				// We will be using the flickr slides how on this page
-				$scope.toggleSlides = true;
+			function ($scope, utilities) {
 
 				// Add to the async handler in case this returns first (likely)
 				utilities.addAsync(function () {
@@ -26,8 +19,6 @@
 					utilities.setLoaded();
 
 				});
-
-				$scope.$on('$destroy', flickr.destroy);
 
 			}
 		]);
