@@ -29,6 +29,7 @@ include ../partials/mixins
     #searchBox(explain='searchBoxTip', top, no-arrow)
 
         input.search.search-large(type='search',
+                                    ng-disabled='!ftss.itemCount.total',
                                     ng-model='ftss.searchText',
                                     ng-change='ftss.doPermalink()',
                                     ng-model-options="{ debounce: 250 }",

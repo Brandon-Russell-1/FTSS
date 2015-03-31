@@ -226,6 +226,9 @@ FTSS.ng.service('controllerHelper', [
 
 								var sifter, watcher, exec;
 
+								// Update our total data count
+								$scope.ftss.itemCount.total = _.size(data);
+
 								// Initialize sifter with the array of data after passing through some string sanitization
 								sifter = _(data)
 

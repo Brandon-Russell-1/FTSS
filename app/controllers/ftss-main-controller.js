@@ -86,6 +86,7 @@
 
 					// The visible item count user feedback
 					$rootScope.ftss.itemCount = {
+						'total'   : 0,
 						'value'   : '-',
 						'overload': false
 					};
