@@ -10,9 +10,9 @@ FTSS.ng.controller(
 		'classProcessor',
 		'controllerHelper',
 		'security',
-		'utilities',
-		'SharePoint',
-		function ($scope, $modal, notifier, classProcessor, controllerHelper, security, utilities, SharePoint) {
+		function ($scope, $modal, notifier, classProcessor, controllerHelper, security) {
+
+			$scope.ftss.searchPlaceholder = 'Type here to search within the available courses.';
 
 			var self = controllerHelper($scope, {
 

@@ -15,6 +15,8 @@ FTSS.ng.controller(
 
 			$scope.ftss.pageLimit = 99;
 
+			$scope.ftss.searchPlaceholder = 'Type here to search for an instructor';
+
 			var read = FTSS.models('scheduled');
 
 			$scope.ftd && getProductionData() || utilities.addAsync(getProductionData);
