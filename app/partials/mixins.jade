@@ -321,7 +321,7 @@ mixin confirmPopover(className, title, text, action)
 
 mixin registeredStudents(bind)
 
-    .well.well-sm(ng-repeat='request in #{bind}', class='alert-{{request.style}}')
+    .well.well-sm(ng-repeat='request in ::#{bind}', class='alert-{{::request.style}}')
 
         .bold.border-bottom
             | {{request.Status}} ({{request.count}})
@@ -329,12 +329,14 @@ mixin registeredStudents(bind)
 
         dl.dl-horizontal
             dt Student(s)
-            dd(ng-repeat='(student, email) in request.Students_JSON') {{student}}
+            dd(ng-repeat='(student, email) in ::request.Students_JSON') {{student}}
 
-            dt Notes
-            dd.italics {{request.Notes}}
+            div(ng-if='request.Notes')
+                dt Notes
+                dd.italics {{::request.Notes}}
 
-            dt Response
-            dd.wideText {{request.Response}}
+            div(ng-if='request.Response')
+                dt Response
+                dd.wideText {{::request.Response}}
 
         .clearfix
