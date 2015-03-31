@@ -1,65 +1,65 @@
-.well {
-	.statusBackground {
-		bottom: -40px;
-		font-size: 120px;
-		opacity: .25;
-		position: absolute;
-		right: 5px;
-		text-transform: uppercase;
-		color: #ddd;
+#requests {
+
+	.well {
+		.statusBackground {
+			bottom: -40px;
+			font-size: 120px;
+			opacity: .25;
+			position: absolute;
+			right: 5px;
+			text-transform: uppercase;
+			color: #ddd;
+		}
 	}
-}
 
-.requestPending {
-	.statusBackground {
-		bottom: 35px;
+	.requestPending {
+		.statusBackground {
+			bottom: 35px;
+		}
 	}
-}
 
-.requestPending:hover {
-	.statusBackground {
-		color: #5bc0de;
-		opacity: .15;
+	.requestPending:hover {
+		.statusBackground {
+			color: #5bc0de;
+			opacity: .15;
+		}
 	}
-}
 
-.requestApproved:hover {
-	.statusBackground {
-		color: #5cb85c !important;
-		opacity: .15;
+	.requestApproved:hover {
+		.statusBackground {
+			color: #5cb85c !important;
+			opacity: .15;
+		}
 	}
-}
 
-.requestDenied:hover {
-	.statusBackground {
-		color: #d9534f !important;
-		opacity: .15;
+	.requestDenied:hover {
+		.statusBackground {
+			color: #d9534f !important;
+			opacity: .15;
+		}
 	}
-}
 
-.requestDenied h4, .requestApproved h4 {
-	color: #000 !important;
-}
+	.requestDenied h4, .requestApproved h4 {
+		color: #000 !important;
+	}
 
-.requestActions {
-	.requestStats {
-		color: #428bca;
+	.requestActions {
+		.requestStats {
+			color: #428bca;
+			display: none;
+		}
+	}
+
+	.availSeats {
+		margin: -1px 0 0;
+		font-size: inherit;
+		padding: 0 8px;
+		opacity: 1 !important;
+	}
+
+	.btn-success .deny, .btn-danger .approve {
 		display: none;
 	}
-}
-
-.availSeats {
-	margin: -1px 0 0;
-	font-size: inherit;
-	padding: 0 8px;
-	opacity: 1 !important;
-}
-
-.btn-success .deny, .btn-danger .approve {
-	display: none;
-}
-
-#requests {
 
 	tr .approved,
 	tr .cancelled,
@@ -76,7 +76,7 @@
 	#edit {
 
 		.btn-label {
-			background: none!important;
+			background: none !important;
 			left: auto;
 			padding: 5px 0;
 		}

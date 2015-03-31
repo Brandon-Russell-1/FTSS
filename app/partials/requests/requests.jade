@@ -23,17 +23,17 @@ include ../mixins
     td.italics {{::row.Notes}}
 
     td
-        .pull-right
+        #stackedVertical.pull-right
 
-            span#edit: edit-students
+            #edit: edit-students
 
-            span.btn.btn-sm.btn-success.btn-muted.no-archive(
+            .btn.btn-sm.btn-success.btn-muted.no-archive(
                 hover='Approve seat request',
                 bs-popover,
                 left,
                 template='/partials/popover-approve-request.html'): +icon('check')
 
-            span.btn.btn-sm.btn-danger.btn-muted.no-archive(
+            .btn.btn-sm.btn-danger.btn-muted.no-archive(
                 hover='Deny seat request',
                 bs-popover,
                 left,
