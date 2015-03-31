@@ -19,6 +19,10 @@ FTSS.ng.controller(
 
 			$scope.ftd && getProductionData() || utilities.addAsync(getProductionData);
 
+			$scope.$watch('ftss.showAlternateView', function(state) {
+				($scope.$$childHead.redraw || Function)(state);
+			});
+
 			function getProductionData() {
 
 				loading(true);

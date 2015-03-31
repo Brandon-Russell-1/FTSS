@@ -17,7 +17,7 @@ directive = function(name, conf) {
 };
 
 directive('linechart', [
-  'n3utils', '$window', '$timeout', function(n3utils, $window, $timeout) {
+  'n3utils', '$window', '$timeout', '$rootScope', function(n3utils, $window, $timeout, $rootScope) {
     var link;
     link = function(scope, element, attrs, ctrl) {
       var dim, initialHandlers, isUpdatingOptions, promise, window_resize, _u;
@@ -41,7 +41,7 @@ directive('linechart', [
 
           scope.updateDimensions(dim);
 
-          dim.width = view.width() * .55;
+          dim.width = view.width() * ($rootScope.ftss.showAlternateView ?.9 : .55);
           dim.height = view.height() * .85;
 
           scope.update(dim);
