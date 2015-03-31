@@ -24,6 +24,12 @@ FTSS.ng.service('controllerHelper', [
 
 		return function ($scope, opts) {
 
+			// Cleanup our scope watchers
+			$scope.$on("$destroy", function() {
+				(FTSS.searchWatch || Function)();
+				(FTSS.archiveWatch || Function)();
+			});
+
 			var model, process, actions;
 
 			actions = {
@@ -264,7 +270,8 @@ FTSS.ng.service('controllerHelper', [
 								// The main limiting, filtering, grouping, sorting function our views
 								exec = function () {
 
-									if (!security.isAuthorized()) {
+									// Cancel if not authorized or $scope is already destroyed
+									if (!security.isAuthorized() || $scope.$$destroyed) {
 										return false;
 									}
 

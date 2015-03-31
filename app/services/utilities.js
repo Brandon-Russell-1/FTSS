@@ -90,12 +90,6 @@ FTSS.ng.service('utilities', [
 
 			loading(true);
 
-			// The visible item count user feedback
-			$rootScope.ftss.itemCount = {
-				'value'   : '-',
-				'overload': false
-			};
-
 			$rootScope.ftss.searchText = '';
 
 			$location.path('/' + pg);
