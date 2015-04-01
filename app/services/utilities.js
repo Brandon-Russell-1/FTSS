@@ -17,12 +17,12 @@ FTSS.ng.service('utilities', [
 
 		var _jobs = [],
 
-		    _self = this,
+			_self = this,
 
-		    _completed = {
-			    'selectize': false,
-			    'security' : false
-		    };
+			_completed = {
+				'selectize': false,
+				'security' : false
+			};
 
 		/**
 		 * Collects async operations that are only executed once the page is initialized
@@ -65,12 +65,12 @@ FTSS.ng.service('utilities', [
 
 			var _originalRoute = $route.current,
 
-			    _once = $rootScope.$on('$locationChangeSuccess', function () {
+				_once = $rootScope.$on('$locationChangeSuccess', function () {
 
-				    $route.current = _originalRoute;
-				    _once();
+					$route.current = _originalRoute;
+					_once();
 
-			    });
+				});
 
 			$location.path(
 				[
@@ -193,11 +193,11 @@ FTSS.ng.service('utilities', [
 					_self.errorHandler(err);
 
 					builder({
-						        'type'    : 'danger',
-						        'title'   : 'Sorry, something went wrong!',
-						        'content' : "Please refresh the page and try again.",
-						        'duration': 20
-					        });
+						'type'    : 'danger',
+						'title'   : 'Sorry, something went wrong!',
+						'content' : "Please refresh the page and try again.",
+						'duration': 20
+					});
 				}
 			};
 
@@ -323,9 +323,9 @@ FTSS.ng.service('utilities', [
 
 				var test = [],
 
-				    map = sharepointFilters.map(),
+					map = sharepointFilters.map(),
 
-				    matches = [];
+					matches = [];
 
 				// First, generate the array of tags to test against
 				_.each($rootScope.ftss.tagMap, function (tag, key) {
@@ -335,10 +335,10 @@ FTSS.ng.service('utilities', [
 						if (map[key]) {
 
 							test.push({
-								          id       : key + ':' + t,
-								          testField: map[key].split('/').join('.'),
-								          testValue: t
-							          });
+								id       : key + ':' + t,
+								testField: map[key].split('/').join('.'),
+								testValue: t
+							});
 
 						}
 
@@ -474,15 +474,15 @@ FTSS.ng.service('utilities', [
 
 					var validFilters = sharepointFilters.map(),
 
-					    /**
-					     * Handles pages with tagbox but no valid selected filters
-					     */
-					    emptyFinish = function () {
+						/**
+						 * Handles pages with tagbox but no valid selected filters
+						 */
+						emptyFinish = function () {
 
-						    FTSS.search.focus();
-						    FTSS.search.$control_input.focus();
+							FTSS.search.focus();
+							FTSS.search.$control_input.focus();
 
-					    };
+						};
 
 					// eval our link portion of the URL or fall back to false
 					pending = JSON.parse(atob($rootScope.ftss.$routeParams.link || 'ZmFsc2U'));
@@ -491,7 +491,7 @@ FTSS.ng.service('utilities', [
 
 						var valMap = [],
 
-						    tagMap = {};
+							tagMap = {};
 
 						_.each(pending, function (filterItems, filterGroup) {
 
