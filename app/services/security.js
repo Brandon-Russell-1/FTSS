@@ -66,7 +66,7 @@ FTSS.ng.service('security', [
 			 * site altogether.  Finally, we make a double check by validating the file name matches.
 			 *
 			 */
-			if (false && !PRODUCTION && location.pathname === '/dev.html') {
+			if (!PRODUCTION && location.pathname === '/dev.html') {
 
 				_isAdmin = true;
 
