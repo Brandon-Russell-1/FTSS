@@ -13,28 +13,28 @@
 		[
 			'$timeout',
 			'$templateCache',
+			'$compile',
 			'dateTools',
 			'loading',
 
-			function ($timeout, $templateCache, dateTools, loading) {
+			function ($timeout, $templateCache, $compile, dateTools, loading) {
 
 				return {
 					'restrict'   : 'E',
 					'templateUrl': '/partials/resource-view-layout.html',
-					'replace'    : true,
-					'scope'      : {},
+					'scope'      : true,
 					'link'       : function (scope, $el, $attr) {
 
 						var templateEvent = _.template($templateCache.get($attr.template ||
 						                                                  '/partials/resource-view-event.html')),
 
-						    templateMonth = _.template('<td colspan="{{colspan}}">{{month}}</td>'),
+							templateMonth = _.template('<td colspan="{{colspan}}">{{month}}</td>'),
 
-						    watch = '$parent.' + ($attr.bind || 'groups'),
+							watch = '$parent.' + ($attr.bind || 'groups'),
 
-						    tbody = $el.find('tbody')[0],
+							tbody = $el.find('tbody')[0],
 
-						    last;
+							last;
 
 						scope.$watch(watch, function (groups) {
 
@@ -44,19 +44,22 @@
 
 							loading(true);
 
-							setTimeout(function () {
+							$timeout(function () {
 
-								var html = {}, events = [], min, max, dayBase;
+								var html = {}, events = {}, min, max, dayBase;
 
 								last = groups;
 
 								// Make a flat copy of our data for date range detection
 								_.each(groups, function (group) {
-									events = events.concat(group);
+									_.each(group, function (row) {
+										events[row.Id] = row;
+									});
 								});
 
 								// Get the earliest start date, minus one day
-								min = moment(Math.min.apply(Math, _.pluck(events, 'startMoment'))).add(-1, 'days');
+								min =
+									moment(Math.min.apply(Math, _.pluck(events, 'startMoment'))).add(-1, 'days');
 
 								// Get the latest end date, plus one day
 								max = moment(Math.max.apply(Math, _.pluck(events, 'endMoment'))).add(1, 'days');
@@ -71,8 +74,9 @@
 
 									var count = 0,
 
-									    bioPhoto = instructor[0].bioPhoto ? '<div class="mask-img circle">' +
-									                       '<img src="' + instructor[0].bioPhoto+ '" /></div>' : '';
+										bioPhoto = instructor[0].bioPhoto ? '<div class="mask-img circle">' +
+										                                    '<img src="' + instructor[0].bioPhoto +
+										                                    '" /></div>' : '';
 
 									// Iterate over each event
 									_.each(instructor, function (event) {
@@ -108,16 +112,16 @@
 
 											event.className =
 
-											// Match MTT classes
-											event.className = event.MTT ? 'mtt' :
+												// Match MTT classes
+												event.className = event.MTT ? 'mtt' :
 
-												// Add trainingSession class if TTMS contains TS
-												              event.TS ? 'trainingSession' :
+													// Add trainingSession class if TTMS contains TS
+													              event.TS ? 'trainingSession' :
 
-													              // Id short classes
-												              (event.allocatedSeats < event.Course.Min) ? 'short' :
+													                  // Id short classes
+													              (event.allocatedSeats < event.Course.Min) ? 'short' :
 
-												              event.className;
+													              event.className;
 
 											// Add our html to the event
 											instructor.html += templateEvent(event);
@@ -153,21 +157,6 @@
 
 								});
 
-								// Bind the edit function (single click in this case)
-								scope.doClick = function () {
-
-									if (scope.$parent.canEdit) {
-
-										// Dirty hack to get the current class without a million extra data binds
-										var row = _.find(events, {Id: parseInt($('td:hover').attr('id'))});
-
-										// complete binding to the edit action with our data
-										row && scope.$parent.edit.call({'row': row}, false);
-
-									}
-
-								};
-
 								html.render = '';
 
 								html.spacer = '<tr class="spacer"><td></td></tr>';
@@ -188,12 +177,44 @@
 								}).value();
 
 								if (html.instructors.length > 9) {
-									html.render +=
-									(html.dayHeader + html.monthHeader).replace(/header/g, 'header footer');
+									html.render += (html.dayHeader + html.monthHeader)
+										.replace(/header/g, 'header footer');
 								}
 
 								tbody.innerHTML = html.render;
 
+								// Handle our details click operation (edit class)
+								scope.editClass = function (id) {
+
+									// Only give this view to FTD Schedulers
+									if (scope.$parent.canEdit) {
+
+										// Find the class data by id
+										var row = scope.getRow(id);
+
+										// complete binding to the edit action with our data
+										row && scope.edit.call({'row': row}, false);
+
+									}
+
+								};
+
+								/**
+								 * Get the class data given an id
+								 *
+								 * @param id Number
+								 * @returns row Object
+								 */
+								scope.getRow = function (id) {
+
+									return events[Number(id)];
+
+								};
+
+								console.time('compile');
+								// Compile our directives/click actions
+								$compile(tbody.getElementsByClassName('mark'))(scope);
+								console.timeEnd('compile');
 								loading(false);
 
 								function buildHeaders() {
@@ -214,10 +235,10 @@
 										// Add day to minClone and get the month
 										var month = minClone.add(1, 'days').format('MMM YYYY'),
 
-										    // Added classes for weekend or holidays
-										    className = dateTools.isWeekend(minClone) ? 'weekend' :
+										// Added classes for weekend or holidays
+											className = dateTools.isWeekend(minClone) ? 'weekend' :
 
-										                dateTools.isDownDay(minClone) ? 'downDay' : '';
+											            dateTools.isDownDay(minClone) ? 'downDay' : '';
 
 										// Create the month if it doesn't exist
 										html.months[month] = html.months[month] || {
