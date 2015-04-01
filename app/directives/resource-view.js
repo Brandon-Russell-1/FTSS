@@ -84,7 +84,7 @@
 										var start = event.startMoment.diff(min, 'days');
 
 										// For long-running events ending soon, truncate their total days
-										event.DaysTruncated = event.Days + ((start < 0) ? start - 1 : 0);
+										event.DaysTruncated = event.Days + ((start < 1) ? start - 1 : 0);
 
 										createTDs(start);
 
