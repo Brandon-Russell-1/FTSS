@@ -2,17 +2,15 @@ include mixins
 
 form.form-horizontal(name='modal')
 
-    .modal-header.caps.bg-warning.text-warning
-        h3
-            +icon('exclamation-circle', 'No Assigned FTD')
+    .modal-header.caps.bg-warning.text-warning: h3: +icon('exclamation-circle', 'No Assigned FTD')
 
-    .modal-body
+    .modal-body.showOverflow
 
         .lead.
             Sorry for the trouble, but it looks like you have the FTD Scheduler role without an assigned FTD.
             Please choose your current FTD from the list below.
 
-        select(selectize='Units', bind='newFTD.id', placeholder='Choose an FTD to switch to')
+        select(selectize='Units', bind='ftd.id', placeholder='Choose an FTD to switch to')
 
         .text-info.info.italics
             +icon('info-circle')

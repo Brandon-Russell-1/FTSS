@@ -2,17 +2,13 @@ include mixins
 
 form.form-horizontal(name='modal')
 
-    .modal-header.caps.bg-warning.text-warning
-        h3
-            +icon('smile-o', 'FTD Context Switch')
+    .modal-header.caps.bg-warning.text-warning: h3: +icon('smile-o', 'FTD Context Switch')
 
-    .modal-body
+    .modal-body.showOverflow
 
         p.
             Choose the FTD to change to from the drop-down below.  After you choose this, the app will reload.  This
             is a persistent setting so you will have to switch back to your FTD when you're done wreaking havoc...
 
-        p.text-right - Jeff
-
-        select(selectize='Units', bind='newFTD.id', placeholder='Choose an FTD to switch to')
+        select(selectize='Units', bind='ftd.id', placeholder='Choose an FTD to switch to')
 
