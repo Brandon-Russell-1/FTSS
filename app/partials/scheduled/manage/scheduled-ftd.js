@@ -348,25 +348,6 @@ FTSS.ng.controller(
 
 					});
 
-				/**
-				 * This is a helper to default to searching for only the next three months of scheduled classes.
-				 * The idea is to give the scheduler a more manageable set of data to work with.
-				 */
-				if (!$scope.ftss.searchText) {
-
-					var format = 'MMMM',
-
-					    month = moment();
-
-					// Type the next three months as a search criteria, i.e. "January or February or March"
-					$scope.ftss.searchText = [
-						month.format(format),
-						month.add(1, 'months').format(format),
-						month.add(1, 'months').format(format)
-					].join(' or ');
-
-				}
-
 				self.bind().then(function (data) {
 
 					// Delete classes that ended more than 30 days aga
