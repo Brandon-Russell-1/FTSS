@@ -58,8 +58,7 @@
 								});
 
 								// Get the earliest start date, minus one day
-								min =
-									moment(Math.min.apply(Math, _.pluck(events, 'startMoment'))).add(-1, 'days');
+								min = moment().add(-1, 'week');
 
 								// Get the latest end date, plus one day
 								max = moment(Math.max.apply(Math, _.pluck(events, 'endMoment'))).add(1, 'days');
@@ -81,8 +80,11 @@
 									// Iterate over each event
 									_.each(instructor, function (event) {
 
-										// We subtract one to include the date the class starts
-										var start = event.startMoment.diff(min, 'days') - 1;
+										// Get the start of this event
+										var start = event.startMoment.diff(min, 'days');
+
+										// For long-running events ending soon, truncate their total days
+										event.DaysTruncated = event.Days + ((start < 0) ? start - 1 : 0);
 
 										createTDs(start);
 
@@ -92,7 +94,7 @@
 											instructor.html += '<td hover="' +
 											                   event.Instructor.InstructorName +
 											                   ' not available for teaching." class="unavailable" colspan="' +
-											                   event.Days +
+											                   event.DaysTruncated +
 											                   '" id="' +
 											                   event.Id +
 											                   '"><div class="details italics">' +
@@ -105,10 +107,11 @@
 											event.photoHTML = bioPhoto;
 
 											// Trim the PDS if days are less than 2
-											event.pds = event.Days > 2 ? event.Course.PDS : '';
+											event.pds = event.DaysTruncated > 2 ? event.Course.PDS : '';
 
 											// Trim the instructor name if days are shorter than 12
-											event.name = event.Days > 12 ? event.Instructor.InstructorName : '';
+											event.name =
+												event.DaysTruncated > 12 ? event.Instructor.InstructorName : '';
 
 											event.className =
 
@@ -129,7 +132,7 @@
 										}
 
 										// Increment the day counter
-										count += event.Days;
+										count += event.DaysTruncated;
 
 									});
 
@@ -211,10 +214,9 @@
 
 								};
 
-								console.time('compile');
 								// Compile our directives/click actions
 								$compile(tbody.getElementsByClassName('mark'))(scope);
-								console.timeEnd('compile');
+
 								loading(false);
 
 								function buildHeaders() {
