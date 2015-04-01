@@ -21,10 +21,20 @@
 					'scope'      : true,
 					'link'       : function (scope, el) {
 
-						scope.data = scope.data || scope.row.Class || scope.row;
-
+						// Support embed instead of modal dialog
 						scope.embed = el[0].hasAttribute('embed');
 
+						// For resources view, we have to lookkup the data first
+						if (scope.getRow) {
+
+							scope.data = scope.getRow(el[0].getAttribute('lookup'));
+
+						} else {
+
+							scope.data = scope.data || scope.row.Class || scope.row;
+						}
+
+						// Process our student data if there are approved seats
 						scope.editStudents = function () {
 
 							// If we have any registered students, load them async

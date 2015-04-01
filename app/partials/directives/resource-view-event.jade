@@ -1,6 +1,6 @@
 include ../mixins
 
-td(class='mark {{className}}',  colspan='{{Days}}', id='{{Id}}')
+td(class='mark {{className}}',  colspan='{{Days}}', ng-click='editClass({{Id}})')
 
     .circle {{photoHTML}}
 
@@ -23,11 +23,7 @@ td(class='mark {{className}}',  colspan='{{Days}}', id='{{Id}}')
 
             br
 
-            .col-lg-4.white
-
-                .btn.btn-info.btn-labeled.btn-sm(ng-click='row.showStudents()')
-                    span.btn-label: +icon('student_hand')
-                    span View Students ({{allocatedSeats}})
+            .col-lg-4.white(edit-students, lookup='{{Id}}')
 
             .col-lg-8
 
