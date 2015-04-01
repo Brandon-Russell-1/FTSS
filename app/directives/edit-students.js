@@ -16,13 +16,14 @@
 			function ($timeout, SharePoint, classProcessor, utilities) {
 
 				return {
-					'restrict'   : 'E',
-					'templateUrl': '/partials/edit-students-button.html',
-					'replace'    : true,
+					'restrict'   : 'A',
+					'templateUrl': '/partials/edit-students-placeholder.html',
 					'scope'      : true,
-					'link'       : function (scope) {
+					'link'       : function (scope, el) {
 
-						scope.data = scope.row.Class || scope.row;
+						scope.data = scope.data || scope.row.Class || scope.row;
+
+						scope.embed = el[0].hasAttribute('embed');
 
 						scope.editStudents = function () {
 
@@ -44,10 +45,12 @@
 
 							}
 
-							// Open our modal dialog
-							utilities.modal('modal-edit-students', scope);
+							// Open our modal dialog when embed is false
+							!scope.embed && utilities.modal('edit-students', scope);
 
 						};
+
+						scope.embed && scope.editStudents();
 
 					}
 

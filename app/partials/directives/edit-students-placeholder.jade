@@ -1,9 +1,11 @@
 include ../mixins
 
 .btn.btn-info.btn-labeled.btn-muted(ng-click='editStudents()',
-                                    ng-if='data.allocatedSeats',
+                                    ng-if='!embed && data.allocatedSeats',
                                     hover='edit-students',
                                     left
                                     )
     span.btn-label: +icon('student_hand')
     span.btn-text View Students ({{::data.allocatedSeats}})
+
+div(ng-if='embed'): +loadStudents()

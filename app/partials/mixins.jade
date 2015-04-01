@@ -318,25 +318,27 @@ mixin confirmPopover(className, title, text, action)
 
             .clearfix
 
+mixin loadStudents()
+    h4.italics(ng-if='loadingStudents') Please wait, loading the list of students...
 
-mixin registeredStudents(bind)
+    div(ng-if='!loadingStudents')
 
-    .well.well-sm(ng-repeat='request in ::#{bind}', class='alert-{{::request.style}}')
+        .well.well-sm(ng-repeat='request in ::students', class='alert-{{::request.style}}')
 
-        .bold.border-bottom
-            | {{request.Status}} ({{request.count}})
-            .pull-right {{request.Host.Unit}}
+            .bold.border-bottom
+                | {{request.Status}} ({{request.count}})
+                .pull-right {{request.Host.Unit}}
 
-        dl.dl-horizontal
-            dt Student(s)
-            dd(ng-repeat='(student, email) in ::request.Students_JSON') {{student}}
+            dl.dl-horizontal
+                dt Student(s)
+                dd(ng-repeat='(student, email) in ::request.Students_JSON') {{student}}
 
-            div(ng-if='request.Notes')
-                dt Notes
-                dd.italics {{::request.Notes}}
+                div(ng-if='request.Notes')
+                    dt Notes
+                    dd.italics {{::request.Notes}}
 
-            div(ng-if='request.Response')
-                dt Response
-                dd.wideText {{::request.Response}}
+                div(ng-if='request.Response')
+                    dt Response
+                    dd.wideText {{::request.Response}}
 
         .clearfix

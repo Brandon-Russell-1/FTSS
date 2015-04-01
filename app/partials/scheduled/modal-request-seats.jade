@@ -5,7 +5,7 @@ form.form-horizontal(name='modal')
     .modal-header.caps
         h3: +icon('plus-circle', '{{row.Course.Number}} Seat Request')
 
-    #requestSeats.modal-body
+    .modal-body
 
         .alert.alert-warning(ng-if='autoApprove') Seats will be auto-approved based on your current roles in FTSS.
 
