@@ -21,7 +21,7 @@ FTSS.ng.controller(
 
 			$scope.ftd && getProductionData() || utilities.addAsync(getProductionData);
 
-			$scope.$watch('ftss.showAlternateView', function(state) {
+			$scope.$watch('ftss.showAlternateView', function (state) {
 				($scope.$$childHead.redraw || Function)(state);
 			});
 
@@ -45,91 +45,91 @@ FTSS.ng.controller(
 
 					var stats = _(results)
 
-						    // Ignore our instructor unavailability
-						    .reject({'CourseId': null})
-						    .reject({'CourseId': -1})
+							// Ignore TTMS/NA
+							.reject('TS')
+							.reject('NA')
 
-						    // Ignore cancelled classes
-						    .reject('Archived')
+							// Ignore cancelled classes
+							.reject('Archived')
 
-						    // Load the cache data for every row (this one is a little expensive)
-						    .each(classProcessor.cacheFiller)
+							// Load the cache data for every row (this one is a little expensive)
+							.each(classProcessor.cacheFiller)
 
-						    // Sort oldest to newest
-						    .sortBy('startMoment')
+							// Sort oldest to newest
+							.sortBy('startMoment')
 
-						    // Then reverse
-						    .reverse()
+							// Then reverse
+							.reverse()
 
-						    // Group the data by InstructorID
-						    .groupBy('InstructorId')
+							// Group the data by InstructorID
+							.groupBy('InstructorId')
 
-						    // Return the chained value output from lodash
-						    .value(),
+							// Return the chained value output from lodash
+							.value(),
 
-					    // The start of our 12-month range
-					    yearStart = moment().add(-12, 'months'),
+					// The start of our 12-month range
+						yearStart = moment().add(-12, 'months'),
 
-					    // End of the 12-month range
-					    yearEnd = moment().add(-1, 'months'),
+					// End of the 12-month range
+						yearEnd = moment().add(-1, 'months'),
 
-					    // Builds our monthly statistics objects
-					    buildMonths = (function () {
+					// Builds our monthly statistics objects
+						buildMonths = (function () {
 
-						    var collection = {},
+							var collection = {},
 
-						        month = moment();
+								month = moment();
 
-						    for (var i = 0; i < 12; i++) {
+							for (var i = 0; i < 12; i++) {
 
-							    collection[month.add(-1, 'months').format('YYYYMM')] = {
-								    'sort'     : parseInt(month.format('YYYYMM'), 10),
-								    'text'     : month.format('MMM'),
-								    'date'     : month.clone().toDate(),
-								    'hours'    : 0,
-								    'classes'  : 0,
-								    'students' : 0,
-								    'impact'   : 0,
-								    'available': 0
-							    };
+								collection[month.add(-1, 'months').format('YYYYMM')] = {
+									'sort'     : parseInt(month.format('YYYYMM'), 10),
+									'text'     : month.format('MMM'),
+									'date'     : month.clone().toDate(),
+									'hours'    : 0,
+									'classes'  : 0,
+									'students' : 0,
+									'impact'   : 0,
+									'available': 0
+								};
 
-						    }
+							}
 
-						    return function () {
+							return function () {
 
-							    return _.cloneDeep(collection);
+								return _.cloneDeep(collection);
 
-						    }
+							}
 
-					    }()),
+						}()),
 
-					    // FTD-wide stats
-					    ftdStats = {
-						    'hours'   : 0,
-						    'classes' : 0,
-						    'students': 0,
-						    'graph'   : buildMonths()
-					    },
+					// FTD-wide stats
+						ftdStats = {
+							'hours'   : 0,
+							'classes' : 0,
+							'students': 0,
+							'graph'   : buildMonths()
+						},
 
-					    // The filtered list of instructors/members
-					    data = _(caches.Instructors)
+					// The filtered list of instructors/members
+						data = _(caches.Instructors)
 
-						    .filter({
-							            'UnitId'  : $scope.ftd.Id,
-							            'Archived': false
-						            })
+							.filter({
+								'UnitId'  : $scope.ftd.Id,
+								'Archived': false
+							})
 
-						    .cloneDeep(),
+							.cloneDeep(),
 
-					    // Load the controller
-					    self = controllerHelper($scope,
+					// Load the controller
+						self = controllerHelper($scope,
 
-					                            {
+						                        {
 
-						                            'sort' : 'InstructorName',
-						                            'modal': 'instructor-stats'
+							                        'sort' : 'InstructorName',
+							                        'modal': 'instructor-stats'
 
-					                            });
+						                        });
 
 					$scope.stats = self.edit();
 
@@ -141,7 +141,7 @@ FTSS.ng.controller(
 
 							      var stat = stats[row.Id],
 
-							          chart = buildMonths();
+								      chart = buildMonths();
 
 							      classProcessor.setupBioPhoto(row, row.Photo);
 
@@ -161,7 +161,7 @@ FTSS.ng.controller(
 
 							      _.each(stat, function (course) {
 
-								      var hours = course.Hours || course.Course.Hours;
+								      var hours = course.Hours || course.Course.Hours || 0;
 
 								      // Tally all courses taught
 								      row.stats.classes++;
