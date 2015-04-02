@@ -35,8 +35,22 @@ directive('linechart', [
         dimensions.height = +(attrs.height || parent.offsetHeight || 500) - top - bottom;
       };
       scope.redraw = function() {
+
+        // Customized for FTSS
+        var view = $('#mainView');
+
         scope.updateDimensions(dim);
+
+        dim.width = view.width() * ($rootScope.ftss.showAlternateView ?.9 : .55);
+        dim.height = view.height() * .85;
+
         scope.update(dim);
+
+        $('.x.axis line').attr('transform', 'rotate(45)').attr('y2', '75');
+        $('.x.axis text').attr('transform', 'rotate(-45)');
+        $('.legend').attr('transform', 'translate(0 40)');
+        $('#ftdChart').addClass('ng-enter-active');
+
       };
       isUpdatingOptions = false;
       initialHandlers = {
