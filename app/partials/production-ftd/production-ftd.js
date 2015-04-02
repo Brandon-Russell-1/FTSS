@@ -245,27 +245,30 @@ FTSS.ng.controller(
 
 						series       : [
 							{
-								y        : "impact",
-								label    : "Impact",
-								type     : "area",
-								color    : "#4CAE4C",
-								thickness: "4px",
-								axis     : "y",
-								id       : "series_impact"
+								'y'        : "impact",
+								'label'    : "Impact",
+								'type'     : "area",
+								'color'    : "#4CAE4C",
+								'thickness': "4px",
+								'axis'     : "y",
+								'id'       : "series_impact",
+								'color'    : "rgb(76, 174, 76)"
 							},
 							{
-								y    : "hours",
-								label: "Hours",
-								type : "column",
-								axis : "y",
-								id   : "series_hours"
+								'y'    : "hours",
+								'label': "Hours",
+								'type' : "column",
+								'axis' : "y",
+								'id'   : "series_hours",
+								'color': "rgb(31, 119, 180)"
 							},
 							{
 								'y'    : "students",
 								'label': "Students",
 								'axis' : "y2",
 								'type' : "column",
-								'id'   : "series_students"
+								'id'   : "series_students",
+								'color': "rgb(174, 199, 232)"
 							},
 							{
 								'y'      : 'utilization',
@@ -273,7 +276,8 @@ FTSS.ng.controller(
 								'type'   : 'line',
 								thickness: "5px",
 								'axis'   : 'y2',
-								'id'     : 'series_utilization'
+								'id'     : 'series_utilization',
+								'color'  : 'rgb(255, 127, 14)'
 							}
 						],
 						'tooltip'    : {
