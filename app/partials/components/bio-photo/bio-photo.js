@@ -120,14 +120,6 @@
 								}
 
 								/**
-								 * Load the image data for the UI and make visible
-								 */
-								function loadImage() {
-									$el[0].innerHTML = '<img src="' + cachedImages[$scope.bioPhoto] + '" />';
-									$el[0].className = classes;
-								}
-
-								/**
 								 * Convert a blob to a Base64 string
 								 *
 								 * @param buffer
@@ -143,6 +135,18 @@
 									}
 									return window.btoa(binary);
 								}
+
+								/**
+								 * Load the image data for the UI and make visible
+								 */
+								function loadImage() {
+
+									$el[0].innerHTML = '<img src="' + cachedImages[$scope.bioPhoto] + '" />';
+
+									$el[0].className = classes;
+
+								}
+
 
 							}
 
