@@ -39,7 +39,7 @@ include ../mixins
                                         ng-click='stats()',
                                         id='row-{{row.Id}}')
 
-                        td.circle: +bioPhoto('row.bioPhoto', 'width:100px;height:100px')
+                        td: .circle(bio-photo='row.Photo', style='width:100px;height:100px')
 
                         td
 

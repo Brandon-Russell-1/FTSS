@@ -166,7 +166,6 @@
 	// This probably doesn't belong here? :-D
 	FTSS.supportEmail = '372trs.trg.ftss@us.af.mil';
 	FTSS.J4Email = '982TRG.J4scheduling@us.af.mil';
-	FTSS.CDN = 'https://d2jjzg0gg2bs3z.cloudfront.net/bios/';
 
 	// Helper variable for handling production vs development mode photos
 	FTSS.photoURL = PRODUCTION ? base + 'live/Bios/' : base + 'dev2/Bios/';

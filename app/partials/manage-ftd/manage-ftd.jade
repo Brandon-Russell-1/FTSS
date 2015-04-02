@@ -18,7 +18,7 @@ div(ng-class='{addNew:addNew}')
             .col-lg-3
                 .drag-target(hover='instructors-photo', left)
                     .sending(id='spinner'): +spinner()
-                    +bioPhoto('row.bioPhoto', 100)
+                    div(bio-photo='row.Photo')
 
             .clearfix
 
@@ -74,10 +74,10 @@ form#embed.col-lg-7(ng-show='det.Courses_JSON', name='modal')
                                 ng-class='{archived:row.Archived}',
                                 ng-file-drop, ng-file-change='onFileSelect($files)')
 
-                td.drag-target.circle
+                td.drag-target
 
                     .sending(id='spinner{{row.Id}}'): +spinner()
-                    +bioPhoto('row.bioPhoto')
+                    .circle(bio-photo='row.Photo')
 
                 td
 

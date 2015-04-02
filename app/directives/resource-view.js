@@ -71,11 +71,7 @@
 
 									instructor.html = '';
 
-									var count = 0,
-
-										bioPhoto = instructor[0].bioPhoto ? '<div class="mask-img circle">' +
-										                                    '<img src="' + instructor[0].bioPhoto +
-										                                    '" /></div>' : '';
+									var count = 0;
 
 									// Iterate over each event
 									_.each(instructor, function (event) {
@@ -108,9 +104,6 @@
 											                   '</div></td>';
 
 										} else {
-
-											// Attempt to use cached bioPhoto
-											event.photoHTML = bioPhoto;
 
 											// Trim the PDS if days are less than 2
 											event.pds = event.DaysTruncated > 2 ? event.Course.PDS : '';

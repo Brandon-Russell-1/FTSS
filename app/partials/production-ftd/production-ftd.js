@@ -143,8 +143,6 @@ FTSS.ng.controller(
 
 								      chart = buildMonths();
 
-							      classProcessor.setupBioPhoto(row, row.Photo);
-
 							      row.search = row.InstructorName;
 
 							      // for aggregate instructor stats

@@ -2,7 +2,7 @@ include ../mixins
 
 td(class='mark {{className}}',  colspan='{{DaysTruncated}}', ng-click='editClass({{Id}})')
 
-    .circle {{photoHTML}}
+    .circle(bio-photo='"{{Instructor.Photo}}"')
 
     span.pds {{pds}}&nbsp;
     span.instructor {{name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{MTT}}</b>
