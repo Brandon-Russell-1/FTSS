@@ -1,17 +1,3 @@
-tr {
-	.archiveOnly {
-		display: none;
-	}
-}
-
-body.archived tr.archived .archiveOnly,
-.archive .archiveExclude {
-	display: inline-block;
-}
-
-.aside {
-	max-width: 40%;
-}
 
 .mask-img.invalid {
 	visibility: hidden;
@@ -50,69 +36,4 @@ body.archived tr.archived .archiveOnly,
 	.mask-img.invalid {
 		visibility: hidden;
 	}
-}
-
-.modal-backdrop.in {
-	opacity: 0.6 !important;
-}
-
-time-ago {
-	font-weight: normal !important;
-	color: #888 !important;
-	float: right;
-	font-style: italic;
-}
-
-.modal-header, .modal-body, .modal-footer {
-	z-index: 999;
-}
-
-.leftBigTraverse:hover, .rightBigTraverse:hover {
-	transition: opacity 500ms ease;
-	opacity: .65;
-}
-
-.leftBigTraverse, .rightBigTraverse {
-	outline: none !important;
-	border: none !important;
-	transition: opacity 500ms ease;
-	text-decoration: none !important;
-	top: 50px;
-	opacity: .1;
-	color: #fff !important;
-	position: absolute;
-	font-size: 200px;
-	cursor: pointer !important;
-}
-
-.modal-footer .leftBigTraverse, .modal-footer .rightBigTraverse {
-	opacity: 1;
-	font-size: 20px;
-	bottom: -5px;
-	top: auto;
-}
-
-.modal-footer .leftBigTraverse *, .modal-footer .rightBigTraverse * {
-	fill: #555;
-}
-
-.leftBigTraverse {
-	left: -350px;
-}
-
-.rightBigTraverse {
-	right: -400px;
-}
-
-.modal-footer {
-	.leftBigTraverse {
-		left: -5px;
-	}
-	.rightBigTraverse {
-		left: 30px;
-	}
-}
-
-.loading + #loading {
-	display: block !important;
 }

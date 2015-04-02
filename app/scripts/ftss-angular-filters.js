@@ -1,4 +1,4 @@
-/*global FTSS, Sifter, _ */
+/*global FTSS, _ */
 
 /**
  *
@@ -27,42 +27,13 @@
 	});
 
 	FTSS.ng.filter('trust_html',
-	               ['$sce',
-	                function ($sce) {
-		                return function (text) {
-			                return $sce.trustAsHtml(text);
-		                };
-	                }
+	               [
+		               '$sce',
+		               function ($sce) {
+			               return function (text) {
+				               return $sce.trustAsHtml(text);
+			               };
+		               }
 	               ]);
-
-	FTSS.ng.filter('search', function () {
-
-		return function (items, text) {
-
-			if (!text || text.length === 0) {
-				return items;
-			}
-
-			// Initialize sifter with the array of data after passing through some string sanitization
-			return _.map(
-				(new Sifter(items)
-
-					.search(text,
-				            {
-					            'fields'     : ['search'],
-					            'conjunction': 'and'
-				            })
-
-					.items),
-
-				function (t) {
-
-					return items[t.id];
-
-				});
-
-		};
-	});
-
 
 }());

@@ -1,9 +1,7 @@
 /*global FTSS */
 
 /**
- * Time-ago directive
- *
- * Uses momentJS to give us a human-friendly time since measurement of the given field
+ * Our user message collection
  */
 (function () {
 

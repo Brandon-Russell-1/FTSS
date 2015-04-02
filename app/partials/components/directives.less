@@ -1,0 +1,33 @@
+tr {
+	.archiveOnly {
+		display: none;
+	}
+}
+
+body.archived tr.archived .archiveOnly,
+.archive .archiveExclude {
+	display: inline-block;
+}
+
+.aside {
+	max-width: 40%;
+}
+
+.modal-backdrop.in {
+	opacity: 0.6 !important;
+}
+
+time-ago {
+	font-weight: normal !important;
+	color: #888 !important;
+	float: right;
+	font-style: italic;
+}
+
+.modal-header, .modal-body, .modal-footer {
+	z-index: 999;
+}
+
+.loading + #loading {
+	display: block !important;
+}

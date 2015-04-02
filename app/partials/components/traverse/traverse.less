@@ -1,0 +1,46 @@
+
+.leftBigTraverse:hover, .rightBigTraverse:hover {
+	transition: opacity 500ms ease;
+	opacity: .65;
+}
+
+.leftBigTraverse, .rightBigTraverse {
+	outline: none !important;
+	border: none !important;
+	transition: opacity 500ms ease;
+	text-decoration: none !important;
+	top: 50px;
+	opacity: .1;
+	color: #fff !important;
+	position: absolute;
+	font-size: 200px;
+	cursor: pointer !important;
+}
+
+.modal-footer .leftBigTraverse, .modal-footer .rightBigTraverse {
+	opacity: 1;
+	font-size: 20px;
+	bottom: -5px;
+	top: auto;
+}
+
+.modal-footer .leftBigTraverse *, .modal-footer .rightBigTraverse * {
+	fill: #555;
+}
+
+.leftBigTraverse {
+	left: -350px;
+}
+
+.rightBigTraverse {
+	right: -400px;
+}
+
+.modal-footer {
+	.leftBigTraverse {
+		left: -5px;
+	}
+	.rightBigTraverse {
+		left: 30px;
+	}
+}
