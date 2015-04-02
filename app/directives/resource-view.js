@@ -86,6 +86,12 @@
 										// For long-running events ending soon, truncate their total days
 										event.DaysTruncated = event.Days + ((start < 1) ? start - 1 : 0);
 
+										// Handle overlapping class dates
+										if (start > 0 && count > start) {
+											event.DaysTruncated = event.Days - (count - start);
+											start = count;
+										}
+
 										createTDs(start);
 
 										if (event.NA) {
@@ -108,6 +114,11 @@
 
 											// Trim the PDS if days are less than 2
 											event.pds = event.DaysTruncated > 2 ? event.Course.PDS : '';
+
+											// Identify this class as truncated
+											if (event.Days !== event.DaysTruncated) {
+												event.pds = '<i hover="Some days of this class are not visible.">' + event.Course.PDS + '</i>'
+											}
 
 											// Trim the instructor name if days are shorter than 12
 											event.name =
