@@ -39,7 +39,7 @@
 					'compile' : function compile(tElement) {
 
 						// Save a copy of the original classes
-						var classes = tElement[0].className;
+						var classes = tElement[0].className + ' mask-img';
 
 						// Add hide to this until the img is load (to avoid the ugly empty shadow)
 						tElement[0].className = classes + ' hide';
@@ -124,7 +124,7 @@
 								 */
 								function loadImage() {
 									$el[0].innerHTML = '<img src="' + cachedImages[$scope.bioPhoto] + '" />';
-									$el[0].className = classes + ' mask-img';
+									$el[0].className = classes;
 								}
 
 								/**

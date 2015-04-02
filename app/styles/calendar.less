@@ -215,6 +215,12 @@
 		}
 	}
 	.mark {
+
+		.mask-img.hide {
+			display: block !important;
+			opacity: 0;
+		}
+
 		.mask-img {
 			z-index: 25;
 			width: 50px;
@@ -222,6 +228,8 @@
 			position: absolute;
 			margin: -10px 0 0 -10px;
 			box-shadow: 0 0 10px rgba(50, 50, 50, 0.7);
+			opacity: 100;
+			transition: opacity 250ms cubic-bezier(1.000, 0.065, 0.835, 0.685);
 		}
 
 		.location {
@@ -230,7 +238,6 @@
 			font-size: 1.75em;
 			line-height: 1em;
 			margin-top: .35em;
-
 		}
 
 		.pds {
