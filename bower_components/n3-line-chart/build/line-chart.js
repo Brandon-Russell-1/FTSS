@@ -17,7 +17,7 @@ directive = function(name, conf) {
 };
 
 directive('linechart', [
-  'n3utils', '$window', '$timeout', function(n3utils, $window, $timeout) {
+  'n3utils', '$window', '$timeout', '$rootScope', function(n3utils, $window, $timeout, $rootScope) {
     var link;
     link = function(scope, element, attrs, ctrl) {
       var dim, initialHandlers, isUpdatingOptions, promise, window_resize, _u;
