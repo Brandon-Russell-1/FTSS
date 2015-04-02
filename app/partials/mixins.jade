@@ -237,7 +237,7 @@ mixin modalHeader(create, update)
             h3(ng-show='createData'): +icon('plus-circle', 'Add&nbsp;' + create)
 
         if update
-            h3(ng-hide='createData'): +icon('edit', 'Update&nbsp;' + update)
+            h3(ng-hide='createData'): +icon('edit', 'Update ' + update)
 
         block
 
