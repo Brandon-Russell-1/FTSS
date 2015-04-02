@@ -152,8 +152,13 @@ FTSS.ng.controller(
 							// Setup uour empty calendar for FullCalendar
 							scope.eventsInstructor = [];
 
+							// For consistency in our bioPhoto directive
+							scope.bioPhoto = scope.data.Instructor.Photo;
+
 							// Monitors the InstructorId to load their teaching schedule
 							scope.$watch('data.InstructorId', function (instructor) {
+
+								scope.bioPhoto = caches.Instructors[instructor].Photo;
 
 								// If we have selected an instructor, try to get their teaching schedule
 								if (instructor) {
