@@ -36,83 +36,120 @@
 					'scope'   : {
 						'bioPhoto': '='
 					},
-					'link'    : function ($scope, $el) {
+					'compile' : function compile(tElement) {
 
-						var classes = $el[0].className;
+						// Save a copy of the original classes
+						var classes = tElement[0].className;
 
-						$scope.$watch('bioPhoto', function () {
+						// Add hide to this until the img is load (to avoid the ugly empty shadow)
+						tElement[0].className = classes + ' hide';
 
-							if ($scope.bioPhoto) {
+						return {
 
-								$el[0].className = classes + ' mask-img';
+							// Run our pre-linker
+							pre: function preLink($scope, $el) {
 
-								cachedImages[$scope.bioPhoto] ? loadImage() : readCache();
+								// We need to watch bioPhoto to make sure we get the right item
+								$scope.$watch('bioPhoto', function () {
 
-							} else {
+									if ($scope.bioPhoto) {
 
-								$el[0].className = classes + ' invalid';
+										// If there is a valid photo url, try to load it
+										cachedImages[$scope.bioPhoto] ? loadImage() : readCache();
 
-								$el[0].innerHTML = '';
+									} else {
+
+										// Otherwise, empty the html and hide it
+										$el[0].className = 'hide';
+
+										$el[0].innerHTML = '';
+
+									}
+
+								});
+
+								/**
+								 * Process image data from the cache for rendering in the UI
+								 *
+								 * @param blob the cached data from indexeddb
+								 */
+								function processImage(blob) {
+
+									cachedImages[$scope.bioPhoto] =
+										'data:image/jpeg;base64,' + _arrayBufferToBase64(blob);
+
+									loadImage();
+
+								}
+
+								/**
+								 * Fetch the image data from our SharePoint list and store in the cache
+								 */
+								function getImageFromWeb() {
+
+									$http({
+
+										'url'             : FTSS.photoURL + '_w/' + $scope.bioPhoto + '_jpg.jpg',
+										'method'          : 'GET',
+										'responseType'    : 'arraybuffer',
+										'ignoreLoadingBar': true
+
+									}).success(function (blob) {
+
+										processImage(blob);
+
+										db.transaction('images', 'readwrite').objectStore('images').put(blob, $scope.bioPhoto);
+
+									});
+
+								}
+
+								/**
+								 * Try to find the data in IndexedDB
+								 */
+								function readCache() {
+
+									// Retrieve the file from the browser db
+									db.transaction('images').objectStore('images')
+										.get($scope.bioPhoto).onsuccess = function (event) {
+
+										event.target.result ? processImage(event.target.result) : getImageFromWeb();
+
+									};
+
+								}
+
+								/**
+								 * Load the image data for the UI and make visible
+								 */
+								function loadImage() {
+									$el[0].innerHTML = '<img src="' + cachedImages[$scope.bioPhoto] + '" />';
+									$el[0].className = classes + ' mask-img';
+								}
+
+								/**
+								 * Convert a blob to a Base64 string
+								 *
+								 * @param buffer
+								 * @returns {string}
+								 * @private
+								 */
+								function _arrayBufferToBase64(buffer) {
+									var binary = '';
+									var bytes = new Uint8Array(buffer);
+									var len = bytes.byteLength;
+									for (var i = 0; i < len; i++) {
+										binary += String.fromCharCode(bytes[i]);
+									}
+									return window.btoa(binary);
+								}
 
 							}
 
-						});
-
-						function processImage(blob) {
-
-							cachedImages[$scope.bioPhoto] = 'data:image/jpeg;base64,' + _arrayBufferToBase64(blob);
-
-							loadImage();
-
-						}
-
-						function getImageFromWeb() {
-
-							$http({
-
-								'url'             : FTSS.photoURL + '_w/' + $scope.bioPhoto + '_jpg.jpg',
-								'method'          : 'GET',
-								'responseType'    : 'arraybuffer',
-								'ignoreLoadingBar': true
-
-							}).success(function (blob) {
-
-								processImage(blob);
-
-								db.transaction('images', 'readwrite').objectStore('images').put(blob, $scope.bioPhoto);
-
-							});
-
-						}
-
-						function readCache() {
-
-							// Retrieve the file from the browser db
-							db.transaction('images').objectStore('images')
-								.get($scope.bioPhoto).onsuccess = function (event) {
-
-								event.target.result ? processImage(event.target.result) : getImageFromWeb();
-
-							};
-
-						}
-
-						function loadImage() {
-							$el[0].innerHTML = '<img src="' + cachedImages[$scope.bioPhoto] + '" />';
-						}
-
-						function _arrayBufferToBase64(buffer) {
-							var binary = '';
-							var bytes = new Uint8Array(buffer);
-							var len = bytes.byteLength;
-							for (var i = 0; i < len; i++) {
-								binary += String.fromCharCode(bytes[i]);
-							}
-							return window.btoa(binary);
-						}
-
+						};
 
 					}
+
 				};
 
 			}
