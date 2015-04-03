@@ -39,10 +39,10 @@
 					'compile' : function compile(tElement) {
 
 						// Save a copy of the original classes
-						var classes = tElement[0].className + ' mask-img';
+						var _classes = tElement[0].className + ' mask-img';
 
 						// Add hide to this until the img is load (to avoid the ugly empty shadow)
-						tElement[0].className = classes + ' hide';
+						tElement[0].className = _classes + ' hide';
 
 						return {
 
@@ -55,7 +55,7 @@
 									if ($scope.bioPhoto) {
 
 										// If there is a valid photo url, try to load it
-										cachedImages[$scope.bioPhoto] ? loadImage() : readCache();
+										cachedImages[$scope.bioPhoto] ? loadImage(true) : readCache();
 
 									} else {
 
@@ -78,7 +78,8 @@
 									cachedImages[$scope.bioPhoto] =
 										'data:image/jpeg;base64,' + _arrayBufferToBase64(blob);
 
-									loadImage();
+									// Random load within 750 ms
+									setTimeout(loadImage, (Math.random() * 500));
 
 								}
 
@@ -139,11 +140,14 @@
 								/**
 								 * Load the image data for the UI and make visible
 								 */
-								function loadImage() {
+								function loadImage(cached) {
+
+									// After the first load, bypass the fade in effect
+									if (cached) $el[0].style.opacity = 100;
 
 									$el[0].innerHTML = '<img src="' + cachedImages[$scope.bioPhoto] + '" />';
 
-									$el[0].className = classes;
+									$el[0].className = _classes;
 
 								}
 
