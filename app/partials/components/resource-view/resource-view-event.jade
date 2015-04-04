@@ -23,20 +23,27 @@ td(class='mark {{className}}',  colspan='{{DaysTruncated}}', ng-click='editClass
 
             br
 
-            .col-lg-4.white(edit-students, lookup='{{Id}}')
+            .col-lg-4.white
+
+                div(edit-students, lookup='{{Id}}')
+
+                .btn.btn-info.btn-labeled.btn-muted(bs-modal='modal', template='/partials/iframe-ttms.html', hover='load-ttms')
+                    span.btn-label: +icon('printer')
+                    span.btn-text Load TTMS
+
 
             .col-lg-8
 
-                i {{Instructor.InstructorName}}
+                        i {{Instructor.InstructorName}}
 
-                br
+                        br
 
-                p
-                    b FTD Notes:&nbsp;&nbsp;
-                    | {{ClassNotes}}
+                        p
+                            b FTD Notes:&nbsp;&nbsp;
+                            | {{ClassNotes}}
 
-                p
-                    b J4 Notes:&nbsp;&nbsp;
-                    | {{J4Notes}}
+                        p
+                            b J4 Notes:&nbsp;&nbsp;
+                            | {{J4Notes}}
 
-            .clearfix
+                    .clearfix

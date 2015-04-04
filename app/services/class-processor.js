@@ -16,16 +16,16 @@ FTSS.ng.service('classProcessor', [
 
 				var csvData = new CSV(scope.csv, {header: true}).encode(),
 
-				    blob = new Blob([decodeURIComponent(encodeURI(csvData))], {
-					    type: "text/csv;charset=utf-8;"
-				    }),
+					blob = new Blob([decodeURIComponent(encodeURI(csvData))], {
+						type: "text/csv;charset=utf-8;"
+					}),
 
-				    fileName = [
-					    scope.$parent.ftd.LongName,
-					    ' Scheduling Data - ',
-					    moment().format(),
-					    '.csv'
-				    ].join('');
+					fileName = [
+						scope.$parent.ftd.LongName,
+						' Scheduling Data - ',
+						moment().format(),
+						'.csv'
+					].join('');
 
 				saveAs(blob, fileName);
 
@@ -145,8 +145,16 @@ FTSS.ng.service('classProcessor', [
 					'danger' : 'Seat Limit Exceeded'
 				}[row.className];
 
-				// Cleanup the TTMS presentation
-				row.TTMSText = row.TTMS ? ' - ' + row.TTMS : '';
+				// The link to a TTMS start/grad roster
+				row.TTMSLink = [
+					'https://krpt.ttms.us.af.mil/TTMSReportsApp/wait.aspx',
+					'?webTier=CSGR.dll&dbinstance=SMPRO&cbMaskID=F',
+					'&Content=PDF&rtm=rptCSGR_PDS&rbSort=name&CLASS_SD=',
+					row.Course.Number,
+					row.TTMS,
+					'     ',
+					row.startMoment.format('DD/MMM/YYYY').toUpperCase()
+				].join('');
 
 				// Setup our search fields for this view
 				row.search = [
