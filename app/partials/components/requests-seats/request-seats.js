@@ -91,7 +91,7 @@
 							};
 
 							// Open the modal
-							utilities.modal('modal-request-seats', $scope);
+							utilities.modal('request-seats', $scope);
 
 						};
 
