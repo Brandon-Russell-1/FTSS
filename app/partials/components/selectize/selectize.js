@@ -212,7 +212,7 @@
 					// Because of some funky async + closures we need to store a copy of this for action
 						_self = this,
 
-						loaded = function (data, group, text) {
+						loaded = function (data, groupName, processRow) {
 
 							// Destroy all archived data because it is completely useless to us...
 							_.each(data, function (row, key) {
@@ -222,38 +222,34 @@
 							});
 
 							// Add the dataset to the caches object for global access
-							caches[group] = data;
+							caches[groupName] = data;
 
 							// create the searchBox value of type:Id for eventual filter mapping
-							// .replace('m', 'c') is a really bad hack but needed to not break course lookups :-/
-							var id = group.toLowerCase().charAt(0).replace('m', 'c') + ':';
+							var _idPrefix = groupName.toLowerCase().charAt(0) + ':';
 
-							options[group] = _.map(data, function (v) {
+							options[groupName] = _.map(data, function (v) {
 
-								var Id, txt;
-
-								Id = (v.Id || v);
-								txt = text(v);
+								processRow(v);
 
 								return {
-									'Id'      : Id,
-									'id'      : id + Id,
-									'optgroup': group,
-									'label'   : v.label || txt,
+									'Id'      : v.Id,
+									'id'      : _idPrefix + v.Id,
+									'optgroup': groupName,
+									'label'   : v.label,
 									'data'    : v,
-									'search'  : v.text || txt.text || txt
+									'search'  : v.text
 								};
 
 							});
 
 							// Add the option group (header) to our searchBox
-							_self.addOptionGroup(group, {
+							_self.addOptionGroup(groupName, {
 								'label': {
 									         'Units'           : 'FTD',
 									         'MasterCourseList': 'Course<right>MDS</right>',
 									         'Hosts'           : 'Host Unit'
-								         }[group] || group,
-								'value': group
+								         }[groupName] || groupName,
+								'value': groupName
 							});
 
 							// Keep track of our async loads and fire once they are all done (not using $q.all())
@@ -270,9 +266,9 @@
 
 								_.each(caches.Units, function (unit) {
 
-									_.each(unit.Courses_JSON, function (course) {
+									unit.Courses = _.map(unit.Courses_JSON, function (courseId) {
 
-										unit.Courses.push(caches.MasterCourseList[course]);
+										return caches.MasterCourseList[courseId];
 
 									});
 
@@ -328,7 +324,8 @@
 							 * @type {*|string}
 							 */
 							course.label = [
-								'<div><h5>', course.PDS, '<em> - ', course.Number, '<right>', course.MDS, '</right></em></h5>',
+								'<div><h5>', course.PDS, '<em> - ', course.Number, '<right>', course.MDS,
+								'</right></em></h5>',
 								'<small>', course.Title, '</small></div>'
 							].join('');
 
@@ -355,7 +352,6 @@
 								course.Title
 							].join(' ');
 
-							return course.text;
 						});
 
 					}
@@ -364,8 +360,6 @@
 
 						// Add Units to Selectize with row callback
 						loaded(response, 'Units', function (v) {
-
-							v.Courses = [];
 
 							// Use Det # to determine squadron 2XX for 372 TRS / 3XX for 373 TRS
 							v.Squadron = v.Det < 300 ? '372 TRS' : '373 TRS';
@@ -413,8 +407,6 @@
 								')'
 							].join('');
 
-							return v.text;
-
 						});
 
 					}
@@ -424,8 +416,6 @@
 						loaded(hosts, 'Hosts', function (host) {
 
 							host.text = host.Unit;
-
-							return host.Unit;
 
 						});
 
@@ -438,9 +428,7 @@
 							// Fix for stupid SP bug--I hate SP
 							val.InstructorEmail = (val.InstructorEmail || '').replace('mailto:', '');
 
-							val.label = val.InstructorName;
-
-							return val.InstructorName;
+							val.text = val.label = val.InstructorName;
 
 						});
 
