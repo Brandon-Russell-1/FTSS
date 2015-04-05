@@ -177,7 +177,9 @@
 									html.render += html.monthHeader + html.dayHeader + html.spacer;
 								}
 
-								html.render += '<tr class="event">' +
+								html.render += '<tr class="event" left hover="' +
+								               instructor[0].Instructor.InstructorName +
+								               '" hoverClass="leftBarOverlayHover">' +
 								               instructor.html +
 								               '</tr>' +
 								               html.spacer;
