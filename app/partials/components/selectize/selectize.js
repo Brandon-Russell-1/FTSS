@@ -225,7 +225,7 @@
 							caches[groupName] = data;
 
 							// create the searchBox value of type:Id for eventual filter mapping
-							var _idPrefix = groupName.toLowerCase().charAt(0) + ':';
+							var _idPrefix = groupName.toLowerCase().charAt(0).replace('m', 'c') + ':';
 
 							options[groupName] = _.map(data, function (v) {
 
