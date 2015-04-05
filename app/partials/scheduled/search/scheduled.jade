@@ -26,7 +26,11 @@ include ../../mixins
 
         .clearfix
 
-        .row(ng-if='!ftss.showAlternateView', ng-repeat='row in group track by row.Id')
+        .row(ng-if='!ftss.showAlternateView',
+                ng-repeat='row in group track by row.Id',
+                left,
+                hover='{{::row.ClassNotes}}'
+                hoverClass="leftBarOverlayHover")
 
             .btn.btn-success.openSeats(ng-click='requestSeats()') {{::row.openSeats}}
 
@@ -39,8 +43,6 @@ include ../../mixins
                     .double
 
                         .pull-left {{::row.dateRange}}
-
-                        .notes.hideDefault(ng-if='row.ClassNotes', hover='{{::row.ClassNotes}}'): +icon('info-circle')
 
                         a.pull-right(href='https://www.google.com/maps/@{{::row.locationCoords}},15z',
                             target='_blank',
