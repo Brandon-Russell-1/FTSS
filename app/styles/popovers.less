@@ -41,9 +41,14 @@
 	}
 }
 
-.popover.frozen {
-	border: 2px solid #428bca;
+.popover.leftBarOverlayHover {
+	transition: none !important;
+	left: auto !important;
+	right: ~"calc(100% - 175px)";
+	background: rgba(0, 0, 0, 0.85);
+	color: #fff;
+
 	.arrow {
-		border-bottom-color: #428bca;
+		display: none;
 	}
 }

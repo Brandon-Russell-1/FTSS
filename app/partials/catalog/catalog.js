@@ -105,7 +105,7 @@ FTSS.ng.controller(
 
 						if (u.Courses_JSON.indexOf(d.Id) > -1) {
 
-							d.Units.push(u.label);
+							d.Units.push(u.Base + ' (' + u.Det + ')');
 							d.search += ' ' + u.search;
 
 						}

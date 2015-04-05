@@ -22,7 +22,10 @@ include ../mixins
                         tr.am-slide-top.traverse(ng-repeat='row in group track by row.Id',
                                                             ng-class='{archived:row.Archived}',
                                                             ng-dblclick='canEdit && edit(false)',
-                                                            id='row-{{::row.Id}}')
+                                                            id='row-{{::row.Id}}',
+                                                            left,
+                                                            hover='{{::row.units}}'
+                                                            hoverClass="leftBarOverlayHover")
 
                             td.uppercase
 
@@ -36,12 +39,6 @@ include ../mixins
                                             href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{::row.Number}}')
                                             | {{::row.Number}}
 
-                                    .pull-right.archiveExclude(ng-show='row.Units',
-                                                hover='{{::row.PDS}} is taught by {{::row.Units.length}} FTDs:',
-                                                content='{{::row.units}}',
-                                                left
-                                                style='margin-right: 15px;')
-                                                +icon('instructor')
                                     .pull-right.archiveOnly(style='margin-right:10%') *** ARCHIVED COURSE ***
 
                                 .row: .col-lg-12.peek {{::row.Title}}
