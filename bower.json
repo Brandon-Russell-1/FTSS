@@ -18,6 +18,7 @@
     "angular-motion": "latest",
     "moment": "latest",
     "lodash": "latest",
+    "sifter": "latest",
     "angular-strap": "2.1.2",
     "angular-ui-calendar": "~0.9.0",
     "n3-line-chart": "latest",
