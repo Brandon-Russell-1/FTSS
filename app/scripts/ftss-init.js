@@ -152,7 +152,7 @@
 	              } : {
 
 		              // These are the ng-sharepoint parameters for the DEVELOPMENT version of FTSS
-		              'offline'     : true,
+		              'offline'     : false,
 		              'baseURL'     : base + 'dev2/_vti_bin/ListData.svc/',
 		              'user'        : {'url': base + 'dev2/_vti_bin/UserGroup.asmx'},
 		              'people'      : {'url': base + 'dev2/_vti_bin/People.asmx'},
@@ -168,7 +168,7 @@
 	FTSS.J4Email = '982TRG.J4scheduling@us.af.mil';
 
 	// Helper variable for handling production vs development mode photos
-	FTSS.photoURL = PRODUCTION ? base + 'live/Bios/' : base + 'dev2/Bios/';
+	FTSS.photoURL = base + 'media/photos/';
 
 	if (!PRODUCTION) {
 
