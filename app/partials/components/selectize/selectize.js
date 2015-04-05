@@ -255,15 +255,6 @@
 							// Keep track of our async loads and fire once they are all done (not using $q.all())
 							if (++count === CACHE_COUNT) {
 
-								var tagBoxOpts = []
-
-									.concat(options.MasterCourseList,
-								            options.Units,
-								            options.Hosts);
-
-								// Add the options to our searchBox
-								_self.addOption(tagBoxOpts);
-
 								_.each(caches.Units, function (unit) {
 
 									unit.Courses = _.map(unit.Courses_JSON, function (courseId) {
@@ -276,17 +267,26 @@
 
 								});
 
-								_.each(caches.Hosts, function (host) {
+								_.each(options.Hosts, function (host) {
 
-									var ftd = caches.Units[host.FTD] || {};
+									var ftd = caches.Units[host.data.FTD] || {};
 
 									host.label = '<b>' +
-									             host.Unit +
+									             host.data.Unit +
 									             '</b><right>' +
 									             (ftd.Det || 'No FTD') +
 									             '</right>';
 
 								});
+
+								FTSS.tagBoxOpts = []
+
+									.concat(options.MasterCourseList,
+								            options.Units,
+								            options.Hosts);
+
+								// Add the options to our searchBox
+								_self.addOption(FTSS.tagBoxOpts);
 
 								// Copy that(this) back to FTSS.search
 								FTSS.search = _self;
