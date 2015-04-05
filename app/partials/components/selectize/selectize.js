@@ -22,17 +22,17 @@
 			opts,
 
 			{
-				'labelField': opts.label || 'label',
-				'maxItems': 1,
-				'options': (!opts.watch &&
-				            scope.$parent[opts.select] ||
-				            options[opts.select] ||
-				            caches[opts.select]) ||
-				null,
-				'plugins': opts.maxItems > 1 ? [
+				'labelField'  : opts.label || 'label',
+				'maxItems'    : 1,
+				'options'     : (!opts.watch &&
+				                 scope.$parent[opts.select] ||
+				                options[opts.select] ||
+				                caches[opts.select]) ||
+				                null,
+				'plugins'     : opts.maxItems > 1 ? [
 					'remove_button'
 				] : null,
-				'onChange': function (val) {
+				'onChange'    : function (val) {
 
 					// Do not run when initializing the value
 					if (loaded) {
@@ -44,9 +44,9 @@
 
 							var oldVal = utilities.deepRead(scope, opts.field),
 
-							    newVal = (val && val.map && !isNaN(val[0]) ?
+								newVal = (val && val.map && !isNaN(val[0]) ?
 
-							              val.map(Number) : Number(val)) || val || null;
+								          val.map(Number) : Number(val)) || val || null;
 
 							// Update the field with the value(s)
 							if (oldVal !== newVal) {
@@ -54,11 +54,11 @@
 								// Split our dotted notation into an array
 								var test = opts.field.split('.'),
 
-								    // Save the last property
-								    prop = test.pop(),
+								// Save the last property
+									prop = test.pop(),
 
-								    // Get a reference to the parent object/scope
-								    item = test.length ? utilities.deepRead(scope, test) : scope;
+								// Get a reference to the parent object/scope
+									item = test.length ? utilities.deepRead(scope, test) : scope;
 
 								// Write the changes to the child property on the parent object
 								item[prop] = newVal;
@@ -91,9 +91,9 @@
 									options[opts.select]
 
 										.push({
-											      'label': val,
-											      'Id'   : val
-										      });
+											'label': val,
+											'Id'   : val
+										});
 
 								}
 
@@ -181,19 +181,19 @@
 			};
 
 			return {
-				'valueField'     : 'id',
-				'persist'        : true,
-				'optgroupOrder'  : [
+				'valueField'   : 'id',
+				'persist'      : true,
+				'optgroupOrder': [
 					'Units',
 					'Hosts',
 					'MasterCourseList'
 				],
-				'plugins'        : [
+				'plugins'      : [
 					'optgroup_columns',
 					'remove_button'
 				],
 				// If the users presses, enter we are assuming they wanted to do a search
-				'onEnter'        : doSearch,
+				'onEnter'      : doSearch,
 
 				// Try to do a search on dropdown close too (we have a fake button for this as a user hint)
 				'onDropdownClose': function () {
@@ -201,106 +201,106 @@
 				},
 
 				// The primary initializer for the search box, performs async operations with ng-SharePoint
-				'onInitialize'   : function () {
+				'onInitialize': function () {
 
 					// Async counter
 					var count = 0,
 
-					    // Final count for our async operations to complete the process
-					    CACHE_COUNT = 4,
+					// Final count for our async operations to complete the process
+						CACHE_COUNT = 4,
 
-					    // Because of some funky async + closures we need to store a copy of this for action
-					    _self = this,
+					// Because of some funky async + closures we need to store a copy of this for action
+						_self = this,
 
-					    loaded = function (data, group, text) {
+						loaded = function (data, group, text) {
 
-						    // Destroy all archived data because it is completely useless to us...
-						    _.each(data, function (row, key) {
+							// Destroy all archived data because it is completely useless to us...
+							_.each(data, function (row, key) {
 
-							    row.Archived && delete data[key];
+								row.Archived && delete data[key];
 
-						    });
+							});
 
-						    // Add the dataset to the caches object for global access
-						    caches[group] = data;
+							// Add the dataset to the caches object for global access
+							caches[group] = data;
 
-						    // create the searchBox value of type:Id for eventual filter mapping
-						    // .replace('m', 'c') is a really bad hack but needed to not break course lookups :-/
-						    var id = group.toLowerCase().charAt(0).replace('m', 'c') + ':';
+							// create the searchBox value of type:Id for eventual filter mapping
+							// .replace('m', 'c') is a really bad hack but needed to not break course lookups :-/
+							var id = group.toLowerCase().charAt(0).replace('m', 'c') + ':';
 
-						    options[group] = _.map(data, function (v) {
+							options[group] = _.map(data, function (v) {
 
-							    var Id, txt;
+								var Id, txt;
 
-							    Id = (v.Id || v);
-							    txt = text(v);
+								Id = (v.Id || v);
+								txt = text(v);
 
-							    return {
-								    'Id'      : Id,
-								    'id'      : id + Id,
-								    'optgroup': group,
-								    'label'   : v.label || txt,
-								    'data'    : v,
-								    'search'  : v.text || txt.text || txt
-							    };
+								return {
+									'Id'      : Id,
+									'id'      : id + Id,
+									'optgroup': group,
+									'label'   : v.label || txt,
+									'data'    : v,
+									'search'  : v.text || txt.text || txt
+								};
 
-						    });
+							});
 
-						    // Add the option group (header) to our searchBox
-						    _self.addOptionGroup(group, {
-							    'label'  : {
-								    'Units'           : 'FTD',
-								    'MasterCourseList': 'Course<right>MDS</right>',
-								    'Hosts'           : 'Host Unit'
-							    }[group] || group,
-							    'value'  : group
-						    });
+							// Add the option group (header) to our searchBox
+							_self.addOptionGroup(group, {
+								'label': {
+									         'Units'           : 'FTD',
+									         'MasterCourseList': 'Course<right>MDS</right>',
+									         'Hosts'           : 'Host Unit'
+								         }[group] || group,
+								'value': group
+							});
 
-						    // Keep track of our async loads and fire once they are all done (not using $q.all())
-						    if (++count === CACHE_COUNT) {
+							// Keep track of our async loads and fire once they are all done (not using $q.all())
+							if (++count === CACHE_COUNT) {
 
-							    var tagBoxOpts = []
+								var tagBoxOpts = []
 
-								    .concat(options.MasterCourseList,
-							                options.Units,
-							                options.Hosts);
+									.concat(options.MasterCourseList,
+								            options.Units,
+								            options.Hosts);
 
-							    // Add the options to our searchBox
-							    _self.addOption(tagBoxOpts);
+								// Add the options to our searchBox
+								_self.addOption(tagBoxOpts);
 
-							    _.each(caches.Units, function (unit) {
+								_.each(caches.Units, function (unit) {
 
-								    _.each(unit.Courses_JSON, function (course) {
+									_.each(unit.Courses_JSON, function (course) {
 
-									    unit.Courses.push(caches.MasterCourseList[course]);
+										unit.Courses.push(caches.MasterCourseList[course]);
 
-								    });
+									});
 
-								    unit.Instructors = _.where(caches.Instructors, {'UnitId': unit.Id});
+									unit.Instructors = _.where(caches.Instructors, {'UnitId': unit.Id});
 
-							    });
+								});
 
-							    _.each(caches.Hosts, function (host) {
+								_.each(caches.Hosts, function (host) {
 
-								    var ftd = caches.Units[host.FTD] || {};
+									var ftd = caches.Units[host.FTD] || {};
 
-								    host.label = '<b>' +
-								                 host.Unit +
-								                 '</b><right>' +
-								                 (ftd.Det || 'No FTD') +
-								                 '</right>';
+									host.label = '<b>' +
+									             host.Unit +
+									             '</b><right>' +
+									             (ftd.Det || 'No FTD') +
+									             '</right>';
 
-							    });
+								});
 
-							    // Copy that(this) back to FTSS.search
-							    FTSS.search = _self;
+								// Copy that(this) back to FTSS.search
+								FTSS.search = _self;
 
-							    // Call completion now
-							    utilities.initPage('selectize');
+								// Call completion now
+								utilities.initPage('selectize');
 
-						    }
+							}
 
-					    };
+						};
 
 					SharePoint.read(FTSS.models('catalog')).then(loadCourses);
 
@@ -313,12 +313,12 @@
 					function loadCourses(response) {
 
 						// Add MCL to Selectize with row callback
-						loaded(response, 'MasterCourseList', function (v) {
+						loaded(response, 'MasterCourseList', function (course) {
 
 							// Save for later  our unit listings
-							v.Units = [];
+							course.Units = [];
 
-							v.MDS = courseNumberParser(v.Number);
+							course.MDS = courseNumberParser(course.Number);
 
 							/**
 							 * Generates string format for dropdown display
@@ -327,10 +327,19 @@
 							 *
 							 * @type {*|string}
 							 */
-							v.label = [
-								'<div><h5>', v.PDS, '<em> - ', v.Number, '<right>', v.MDS, '</right></em></h5>',
-								'<small>', v.Title, '</small></div>'
+							course.label = [
+								'<div><h5>', course.PDS, '<em> - ', course.Number, '<right>', course.MDS, '</right></em></h5>',
+								'<small>', course.Title, '</small></div>'
 							].join('');
+
+							/**
+							 * A text mapping of IMDS/G081 values
+							 * @type {string}
+							 */
+							course.imds_g081 = [
+								course.IMDS && 'IMDS: ' + course.IMDS,
+								course.G081 && 'G081: ' + course.G081
+							].join('    ');
 
 							/**
 							 * Generates string format for full-text search
@@ -339,14 +348,14 @@
 							 *
 							 * @type {*|string}
 							 */
-							v.text = [
-								'pds:' + v.PDS,
-								'mds:' + v.MDS,
-								v.Number,
-								v.Title
+							course.text = [
+								'pds:' + course.PDS,
+								'mds:' + course.MDS,
+								course.Number,
+								course.Title
 							].join(' ');
 
-							return v.text;
+							return course.text;
 						});
 
 					}
@@ -512,7 +521,7 @@
 				'restrict': 'A',
 
 				// Responsible for registering DOM listeners as well as updating the DOM
-				'link'    : function (scope, element, attrs) {
+				'link': function (scope, element, attrs) {
 
 					timeout = $timeout;
 					SharePoint = _SharePoint_;
@@ -554,33 +563,33 @@
 
 							var watchList = attrs.watchlist.split('.'),
 
-							    /**
-							     * Our watch function that updates and enables/disables this dropdown
-							     *
-							     * @param find
-							     */
-							    refresh = function (find) {
+								/**
+								 * Our watch function that updates and enables/disables this dropdown
+								 *
+								 * @param find
+								 */
+								refresh = function (find) {
 
-								    var select = element[0].selectize;
+									var select = element[0].selectize;
 
-								    // First, disable and clear the dropdown
-								    select.disable();
-								    select.clearOptions();
+									// First, disable and clear the dropdown
+									select.disable();
+									select.clearOptions();
 
-								    // Attempt to load the list of options
-								    find = find && caches[watchList[0]][find][watchList[1]];
+									// Attempt to load the list of options
+									find = find && caches[watchList[0]][find][watchList[1]];
 
-								    // If options exist, add them, refresh and enable the list
-								    if (find) {
+									// If options exist, add them, refresh and enable the list
+									if (find) {
 
-									    select.addOption(find);
-									    select.refreshOptions(false);
-									    select.setValue(scope.data[opts.field]);
-									    select.enable();
+										select.addOption(find);
+										select.refreshOptions(false);
+										select.setValue(scope.data[opts.field]);
+										select.enable();
 
-								    }
+									}
 
-							    };
+								};
 
 							// Our watch binding
 							scope.$watch(attrs.watch, refresh);
@@ -590,17 +599,17 @@
 						// Strange bug we need to look into later on, just try/catch for now...
 						try {
 							selectize
-							= FTSS.selectizeInstances[opts.field || attrs.selectize]
-							= $(element).selectize(opts)[0].selectize;
+								= FTSS.selectizeInstances[opts.field || attrs.selectize]
+								= $(element).selectize(opts)[0].selectize;
 						} catch (e) {}
 
 						selectize && scope.modal && scope.modal
 
 							.$addControl({
-								             '$setPristine': function () {
-									             selectize.$control.removeClass('ng-dirty');
-								             }
-							             });
+								'$setPristine': function () {
+									selectize.$control.removeClass('ng-dirty');
+								}
+							});
 					});
 				}
 			};

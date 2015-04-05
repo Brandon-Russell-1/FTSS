@@ -41,18 +41,6 @@ FTSS.ng.controller(
 				// Reference for course headers:  IMDS: XXXXX    G081: XXXXX
 				$scope.imds_g081 = {};
 
-				// Generate the IMDS/G081 mappings once (rather than multiple times for each class)
-				_(data).pluck('CourseId').unique().each(function (id) {
-
-					var course = caches.MasterCourseList[id];
-
-					$scope.imds_g081[id] = [
-						course.IMDS && 'IMDS: ' + course.IMDS,
-						course.G081 && 'G081: ' + course.G081
-					].join('    ');
-
-				}).value();
-
 				self.initialize(data).then(function (row) {
 
 					classProcessor.processRow(row);

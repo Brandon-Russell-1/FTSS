@@ -13,7 +13,7 @@ include ../../mixins
 
         .lead(style='letter-spacing: .1em;font-size: 1.2em;')
             .pull-left.italics {{::group[0].Course.Title}}
-            .pull-right {{::imds_g081[group[0].CourseId]}}
+            .pull-right {{::group[0].Course.imds_g081}}
 
         br
         br
