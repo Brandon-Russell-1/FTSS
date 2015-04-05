@@ -11,26 +11,26 @@ FTSS.ng.service('sharepointFilters', [
 
 		var _self = this,
 
-		    _filterMaps = {
+			_filterMaps = {
 
-			    'scheduled'   : {
-				    'u': 'UnitId',
-				    'c': 'CourseId'
-			    },
-			    'requirements': {
-				    'h': 'HostId',
-				    'u': 'UnitId'
-			    },
-			    'backlog'     : {
-				    'h': 'HostId'
-			    }
+				'scheduled'   : {
+					'u': 'UnitId',
+					'c': 'CourseId'
+				},
+				'requirements': {
+					'h': 'HostId',
+					'u': 'UnitId'
+				},
+				'backlog'     : {
+					'h': 'HostId'
+				}
 
-		    },
+			},
 
-		    _max = {
-			    'backlog'     : 1,
-			    'requirements': 1
-		    };
+			_max = {
+				'backlog'     : 1,
+				'requirements': 1
+			};
 
 
 		this.map = function () {
@@ -44,44 +44,32 @@ FTSS.ng.service('sharepointFilters', [
 		 */
 		this.refresh = (function () {
 
-			var options, userOptions, lastFilter;
+			var lastViewName;
 
 			return function () {
 
 				FTSS.search.clear(true);
+				FTSS.search.clearOptions();
 
-				var page = $location.path().split('/')[1];
+				var viewName = $location.path().split('/')[1],
 
-				// Temporary list of valid filter keys for this page
-				var validFilters = _.keys(_filterMaps[page]);
+					view = _filterMaps[viewName];
 
-				if (validFilters.join() !== lastFilter) {
+				if (viewName !== lastViewName && _filterMaps[viewName]) {
 
-					lastFilter = validFilters.join();
+					lastViewName = viewName;
 
-					// create a cloned backup of our options & userOptions before we change them up
-					options = options || _.clone(FTSS.search.options);
-					userOptions = userOptions || _.clone(FTSS.search.userOptions);
+					FTSS.search.addOption(_.filter(FTSS.tagBoxOpts, function (opt) {
 
-					// empty the options--how wild is that!?@!
-					FTSS.search.options = {};
-					FTSS.search.userOptions = {};
+						return view[opt.id.charAt(0)];
 
-					// Add everything else back in that is a valid filter for this page
-					_.each(userOptions, function (opt, key) {
-
-						if (_.contains(validFilters, key.charAt(0))) {
-							FTSS.search.options[key] = _.clone(options[key]);
-							FTSS.search.userOptions[key] = _.clone(userOptions[key]);
-						}
-
-					});
+					}));
 
 				}
 
 				var settings = FTSS.search.settings;
 
-				settings.maxItems = _max[page] || 20;
+				settings.maxItems = _max[viewName] || 20;
 				settings.mode = (settings.maxItems === 1) ? 'single' : 'multi';
 
 				// Need to redraw selectize with our updated options!
