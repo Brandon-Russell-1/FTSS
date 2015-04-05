@@ -29,19 +29,16 @@ include ../mixins
 
                             td.uppercase
 
-                                .row
+                                h4 {{::row.PDS}}&nbsp;-&nbsp;
+                                    a(target='etca',
+                                        href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{::row.Number}}')
+                                        | {{::row.Number}}
 
-                                    .col-lg-10
+                                    .small.pull-right.peek {{::row.imds_g081}}
 
-                                        b {{::row.PDS}}
-                                        |&nbsp;-&nbsp;
-                                        a(target='etca',
-                                            href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{::row.Number}}')
-                                            | {{::row.Number}}
+                                .pull-right.archiveOnly(style='margin-right:10%') *** ARCHIVED COURSE ***
 
-                                    .pull-right.archiveOnly(style='margin-right:10%') *** ARCHIVED COURSE ***
-
-                                .row: .col-lg-12.peek {{::row.Title}}
+                                .peek.italics.wideText {{::row.Title}}
 
 
     iframe(name='etca') {{::FocusCourse}}

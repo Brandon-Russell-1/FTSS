@@ -14,13 +14,14 @@ FTSS.ng.controller(
 			// Increase to 99 due to the simple binding
 			$scope.ftss.pageLimit = 99;
 
-			$scope.ftss.searchPlaceholder = 'Type here to search the catalog.  Examples: MDS:F-15, PDS:RFV, Robins, wire, 2A5*.';
+			$scope.ftss.searchPlaceholder =
+				'Type here to search the catalog.  Examples: MDS:F-15, PDS:RFV, Robins, wire, 2A5*.';
 
 			var self = controllerHelper($scope, {
 
-				'sort'        : 'PDS',
-				'group'       : 'MDS',
-				'model'       : 'catalog',
+				'sort' : 'PDS',
+				'group': 'MDS',
+				'model': 'catalog',
 
 				// Actions to perform prior the SP Post operation
 				'beforeSubmit': function (scope) {
@@ -43,8 +44,8 @@ FTSS.ng.controller(
 							// Create moment() for today
 							var today = moment(),
 
-							    // Restrict to only future scheduled classes
-							    collection = [];
+							// Restrict to only future scheduled classes
+								collection = [];
 
 							// Iterate over results
 							_.each(result, function (test) {
@@ -59,10 +60,10 @@ FTSS.ng.controller(
 											'__metadata': test.__metadata,
 
 											// Tell ngSharePoint to add a cache field
-											'cache'     : true,
+											'cache': true,
 
 											// Erase the Class #
-											'TTMS'      : null
+											'TTMS': null
 
 										});
 
@@ -87,33 +88,40 @@ FTSS.ng.controller(
 				// Only permit special roles read/write access (still has server-level security)
 				$scope.canEdit = security.hasRole(['curriculum', 'scheduling']);
 
-				self.initialize(data).then(function (d) {
+				self.initialize(data).then(function (course) {
+
+					course.imds_g081 = [];
+
+					course.IMDS && course.imds_g081.push('IMDS: ' + course.IMDS);
+					course.G081 && course.imds_g081.push('G081: ' + course.G081);
+
+					course.imds_g081 = course.imds_g081.join(' / ');
 
 					// Ger our official MDS for this course
-					d.MDS = courseNubmerParser(d.Number);
+					course.MDS = courseNubmerParser(course.Number);
 
-					d.search = [
-						'mds:' + d.MDS,
-						'pds:' + d.PDS,
-						d.Number,
-						d.Title
+					course.search = [
+						'mds:' + course.MDS,
+						'pds:' + course.PDS,
+						course.Number,
+						course.Title
 					].join(' ');
 
-					d.Units = [];
+					course.Units = [];
 
 					_.each(caches.Units, function (u) {
 
-						if (u.Courses_JSON.indexOf(d.Id) > -1) {
+						if (u.Courses_JSON.indexOf(course.Id) > -1) {
 
-							d.Units.push(u.Base + ' (' + u.Det + ')');
-							d.search += ' ' + u.search;
+							course.Units.push(u.Base + ' (' + u.Det + ')');
+							course.search += ' ' + u.search;
 
 						}
 
 					});
 
-					if (d.Units) {
-						d.units = d.Units.sort().join('<br>');
+					if (course.Units) {
+						course.units = course.Units.sort().join('<br>');
 					}
 
 				});
