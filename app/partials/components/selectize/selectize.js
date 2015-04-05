@@ -333,10 +333,12 @@
 							 * A text mapping of IMDS/G081 values
 							 * @type {string}
 							 */
-							course.imds_g081 = [
-								course.IMDS && 'IMDS: ' + course.IMDS,
-								course.G081 && 'G081: ' + course.G081
-							].join('    ');
+							course.imds_g081 = [];
+
+							course.IMDS && course.imds_g081.push('IMDS: ' + course.IMDS);
+							course.G081 && course.imds_g081.push('G081: ' + course.G081);
+
+							course.imds_g081 = course.imds_g081.join(' / ');
 
 							/**
 							 * Generates string format for full-text search
