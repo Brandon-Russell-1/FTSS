@@ -70,7 +70,7 @@
 					$rootScope.ftss.isTagBox = !!sharepointFilters.map();
 
 					// Limit the results for a view
-					$rootScope.ftss.pageLimit = FTSS.prefs.limit || 50;
+					$rootScope.ftss.pageLimit = 99;
 
 					// Toggle archived item visibility
 					$rootScope.ftss.showArchived = false;

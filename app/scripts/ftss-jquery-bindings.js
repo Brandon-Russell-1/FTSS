@@ -14,6 +14,7 @@
 		e = e || event;
 		e.preventDefault();
 	}, false);
+
 	window.addEventListener("drop", function (e) {
 		e = e || event;
 		e.preventDefault();
@@ -38,10 +39,6 @@
 	var body, popover, pasteAction;
 
 	body = $('body');
-
-	if (!FTSS.prefs.animate) {
-		$('html').attr('id', 'noAnimate');
-	}
 
 	/**
 	 * Intercepts paste events and handles if we have a paste handler set (FTSS.pasteAction)
@@ -91,10 +88,6 @@
 		 *
 		 */
 		'enter': function () {
-
-			if (!FTSS.prefs.tooltips) {
-				return;
-			}
 
 			var $el = $(this), title, content, placement;
 

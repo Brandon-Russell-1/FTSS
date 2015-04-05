@@ -13,8 +13,6 @@ FTSS.ng.controller(
 		'utilities',
 		function ($scope, $timeout, SharePoint, classProcessor, controllerHelper, loading, utilities) {
 
-			$scope.ftss.pageLimit = 99;
-
 			$scope.ftss.searchPlaceholder = 'Type here to search for an instructor';
 
 			var read = FTSS.models('scheduled');

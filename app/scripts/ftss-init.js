@@ -183,24 +183,4 @@
 
 	}
 
-	// These are the default user preferences for the app
-	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {
-
-		// Page limit default
-		'limit'   : 50,
-
-		// CSS animations
-		'animate' : true,
-
-		// Focus tooltips (when in a field it gives you a popup with instructions)
-		'tooltips': true,
-
-		// Enable/disable page instructions
-		'page'    : true,
-
-		// Hover tooltips (mainly used with buttons)
-		'hover'   : true
-
-	};
-
 }());

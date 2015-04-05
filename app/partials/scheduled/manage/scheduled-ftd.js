@@ -13,9 +13,6 @@ FTSS.ng.controller(
 		'security',
 		function ($scope, notifier, dateTools, classProcessor, controllerHelper, utilities, security) {
 
-			// Increase the default page limit to 100 for this view
-			$scope.ftss.pageLimit = 100;
-
 			$scope.ftd ? getSchedule() : utilities.addAsync(getSchedule);
 
 			function getSchedule() {
