@@ -102,6 +102,12 @@
 
 									} else {
 
+										event.notesHTML = event.ClassNotes ?
+										                  '<b>FTD Notes:</b> ' + event.ClassNotes : '';
+
+										event.j4NotesHTML = event.J4Notes ?
+										                    '<b>J4 Notes:</b> ' + event.J4Notes : '';
+
 										// Trim the PDS if days are less than 2
 										event.pds = event.DaysTruncated > 2 ? event.Course.PDS : '';
 
