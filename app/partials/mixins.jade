@@ -248,8 +248,7 @@ mixin modalFooter(submitText, defaultShow)
 
         block
 
-        .btn.btn-success.btn-labeled(ng-click='submit()',
-        ng-hide='modal.$invalid || submitted || !modal.$dirty || ' + defaultShow)
+        .btn.btn-success.btn-labeled(ng-click='submit()', ng-hide='modal.$invalid || submitted || !modal.$dirty || #{defaultShow}')
 
             span.btn-label.white: +icon('check-circle')
 
