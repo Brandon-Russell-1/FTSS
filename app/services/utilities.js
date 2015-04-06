@@ -115,6 +115,8 @@ FTSS.ng.service('utilities', [
 
 			scope.close = scope.modal.destroy;
 
+			return scope;
+
 		};
 
 		/**

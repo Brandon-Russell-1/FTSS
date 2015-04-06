@@ -26,6 +26,8 @@
 					'scope'      : true,
 					'link'       : function ($scope) {
 
+						var modal;
+
 						if (!$scope.canRequest) {
 							return;
 						}
@@ -86,12 +88,18 @@
 									});
 
 								// Send the operation as a batch (similar to a SQL transaction) to ensure everything worked
-								SharePoint.batch(send).then();
+								SharePoint.batch(send).then(function(results) {
+
+									results.success ? utilities.alert.create() : utilities.alert.error();
+
+									modal.modal.destroy();
+
+								});
 
 							};
 
 							// Open the modal
-							utilities.modal('request-seats', $scope);
+							modal = utilities.modal('request-seats', $scope);
 
 						};
 
