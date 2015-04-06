@@ -13,6 +13,9 @@ FTSS.ng.controller(
 		'security',
 		function ($scope, notifier, dateTools, classProcessor, controllerHelper, utilities, security) {
 
+			$scope.ftss.searchPlaceholder =
+				'Type here to search the schedule.  Examples: MDS:F-15, PDS:RFV, Robins, wire, 2A5*, March.';
+
 			$scope.ftss.hasAlternateView = true;
 			$scope.ftss.hasArchiveOption = true;
 
@@ -352,6 +355,8 @@ FTSS.ng.controller(
 						}
 
 					});
+
+				$scope.export = classProcessor.csvExport;
 
 				self.bind().then(function (data) {
 
