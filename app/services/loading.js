@@ -19,7 +19,7 @@ FTSS.ng.service('loading', [
 
 			if (updateState) {
 
-				document.getElementById('content').className = 'wait';
+				(document.getElementById('content') || {}).className = 'wait';
 				document.body.style.cursor = 'wait';
 
 			} else {
