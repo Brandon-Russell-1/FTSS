@@ -25,11 +25,11 @@ FTSS.ng.controller(
 
 				var reader = new FileReader(),
 
-				    // Get a reference to item's scope
-				    scope = this,
+				// Get a reference to item's scope
+					scope = this,
 
-				    // Angular is super-dumb about ng-repeat updates so we'll just break the rules and use jQuery...
-				    spinner = $('#spinner' + (scope.row.Id || ''));
+				// Angular is super-dumb about ng-repeat updates so we'll just break the rules and use jQuery...
+					spinner = $('#spinner' + (scope.data.Id || ''));
 
 				// Use jquery to turn on the upload spinner
 				spinner.addClass('submitting');
@@ -39,44 +39,44 @@ FTSS.ng.controller(
 					var // Get the file buffer
 						rawBuffer = result.target.result,
 
-						// Create a random file name
+					// Create a random file name
 						rand = utilities.generateUUID();
 
 					$.ajax({
-						       'url'        : SP_CONFIG.baseURL + 'Bios',
-						       'type'       : 'POST',
-						       'data'       : rawBuffer,
-						       'processData': false,
-						       'contentType': 'multipart/form-data',
-						       'headers'    : {
-							       'accept': "application/json;odata=verbose",
-							       'slug'  : FTSS.photoURL + rand + '.jpg'
-						       },
-						       'success'    : function () {
+						'url'        : SP_CONFIG.baseURL + 'Bios',
+						'type'       : 'POST',
+						'data'       : rawBuffer,
+						'processData': false,
+						'contentType': 'multipart/form-data',
+						'headers'    : {
+							'accept': "application/json;odata=verbose",
+							'slug'  : FTSS.photoURL + rand + '.jpg'
+						},
+						'success'    : function () {
 
-							       // When complete, remove the spinner and refresh the photo directive
-							       var finish = function () {
+							// When complete, remove the spinner and refresh the photo directive
+							var finish = function () {
 
-								       spinner.removeClass('submitting');
-								       spinner.data().update();
+								spinner.removeClass('submitting');
+								spinner.data().update();
 
-							       };
+							};
 
-							       // Add the new photo URL back to the scope
-							       scope.row.Photo = rand;
+							// Add the new photo URL back to the scope
+							scope.data.Photo = rand;
 
-							       // If this an existing item, call inlineUpdate();
-							       if (scope.row.Id) {
+							// If this an existing item, call inlineUpdate();
+							if (scope.data.Id) {
 
-								       self.inlineUpdate.call(scope, 'Photo', finish);
+								self.inlineUpdate.call(scope, 'Photo', finish);
 
-							       } else {
-								       finish();
-							       }
+							} else {
+								finish();
+							}
 
-						       },
-						       error        : utilities.alert.error
-					       });
+						},
+						error        : utilities.alert.error
+					});
 				};
 
 				reader.readAsArrayBuffer($files[0]);
@@ -85,11 +85,15 @@ FTSS.ng.controller(
 
 			$scope.submit = function () {
 
-				var send = $scope.row;
+				var send = $scope.data;
 
+				send.Name = send.Person.DISPLAYNAME;
+				send.Email = send.Person.EMAIL;
 				send.UnitId = $scope.ftd.Id;
 				send.cache = true;
 				send.__metadata = 'Instructors';
+
+				delete send.Person;
 
 				self._create(send, $scope.close);
 
@@ -109,11 +113,11 @@ FTSS.ng.controller(
 			$scope.addInstructor = function () {
 
 				$scope.addNew = true;
-				$scope.row = {};
+				$scope.data = {};
 
 				$scope.close = function () {
 					$scope.addNew = false;
-				}
+				};
 
 			};
 

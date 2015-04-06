@@ -13,12 +13,12 @@ div(ng-class='{addNew:addNew}')
             .col-lg-9.form-horizontal
 
                 select(selectize='people')
-                h4 {{row.email}}
+                h4 {{data.Person.EMAIL}}
 
             .col-lg-3
                 .drag-target(hover='instructors-photo', left)
                     .sending(id='spinner'): +spinner()
-                    div(bio-photo='row.Photo')
+                    div(bio-photo='data.Photo')
 
             .clearfix
 

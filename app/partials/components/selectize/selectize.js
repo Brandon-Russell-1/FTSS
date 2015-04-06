@@ -458,27 +458,38 @@
 				],
 				'onChange'    : function (val) {
 
-					var options = this.options;
+					var options = this.options,
+
+						multi = (this.settings.maxItems > 1);
 
 					scope.data = scope.data || {};
 
 					timeout(function () {
 
-						scope.data.People = {};
+						if (multi) {
 
-						_.each(val, function (person) {
+							scope.data.People = {};
 
-							var data = options[person];
+							_.each(val, function (person) {
 
-							scope.data.People[data.DISPLAYNAME || val] = data.EMAIL || '';
+								var data = options[person];
 
-						});
+								scope.data.People[data.DISPLAYNAME || val] = data.EMAIL || '';
 
-						scope.data.peopleCount = _.size(scope.data.People);
+							});
 
-						/*	scope.row.name = data.DISPLAYNAME;
-						 scope.row.email = data.EMAIL;
-						 */
+							scope.data.peopleCount = _.size(scope.data.People);
+
+						} else {
+
+							scope.data.Person = options[val];
+
+						}
+
+						try {
+							scope.modal.$setDirty();
+						} catch (_) {}
+
 					});
 
 				},
