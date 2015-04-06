@@ -68,6 +68,8 @@
 
 								instructor.html = '';
 
+								instructor.overlay = '<h5>' + instructor[0].Instructor.InstructorName + '</h5>';
+
 								var count = 0;
 
 								// Iterate over each event
@@ -139,6 +141,9 @@
 
 									}
 
+									instructor.overlay += '<div><i>' + (event.Course ? event.Course.PDS : ' - ') +
+									                      '</i><b>' + event.shortDates + '</b></div>';
+
 									// Increment the day counter
 									count += event.DaysTruncated;
 
@@ -178,8 +183,8 @@
 								}
 
 								html.render += '<tr class="event" left hover="' +
-								               instructor[0].Instructor.InstructorName +
-								               '" hoverClass="leftBarOverlayHover">' +
+								               instructor.overlay +
+								               '" hoverClass="leftBarOverlayHover"><td></td>' +
 								               instructor.html +
 								               '</tr>' +
 								               html.spacer;
@@ -273,7 +278,7 @@
 								 *
 								 * @type {string}
 								 */
-								html.monthHeader = '<tr class="header months">';
+								html.monthHeader = '<tr class="header months"><td></td>';
 
 								_(html.months).sortBy('sort').each(function (month) {
 
@@ -283,7 +288,7 @@
 
 								html.monthHeader += '</tr>';
 
-								html.dayHeader = '<tr class="header days">' + html.days.join('') + '</tr>';
+								html.dayHeader = '<tr class="header days"><td>List<br>View</td>' + html.days.join('') + '</tr>';
 
 							}
 

@@ -173,6 +173,9 @@ FTSS.ng.service('classProcessor', [
 
 			}
 
+			// Our processor for the left overlay list of courses
+			row.shortDates = row.startMoment.format('M/D/YY') + ' - ' + row.endMoment.clone().add(-1, 'days').format('M/D/YY');
+
 		};
 
 		this.getOpenSeats = function (data, countOnly) {
