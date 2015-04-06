@@ -2,39 +2,46 @@ include ../mixins
 
 - var columns = {'Class #':10, 'Dates':15, Unit:15, Open:10, Requested:10, Notes: 30}
 
-+tableHeader(false, columns, 'requests')
+.wrapped.noAdd
 
-    td
-        span(hover='popover-priority'): +icon('asterisk')
-        .double.approved(hover='Request approved'): +icon('check')
-        .double.denied(hover='Request denied'): +icon('times')
-        .double.cancelled(hover='Class cancelled'): +icon('exclamation-circle')
+    +userInstructions('requests', true)
 
-    td {{::row.Class.TTMS}}
+    +grouping()
 
-    td {{::row.Class.dateRange}}
+        +tableBody(columns)(left, hover='{{::row.studentList}}', hoverClass="leftBarOverlayHover")
 
-    td {{::row.Class.HostUnit.Unit}}
 
-    td.double {{::row.Class.openSeats}}
+            td
+                span(hover='popover-priority'): +icon('asterisk')
+                .double.approved(hover='Request approved'): +icon('check')
+                .double.denied(hover='Request denied'): +icon('times')
+                .double.cancelled(hover='Class cancelled'): +icon('exclamation-circle')
 
-    td.double {{::row.seatCount}}
+            td {{::row.Class.TTMS}}
 
-    td.italics {{::row.Notes}}
+            td {{::row.Class.dateRange}}
 
-    td
-        #stackedVertical.pull-right
+            td {{::row.Class.HostUnit.Unit}}
 
-            #edit(edit-students)
+            td.double {{::row.Class.openSeats}}
 
-            .btn.btn-sm.btn-success.btn-muted.no-archive(
-                hover='Approve seat request',
-                bs-popover,
-                left,
-                template='/partials/popover-approve-request.html'): +icon('check')
+            td.double {{::row.seatCount}}
 
-            .btn.btn-sm.btn-danger.btn-muted.no-archive(
-                hover='Deny seat request',
-                bs-popover,
-                left,
-                template='/partials/popover-deny-request.html'): +icon('times')
+            td.italics {{::row.Notes}}
+
+            td
+                #stackedVertical.pull-right
+
+                    #edit(edit-students)
+
+                    .btn.btn-sm.btn-success.btn-muted.no-archive(
+                        hover='Approve seat request',
+                        bs-popover,
+                        left,
+                        template='/partials/popover-approve-request.html'): +icon('check')
+
+                    .btn.btn-sm.btn-danger.btn-muted.no-archive(
+                        hover='Deny seat request',
+                        bs-popover,
+                        left,
+                        template='/partials/popover-deny-request.html'): +icon('times')
