@@ -61,30 +61,6 @@
 	popover = {
 
 		/**
-		 * Internal data parser that converts [icon=someicon] into the SVG icon form FTSS.icons:
-		 *
-		 * [icon=info] => <div class="icon icon-info"><svg>...</svg></div>
-		 *
-		 * @param content
-		 * @returns string
-		 */
-		'icon': function (content) {
-
-			return content
-
-				.replace(/\[icon\=([a-z\-\_]+)\]/g,
-
-			             function (match, icon) {
-				             return '<svg class="icon icon-' +
-				                    icon +
-				                    '"><use xlink:href="#icon-' +
-				                    icon +
-				                    '"/></use></svg>';
-			             });
-
-		},
-
-		/**
 		 *
 		 */
 		'enter': function () {
@@ -104,8 +80,6 @@
 			}
 
 			if (content) {
-
-				content = popover.icon(content);
 
 				placement = $el.attr('placement') ||
 				            $el[0].hasAttribute('left') && 'left' ||
