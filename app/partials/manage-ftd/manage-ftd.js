@@ -123,6 +123,13 @@ FTSS.ng.controller(
 
 			$scope.updateFTD = self._update;
 
+			$scope.$watch('det.Courses_JSON', function (courses, old) {
+
+				if (old) {
+					$scope.ftdEdit.$setDirty();
+				}
+
+			});
 
 			self.bind().then(function (data) {
 

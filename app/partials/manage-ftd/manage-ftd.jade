@@ -27,42 +27,42 @@ div(ng-class='{addNew:addNew}')
             +modalFooter()
 
 
-form#embed.col-lg-7(ng-show='det.Courses_JSON', name='modal')
-
-    br
+form#embed.col-lg-6.wrapped(ng-show='det.Courses_JSON', name='ftdEdit')
 
     +userInstructions('units', true)
 
     h3 {{det.Courses_JSON.length}} Courses Taught
 
-    .pds(explain='units-courses', right)
-        select(selectize='MasterCourseList', bind='det.Courses_JSON', multiple, required)
-
-    br
-
     .row.form-horizontal
 
-        .col-lg-8
+        .col-lg-7
             .input-group(explain='units-email', right)
                 .input-group-addon.w15: +icon('envelope')
                 input.form-control(ng-model='det.Email', type='email', required)
 
-        .col-lg-4
+        .col-lg-5
             .input-group(explain='units-phone', right)
                 .input-group-addon.w15: +icon('phone')
                 input.form-control(ng-model='det.Phone', type='text', required)
 
     .clearfix
 
-    .pull-right.btn.btn-success.btn-labeled(ng-click='updateFTD()',
-                                    ng-hide='modal.$invalid || submitted || !modal.$dirty')
+    br
+
+    .pds(explain='units-courses', right)
+        select.wide(selectize='MasterCourseList', bind='det.Courses_JSON', multiple, required)
+
+    br
+
+    #floatSubmit.pull-right.btn.btn-success.btn-labeled(ng-click='updateFTD()',
+                                    ng-hide='modal.$invalid || submitted || !ftdEdit.$dirty')
 
         span.btn-label.white: +icon('check-circle')
 
         span.text &nbsp;Update FTD
 
 
-#rightScroll.wrapped.col-lg-5.addNew
+#rightScroll.wrapped.col-lg-6.addNew
 
     h3 {{groups.false.length}} Personnel
 
