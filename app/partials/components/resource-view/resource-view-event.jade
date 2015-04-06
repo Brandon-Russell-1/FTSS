@@ -21,17 +21,15 @@ td(class='mark {{className}}',  colspan='{{DaysTruncated}}', ng-click='editClass
             i.wideText {{Course.Title}}
 
             br
-            br
 
             p {{notesHTML}}
             p {{j4NotesHTML}}
 
-            .white
+            h4.text-center
 
-                div(edit-students, lookup='{{Id}}')
+                .col-lg-5(edit-students, lookup='{{Id}}', templateURL='simple')
 
-                .btn.btn-info.btn-labeled.btn-muted(bs-modal='modal', template='/partials/iframe-ttms.html', hover='load-ttms')
-                    span.btn-label: +icon('printer')
-                    span.btn-text View TTMS
+                .col-lg-6: a(ng-click='$event.stopPropagation()', href='{{TTMSLink}}', target="_blank", hover='load-ttms') Load Start/Grad Roster
+
 
             .clearfix
