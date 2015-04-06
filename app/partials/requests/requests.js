@@ -21,6 +21,29 @@ FTSS.ng.controller(
 
 			});
 
+			/**
+			 * Process our FTD response
+			 *
+			 * @param status
+			 * @param response
+			 */
+			$scope.respond = function (status, response) {
+
+				var scope = this;
+
+				self._update(scope.row, {
+					'__metadata': scope.row.__metadata,
+					'Status'    : status,
+					'Response'  : response
+				}, function() {
+
+					delete self.data[scope.row.Id];
+					scope.$hide();
+
+				});
+
+			};
+
 			self.bind().then(function (data) {
 
 				$scope.edit = angular.noop;

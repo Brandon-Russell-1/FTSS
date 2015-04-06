@@ -1,4 +1,4 @@
 include ../mixins
 
-+confirmPopover('success', 'Confirm Request Approval', 'Are you sure you want to approve this request?','respond(2, response)')
++confirmPopover('success', 'Confirm Request Approval', 'Are you sure you want to approve this request?','respond("Approve", response)')
     textarea.form-control(ng-model='response', placeholder='Comments to the requesting unit.')

@@ -1,4 +1,4 @@
 include ../mixins
 
-+confirmPopover('danger', 'Confirm Request Denail', 'Are you sure you want to deny this seat request?', 'respond(3, response)')
++confirmPopover('danger', 'Confirm Request Denail', 'Are you sure you want to deny this seat request?', 'respond("Deny", response)')
     textarea.form-control(ng-model='response', placeholder='Please type a reason for the denial.')
