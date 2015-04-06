@@ -11,16 +11,16 @@ header.navbar.navbar-inverse
 
     ul.nav.navbar-nav.pull-right.hidden-xs
 
-        li: .support(bs-popover,
+        li: #share.support(bs-popover,
                         left,
-                        ng-click='doCreateLink()',
-                        animation='am-flip-x',
+                        url-shortner,
+                        animation='am-fade-and-slide-top',
                         hover='topbar-share',
                         content-template='/partials/url-shortner.html',
                         data-placement='bottom-right',
                         container='body',
                         no-arrow)
-                +icon('share')
+                +icon('share', 'Share')
 
         li: .support(data-content-template='/partials/support.html',
                         left,
@@ -30,4 +30,4 @@ header.navbar.navbar-inverse
                         animation='am-slide-left',
                         hover='topbar-help',
                         no-arrow)
-                +icon('question')
+                +icon('question', 'Help')

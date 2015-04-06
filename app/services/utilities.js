@@ -97,49 +97,6 @@ FTSS.ng.service('utilities', [
 		};
 
 		/**
-		 * Generates short URLs using the USA.gov API for generating go.usa.gov links
-		 *
-		 */
-		this.createLink = function () {
-
-			var page = encodeURIComponent(
-				[
-					'https://cs1.eis.af.mil/sites/FTSS#',
-					$rootScope.ftss.viewTitle,
-					$rootScope.permaLink
-				].join('/'));
-
-			$rootScope.bitlyResponse = '';
-
-			// Send our JSONP request to go.usa.gov using the FTSS apiKey
-			return $http(
-				{
-
-					'method': 'jsonp',
-
-					'url': [
-						'https://go.usa.gov/api/shorten.jsonp',
-						'?login=af-ftss',
-						'&apiKey=76856686bb86523732e316b4fd0d867a',
-						'&longUrl=',
-						page,
-						'&callback=JSON_CALLBACK'
-					].join('')
-
-				})
-
-				.then(function (response) {
-
-					      $rootScope.bitlyResponse = ((response.status === 200) &&
-
-					                                  response.data.response.data.entry[0].short_url ||
-					                                  page).split('://')[1];
-
-				      });
-
-		};
-
-		/**
 		 * Modal dialog helper
 		 *
 		 * @param template
@@ -181,6 +138,8 @@ FTSS.ng.service('utilities', [
 			};
 
 			return {
+
+				'generic': builder,
 
 				'create': function () {
 					builder({'title': 'Record Created!'});

@@ -1,5 +1,5 @@
 div(style='width:300px')
-    p Copy this link to share this view with others.
+    p Once loaded, click the link below to share.
 
-    .well.well-sm
-        b(style='font-size:2em'): {{bitlyResponse || 'Loading...'}}
+    .well.well-sm: b(style='font-size:2em')
+        a(href='mailto:?subject=FTSS%20Link&body=https%3A%2F%2F{{shortURL}}') {{shortURL || 'Loading...'}}
