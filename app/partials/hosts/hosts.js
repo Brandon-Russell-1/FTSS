@@ -8,6 +8,9 @@ FTSS.ng.controller(
 		'controllerHelper',
 		function ($scope, controllerHelper) {
 
+			// This is a simple table, lets show it all
+			$scope.ftss.pageLimit = 500;
+
 			var self = controllerHelper($scope, {
 
 				'sort' : 'Unit',
