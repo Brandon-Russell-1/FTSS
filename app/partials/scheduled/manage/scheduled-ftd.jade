@@ -29,7 +29,7 @@ div(ng-if='canEdit')
             tr(ng-repeat='row in rawSchedule | orderBy:"Start"')
 
                 td {{row.Location}}
-                td {{row.Instructor.InstructorName}}
+                td {{row.Instructor.Name}}
                 td {{row.Course.PDS}}
                 td {{row.dateRange}}
                 td {{row.Approved}}

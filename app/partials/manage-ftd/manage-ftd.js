@@ -14,7 +14,7 @@ FTSS.ng.controller(
 
 			var self = controllerHelper($scope, {
 
-				'sort' : 'InstructorName',
+				'sort' : 'Name',
 				'model': 'instructors',
 				'modal': 'instructor-stats'
 
@@ -132,7 +132,7 @@ FTSS.ng.controller(
 				// Complete the controller initialization
 				self.initialize(data).then(function (row) {
 
-					row.search = row.InstructorName;
+					row.search = row.Name;
 
 				});
 

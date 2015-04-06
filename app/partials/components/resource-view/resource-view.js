@@ -68,7 +68,7 @@
 
 								instructor.html = '';
 
-								instructor.overlay = '<h5>' + instructor[0].Instructor.InstructorName + '</h5>';
+								instructor.overlay = '<h5>' + instructor[0].Instructor.Name + '</h5>';
 
 								var count = 0;
 
@@ -93,7 +93,7 @@
 
 										// This creates the HTML for our unavailable blocks
 										instructor.html += '<td hover="' +
-										                   event.Instructor.InstructorName +
+										                   event.Instructor.Name +
 										                   ' not available for teaching." class="unavailable" colspan="' +
 										                   event.DaysTruncated +
 										                   '" id="' +
@@ -121,7 +121,7 @@
 
 										// Trim the instructor name if days are shorter than 12
 										event.name = (event.DaysTruncated > 12) ?
-										             event.Instructor.InstructorName : '';
+										             event.Instructor.Name : '';
 
 										event.className =
 

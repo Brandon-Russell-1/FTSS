@@ -22,7 +22,7 @@ FTSS.ng.controller(
 					self = controllerHelper($scope, {
 
 						'sort'          : 'startMoment',
-						'group'         : 'Instructor.InstructorName',
+						'group'         : 'Instructor.Name',
 						'model'         : 'scheduled',
 						'modalPlacement': 'wide',
 						'noEmptyGroup'  : true,

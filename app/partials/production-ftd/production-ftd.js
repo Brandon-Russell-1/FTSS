@@ -124,7 +124,7 @@ FTSS.ng.controller(
 
 						                        {
 
-							                        'sort' : 'InstructorName',
+							                        'sort' : 'Name',
 							                        'modal': 'instructor-stats'
 
 						                        });
@@ -141,7 +141,7 @@ FTSS.ng.controller(
 
 								      chart = buildMonths();
 
-							      row.search = row.InstructorName;
+							      row.search = row.Name;
 
 							      // for aggregate instructor stats
 							      row.stats = {

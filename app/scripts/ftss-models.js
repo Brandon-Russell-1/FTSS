@@ -79,8 +79,8 @@
 			    'params': {
 				    '$select': [
 					    'UnitId',
-					    'InstructorName',
-					    'InstructorEmail',
+					    'Name',
+					    'Email',
 					    'Photo',
 					    'Archived'
 				    ]

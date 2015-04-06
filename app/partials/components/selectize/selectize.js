@@ -428,9 +428,9 @@
 						loaded(response, 'Instructors', function (val) {
 
 							// Fix for stupid SP bug--I hate SP
-							val.InstructorEmail = (val.InstructorEmail || '').replace('mailto:', '');
+							val.Email = (val.Email || '').replace('mailto:', '');
 
-							val.text = val.label = val.InstructorName;
+							val.text = val.label = val.Name;
 
 						});
 

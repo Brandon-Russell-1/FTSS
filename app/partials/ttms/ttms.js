@@ -71,7 +71,7 @@ FTSS.ng.controller(
 						      row.search = [
 							      row.ClassNotes,
 							      row.Course.text,
-							      row.Instructor.InstructorName,
+							      row.Instructor.Name,
 							      row.FTD.text
 						      ].join(' ');
 

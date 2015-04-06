@@ -120,7 +120,7 @@ FTSS.ng.service('classProcessor', [
 
 				// Setup the search params
 				row.search = [
-					row.Instructor.InstructorName,
+					row.Instructor.Name,
 					'unavailable',
 					row.startMoment.format('MMMM'),
 					row.ClassNotes
@@ -160,7 +160,7 @@ FTSS.ng.service('classProcessor', [
 				row.search = [
 					row.ClassNotes,
 					row.Course.text,
-					row.Instructor.InstructorName || 'needs instructor',
+					row.Instructor.Name || 'needs instructor',
 					'ttms:' + row.TTMS,
 					row.FTD.text,
 					row.startMoment.format('MMMM YYYY'),

@@ -14,7 +14,7 @@ FTSS.ng.controller(
 
 			var self = controllerHelper($scope, {
 
-				'sort' : 'InstructorName',
+				'sort' : 'Name',
 				'model': 'instructors',
 				'group': 'FTD.LongName'
 
@@ -39,7 +39,7 @@ FTSS.ng.controller(
 				self.initialize(data).then(function (row) {
 
 					row.FTD = caches.Units[row.UnitId];
-					row.search = row.InstructorName + row.FTD.search;
+					row.search = row.Name + row.FTD.search;
 
 				});
 

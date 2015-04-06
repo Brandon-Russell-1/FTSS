@@ -85,13 +85,13 @@ form#embed.col-lg-7(ng-show='det.Courses_JSON', name='modal')
                     br.archiveOnly
 
                     b.form-control(contenteditable,
-                                    ng-model='row.InstructorName',
-                                    onEnter='inlineUpdate("InstructorName")',
+                                    ng-model='row.Name',
+                                    onEnter='inlineUpdate("Name")',
                                     placeholder='Member, i.e. SSgt John Doe')
 
                     .form-control(contenteditable,
-                                    ng-model='row.InstructorEmail',
-                                    onEnter='inlineUpdate("InstructorEmail")',
+                                    ng-model='row.Email',
+                                    onEnter='inlineUpdate("Email")',
                                     placeholder='AFNET Email or Account ID')
 
                 td.w5: +actions(false, false, true, 'member')

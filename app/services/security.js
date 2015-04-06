@@ -225,12 +225,12 @@ FTSS.ng.service('security', [
 				      (caches.Instructors && identifier.length && _(caches.Instructors)
 
 					      // Remove empty accounts
-					      .filter('InstructorEmail')
+					      .filter('Email')
 
 					      // Try to perform our match against the array elements
 					      .find(function (test) {
 
-						            var check = test.InstructorEmail.toLowerCase().trim();
+						            var check = test.Email.toLowerCase().trim();
 						            return (identifier.indexOf(check) > -1);
 
 					            }));
