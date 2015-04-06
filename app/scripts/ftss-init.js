@@ -41,7 +41,8 @@
 			'ngSanitize',
 			'ui.calendar',
 			'n3-line-chart',
-			'angular-loading-bar'
+			'angular-loading-bar',
+			'angularFileUpload'
 		]);
 
 	/*

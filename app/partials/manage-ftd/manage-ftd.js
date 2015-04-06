@@ -29,7 +29,7 @@ FTSS.ng.controller(
 					scope = this,
 
 				// Angular is super-dumb about ng-repeat updates so we'll just break the rules and use jQuery...
-					spinner = $('#spinner' + (scope.data.Id || ''));
+					spinner = $('#spinner' + (scope.row.Id || ''));
 
 				// Use jquery to turn on the upload spinner
 				spinner.addClass('submitting');
@@ -43,8 +43,8 @@ FTSS.ng.controller(
 						rand = utilities.generateUUID();
 
 					$.ajax({
-						'url'        : SP_CONFIG.baseURL + 'Bios',
 						'type'       : 'POST',
+						'url'        : FTSS.photoURL.replace('photos/', '_vti_bin/ListData.svc/Photos'),
 						'data'       : rawBuffer,
 						'processData': false,
 						'contentType': 'multipart/form-data',
@@ -63,10 +63,10 @@ FTSS.ng.controller(
 							};
 
 							// Add the new photo URL back to the scope
-							scope.data.Photo = rand;
+							scope.row.Photo = rand;
 
 							// If this an existing item, call inlineUpdate();
-							if (scope.data.Id) {
+							if (scope.row.Id) {
 
 								self.inlineUpdate.call(scope, 'Photo', finish);
 
