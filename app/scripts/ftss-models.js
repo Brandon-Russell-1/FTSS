@@ -123,7 +123,7 @@
 			    'source': 'Scheduled',
 			    'params': {
 				    '$filter': [
-					    'Archived eq false',
+					    'Archived ne true',
 					    'NA ne true'
 				    ],
 				    '$select': [
@@ -174,8 +174,8 @@
 			    'source': 'Scheduled',
 			    'params': {
 				    '$filter': [
-					    'Archived eq false',
-					    'NA eq false',
+					    'Archived ne true',
+					    'NA ne true',
 					    'Start ge ' + _today
 				    ],
 				    '$select': [
@@ -208,7 +208,7 @@
 					    // Ignore unavailability and training sessions
 					    'CourseId gt 1',
 					    // Ignore cancelled classes
-					    'Archived eq false'
+					    'Archived ne true'
 				    ],
 				    '$select': [
 					    'UnitId',
