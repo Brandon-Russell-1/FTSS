@@ -167,20 +167,7 @@
 	FTSS.supportEmail = '372trs.trg.ftss@us.af.mil';
 	FTSS.J4Email = '982TRG.J4scheduling@us.af.mil';
 
-	// Helper variable for handling production vs development mode photos
+	// Base path for bio photos
 	FTSS.photoURL = base + 'media/photos/';
-
-	if (!PRODUCTION) {
-
-		FTSS.ng.run([
-			            'SharePoint',
-			            function (SharePoint) {
-
-				            FTSS.SP = SharePoint;
-
-			            }
-		            ])
-
-	}
 
 }());
