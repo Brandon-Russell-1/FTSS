@@ -25,7 +25,7 @@
     "angular-loading-bar": "~0.6.0",
     "comma-separated-values": "~3.6.1",
     "FileSaver": "*",
-    "pica": "latest"
+    "ng-file-upload": "latest"
   },
   "resolutions": {
     "angular": "~1.3"
