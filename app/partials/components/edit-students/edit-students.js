@@ -17,12 +17,14 @@
 
 				return {
 					'restrict'   : 'A',
-					'templateUrl': '/partials/edit-students-placeholder.html',
 					'scope'      : true,
-					'link'       : function (scope, el) {
+					'templateUrl': function (elem, attrs) {
+						return '/partials/edit-students-' + (attrs.templateurl || 'placeholder') + '.html';
+					},
+					'link'       : function (scope, el, attrs) {
 
 						// Support embed instead of modal dialog
-						scope.embed = el[0].hasAttribute('embed');
+						scope.embed = (attrs.templateurl === 'embed');
 
 						// For resources view, we have to lookkup the data first
 						if (scope.getRow) {
