@@ -12,24 +12,61 @@ FTSS.ng.service('classProcessor', [
 
 		this.csvExport = function () {
 
-			scope.$parent.export = function () {
+			var scope = this,
 
-				var csvData = new CSV(scope.csv, {header: true}).encode(),
+				csvData = (function () {
 
-					blob = new Blob([decodeURIComponent(encodeURI(csvData))], {
-						type: "text/csv;charset=utf-8;"
-					}),
+					var csv = [];
 
-					fileName = [
-						scope.$parent.ftd.LongName,
-						' Scheduling Data - ',
-						moment().format(),
-						'.csv'
-					].join('');
+					_.each(scope.groups, function (group) {
 
-				saveAs(blob, fileName);
+						_.each(group, function (row) {
 
-			};
+							row.Course = row.Course || {};
+
+							csv.push({
+								'MDS'              : row.Course.MDS || '',
+								'PDS'              : row.Course.PDS || '',
+								'Number'           : row.Course.Number || '',
+								'IMDS'             : row.Course.IMDS || '',
+								'G081'             : row.Course.G081 || '',
+								'Title'            : row.Course.Title || '',
+								'TTMS'             : row.TTMS || '',
+								'Start/Grad Roster': row.TTMSLink || '',
+								'Instructor'       : row.name || '',
+								'Hours'            : row.Hours || row.Course.Hours || '',
+								'Dates'            : row.dateRange,
+								'Host'             : row.Host || 0,
+								'Other'            : row.Other || 0,
+								'Total Seats'      : row.allocatedSeats || 0,
+								'Min'              : row.Course.Min || '',
+								'Max'              : row.Course.Max || '',
+								'Room'             : row.Location || '',
+								'Notes'            : row.ClassNotes,
+								'J4 Notes'         : row.J4Notes
+
+							});
+
+						})
+
+					});
+
+					return  new CSV(csv, {header: true}).encode();
+
+				}()),
+
+				blob = new Blob([decodeURIComponent(encodeURI(csvData))], {
+					type: "text/csv;charset=utf-8;"
+				}),
+
+				fileName = [
+					scope.$parent.ftd.LongName,
+					' Scheduling Data - ',
+					moment().format(),
+					'.csv'
+				].join('');
+
+			saveAs(blob, fileName);
 
 		};
 
@@ -174,7 +211,8 @@ FTSS.ng.service('classProcessor', [
 			}
 
 			// Our processor for the left overlay list of courses
-			row.shortDates = row.startMoment.format('M/D/YY') + ' - ' + row.endMoment.clone().add(-1, 'days').format('M/D/YY');
+			row.shortDates =
+				row.startMoment.format('M/D/YY') + ' - ' + row.endMoment.clone().add(-1, 'days').format('M/D/YY');
 
 		};
 
