@@ -10,7 +10,7 @@ div(ng-if='canEdit'): +addButton('Create Class')
 
     +userInstructions('scheduled-ftd', true)
 
-    resource-view(ng-if='!ftss.showAlternateView')
+    resource-view(ng-show='!ftss.showAlternateView')
 
     table.table.table-striped.table-hover(ng-if='ftss.showAlternateView')
 
