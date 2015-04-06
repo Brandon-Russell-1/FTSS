@@ -44,8 +44,6 @@ FTSS.ng.service('sharepointFilters', [
 		 */
 		this.refresh = (function () {
 
-			var lastViewName;
-
 			return function () {
 
 				FTSS.search.clear(true);
@@ -55,9 +53,7 @@ FTSS.ng.service('sharepointFilters', [
 
 					view = _filterMaps[viewName];
 
-				if (viewName !== lastViewName && _filterMaps[viewName]) {
-
-					lastViewName = viewName;
+				if (_filterMaps[viewName]) {
 
 					FTSS.search.addOption(_.filter(FTSS.tagBoxOpts, function (opt) {
 
