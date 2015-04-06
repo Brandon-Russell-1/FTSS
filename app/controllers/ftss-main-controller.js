@@ -75,8 +75,14 @@
 					// Toggle archived item visibility
 					$rootScope.ftss.showArchived = false;
 
-					// Toggle alterate view layout
+					// Hide of show the archive button
+					$rootScope.ftss.hasArchiveOption = false;
+
+					// Toggle alternate view layout
 					$rootScope.ftss.showAlternateView = false;
+
+					// Hide or show the alternate view toggle button
+					$rootScope.ftss.hasAlternateView = false;
 
 					// Contains our tag-based filters if used
 					$rootScope.ftss.filter = false;

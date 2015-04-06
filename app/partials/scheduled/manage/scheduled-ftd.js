@@ -13,6 +13,9 @@ FTSS.ng.controller(
 		'security',
 		function ($scope, notifier, dateTools, classProcessor, controllerHelper, utilities, security) {
 
+			$scope.ftss.hasAlternateView = true;
+			$scope.ftss.hasArchiveOption = true;
+
 			$scope.ftd ? getSchedule() : utilities.addAsync(getSchedule);
 
 			function getSchedule() {

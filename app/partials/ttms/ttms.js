@@ -14,6 +14,7 @@ FTSS.ng.controller(
 			$scope.ftss.searchPlaceholder =
 				'Type "late" to just see classes starting within 10 days.  Other examples: MDS:F-15, PDS:RFV, Robins, UHHZ, wire, 2A5*.';
 
+			$scope.ftss.hasArchiveOption = true;
 
 			var self = controllerHelper($scope, {
 

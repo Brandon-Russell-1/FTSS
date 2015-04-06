@@ -14,6 +14,8 @@ FTSS.ng.controller(
 		function ($scope, $timeout, SharePoint, classProcessor, controllerHelper, loading, utilities) {
 
 			$scope.ftss.searchPlaceholder = 'Type here to search for an instructor';
+			$scope.ftss.hasAlternateView = true;
+			$scope.ftss.hasArchiveOption = true;
 
 			var read = FTSS.models('scheduled');
 

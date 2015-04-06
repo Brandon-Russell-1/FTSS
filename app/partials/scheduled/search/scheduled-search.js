@@ -14,6 +14,8 @@ FTSS.ng.controller(
 
 			$scope.ftss.searchPlaceholder = 'Type here to search within the available courses.';
 
+			$scope.ftss.hasArchiveOption = true;
+
 			var self = controllerHelper($scope, {
 
 				'sort' : 'Start',

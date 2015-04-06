@@ -12,6 +12,8 @@ FTSS.ng.controller(
 		'utilities',
 		function ($scope, $timeout, SharePoint, SP_CONFIG, controllerHelper, utilities) {
 
+			$scope.ftss.hasArchiveOption = true;
+
 			var self = controllerHelper($scope, {
 
 				'sort' : 'Name',
