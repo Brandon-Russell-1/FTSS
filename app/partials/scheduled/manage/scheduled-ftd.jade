@@ -1,8 +1,6 @@
 include ../../mixins
 
-div(ng-if='canEdit')
-    +addButton('Create Class')
-
+div(ng-if='canEdit'): +addButton('Create Class')
 
 .add-button.btn.btn-labeled.btn-primary(ng-click='export()', style='top:155px')
     span.btn-label.white: +icon('disk')
