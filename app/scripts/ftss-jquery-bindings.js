@@ -167,6 +167,9 @@
 			    $(this).parents('.slideToggleEffect').toggleClass('slideOut');
 		    })
 
+		// Prevent some odd hover behaviors
+		.on('click', '.btn,[ng-click]', popover.exit)
+
 		.on('mouseenter', '[hover]', popover.enter)
 
 		.on('focusin', '[explain],[explain] *', popover.enter)
