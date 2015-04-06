@@ -124,7 +124,7 @@
 			    'params': {
 				    '$filter': [
 					    'Archived eq false',
-					    'NA eq false'
+					    'NA ne true'
 				    ],
 				    '$select': [
 					    'Start',
