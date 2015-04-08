@@ -17,7 +17,10 @@ FTSS.ng.controller(
 				'group': 'Class.Course.Number',
 				'model': 'requests',
 
-				'filter': 'UnitId eq ' + $scope.ftd.Id
+				'filter': [
+					'UnitId eq ' + $scope.ftd.Id,
+					"Status eq 'Pending'"
+				]
 
 			});
 
@@ -35,7 +38,7 @@ FTSS.ng.controller(
 					'__metadata': scope.row.__metadata,
 					'Status'    : status,
 					'Response'  : response
-				}, function() {
+				}, function () {
 
 					delete self.data[scope.row.Id];
 					scope.$hide();
