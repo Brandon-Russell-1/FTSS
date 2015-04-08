@@ -78,8 +78,8 @@
 					'catalog',
 					'manage-ftd',
 					'backlog',
-					'hosts',
 					'admin',
+					'admin-hosts',
 					'admin-instructors',
 					'reset',
 					'production-ftd'

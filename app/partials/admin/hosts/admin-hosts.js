@@ -1,7 +1,7 @@
 /*global utils, FTSS, _, caches, angular */
 
 FTSS.ng.controller(
-	'hostsController',
+	'admin-hostsController',
 
 	[
 		'$scope',
