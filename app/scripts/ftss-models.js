@@ -105,7 +105,8 @@
 			    'source': 'Requests',
 			    'params': {
 				    '$expand': [
-					    'Class'
+					    'Class',
+				        'CreatedBy'
 				    ],
 				    '$select': [
 					    'Status',
@@ -114,6 +115,8 @@
 					    'Notes',
 					    'Response',
 					    'Students_JSON',
+					    'Created',
+					    'CreatedBy/Name',
 					    'Class/Id',
 					    'Class/TTMS',
 					    'Class/CourseId',
