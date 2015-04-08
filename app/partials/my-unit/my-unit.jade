@@ -1,0 +1,31 @@
+include ../mixins
+
+- var columns = {'Class #':10, 'Dates':15, Unit:15, Open:10, Requested:10, Notes: 30}
+
+.wrapped.noAdd
+
+    +userInstructions('requests', true)
+
+    +grouping()
+
+        +tableBody(columns)(left, hover='{{::row.studentList}}', hoverClass="leftBarOverlayHover")
+
+            td
+                span(hover='popover-priority'): +icon('asterisk')
+                .double.approved(hover='Request approved'): +icon('check')
+                .double.denied(hover='Request denied'): +icon('times')
+                .double.cancelled(hover='Class cancelled'): +icon('exclamation-circle')
+
+            td {{::row.Class.TTMS}}
+
+            td {{::row.Class.dateRange}}
+
+            td {{::row.Unit.LongName}}
+
+            td.double {{::row.Class.openSeats}}
+
+            td.double {{::row.count}}
+
+            td.italics {{::row.Notes}}
+
+            td: #edit(edit-students)

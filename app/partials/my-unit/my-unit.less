@@ -1,0 +1,15 @@
+#my-host {
+
+	tr .approved,
+	tr .cancelled,
+	tr .denied {
+		display: none;
+	}
+
+	tr.success .approved,
+	tr.danger .cancelled,
+	tr.warning .denied {
+		display: inline-block;
+	}
+
+}

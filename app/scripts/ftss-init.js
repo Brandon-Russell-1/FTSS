@@ -82,7 +82,8 @@
 					'admin-hosts',
 					'admin-instructors',
 					'reset',
-					'production-ftd'
+					'production-ftd',
+				    'my-unit'
 				];
 
 				while (routes.length) {

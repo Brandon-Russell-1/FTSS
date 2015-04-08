@@ -174,7 +174,7 @@ mixin tableBody(columns)
             tbody
                 tr.middle.am-fade-and-slide-top.traverse(attributes, ng-repeat='row in group track by row.Id',
                 ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}',
-                class='{{row.styles}}',
+                class='{{row.style}}',
                 ng-dblclick='edit(false)',
                 id='row-{{row.Id}}')
                     block

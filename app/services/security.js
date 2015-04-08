@@ -34,7 +34,7 @@ FTSS.ng.service('security', [
 
 				'backlog': ['mtf', 'ftd'],
 
-				'hosts': ['mtf', 'ftd'],
+				'my-unit': ['mtf', 'scheduling'],
 
 				'ttms': ['scheduling']
 
