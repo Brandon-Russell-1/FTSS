@@ -1,4 +1,4 @@
-/*global FTSS, _, caches */
+/*global FTSS, caches */
 
 /**
  * Selectize directive
@@ -441,7 +441,7 @@
 
 		},
 
-		'people': function (scope, attrs) {
+		'people': function ($scope, attrs) {
 
 			return {
 				'delimiter'   : '+',
@@ -456,41 +456,35 @@
 				'plugins'     : [
 					'remove_button'
 				],
-				'onChange'    : function (val) {
+				'onChange'    : function (selection) {
 
 					var options = this.options,
 
 						multi = (this.settings.maxItems > 1);
 
-					scope.data = scope.data || {};
+					$scope.data = $scope.data || {};
 
-					timeout(function () {
+					if (multi) {
 
-						if (multi) {
+						$scope.data.People = {};
 
-							scope.data.People = {};
+						_.each(selection, function (person) {
 
-							_.each(val, function (person) {
+							var data = options[person];
 
-								var data = options[person];
+							$scope.data.People[data.DISPLAYNAME || person] = data.EMAIL || '';
 
-								scope.data.People[data.DISPLAYNAME || val] = data.EMAIL || '';
+						});
 
-							});
+						$scope.data.peopleCount = _.size($scope.data.People);
 
-							scope.data.peopleCount = _.size(scope.data.People);
+					} else {
 
-						} else {
+						$scope.data.Person = options[selection];
 
-							scope.data.Person = options[val];
+					}
 
-						}
-
-						try {
-							scope.modal.$setDirty();
-						} catch (_) {}
-
-					});
+					($scope.modal.$setDirty || Function)();
 
 				},
 				'load'        : function (query, callback) {

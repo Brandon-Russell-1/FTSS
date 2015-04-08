@@ -44,6 +44,8 @@ exports.config =
     jade_angular:
       modules_folder: 'partials'
       locals        : {}
+    uglify:
+      screw_ie8: true
 
 # Enable or disable minifying of result js / css files.
 # minify: true
