@@ -104,9 +104,6 @@
 
 			    'source': 'Requests',
 			    'params': {
-				    '$filter': [
-				        "Status eq 'Pending'"
-				    ],
 				    '$expand': [
 					    'Class'
 				    ],
