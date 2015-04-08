@@ -91,8 +91,7 @@ FTSS.ng.service('controllerHelper', [
 
 											    filters = modelClone.params.$filter || [];
 
-											// Merge our filter(s) into the model filter
-											opts.filter && filters.concat(opts.filter);
+											opts.filter && filters.push(opts.filter);
 
 											watchTarget && filters.push(watch);
 

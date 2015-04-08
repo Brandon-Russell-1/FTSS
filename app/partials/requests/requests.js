@@ -20,7 +20,7 @@ FTSS.ng.controller(
 				'filter': [
 					'UnitId eq ' + $scope.ftd.Id,
 					"Status eq 'Pending'"
-				]
+				].join(' and ')
 
 			});
 
