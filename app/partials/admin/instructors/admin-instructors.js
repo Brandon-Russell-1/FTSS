@@ -10,13 +10,14 @@ FTSS.ng.controller(
 		'controllerHelper',
 		function ($scope, $timeout, SharePoint, controllerHelper) {
 
+			// Yeah...that's a lot.....
 			$scope.ftss.pageLimit = 5000;
 
 			var self = controllerHelper($scope, {
 
 				'sort' : 'Name',
 				'model': 'instructors',
-				'group': 'FTD.LongName'
+				'group': 'ftd'
 
 			});
 
@@ -38,8 +39,10 @@ FTSS.ng.controller(
 				// Complete the controller initialization
 				self.initialize(data).then(function (row) {
 
-					row.FTD = caches.Units[row.UnitId];
-					row.search = row.Name + row.FTD.search;
+					var FTD = caches.Units[row.UnitId] || {};
+
+					row.ftd = FTD.LongName;
+					row.search = row.Name + FTD.LongName;
 
 				});
 

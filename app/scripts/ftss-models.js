@@ -17,6 +17,18 @@
 	    // Our internal collection of models--these are immutable! :-)
 	    _models = {
 
+		    'users': {
+
+			    'source': 'UserInformationList',
+			    'params': {
+				    '$select': [
+					    'Name',
+				        'WorkEMail'
+				    ]
+			    }
+
+		    },
+
 		    'catalog': {
 
 			    'cache' : true,

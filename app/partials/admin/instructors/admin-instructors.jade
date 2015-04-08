@@ -6,14 +6,14 @@ include ../../mixins
 
     table.table.table-striped.table-expanded.table-hover
         tbody
-            tr(ng-repeat='row in users')
+            tr(ng-repeat='row in users track by row.Name')
                 td
                     b {{::row.Name}}
                     br
                     span {{::row.WorkEMail}}
 
 
-#rightScroll.wrapped.col-lg-5.addNew
+#rightScroll.wrapped.col-lg-5
 
     +grouping()
 
