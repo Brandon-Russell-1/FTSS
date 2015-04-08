@@ -14,15 +14,19 @@ ul#dashboard-menu
     +link('admin-hosts', 'puzzle-piece', 'Host Units', 'role')
     +link('admin-instructors', 'instructor', 'Instructors', 'role')
 
+    li.role: h4 My Unit
+    +link('my-unit', '', 'Requests', 'role scheduling mtf')
+
     li.role.ftd.instructor: h4 My FTD
     +link('production-ftd', 'graph_pie', 'Production', 'role ftd instructor')
     +link('scheduled-ftd', 'calendar_range', 'Schedule', 'role ftd instructor')
     +link('requests', 'download', 'Seat Requests', 'role ftd')
     +link('manage-ftd', 'edit2', 'Manage', 'role ftd')
 
-    li.role: h4 Requirements
-    +link('backlog', 'checklist2', 'Create', 'role')
-    +link('requirements', 'agree', 'Needs Approval', 'role')
+    //
+        li.role: h4 Requirements
+        +link('backlog', 'checklist2', 'Create', 'role')
+        +link('requirements', 'agree', 'Needs Approval', 'role')
 
 #external-links
     a(href='https://www.my.af.mil/etcacourses', target='_blank') ETCA

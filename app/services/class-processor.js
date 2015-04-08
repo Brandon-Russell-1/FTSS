@@ -122,23 +122,25 @@ FTSS.ng.service('classProcessor', [
 		 */
 		this.requestProcessor = function (requests) {
 
-			_.each(requests, function (row) {
+			return _.map(requests, _self.singleRequestProcess);
 
-				row.Host = caches.Hosts[row.HostId] || {};
+		};
 
-				row.Unit = caches.Units[row.UnitId] || {};
+		this.singleRequestProcess = function (request) {
+;
+			request.Host = caches.Hosts[request.HostId] || {};
 
-				row.count = _.size(row.Students_JSON);
+			request.Unit = caches.Units[request.UnitId] || {};
 
-				row.style = {
-					'Approved': 'success',
-					'Pending' : 'info',
-					'Denied'  : 'danger'
-				}[row.Status]
+			request.count = _.size(request.Students_JSON);
 
-			});
+			request.style = {
+				'Approved': 'success',
+				'Pending' : 'info',
+				'Denied'  : 'danger'
+			}[request.Status];
 
-			return requests;
+			return request;
 
 		};
 
