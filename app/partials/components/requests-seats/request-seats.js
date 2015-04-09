@@ -33,7 +33,9 @@
 						}
 
 						// We use .data because of child scopes with a modal
-						$scope.data = {};
+						$scope.data = {
+							'HostId' : $scope.host.Id
+						};
 
 						// Action performed when the user presses the request seat button (use $parent for external use)
 						$scope.$parent.requestSeats = function () {

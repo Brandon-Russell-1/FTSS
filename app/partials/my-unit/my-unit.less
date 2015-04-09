@@ -1,15 +1,19 @@
-#my-host {
+#my-unit {
 
 	tr .approved,
-	tr .cancelled,
+	tr .pending,
 	tr .denied {
 		display: none;
 	}
 
-	tr.success .approved,
-	tr.danger .cancelled,
-	tr.warning .denied {
+	tr.text-success .approved,
+	tr.text-info .pending,
+	tr.text-danger .denied {
 		display: inline-block;
+	}
+
+	.leftBarOverlayHover {
+		font-size: .75em
 	}
 
 }

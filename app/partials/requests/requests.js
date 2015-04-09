@@ -62,7 +62,7 @@ FTSS.ng.controller(
 					// Get the requested seat count
 					row.seatCount = _.size(row.Students_JSON);
 
-					row.studentList = _.keys(row.Students_JSON).join('<br>');
+					row.studentList = '<div>' +  _.keys(row.Students_JSON).join('</div><br><div>') + '</div>';
 
 				});
 

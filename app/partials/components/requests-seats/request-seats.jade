@@ -17,11 +17,12 @@ form.form-horizontal(name='modal')
 
         br
 
-        h4: +icon('puzzle-piece', 'Requesting Unit')
-        div(explain='scheduled-request-host', right)
-            select(selectize='Hosts', bind='data.HostId', remember='host')
+        div(ng-if='autoApprove')
+            h4: +icon('puzzle-piece', 'Requesting Unit')
+            div(explain='scheduled-request-host', right)
+                select(selectize='Hosts', bind='data.HostId', remember='host')
 
-        br
+            br
 
         h4: +icon('student_hand', 'Students')
         div(explain='scheduled-request-students', right)

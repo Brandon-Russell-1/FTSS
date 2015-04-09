@@ -7,44 +7,59 @@ FTSS.ng.controller(
 		'$scope',
 		'classProcessor',
 		'controllerHelper',
-		function ($scope, classProcessor, controllerHelper) {
+		'loading',
+		function ($scope, classProcessor, controllerHelper, loading) {
 
-			var self = controllerHelper($scope, {
+			$scope.ftss.hasArchiveOption = true;
 
-				'sort' : 'Class.Start',
-				'group': 'Course',
-				'model': 'requests',
-				'filter': 'HostId eq 3'
+			$scope.$watch('host.Id', function (hostId) {
 
-			});
+				if (!hostId) return;
 
-			self.bind().then(function (data) {
+				loading(true);
 
-				self.initialize(data).then(function (row) {
-console.log(row);
-				/*	d.search = d.Unit;
+				var self = controllerHelper($scope, {
 
-					// Add the FTD data if this unit has one assigned
-					if (d.FTD) {
-						d.det = caches.Units[d.FTD];
-						d.Location = d.det.Location;
-						d.search += d.det.search;
-					}
-*/
+						'sort'  : 'Class.Start',
+						'group' : 'Course',
+						'model' : 'requests',
+						'filter': 'HostId eq ' + hostId
 
-					classProcessor.cacheFiller(row.Class);
+					}),
 
-					// Get the requested seat coun
-					classProcessor.singleRequestProcess(row);
+					lastMonth = moment().add(-1, 'months');
 
-					row.Course = row.Class.Course.PDS + ' - ' + row.Class.Course.Number;
+				self.bind().then(function (data) {
 
-					row.Priority = row.Class.Course.Priority;
+					self.initialize(data).then(function (row) {
 
-					row.studentList = _.keys(row.Students_JSON).join('<br>');
+						/*	d.search = d.Unit;
 
+						 // Add the FTD data if this unit has one assigned
+						 if (d.FTD) {
+						 d.det = caches.Units[d.FTD];
+						 d.Location = d.det.Location;
+						 d.search += d.det.search;
+						 }
+						 */
+
+						classProcessor.cacheFiller(row.Class);
+
+						// Get the requested seat count
+						classProcessor.singleRequestProcess(row);
+
+						row.Archived = row.Class.endMoment < lastMonth;
+
+						row.Course = row.Class.Course.PDS + ' - ' + row.Class.Course.Number;
+
+						row.Priority = row.Class.Course.Priority;
+
+						row.studentList = '<div>' +  _.keys(row.Students_JSON).join('</div><br><div>') + '</div>';
+
+					});
 
 				});
+
 
 			});
 

@@ -1,0 +1,12 @@
+include ../../mixins
+
+form.form-horizontal(name='modal')
+
+    .modal-header.caps.bg-warning.text-warning: h3: +icon('smile-o', 'Host Context Switch')
+
+    .modal-body.showOverflow
+
+        p Choose the host to change to from the drop-down below.  After you choose this, the app will reload.
+
+        select(selectize='Hosts', bind='host.id', placeholder='Choose a host unit to switch to')
+

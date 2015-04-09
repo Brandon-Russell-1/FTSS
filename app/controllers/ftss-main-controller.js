@@ -37,13 +37,10 @@
 
 				}
 
-				// Setup our SP group-based security
-				security.initialize();
-
 				$rootScope.ftss = {
 
 					// Copy navigate to the scope
-					'doNavigate'  : utilities.navigate,
+					'doNavigate': utilities.navigate,
 
 					// Copy createLink to the scope
 					'doCreateLink': utilities.createLink,
@@ -54,9 +51,14 @@
 
 						$rootScope.ftss[name] = !$rootScope.ftss[name];
 
-					}
+					},
+
+					'initPage': utilities.initPage
 
 				};
+
+				// Setup our SP group-based security
+				security.initialize();
 
 				/**
 				 * Starts the loading indicators on navigation begin

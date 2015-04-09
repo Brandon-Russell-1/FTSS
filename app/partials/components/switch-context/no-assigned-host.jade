@@ -1,0 +1,18 @@
+include ../../mixins
+
+form.form-horizontal(name='modal')
+
+    .modal-header.caps.bg-success.text-success: h3: +icon('check-square-o', 'Training Unit Selection')
+
+    .modal-body.showOverflow
+
+        .lead.
+            You have been granted the UTM, MTS or Scheduling role in FTSS and need to choose your unit to continue.  If
+            you do not see your unit currently listed, please email the help desk at
+            <a href="mailto:372trs.trg.ftss@us.af.mil?subject=Host+Unit+Not+Listed">982 TRG/FTSS</a> for assistance.
+
+        select(selectize='Hosts', bind='host.id', placeholder='Choose your unit')
+
+        .text-info.info.italics
+            +icon('info-circle')
+            small If you are not a UTM, MTS member or J4 Scheduler, please let us know ASAP.

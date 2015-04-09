@@ -1,4 +1,4 @@
-/*global FTSS, _ */
+/*global FTSS, _, caches */
 
 /**
  * The FTSS.security() function controls the role-based views and automatic redirectors for pages not authorized.
@@ -9,10 +9,10 @@
 FTSS.ng.service('security', [
 
 	'SharePoint',
-	'utilities',
+	'$modal',
 	'$rootScope',
 
-	function (SharePoint, utilities, $rootScope) {
+	function (SharePoint, $modal, $rootScope) {
 
 		"use strict";
 
@@ -24,7 +24,7 @@ FTSS.ng.service('security', [
 
 				'requirements': ['mtf', 'ftd'],
 
-				'requests': ['approvers', 'mtf', 'ftd'],
+				'requests': ['mtf', 'ftd'],
 
 				'manage-ftd': ['ftd', 'scheduling'],
 
@@ -48,7 +48,6 @@ FTSS.ng.service('security', [
 
 		/**
 		 *
-		 * @param $rootScope
 		 */
 		this.initialize = function () {
 
@@ -74,17 +73,20 @@ FTSS.ng.service('security', [
 
 				$rootScope.roleText = 'DEVELOPER MODE';
 
-				$rootScope.ftd = {
-					'Id'      : 9,
-					'LongName': 'Robins AFB (Det. 306)'
-				};
+				$rootScope.switchContext = _self.switchContext;
 
-				utilities.initPage('security');
+				_self.checkFTD(false);
+
+				_self.checkHost();
+
+				$rootScope.ftss.initPage('security');
 
 			} else {
 
 				// First try to check for the cached FTD settings (before the user data is loaded)
-				checkFTD(false);
+				_self.checkFTD(false);
+
+				_self.checkHost();
 
 				// Load our user data into FTSS
 				SharePoint.user().then(initSecurity);
@@ -95,27 +97,32 @@ FTSS.ng.service('security', [
 		/**
 		 * Allow switching FTDs for certain users
 		 */
-		this.switchFTD = function () {
+		this.switchContext = function (contextType) {
 
 			// Verify authorization first
-			if (_self.hasRole('ftd')) {
+			if (_self.hasRole(contextType)) {
 
 				// Create an object that will pass up from the child scope
-				$rootScope.ftd = {};
+				$rootScope[contextType] = {};
 
-				// Launch the modal dialog
-				utilities.modal(_isAdmin ? 'switch-ftd' : 'no-assigned-ftd', $rootScope);
+				$modal(
+					{
+						'contentTemplate': '/partials/' + (_isAdmin ? 'switch-' : 'no-assigned-') +
+						                   contextType + '.html',
+						'backdrop'       : 'static',
+						'keyboard'       : false
+					});
 
 				// Watch our newFTD variable
-				$rootScope.$watch('ftd.id', function (id) {
+				$rootScope.$watch(contextType + '.id', function (id) {
 
 					if (id) {
 
-						// Update the localStorage variable
-						localStorage.ftssCachedFTD = JSON.stringify(
+						localStorage['ftssCached_' + contextType] = JSON.stringify(
 							{
-								'Id'      : caches.Units[id].Id,
-								'LongName': caches.Units[id].LongName
+								'Id'      : id,
+								'LongName': (contextType === 'ftd') ?
+								            caches.Units[id].LongName : caches.Hosts[id].Unit
 							}
 						);
 
@@ -159,57 +166,30 @@ FTSS.ng.service('security', [
 
 		};
 
-		function initSecurity(user) {
+		this.checkHost = function () {
 
-			// Check again if this is an FTD user (should only happen the first time for them)
-			checkFTD(user);
+			if ($rootScope.host) return true;
 
-			// Load the SP groups every time
-			SharePoint.groups().then(function (spGroups) {
+			if (_self.hasRole('host')) {
 
-				// Extract the name of any groups the user is a member of
-				_groups = _groups.concat(spGroups.name ? [spGroups.name] : _.pluck(spGroups, 'name'));
-
-				// If no groups were found, just add our "guest" group
-				_groups = _groups.length ? _groups : ['guest'];
-
-				// Check for the admin group
-				_isAdmin = _groups.indexOf('admin') > -1;
-
-				// Add switchFTD() for admins
-				if (_isAdmin) {
-					$rootScope.switchFTD = _self.switchFTD;
+				try {
+					$rootScope.host = JSON.parse(localStorage.ftssCached_host);
+				} catch (e) {
+					caches.Hosts && _self.switchContext('host');
 				}
 
-				// Used to modify views based on roles
-				$rootScope.roleClasses = _groups.join(' ');
+			}
 
-				// This is the text that is displayed in the top-left corner of the app
-				$rootScope.roleText = _groups.join(' • ')
-					.replace('mtf', 'MTS/UTM')
-					.replace('ftd', 'FTD Scheduler/Production Supervisor')
-					.replace('curriculum', 'Training/Curriculum Manager')
-					.replace('scheduling', 'J4 Scheduler')
-					.replace('admin', 'Administrator')
-					.replace('instructor', 'FTD Member')
-					.replace('guest', 'Visitor');
+		};
 
-				// Finish the security code
-				utilities.initPage('security');
-
-			});
-
-		}
 
 		/**
 		 *
 		 * @param user
 		 */
-		function checkFTD(user) {
+		this.checkFTD = function (user) {
 
-			if ($rootScope.ftd) {
-				return true;
-			}
+			if ($rootScope.ftd) return true;
 
 			// Check for email and login name
 			var identifier = user ?
@@ -220,7 +200,7 @@ FTSS.ng.service('security', [
 			                 ].filter(function (e) {return e}) : [],
 
 			// First try to load from localStorage, otherwise attempt to load from cache
-				ftd = JSON.parse(localStorage.ftssCachedFTD || false) ||
+				ftd = JSON.parse(localStorage.ftssCached_ftd || false) ||
 
 				      (caches.Instructors && identifier.length && _(caches.Instructors)
 
@@ -244,7 +224,7 @@ FTSS.ng.service('security', [
 				_groups.push('instructor');
 
 				// Push this back to localStorage for future use
-				localStorage.ftssCachedFTD = JSON.stringify(
+				localStorage.ftssCached_ftd = JSON.stringify(
 					{
 						'Id'      : $rootScope.ftd.Id,
 						'LongName': $rootScope.ftd.LongName
@@ -252,16 +232,60 @@ FTSS.ng.service('security', [
 
 			} else {
 
-				$rootScope.initInstructorRole = function () {
+				if (identifier && caches.Instructors) {
 
 					// If the user was not found, send to switch FTD to check for the FTD role
-					!checkFTD(user) && _self.switchFTD();
+					_self.switchContext('ftd');
 
-				};
+				}
 
 			}
 
-			return ftd;
+		}
+
+
+		function initSecurity(user) {
+
+			// Check again if this is an FTD user (should only happen the first time for them)
+			_self.checkFTD(user);
+
+			// Load the SP groups every time
+			SharePoint.groups().then(function (spGroups) {
+
+				// Extract the name of any groups the user is a member of
+				_groups = _groups.concat(spGroups.name ? [spGroups.name] : _.pluck(spGroups, 'name'));
+
+				// If no groups were found, just add our "guest" group
+				_groups = _groups.length ? _groups : ['guest'];
+
+				// Check for the admin group
+				_isAdmin = _groups.indexOf('admin') > -1;
+
+				// Add special "host" role for mtf/scheduling to use host-centric view
+				self.hasRole(['mtf', 'scheduling']) && _groups.push('host');
+
+				// Add switchContext() for admins
+				if (_isAdmin) {
+					$rootScope.switchContext = _self.switchContext;
+				}
+
+				// Used to modify views based on roles
+				$rootScope.roleClasses = _groups.join(' ');
+
+				// This is the text that is displayed in the top-left corner of the app
+				$rootScope.roleText = _groups.join(' • ')
+					.replace('mtf', 'MTS/UTM')
+					.replace('ftd', 'FTD Scheduler/Production Supervisor')
+					.replace('curriculum', 'Training/Curriculum Manager')
+					.replace('scheduling', 'J4 Scheduler')
+					.replace('admin', 'Administrator')
+					.replace('instructor', 'FTD Member')
+					.replace('guest', 'Visitor');
+
+				// Finish the security code
+				utilities.initPage('security');
+
+			});
 
 		}
 

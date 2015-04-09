@@ -12,8 +12,9 @@ FTSS.ng.service('utilities', [
 	'$modal',
 	'$http',
 	'dateTools',
+	'security',
 
-	function (loading, $timeout, $rootScope, $route, $location, sharepointFilters, $alert, $modal, $http, dateTools) {
+	function (loading, $timeout, $rootScope, $route, $location, sharepointFilters, $alert, $modal, $http, dateTools, security) {
 
 		var _jobs = [],
 
@@ -425,7 +426,8 @@ FTSS.ng.service('utilities', [
 
 			if (_.all(_completed)) {
 
-				$rootScope.initInstructorRole();
+				security.checkFTD();
+				security.checkHost();
 
 				if ($rootScope.ftss.isTagBox) {
 

@@ -14,7 +14,7 @@ include ../mixins
                 span(hover='popover-priority'): +icon('asterisk')
                 .double.approved(hover='Request approved'): +icon('check')
                 .double.denied(hover='Request denied'): +icon('times')
-                .double.cancelled(hover='Class cancelled'): +icon('exclamation-circle')
+                .double.pending(hover='Request pending'): +icon('wait')
 
             td {{::row.Class.TTMS}}
 
@@ -26,6 +26,13 @@ include ../mixins
 
             td.double {{::row.count}}
 
-            td.italics {{::row.Notes}}
+            td
+
+                p.italics {{::row.Notes}}
+
+                p(ng-if='row.Response')
+
+                    b FTD:&nbsp;
+                    span {{::row.Response}}
 
             td: #edit(edit-students)
