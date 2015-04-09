@@ -1,4 +1,4 @@
-/*global FTSS, angular */
+/*global FTSS, _, angular */
 
 /**
  *
@@ -128,29 +128,35 @@
 											            event.Course.PDS + '</i>'
 										}
 
+										// Only show the bio photo if there is room for it
+										event.bioPhoto = event.pds ? event.Instructor.Photo : '';
+
 										// Trim the instructor name if days are shorter than 12
 										event.name = (event.DaysTruncated > 12) ?
 										             event.Instructor.Name : '';
 
-										event.className =
+										// Match MTT classes
+										event.className = event.MTT ? 'mtt' :
 
-											// Match MTT classes
-											event.className = event.MTT ? 'mtt' :
+											// Add trainingSession class if TTMS contains TS
+											              event.TS ? 'trainingSession' :
 
-												// Add trainingSession class if TTMS contains TS
-												              event.TS ? 'trainingSession' :
+											                  // Id short classes
+											              (event.allocatedSeats < event.Course.Min) ? 'short' :
 
-												                  // Id short classes
-												              (event.allocatedSeats < event.Course.Min) ? 'short' :
+											              event.className;
 
-												              event.className;
+										// Add the noPhoto classes when the photo is not visible
+										if (!event.bioPhoto) { event.className += ' noPhoto'}
 
 										// Add our html to the event
 										instructor.html += templateEvent(event);
 
 									}
 
+									// Build our left overlay list
 									instructor.overlay += '<div><i>' + (event.Course ? event.Course.PDS : ' - ') +
+									                      (event.MTT ? ' *' : '') +
 									                      '</i><b>' + event.shortDates + '</b></div>';
 
 									// Increment the day counter
@@ -297,7 +303,8 @@
 
 								html.monthHeader += '</tr>';
 
-								html.dayHeader = '<tr class="header days"><td>List<br>View</td>' + html.days.join('') + '</tr>';
+								html.dayHeader =
+									'<tr class="header days"><td>List<br>View</td>' + html.days.join('') + '</tr>';
 
 							}
 
