@@ -11,7 +11,6 @@ include ../mixins
         +tableBody(columns)(left, hover='{{::row.studentList}}', hoverClass="leftBarOverlayHover")
 
             td
-                span(hover='popover-priority'): +icon('asterisk')
                 .double.approved(hover='Request approved'): +icon('check')
                 .double.denied(hover='Request denied'): +icon('times')
                 .double.pending(hover='Request pending'): +icon('wait')
