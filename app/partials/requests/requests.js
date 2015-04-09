@@ -9,7 +9,8 @@ FTSS.ng.controller(
 		'notifier',
 		'classProcessor',
 		'controllerHelper',
-		function ($scope, SharePoint, notifier, classProcessor, controllerHelper) {
+		'utilities',
+		function ($scope, SharePoint, notifier, classProcessor, controllerHelper, utilities) {
 
 			var self = controllerHelper($scope, {
 
@@ -45,8 +46,8 @@ FTSS.ng.controller(
 						// Update the approved seat count for the related class
 						{
 							'cache'     : true,
-							'__metadata': $scope.row.Class.__metadata,
-							'Approved'  : ($scope.row.Class.Approved || 0) + $scope.seatCount
+							'__metadata': scope.row.Class.__metadata,
+							'Approved'  : (scope.row.Class.Approved || 0) + scope.seatCount
 						}
 
 					];
@@ -54,16 +55,27 @@ FTSS.ng.controller(
 				// Send the batch operation to SharePoint
 				SharePoint.batch(send).then(function (results) {
 
-					// update fields needed for notifier service
-					scope.row.Status = status;
-					scope.row.Response = response;
-					scope.row.students = _.keys(scope.row.Students_JSON).join('\n');
+					if (results.success) {
 
-					// Send our email update
-					notifier.respondToRequest(scope.row);
+						// update fields needed for notifier service
+						scope.row.Status = status;
+						scope.row.Response = response;
+						scope.row.students = _.keys(scope.row.Students_JSON).join('\n');
 
-					// Update the model by removing this item
-					delete self.data[scope.row.Id];
+						// Send our email update
+						notifier.respondToRequest(scope.row);
+
+						// Update the model by removing this item
+						delete self.data[scope.row.Id];
+						self.process();
+
+						utilities.alert.update();
+
+					} else {
+
+						utilities.alert.error();
+
+					}
 
 					// close the popover
 					scope.$hide();

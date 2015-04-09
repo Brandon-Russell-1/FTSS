@@ -91,7 +91,7 @@
 								// Send the operation as a batch (similar to a SQL transaction) to ensure everything worked
 								SharePoint.batch(send).then(function (results) {
 
-									utilities.alert[results.success ? 'success' : 'error']();
+									utilities.alert[results.success ? 'create' : 'error']();
 
 									modal.modal.destroy();
 
