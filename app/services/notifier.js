@@ -66,9 +66,10 @@ FTSS.ng.service('notifier', [
 		this.respondToRequest = function (data) {
 
 			emailWrapper(
-				'{{request.Host.Email}}',
-				'FTD Seat Request Response for {{Course.PDS}}',
-				'Seat request for {{Course.Number}} ({{dateRange}}) {{status}}.\n\n{{row.students}}\n\nFTD Notes:{{response}}')
+				'{{Class.HostUnit.Email}}',
+				'FTD Seat Request Response for {{Class.Course.PDS}}',
+				'Seat request for {{Class.Course.Number}} ({{Class.dateRange}}) {{Status}}.' +
+				'\n\n{{students}}\n\nFTD Notes:{{Response}}\n\n\nView all your requests: https://cs1.eis.af.mil/sites/ftss#my-unit')
 
 			(data);
 

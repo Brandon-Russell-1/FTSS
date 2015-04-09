@@ -34,11 +34,17 @@ FTSS.ng.controller(
 
 				var scope = this;
 
+				scope.row.Status = status;
+				scope.row.Response = response;
+				scope.row.students =  _.keys(scope.row.Students_JSON).join('\n');
+
 				self._update(scope.row, {
 					'__metadata': scope.row.__metadata,
 					'Status'    : status,
 					'Response'  : response
 				}, function () {
+
+					notifier.respondToRequest(scope.row);
 
 					delete self.data[scope.row.Id];
 					scope.$hide();
