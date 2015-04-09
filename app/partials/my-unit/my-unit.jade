@@ -1,6 +1,6 @@
 include ../mixins
 
-- var columns = {'Class #':10, 'Dates':15, Unit:15, Open:10, Requested:10, Notes: 30}
+- var columns = {'Class #':8, 'Dates':18, Unit:15, Open:5, Seats:5, Notes: 25}
 
 .wrapped.noAdd
 
@@ -26,7 +26,7 @@ include ../mixins
 
             td.double {{::row.count}}
 
-            td
+            td(style='overflow:visible')
 
                 p.italics {{::row.Notes}}
 

@@ -161,23 +161,22 @@ mixin tableHeader(addNew, columns, instructions)
                 block
 
 mixin tableBody(columns)
-    .rollupContainer
 
-        table.table.table-striped.table-expanded.table-hover.rollup
+    table.table.table-striped.table-expanded.table-hover
 
-            thead
-                th.w5#flags
-                each width, label in columns
-                    th(style='width:' + width + '%')= label
-                th.w10#action
+        thead
+            th.w5#flags
+            each width, label in columns
+                th(style='width:' + width + '%')= label
+            th.w10#action
 
-            tbody
-                tr.middle.am-fade-and-slide-top.traverse(attributes, ng-repeat='row in group track by row.Id',
-                ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}',
-                class='{{row.style}}',
-                ng-dblclick='edit(false)',
-                id='row-{{row.Id}}')
-                    block
+        tbody
+            tr.middle.am-fade-and-slide-top.traverse(attributes, ng-repeat='row in group track by row.Id',
+            ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}',
+            class='{{row.style}}',
+            ng-dblclick='edit(false)',
+            id='row-{{row.Id}}')
+                block
 
 mixin googleMap(small, thumb)
     if small

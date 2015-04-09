@@ -1,9 +1,5 @@
 .table {
-	td {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
+
 	.left {
 		text-align: left !important;
 	}
@@ -52,7 +48,6 @@
 	transition: background-color 200ms ease;
 	background-color: #f5fafc;
 	color: #428bca;
-
 }
 
 .table-hover tbody tr:hover .lbl-instructor *,
@@ -127,23 +122,13 @@ tr.thin {
 	}
 }
 
-.rollupContainer {
-	overflow: hidden;
-	max-height: 3000px;
-	opacity: 1;
-	transition: all 1s ease;
-	td:first-child {
-		text-align: center;
-	}
-}
-
 [ng-repeat] .flag,
 [ng-repeat] .asterisk {
 	display: none;
 }
 
 [ng-repeat].updated .flag,
-[ng-repeat] arriority .asterisk {
+[ng-repeat].priority .asterisk {
 	display: block;
 	float: left;
 }
