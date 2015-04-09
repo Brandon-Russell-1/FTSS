@@ -34,7 +34,7 @@
 
 						// We use .data because of child scopes with a modal
 						$scope.data = {
-							'HostId' : $scope.host.Id
+							'HostId': $scope.host.Id
 						};
 
 						// Action performed when the user presses the request seat button (use $parent for external use)
@@ -75,7 +75,7 @@
 										'students'  : _.keys($scope.data.People).join('\n'),
 										'notes'     : $scope.data.Notes,
 										'recipients': $scope.row.FTD.Email + ';' +
-										            caches.Hosts[$scope.data.HostId].Email
+										              caches.Hosts[$scope.data.HostId].Email
 
 									}
 								);
@@ -85,14 +85,13 @@
 									{
 										'cache'     : true,
 										'__metadata': $scope.row.__metadata,
-										'Approved'  : $scope.row.Approved +
-										            $scope.data.peopleCount
+										'Approved'  : ($scope.row.Approved || 0) + $scope.data.peopleCount
 									});
 
 								// Send the operation as a batch (similar to a SQL transaction) to ensure everything worked
-								SharePoint.batch(send).then(function(results) {
+								SharePoint.batch(send).then(function (results) {
 
-									results.success ? utilities.alert.create() : utilities.alert.error();
+									utilities.alert[results.success ? 'success' : 'error']();
 
 									modal.modal.destroy();
 
