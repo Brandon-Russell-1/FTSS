@@ -317,7 +317,7 @@ mixin loadStudents()
 
     div(ng-if='!loadingStudents')
 
-        .well.well-sm(ng-repeat='request in ::students', class='alert-{{::request.style}}')
+        .well.well-sm(ng-repeat='request in ::students', class='{{::request.style}}')
 
             .bold.border-bottom
                 | {{request.Status}} ({{request.count}})
