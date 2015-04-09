@@ -32,21 +32,40 @@ FTSS.ng.controller(
 			 */
 			$scope.respond = function (status, response) {
 
-				var scope = this;
+				var scope = this,
 
-				scope.row.Status = status;
-				scope.row.Response = response;
-				scope.row.students =  _.keys(scope.row.Students_JSON).join('\n');
+					send = [
+						// Update the request item
+						{
+							'__metadata': scope.row.__metadata,
+							'Status'    : status,
+							'Response'  : response
+						},
 
-				self._update(scope.row, {
-					'__metadata': scope.row.__metadata,
-					'Status'    : status,
-					'Response'  : response
-				}, function () {
+						// Update the approved seat count for the related class
+						{
+							'cache'     : true,
+							'__metadata': $scope.row.Class.__metadata,
+							'Approved'  : ($scope.row.Class.Approved || 0) + $scope.seatCount
+						}
 
+					];
+
+				// Send the batch operation to SharePoint
+				SharePoint.batch(send).then(function (results) {
+
+					// update fields needed for notifier service
+					scope.row.Status = status;
+					scope.row.Response = response;
+					scope.row.students = _.keys(scope.row.Students_JSON).join('\n');
+
+					// Send our email update
 					notifier.respondToRequest(scope.row);
 
+					// Update the model by removing this item
 					delete self.data[scope.row.Id];
+
+					// close the popover
 					scope.$hide();
 
 				});
@@ -55,6 +74,7 @@ FTSS.ng.controller(
 
 			self.bind().then(function (data) {
 
+				// No double click action for this one
 				$scope.edit = angular.noop;
 
 				self.initialize(data).then(function (row) {
@@ -68,7 +88,8 @@ FTSS.ng.controller(
 					// Get the requested seat count
 					row.seatCount = _.size(row.Students_JSON);
 
-					row.studentList = '<div>' +  _.keys(row.Students_JSON).join('</div><br><div>') + '</div>';
+					// Our student list for the left overlay
+					row.studentList = '<div>' + _.keys(row.Students_JSON).join('</div><br><div>') + '</div>';
 
 				});
 
