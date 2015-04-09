@@ -231,6 +231,9 @@
 
 								processRow(v);
 
+								// Needed for manage-ftd selectize boxes (caches vs options) lists
+								v.search = v.text;
+
 								return {
 									'Id'      : v.Id,
 									'id'      : _idPrefix + v.Id,
