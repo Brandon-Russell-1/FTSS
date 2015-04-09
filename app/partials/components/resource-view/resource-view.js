@@ -54,8 +54,17 @@
 								});
 							});
 
-							// Only looing a week back
-							min = moment().add(-1, 'week');
+							min = (function () {
+
+								// Get the date from last week
+								var lastWeek = moment().startOf('day').add(-1, 'week'),
+
+								// Find earliest class start and offset by one day in milliseconds
+									earliestEvent = Math.min.apply(Math, _.pluck(events, 'startMoment'));
+
+								return moment(Math.max(lastWeek, earliestEvent));
+
+							}());
 
 							// Get the latest end date, plus one day
 							max = moment(Math.max.apply(Math, _.pluck(events, 'endMoment'))).add(1, 'days');
@@ -76,10 +85,10 @@
 								_.each(instructor, function (event) {
 
 									// Get the start of this event
-									var start = event.startMoment.diff(min, 'days');
+									var start = event.startMoment.diff(min, 'days') - 1;
 
 									// For long-running events ending soon, truncate their total days
-									event.DaysTruncated = event.Days + ((start < 1) ? start - 1 : 0);
+									event.DaysTruncated = event.Days + ((start < 1) ? start : 0);
 
 									// Handle overlapping class dates
 									if (start > 0 && count > start) {
