@@ -326,13 +326,13 @@ FTSS.ng.controller(
 												    end = start.clone();
 
 												// loop through the days, skipping weekends
-												while (days > 1) {
-
-													// Add a day to our range
-													end.add(1, 'days');
+												while (days > 0) {
 
 													// Only count this day if it is a weekday and not a down day
 													!dateTools.isWeekend(end) && !dateTools.isDownDay(end) && days--;
+
+													// Add a day to our range
+													end.add(1, 'days');
 
 												}
 
