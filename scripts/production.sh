@@ -15,7 +15,7 @@ cp vendor.js ../failover/live-libs.js
 cat vendor.js | gzip -9cv > ../aws/live-libs.js
 
 echo Building live-apps
-cat partials.js app.js > ../failover/live-apps.js
+cat partials.js app.js > ../failover/live-app.js
 gzip -9cv ../failover/live-apps.js > ../aws/live-app.js
 
 cd ../css
