@@ -109,7 +109,7 @@
 					$rootScope.ftss.$routeParams = $routeParams;
 
 					// Our current view name
-					$rootScope.ftss.viewTitle = $route.current.$$route.routeName;
+					$rootScope.ftss.viewTitle = $route.current ? $route.current.$$route.routeName : '';
 
 					FTSS.selectizeInstances = {};
 
