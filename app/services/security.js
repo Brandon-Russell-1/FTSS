@@ -47,54 +47,6 @@ FTSS.ng.service('security', [
 			_self = this;
 
 		/**
-		 *
-		 */
-		this.initialize = function () {
-
-			// Initialize our $rootScope variables
-			$rootScope.initInstructorRole = angular.noop;
-			$rootScope.roleClasses = '';
-			$rootScope.roleText = '';
-
-			/**
-			 * This eliminates the needless server calls for user/group info when developing FTSS.
-			 *
-			 * Yes, someone could easily spoof the global variable (if they paused the code during page load
-			 * and changed it.  However, this is all just client-view stuff anyway.  Additionally, doing so
-			 * would cause them more problems as it would force everything to read from a different SharePoint
-			 * site altogether.  Finally, we make a double check by validating the file name matches.
-			 *
-			 */
-			if (!PRODUCTION && location.pathname === '/dev.html') {
-
-				_isAdmin = true;
-
-				$rootScope.roleClasses = 'admin';
-
-				$rootScope.roleText = 'DEVELOPER MODE';
-
-				$rootScope.switchContext = _self.switchContext;
-
-				_self.checkFTD(false);
-
-				_self.checkHost();
-
-				$rootScope.ftss.initPage('security');
-
-			} else {
-
-				// First try to check for the cached FTD settings (before the user data is loaded)
-				_self.checkFTD(false);
-
-				_self.checkHost();
-
-				// Load our user data into FTSS
-				SharePoint.user().then(initSecurity);
-
-			}
-		};
-
-		/**
 		 * Allow switching FTDs for certain users
 		 */
 		this.switchContext = function (contextType) {
@@ -241,7 +193,55 @@ FTSS.ng.service('security', [
 
 			}
 
-		}
+		};
+
+		/**
+		 *
+		 */
+		this.initialize = function () {
+
+			// Initialize our $rootScope variables
+			$rootScope.initInstructorRole = angular.noop;
+			$rootScope.rolsceClasses = '';
+			$rootScope.roleText = '';
+
+			/**
+			 * This eliminates the needless server calls for user/group info when developing FTSS.
+			 *
+			 * Yes, someone could easily spoof the global variable (if they paused the code during page load
+			 * and changed it.  However, this is all just client-view stuff anyway.  Additionally, doing so
+			 * would cause them more problems as it would force everything to read from a different SharePoint
+			 * site altogether.  Finally, we make a double check by validating the file name matches.
+			 *
+			 */
+			if (!PRODUCTION && location.pathname === '/dev.html') {
+
+				_isAdmin = true;
+
+				$rootScope.roleClasses = 'admin';
+
+				$rootScope.roleText = 'DEVELOPER MODE';
+
+				$rootScope.switchContext = _self.switchContext;
+
+				_self.checkFTD(false);
+
+				_self.checkHost();
+
+				$rootScope.ftss.initPage('security');
+
+			} else {
+
+				// First try to check for the cached FTD settings (before the user data is loaded)
+				_self.checkFTD(false);
+
+				_self.checkHost();
+
+				// Load our user data into FTSS
+				SharePoint.user().then(initSecurity);
+
+			}
+		};
 
 
 		function initSecurity(user) {
@@ -262,7 +262,7 @@ FTSS.ng.service('security', [
 				_isAdmin = _groups.indexOf('admin') > -1;
 
 				// Add special "host" role for mtf/scheduling to use host-centric view
-				self.hasRole(['mtf', 'scheduling']) && _groups.push('host');
+				_self.hasRole(['mtf', 'scheduling']) && _groups.push('host');
 
 				// Add switchContext() for admins
 				if (_isAdmin) {
@@ -283,7 +283,7 @@ FTSS.ng.service('security', [
 					.replace('guest', 'Visitor');
 
 				// Finish the security code
-				utilities.initPage('security');
+				$rootScope.ftss.initPage('security');
 
 			});
 
