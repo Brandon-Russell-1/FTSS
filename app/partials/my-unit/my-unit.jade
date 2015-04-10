@@ -1,6 +1,6 @@
 include ../mixins
 
-- var columns = {'Class #':8, 'Dates':18, Unit:15, Open:5, Seats:5, Notes: 25}
+- var columns = {'Dates':18, Unit:15, Open:5, Seats:5, Comments: 40}
 
 .wrapped.noAdd
 
@@ -15,8 +15,6 @@ include ../mixins
                 .double.denied(hover='Request denied'): +icon('times')
                 .double.pending(hover='Request pending'): +icon('wait')
 
-            td {{::row.Class.TTMS}}
-
             td {{::row.Class.dateRange}}
 
             td {{::row.Unit.LongName}}
@@ -27,11 +25,8 @@ include ../mixins
 
             td(style='overflow:visible')
 
-                p.italics {{::row.Notes}}
+                p(ng-if='row.Notes') <b>{{::host.LongName}}:</b> {{::row.Notes}}
 
-                p(ng-if='row.Response')
+                p(ng-if='row.Response') <b>{{::row.Unit.LongName}}:</b> {{::row.Response}}
 
-                    b FTD:&nbsp;
-                    span {{::row.Response}}
-
-            td: #edit(edit-students)
+            td.text-right.overrideLabel(edit-students)
