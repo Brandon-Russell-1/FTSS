@@ -44,6 +44,8 @@ FTSS.ng.service('security', [
 
 			_groups = [],
 
+			_user = false,
+
 			_self = this;
 
 		/**
@@ -137,18 +139,17 @@ FTSS.ng.service('security', [
 
 		/**
 		 *
-		 * @param user
 		 */
-		this.checkFTD = function (user) {
+		this.checkFTD = function () {
 
 			if ($rootScope.ftd) return true;
 
 			// Check for email and login name
-			var identifier = user ?
+			var identifier = _user ?
 
 			                 [
-				                 (user.email || '').toLowerCase().trim() || false,
-				                 (user.loginname || '').toLowerCase().trim() || false
+				                 (_user.email || '').toLowerCase().trim() || false,
+				                 (_user.loginname || '').toLowerCase().trim() || false
 			                 ].filter(function (e) {return e}) : [],
 
 			// First try to load from localStorage, otherwise attempt to load from cache
@@ -246,8 +247,10 @@ FTSS.ng.service('security', [
 
 		function initSecurity(user) {
 
+			_user = user;
+
 			// Check again if this is an FTD user (should only happen the first time for them)
-			_self.checkFTD(user);
+			_self.checkFTD();
 
 			// Load the SP groups every time
 			SharePoint.groups().then(function (spGroups) {
