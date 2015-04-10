@@ -54,8 +54,6 @@ FTSS.ng.controller(
 
 						row.Priority = row.Class.Course.Priority;
 
-						row.studentList = '<div>' +  _.keys(row.Students_JSON).join('</div><br><div>') + '</div>';
-
 					});
 
 				});

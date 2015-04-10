@@ -51,7 +51,7 @@ FTSS.ng.service('classProcessor', [
 
 					});
 
-					return  new CSV(csv, {header: true}).encode();
+					return new CSV(csv, {header: true}).encode();
 
 				}()),
 
@@ -127,7 +127,7 @@ FTSS.ng.service('classProcessor', [
 		};
 
 		this.singleRequestProcess = function (request) {
-;
+
 			request.Host = caches.Hosts[request.HostId] || {};
 
 			request.Unit = caches.Units[request.UnitId] || {};
@@ -139,6 +139,15 @@ FTSS.ng.service('classProcessor', [
 				'Pending' : 'text-info',
 				'Denied'  : 'text-danger'
 			}[request.Status];
+
+			request.date = moment(request.Created).format('D MMM YYYY');
+
+			if (request.Class) {
+				request.studentList = '<h5>Class #' + request.Class.TTMS + '</h5>' +
+				                      '<em>' + _.keys(request.Students_JSON).join('</em><em>') + '</em>' +
+				                      '<f>Requested: ' + request.date + '<br>By: ' + request.CreatedBy.Name + '</f>';
+			}
+
 
 			return request;
 

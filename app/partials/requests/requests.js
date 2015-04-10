@@ -97,11 +97,7 @@ FTSS.ng.controller(
 					// Run the cacheFiller
 					classProcessor.cacheFiller(row.Class);
 
-					// Get the requested seat count
-					row.seatCount = _.size(row.Students_JSON);
-
-					// Our student list for the left overlay
-					row.studentList = '<div>' + _.keys(row.Students_JSON).join('</div><br><div>') + '</div>';
+					classProcessor.singleRequestProcess(row);
 
 				});
 
