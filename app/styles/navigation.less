@@ -66,8 +66,6 @@
 	text-decoration: none;
 }
 
-
-
 #admin-hosts .admin-hosts .pointer,
 #admin-instructors .admin-instructors .pointer,
 #my-unit .my-unit .pointer,
@@ -184,10 +182,21 @@ body.admin #ftd:hover, body.admin #host:hover {
 	}
 
 	a:hover {
-		color: rgb(76, 174, 76)!important;
+		color: rgb(76, 174, 76) !important;
 		border-bottom: 1px solid;
 		font-weight: 800;
 	}
 
+}
 
+#aflogo {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#aflogo:hover * {
+	fill: #00c1cc !important;
+	user-select: none;
 }

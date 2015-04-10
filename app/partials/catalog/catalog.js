@@ -13,7 +13,7 @@ FTSS.ng.controller(
 
 			$scope.ftss.searchPlaceholder =
 				'Type here to search the catalog.  Examples: MDS:F-15, PDS:RFV, Robins, wire, 2A5*.';
-			
+
 			var self = controllerHelper($scope, {
 
 				'sort' : 'PDS',

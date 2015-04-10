@@ -1,4 +1,4 @@
-/*global FTSS */
+/*global FTSS, $ALERT */
 
 FTSS.ng.service('utilities', [
 
@@ -123,7 +123,7 @@ FTSS.ng.service('utilities', [
 		/**
 		 * Our app-wide alert notification system, this will eventually replace all the other message garbage polluting MainController
 		 */
-		this.alert = (function () {
+		$ALERT = this.alert = (function () {
 
 			var builder;
 
