@@ -87,6 +87,9 @@ FTSS.ng.controller(
 
 				self.initialize(data).then(function (course) {
 
+					// Hide invalid courses
+					course.Archived = course.PDS.length < 3;
+
 					course.imds_g081 = [];
 
 					course.IMDS && course.imds_g081.push('IMDS: ' + course.IMDS);
