@@ -125,11 +125,11 @@
 										// Identify this class as truncated
 										if (event.Days !== event.DaysTruncated) {
 											event.pds = '<i hover="Some days of this class are not visible.">' +
-											            event.Course.PDS + '</i>'
+											            event.pds + '</i>'
 										}
 
 										// Only show the bio photo if there is room for it
-										event.bioPhoto = event.pds ? event.Instructor.Photo : '';
+										event.bioPhoto =  event.DaysTruncated > 3 ? event.Instructor.Photo : '';
 
 										// Trim the instructor name if days are shorter than 12
 										event.name = (event.DaysTruncated > 12) ?
