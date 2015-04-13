@@ -317,22 +317,36 @@ mixin loadStudents()
 
     div(ng-if='!loadingStudents')
 
-        .well.well-sm(ng-repeat='request in ::students', class='{{::request.style}}')
+        .well.well-sm(ng-repeat='request in students', class='{{request.style}}', ng-form='modal')
 
             .bold.border-bottom
-                | {{request.Status}} ({{request.count}})
-                .pull-right {{request.Host.Unit}}
+                | {{request.Status}} ({{request.peopleCount||request.count}})
+                .pull-right {{::request.Host.Unit}}
 
             dl.dl-horizontal
-                dt Student(s)
-                dd(ng-repeat='(student, email) in ::request.Students_JSON') {{student}}
+                div(ng-if='!canEditSeats')
+                    dt Student(s)
+                    dd(ng-repeat='(student, email) in ::request.Students_JSON') {{student}}
+
+                div(ng-if='canEditSeats')
+                    dt Students(s)
+                    dd: select.wide(selectize='people', max="99")
+
+                br
 
                 div(ng-if='request.Notes')
-                    dt Notes
+                    dt {{::request.Host.Unit}}
                     dd.italics {{::request.Notes}}
 
-                div(ng-if='request.Response')
-                    dt Response
-                    dd.wideText {{::request.Response}}
+                br
 
-        .clearfix
+                div(ng-if='request.Response || canEditSeats')
+                    dt FTD Notes
+                    dd: textarea.wideText.full.form-control(ng-model='request.Response')
+
+            .pull-right.btn.btn-success.btn-labeled(ng-click='submit()', ng-hide='!modal.$dirty')
+
+                span.btn-label.white: +icon('check-circle')
+                span.text &nbsp;Update
+
+            .clearfix

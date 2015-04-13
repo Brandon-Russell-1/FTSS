@@ -446,11 +446,13 @@
 
 		'people': function ($scope, attrs) {
 
+			var once = false;
+
 			return {
 				'delimiter'   : '+',
 				'loadThrottle': 500,
 				'labelField'  : 'DISPLAYNAME',
-				'valueField'  : 'EMAIL',
+				'valueField'  : 'DISPLAYNAME',
 				'sortField'   : 'DISPLAYNAME',
 				'searchField' : 'DISPLAYNAME',
 				'persist'     : false,
@@ -459,35 +461,67 @@
 				'plugins'     : [
 					'remove_button'
 				],
+				'onInitialize': function () {
+
+					var _self = this;
+
+					$scope.$watch('request.Students_JSON', function (list) {
+
+						if (list) {
+
+							_self.addOption(_.map(list, function (email, student) {
+
+								return {
+									'DISPLAYNAME': student,
+									'EMAIL'      : email || student
+								};
+
+							}));
+
+							_self.setValue(_.keys(list));
+
+						}
+
+					});
+
+				},
 				'onChange'    : function (selection) {
 
 					var options = this.options,
 
-						multi = (this.settings.maxItems > 1);
+						multi = (this.settings.maxItems > 1),
 
-					$scope.data = $scope.data || {};
+						parent = $scope.request || $scope.data || $scope;
 
-					if (multi) {
+					timeout(function() {
 
-						$scope.data.People = {};
+						if (multi) {
 
-						_.each(selection, function (person) {
+							parent.People = {};
 
-							var data = options[person];
+							_.each(selection, function (person) {
 
-							$scope.data.People[data.DISPLAYNAME || person] = data.EMAIL || '';
+								var opt = options[person];
 
-						});
+								opt.EMAIL = opt.EMAIL === opt.DISPLAYNAME ? '' : opt.EMAIL;
 
-						$scope.data.peopleCount = _.size($scope.data.People);
+								parent.People[opt.DISPLAYNAME || person] = opt.EMAIL || '';
 
-					} else {
+							});
 
-						$scope.data.Person = options[selection];
+							parent.peopleCount = _.size(parent.People);
 
-					}
+						} else {
 
-					($scope.modal.$setDirty || Function)();
+							parent.Person = options[selection];
+
+						}
+
+						(!$scope.request || once) && ($scope.modal.$setDirty || Function)();
+
+						once = true;
+
+					});
 
 				},
 				'load'        : function (query, callback) {

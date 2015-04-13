@@ -128,22 +128,37 @@ FTSS.ng.service('classProcessor', [
 
 		this.singleRequestProcess = function (request) {
 
+			// Get the Host info from cache
 			request.Host = caches.Hosts[request.HostId] || {};
 
+			// Get the FTD info from cache
 			request.Unit = caches.Units[request.UnitId] || {};
 
+			// Get the number of students
 			request.count = _.size(request.Students_JSON);
 
+			// Add classes for the current status
 			request.style = {
-				'Approved': 'text-success',
-				'Pending' : 'text-info',
-				'Denied'  : 'text-danger'
+				'Approved' : 'text-success',
+				'Pending'  : 'text-info',
+				'Denied'   : 'text-danger',
+				'Cancelled': 'text-muted'
 			}[request.Status];
 
+			// Format the request date
 			request.date = moment(request.Created).format('D MMM YYYY');
 
+			// Generate object for selectize directive (needed for editing lists)
+			request.data = {
+
+				'People'     : request.Students_JSON,
+				'peopleCount': request.count
+
+			};
+
+			// Generate the left overlay if the Class data is present
 			if (request.Class) {
-				request.studentList = '<h5>Class #' + request.Class.TTMS + '</h5>' +
+				request.studentList = '<h5>Class #' + (request.Class.TTMS || ' Pending') + '</h5>' +
 				                      '<em>' + _.keys(request.Students_JSON).join('</em><em>') + '</em>' +
 				                      '<f>Requested: ' + request.date + '<br>By: ' + request.CreatedBy.Name + '</f>';
 			}
