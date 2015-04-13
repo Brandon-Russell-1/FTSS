@@ -2,9 +2,9 @@
 
 clear
 
-cd Code
+cd ..
 
-git --no-pager log --stat --color | aha --black > ../Collaboration\ Docs/Mockups\ \&\ UX/content/FTSS\ Git\ Log.html
+git --no-pager log --stat --color | aha --black > Collaboration\ Docs/Mockups\ \&\ UX/content/FTSS\ Git\ Log.html
 echo Git log created
 echo
 
