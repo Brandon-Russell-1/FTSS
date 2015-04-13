@@ -545,7 +545,8 @@
 		'sharepointFilters',
 		'utilities',
 		'courseNumberParser',
-		function ($timeout, _SharePoint_, _sharepointFiltes_, _utilities_, _courseNumberParser_) {
+		'geodata',
+		function ($timeout, _SharePoint_, _sharepointFiltes_, _utilities_, _courseNumberParser_, geodata) {
 
 			return {
 
@@ -560,7 +561,7 @@
 					sharepointFilters = _sharepointFiltes_;
 					utilities = _utilities_;
 					courseNumberParser = _courseNumberParser_;
-
+					options.geodata = geodata.map;
 
 					timeout(function () {
 

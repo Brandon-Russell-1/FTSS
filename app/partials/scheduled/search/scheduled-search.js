@@ -10,7 +10,8 @@ FTSS.ng.controller(
 		'classProcessor',
 		'controllerHelper',
 		'security',
-		function ($scope, $modal, notifier, classProcessor, controllerHelper, security) {
+		'geodata',
+		function ($scope, $modal, notifier, classProcessor, controllerHelper, security, geodata) {
 
 			$scope.ftss.searchPlaceholder = 'Type here to search within the available courses.';
 
@@ -63,7 +64,7 @@ FTSS.ng.controller(
 					if (row.MTT) {
 
 						row.locationName = row.MTT;
-						row.locationCoords = caches.geodataFlat[row.MTT].toString()
+						row.locationCoords = geodata.index[row.MTT].toString()
 
 					} else {
 

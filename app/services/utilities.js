@@ -347,39 +347,6 @@ FTSS.ng.service('utilities', [
 
 		};
 
-		/**
-		 * Calculate distance between two coordinates
-		 *
-		 * @param start
-		 * @param end
-		 * @returns {number}
-		 */
-		this.distanceCalc = function (start, end) {
-
-			if (start && end) {
-
-				start = JSON.parse('[' + start + ']');
-				end = JSON.parse('[' + end + ']');
-
-				var deg2rad = function (deg) {
-					return deg * (Math.PI / 180);
-				};
-
-				var R = 3963.1676; // Radius of the earth in miles
-				var dLat = deg2rad(end[0] - start[0]);  // deg2rad below
-				var dLon = deg2rad(end[1] - start[1]);
-				var a = Math.sin(dLat / 2) *
-				        Math.sin(dLat / 2) +
-				        Math.cos(deg2rad(start[0])) *
-				        Math.cos(deg2rad(end[0])) *
-				        Math.sin(dLon / 2) *
-				        Math.sin(dLon / 2);
-				var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-				return Math.ceil(R * c); // Distance in miles
-
-			}
-		};
 
 		/**
 		 * Delete old class data from the recordset before processing
