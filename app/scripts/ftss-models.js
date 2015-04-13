@@ -270,7 +270,6 @@
 
 		    'requirements_stats': {
 
-			    'cache' : true,
 			    'source': 'RequirementsStats',
 			    'params': {
 				    '$select': [

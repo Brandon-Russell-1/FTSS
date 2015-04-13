@@ -20,15 +20,11 @@ FTSS.ng.service('sharepointFilters', [
 				'requirements': {
 					'h': 'HostId',
 					'u': 'UnitId'
-				},
-				'backlog'     : {
-					'h': 'HostId'
 				}
 
 			},
 
 			_max = {
-				'backlog'     : 1,
 				'requirements': 1
 			};
 

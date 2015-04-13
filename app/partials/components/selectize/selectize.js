@@ -491,9 +491,11 @@
 
 						multi = (this.settings.maxItems > 1),
 
+					// @todo need to work this out for backlog.js--needs scope.row
+					//	parent = $scope.request || $scope.row || $scope.data || $scope;
 						parent = $scope.request || $scope.data || $scope;
 
-					timeout(function() {
+					timeout(function () {
 
 						if (multi) {
 

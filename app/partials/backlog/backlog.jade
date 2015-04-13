@@ -32,11 +32,13 @@ mixin wizardRow(text)
                     bs-show='loaded')
 
     h4(style='clear:both;padding-top:1em') Courses Needed
+
     .pds(explain='units-courses', right)
         select(selectize='MasterCourseList',
         bind='data.Course_Requirements',
         multiple,
         ng-if='loaded')
+
     .text-info.info.italics.pull-right
         +icon('info-circle')
         small You can paste PDS codes
@@ -54,15 +56,16 @@ mixin wizardRow(text)
 
         br
 
-        .well.well-sm.am-fade-and-scale(id='{{row.course.PDS}}',
+        .well.well-sm.am-fade-and-scale(id='{{row.PDS}}',
                                 ng-repeat='row in flatData track by row.Id',
-                                ng-class='{priority:row.priority}')
+                                ng-class='{priority:row.priority}',
+                                ng-form='modal')
 
             .h4.pull-left
 
-                .btnFake.white(class='btn-{{requestType(row)}}')
-                    span.bigLetter {{row.requirements.length}}
-                    span(style='font-size:1.15em') {{row.course.Number}} - {{row.course.PDS}}
+                .btnFake.white(class='btn-{{row.detRequest.style}}')
+                    span.bigLetter {{row.peopleCount}}
+                    span(style='font-size:1.15em') {{row.Number}} - {{row.PDS}}
                     span#tdyOrLocal
                         +icon('plane')
                         +icon('exclamation-circle')
@@ -70,31 +73,29 @@ mixin wizardRow(text)
             .h4.pull-right.pad1
 
                 .pull-right(style='position:relative;top:.2em')
-                    span.pull-right(hover='This is a MAJCOM priority course.')
+                    span.pull-right(hover='This is a priority course.')
                         +icon('asterisk')
 
                 select.form-control(
                         ng-change='updateGrouping()',
                         ng-model='row.detRequest',
-                        ng-options='ftd as ftd.distanceText for ftd in row.listFTD')
+                        ng-options='ftd as ftd.distanceText for ftd in row.Units')
 
             .clearfix
 
-            .rollup.slide
+            .slide
 
-                .courseTitle {{row.course.Title}}
+                .courseTitle {{row.Title}}
 
-                .alert.alert-danger(ng-if='row.listFTD.length < 1')
+                .alert.alert-danger(ng-if='row.Units.length < 1')
                     .lead *** No available FTD's found! ***
-                    p: b Please verify {{row.course.PDS}} is the correct course.
+                    p: b Please verify {{row.PDS}} is the correct course.
 
                 .row
                     .col-lg-6
-                        h4.soft-bottom-border Student names ({{row.course.Min}} Min / {{row.course.Max}} Max)
-                        select( selectize,
-                                bind='row.requirements',
-                                multiple,
-                                create)
+                        h4.soft-bottom-border Student names ({{row.Min}} Min / {{row.Max}} Max)
+                        select.wide( selectize='people',
+                                max='99')
 
                         .text-danger.am-fade-and-slide-bottom.text-center
                             em(ng-show='getOver(row)') FYI, you've exceeded this course's max capacity
@@ -108,23 +109,11 @@ mixin wizardRow(text)
                     .col-lg-6
                         table.table.table-split#stats898
                             tbody
-                                tr
-                                    td Jan
-                                    td
-                                        input.w60(ng-model='row.History.r1', placeholder='Requested')
-                                        input.w30.pull-right(ng-model='row.History.b1', placeholder='Built')
-                                tr
-                                    td Feb
-                                    td
-                                        input.w60(ng-model='row.History.r2', placeholder='Requested')
-                                        input.w30.pull-right(ng-model='row.History.b2', placeholder='Built')
-                                tr
-                                    td Mar
-                                    td
-                                        input.w60(ng-model='row.History.r3', placeholder='Requested')
-                                        input.w30.pull-right(ng-model='row.History.b3', placeholder='Built')
-
-
+                                tr(ng-repeat='label in monthLabels')
+                                    td.w40 {{label}}
+                                    td.w60
+                                        input.w40(ng-model='row.History.r[$index]', placeholder='Requested')
+                                        input.w40.pull-right(ng-model='row.History.b[$index]', placeholder='Built')
 
         .clearfix
 
@@ -133,7 +122,7 @@ mixin wizardRow(text)
     .wrapped
 
         .well.well-sm.am-fade-and-slide-top(ng-repeat='(unit, courses) in groups')
-            h4.animateColorFast(class='btn-{{requestType(courses)}}', ng-click='edit(true, courses)') {{unit}}
+            h4.animateColorFast(class='btn-{{courses[0].detRequest.style}}', ng-click='edit(true, courses)') {{unit}}
                 .pull-right.white
                     +icon('plus-circle')
                     +icon('arrow-circle-o-right')
@@ -141,6 +130,6 @@ mixin wizardRow(text)
             ul.list-group(style='margin:0')
                 li.list-group-item(ng-repeat='crs in courses',
                                     ng-class='{limit:(getUnder(crs) || getOver(crs))}',
-                                    ng-if='crs.requirements.length')
-                    span.badge {{crs.requirements.length}}
-                    h5: span.a(scroll-to='crs.course.PDS') {{crs.course.Number}}
+                                    ng-if='crs.peopleCount')
+                    span.badge {{crs.peopleCount}}
+                    h5: span.a(scroll-to='crs.PDS') {{crs.Number}}

@@ -1,8 +1,9 @@
-/*global FTSS */
+/*
+/!*global FTSS *!/
 
-/**
+/!**
  *
- */
+ *!/
 (function () {
 
 	"use strict";
@@ -43,7 +44,7 @@
 				    .replace(/PERSONAL\sDATA[\s\S]+?EVT\-ID/gim, '')
 
 				    // Strip the page footer junk
-				    .replace(/^PCN\s.*/gim, '')
+				    .replace(/^PCN\s.*!/gim, '')
 
 				    // Strip ANG prefix from some names -- why would they do that anyway?!?!?!
 				    .replace(/^ANG\s/gi, '')
@@ -179,3 +180,4 @@
 		};
 
 }());
+*/
