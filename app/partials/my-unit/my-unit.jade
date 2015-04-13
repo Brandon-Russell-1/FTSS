@@ -13,6 +13,7 @@ include ../mixins
             td
                 .double.approved(hover='Request approved'): +icon('check')
                 .double.denied(hover='Request denied'): +icon('times')
+                .double.cancelled(hover='Request cancelled'): +icon('times')
                 .double.pending(hover='Request pending'): +icon('wait')
 
             td {{::row.Class.dateRange}}

@@ -2,18 +2,24 @@
 
 	tr .approved,
 	tr .pending,
-	tr .denied {
+	tr .denied,
+	tr .cancelled {
 		display: none;
 	}
 
 	tr.text-success .approved,
 	tr.text-info .pending,
-	tr.text-danger .denied {
+	tr.text-danger .denied,
+	tr.text-muted .cancelled {
 		display: inline-block;
 	}
 
 	.leftBarOverlayHover {
 		font-size: .75em;
+	}
+
+	tr.text-muted * {
+		color: #aaa!important;
 	}
 
 }
