@@ -10,7 +10,7 @@ FTSS.ng.service('notifier', [
 
 		this.j4Update = function (data) {
 
-			emailWrapper('FTD.Email',
+			emailWrapper('{{FTD.Email}}',
 			             'J4 Scheduling Update for {{Course.PDS}} - {{Course.Number}}',
 			             'The following notes were left by Sheppard for the {{dateRange}} {{Course.PDS}} class:\n\n{{J4Notes}}')
 
@@ -43,7 +43,7 @@ FTSS.ng.service('notifier', [
 		this.cancelClass = function (data) {
 
 			emailWrapper(
-				'',
+				FTSS.J4Email,
 				'Scheduled Class Cancelled',
 				'The following class was cancelled:\n\n{{Course.Number}}{{TTMS}} ({{dateRange}}) at {{FTD.LongName}} ({{FTD.LCode}})')
 
@@ -54,7 +54,7 @@ FTSS.ng.service('notifier', [
 		this.updateClass = function (data) {
 
 			emailWrapper(
-				'',
+				FTSS.J4Email,
 				'Scheduled Class Change',
 				'The following class dates were changed:\n\n{{Course.Number}}{{TTMS}} at {{FTD.LongName}} ({{FTD.LCode}})\n\n' +
 				'Original: {{oldDateRange}}\nUpdated: {{dateRange}}')
