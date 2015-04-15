@@ -123,7 +123,26 @@ FTSS.ng.controller(
 
 			};
 
-			$scope.updateFTD = self._update;
+			$scope.updateFTD = function () {
+
+				var det = $scope.det,
+
+					send = {
+						'cache'       : true,
+						'__metadata'  : det.__metadata,
+						'Courses_JSON': det.Courses_JSON,
+						'Email'       : det.Email,
+						'Phone'       : det.Phone
+					};
+
+				self._update(det, send, function () {
+
+					$scope.ftdEdit.$setPristine();
+					det.submitted = false;
+
+				}, true);
+
+			};
 
 			$scope.$watch('det.Courses_JSON', function (courses, old) {
 

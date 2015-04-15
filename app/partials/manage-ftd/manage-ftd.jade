@@ -55,7 +55,7 @@ form#embed.col-lg-6.wrapped(ng-show='det.Courses_JSON', name='ftdEdit')
     br
 
     #floatSubmit.pull-right.btn.btn-success.btn-labeled(ng-click='updateFTD()',
-                                    ng-hide='modal.$invalid || submitted || !ftdEdit.$dirty')
+                                    ng-hide='modal.$invalid || det.submitted || !ftdEdit.$dirty')
 
         span.btn-label.white: +icon('check-circle')
 
