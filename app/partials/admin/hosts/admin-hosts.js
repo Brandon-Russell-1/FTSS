@@ -15,7 +15,7 @@ FTSS.ng.controller(
 
 				'sort' : 'Unit',
 				'group': 'det.LongName',
-				'model': 'hosts'
+				'model': 'hosts',
 
 			});
 

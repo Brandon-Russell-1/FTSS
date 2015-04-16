@@ -1,6 +1,6 @@
 include ../../mixins
 
-- var columns = {'Host Unit':20, 'Local FTD':20, Email:30}
+- var columns = {'Host Unit':20, 'Local FTD':20, Location:20, Email:30}
 +tableHeader('Host Unit', columns, 'hosts')
 
     td
@@ -8,6 +8,8 @@ include ../../mixins
     td.bold {{::row.Unit}}
 
     td {{::row.det.LongName}}
+
+    td {{::row.Location}}
 
     td {{::row.Email}}
 

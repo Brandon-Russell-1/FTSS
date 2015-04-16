@@ -22,6 +22,11 @@ form(name='modal')
 
             +formGroupIcon('Unit Email', 'data.Email', 'email', true, 'Make sure you enter a valid email address.', 'hosts-email', 'envelope')
 
-            +formGroupIcon('Location', 'data.Location', 'text', false, false, 'hosts-location', 'location')
+            +formGroup('Location')
+
+                .input-group
+
+                    .input-group-addon.w15:  +icon('location')
+                    .input-group-selectize(explain='hosts-location', right): select(selectize='geodata', bind='data.Location')
 
     +modalFooter()
