@@ -1,0 +1,87 @@
+
+- updated = '1 April 2015'
+
+mixin base(title, page, intro)
+   doctype html
+
+   html(lang="en")
+
+      head
+         title Field Training Scheduling System User Guide - #{title} - Updated #{updated}
+
+         style: include css/bootstrap.min.css
+         style: include css/bootstrap-yeti.min.css
+         style: include css/docs.css
+   
+         body(data-spy="scroll", data-target="#toc", id='#{page}')
+
+            .navbar.navbar-default.navbar-fixed-top
+
+               .container
+
+                  #navbar-main.navbar-collapse.collapse
+
+                     ul.nav.navbar-nav.col-lg-12
+
+                        li: a(href='https://cs1.eis.af.mil/sites/FTSS', style='color:rgba(101, 255, 101, 0.8)') Back to FTSS
+
+                        li
+
+                        li#link-ftd: a(href='ftd.html') FTD Personnel
+                        li#link-utm-mts: a(href='utm-mts.html') UTM/MTS Personnel
+                        li#link-j4: a(href='j4.html') J4 Personnel
+                        li#link-cm-tm: a(href='cm-tm.html') Training/Curriculum Managers
+
+                        li.pull-right: a #{updated}
+
+
+            if intro
+
+               block
+
+            else
+
+               .container
+
+                  nav#toc
+
+                     ul.nav.sidenav.text-right
+
+                        li: a(href='#common') Common Functions
+                        li: a(href='#pageSection') #{title}
+
+                  #banner.page-header
+                     .row
+                        .col-lg-8
+                           h1 Field Training Scheduling System
+                           .lead User Guide for #{title}
+
+                  #content
+
+                     .section
+
+                        include about
+
+                        h2#common Common Functions
+
+                        hr
+
+                        include common
+
+                     .section
+
+                        h2#pageSection #{title}
+
+                        hr
+
+                        block
+
+                        br
+                        br
+
+                     footer: a.pull-right(href='#top') Back to top
+
+                     br
+
+               script: include js/jquery.min.js
+               script: include js/bootstrap3.min.js

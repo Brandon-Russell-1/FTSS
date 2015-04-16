@@ -22,6 +22,10 @@ header.navbar.navbar-inverse
                         container='body',
                         no-arrow)
                 +icon('share')
+
+        li: .support(left, hover='Click to view the user guide', no-arrow): a(href='guide/intro.html', target='_blank'): +icon('info-circle')
+
+        li: .support
     //
         li: .support(data-content-template='/partials/support.html',
                         left,

@@ -1,131 +1,133 @@
+include base
 
++base('FTD Personnel', 'ftd')
 
-p.
+   p.
 
-   The <img src='scheduleIcon.png' alt='Schedule'> function is used by the FTD to view, build, edit, and delete classes as well as schedule
-   instructor unavailability. This screen shows the schedule for which the FTD member is assigned.
-   The main page view gives an overlook of currently scheduled classes. Hovering over a class provides more
-   detailed information about the class, including course code, dates, course name, seats available, and any
-   associated notes. Clicking a class allows the user to make changes to that class. All classes are color-coded
-   according to class population, class type (MTT or training session), or instructor availability. The color code
-   legend can be viewed by hovering over the color tab on the top left of the screen.
+      The <img src='imageFiles/scheduleIcon.png' alt='Schedule'> function is used by the FTD to view, build, edit, and delete classes as well as schedule
+      instructor unavailability. This screen shows the schedule for which the FTD member is assigned.
+      The main page view gives an overlook of currently scheduled classes. Hovering over a class provides more
+      detailed information about the class, including course code, dates, course name, seats available, and any
+      associated notes. Clicking a class allows the user to make changes to that class. All classes are color-coded
+      according to class population, class type (MTT or training session), or instructor availability. The color code
+      legend can be viewed by hovering over the color tab on the top left of the screen.
 
-.text-center
-   img(title='Schedule screen example' src='imageFiles/scheduleScreen.png' alt='Schedule screenshot' width='800')
-br
-br
-br
+   .text-center
+      img(title='Schedule screen example' src='imageFiles/scheduleScreen.png' alt='Schedule screenshot' width='800')
+   br
+   br
+   br
 
-p.
+   p.
 
-   Clicking the <img src='imageFiles/saveIcon.png' alt='save'> icon allows the scheduler to download the schedule as a
-   comma separated values (.csv) file. The default program for opening these files on most USAF desktops is Microsoft Excel.
+      Clicking the <img src='imageFiles/saveIcon.png' alt='save'> icon allows the scheduler to download the schedule as a
+      comma separated values (.csv) file. The default program for opening these files on most USAF desktops is Microsoft Excel.
 
-p.
+   p.
 
-   Clicking the <img src='imageFiles/newIcon.png' alt='+'> icon along the right border will bring enable the 'Create Class/Unavailability' dialog.
-   The 'Type' field allows the scheduler to identify the class as a regular class, Mobile Training Team (MTT),
-   instructor unavailability or a training session. The 'Course' list will be filtered to the courses which that
-   detachment teaches. The 'Instructor' field is likewise filtered to instructors assigned to that detachment.
-   The 'Reserved Seats' field is used to allocate seats not allocated by the 898 process. The 'Hours' (optional) is used
-   to record actual hours to be recorded for the class. Any notes about the class can be added in the 'Notes' section.
+      Clicking the <img src='imageFiles/newIcon.png' alt='+'> icon along the right border will bring enable the 'Create Class/Unavailability' dialog.
+      The 'Type' field allows the scheduler to identify the class as a regular class, Mobile Training Team (MTT),
+      instructor unavailability or a training session. The 'Course' list will be filtered to the courses which that
+      detachment teaches. The 'Instructor' field is likewise filtered to instructors assigned to that detachment.
+      The 'Reserved Seats' field is used to allocate seats not allocated by the 898 process. The 'Hours' (optional) is used
+      to record actual hours to be recorded for the class. Any notes about the class can be added in the 'Notes' section.
 
-p.
+   p.
 
-   On the right side of the screen, the detachment calendar is displayed. In this calendar, the user can view
-   and select the day on which the class will start. The user can also view any other classes being taught by
-   the instructor in the date range being displayed. The course being currently scheduled is shown as date range
-   labelled "THIS COURSE". The date range is the length of the course loaded into the course catalog by default.
-   The user can click and drag the date range to change the start date. The user can also click and drag the right
-   boundary of the course to extend or shorten the course. Clicking the <img src='imageFiles/submitIcon.png' alt='submit'>
-   button schedules the course.
+      On the right side of the screen, the detachment calendar is displayed. In this calendar, the user can view
+      and select the day on which the class will start. The user can also view any other classes being taught by
+      the instructor in the date range being displayed. The course being currently scheduled is shown as date range
+      labelled "THIS COURSE". The date range is the length of the course loaded into the course catalog by default.
+      The user can click and drag the date range to change the start date. The user can also click and drag the right
+      boundary of the course to extend or shorten the course. Clicking the <img src='imageFiles/submitIcon.png' alt='submit'>
+      button schedules the course.
 
-.text-center
-   img(title='Build class example' src='imageFiles/createScreen.png' alt='Create class screenshot' width='800')
-br
-br
-br
+   .text-center
+      img(title='Build class example' src='imageFiles/createScreen.png' alt='Create class screenshot' width='800')
+   br
+   br
+   br
 
-p.
+   p.
 
-   Clicking a class from the <img src='imageFiles/scheduleIcon.png' alt='schedule'> page opens the 'Update' class dialog.
-   This dialog is almost identical to the 'Add Build Class' dialog with the exception of the additional
-   <img src='imageFiles/cancelClassIcon' alt='Cancel Class'> button. Clicking this button will cancel the class.
+      Clicking a class from the <img src='imageFiles/scheduleIcon.png' alt='schedule'> page opens the 'Update' class dialog.
+      This dialog is almost identical to the 'Add Build Class' dialog with the exception of the additional
+      <img src='imageFiles/cancelClassIcon.png' alt='Cancel Class'> button. Clicking this button will cancel the class.
 
-p.
+   p.
 
-   The <img src='imageFiles/seatRequestsIcon.png' alt='Seat Requests'> function allows a detachment to respond to
-   requests for advertised seats. Clicking the <img src='imageFiles/okIcon.png' alt='OK'> icon will approve the request.
-   Clicking the <img src='imageFiles/denyIcon.png' alt='deny'> icon will deny it.
+      The <img src='imageFiles/seatRequestsIcon.png' alt='Seat Requests'> function allows a detachment to respond to
+      requests for advertised seats. Clicking the <img src='imageFiles/okIcon.png' alt='OK'> icon will approve the request.
+      Clicking the <img src='imageFiles/denyIcon.png' alt='deny'> icon will deny it.
 
-.text-center
-   img(src='imageFiles/seatRequestsScreen.png' alt='Seat requests screenshot' width='800')
-br
-br
-br
+   .text-center
+      img(src='imageFiles/seatRequestsScreen.png' alt='Seat requests screenshot' width='800')
+   br
+   br
+   br
 
-p.
+   p.
 
-   The <img src='imageFiles/productionIcon.png' alt='Production'> function allows users to view production data for the
-   last 12 months for their assigned FTD. It is important to note that this is reference data only. Use STARS-FD for
-   official data pertaining to instructor hours.
+      The <img src='imageFiles/productionIcon.png' alt='Production'> function allows users to view production data for the
+      last 12 months for their assigned FTD. It is important to note that this is reference data only. Use STARS-FD for
+      official data pertaining to instructor hours.
 
-.text-center
-   img(title='Production screen example' src='imageFiles/productionScreen.png' alt='Production screenshot' width='800')
-br
-br
-br
+   .text-center
+      img(title='Production screen example' src='imageFiles/productionScreen.png' alt='Production screenshot' width='800')
+   br
+   br
+   br
 
-p.
+   p.
 
-   Seat utilization (orange line) depicts the perentage of the seats attended by students vs. the number of seats built.
-   Impact (green line) depicts the number of students multiplied by the number of training days. Hours (blue bar) shows
-   the number of instructor hours for the month. Students(light blue bar) shows the number of students that attended
-   the FTD in that month. Clicking the <img src='imageFiles/impactHoursIcon.png' alt='impact, hours,'>
-   <img src='imageFiles/studentsUtilizationIcon.png' alt='students, or utilization'> buttons below the graph will show or hide the
-   applicable data. Clicking an instructor will allow the user to view utilization and courses taught by that
-   instructor. Again, this data is not an official record of classes taught or hours recorded for an instructor.
+      Seat utilization (orange line) depicts the perentage of the seats attended by students vs. the number of seats built.
+      Impact (green line) depicts the number of students multiplied by the number of training days. Hours (blue bar) shows
+      the number of instructor hours for the month. Students(light blue bar) shows the number of students that attended
+      the FTD in that month. Clicking the <img src='imageFiles/impactHoursIcon.png' alt='impact, hours,'>
+      <img src='imageFiles/studentsUtilizationIcon.png' alt='students, or utilization'> buttons below the graph will show or hide the
+      applicable data. Clicking an instructor will allow the user to view utilization and courses taught by that
+      instructor. Again, this data is not an official record of classes taught or hours recorded for an instructor.
 
-img(title='Example instructor production data' src='imageFiles/exampleInstructorScreen.png' alt='Instructor Production Screenshot')
-br
-br
-br
+   img(title='Example instructor production data' src='imageFiles/exampleInstructorScreen.png' alt='Instructor Production Screenshot')
+   br
+   br
+   br
 
-p.
+   p.
 
-   The <img src='imageFiles/manageIcon.png' alt='Manage'> function allows FTD personnel to search, add, edit, or archive
-   instructors and courses for their FTDs. The user can filter results with the search bar. From this view, the user
-   can see instructors' names, email addresses, and pictures. Clicking the
-   <img src='imageFiles/archiveIcon.png' alt='archive'> icon will archive the instructor. Instructor details can be
-   edited by hovering over their name.
+      The <img src='imageFiles/manageIcon.png' alt='Manage'> function allows FTD personnel to search, add, edit, or archive
+      instructors and courses for their FTDs. The user can filter results with the search bar. From this view, the user
+      can see instructors' names, email addresses, and pictures. Clicking the
+      <img src='imageFiles/archiveIcon.png' alt='archive'> icon will archive the instructor. Instructor details can be
+      edited by hovering over their name.
 
-img(title='Example Instructor' src='imageFiles/exampleManageInstructorScreen.png' alt='Example instructor screenshot')
-br
-br
-br
+   img(title='Example Instructor' src='imageFiles/exampleManageInstructorScreen.png' alt='Example instructor screenshot')
+   br
+   br
+   br
 
-p.
+   p.
 
-   Clicking the <img src='imageFiles/archivedIcon.png' alt='archived'> icon next to the search bar toggles the
-   visibility of archived instructors in the instructor view. Clicking the
-   <img src='imageFiles/unarchiveIcon.png' alt='unarchive'> icon next to an archived instructor restores that instructor
-   to the detachment.
+      Clicking the <img src='imageFiles/archivedIcon.png' alt='archived'> icon next to the search bar toggles the
+      visibility of archived instructors in the instructor view. Clicking the
+      <img src='imageFiles/unarchiveIcon.png' alt='unarchive'> icon next to an archived instructor restores that instructor
+      to the detachment.
 
-p.
-   Clicking the <img src='imageFiles/newIcon.png' alt='+'> icon opens the 'Add Member' dialog. FTD
-   schedulers add instructors by adding a name and valid AFNET email address or account ID number. The scheduler can
-   optionally add a photo by dragging and dropping a photo file onto the dialog box.
+   p.
+      Clicking the <img src='imageFiles/newIcon.png' alt='+'> icon opens the 'Add Member' dialog. FTD
+      schedulers add instructors by adding a name and valid AFNET email address or account ID number. The scheduler can
+      optionally add a photo by dragging and dropping a photo file onto the dialog box.
 
-img(title='Add member example' src='imageFiles/addMemberScreen.png' alt='Add member screenshot')
-br
-br
-br
+   img(title='Add member example' src='imageFiles/addMemberScreen.png' alt='Add member screenshot')
+   br
+   br
+   br
 
-p.
+   p.
 
-   The scheduler can add or remove courses to the FTD's course list. The courses are listed by their unique PDS code.
-   Adding new courses can be done individually by clicking on the course box and selecting a new course from the
-   dropdown menu. Clicking the 'x' next to a PDS code removes the course from the detachment's catalog.
+      The scheduler can add or remove courses to the FTD's course list. The courses are listed by their unique PDS code.
+      Adding new courses can be done individually by clicking on the course box and selecting a new course from the
+      dropdown menu. Clicking the 'x' next to a PDS code removes the course from the detachment's catalog.
 
-.text-center
-   img(title='Example Manage FTD Screen' src='imageFiles/manageFTDScreen.png' alt='Manage FTD Screenshot' width='800')
+   .text-center
+      img(title='Example Manage FTD Screen' src='imageFiles/manageFTDScreen.png' alt='Manage FTD Screenshot' width='800')
