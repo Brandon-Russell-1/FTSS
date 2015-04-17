@@ -10,7 +10,10 @@ header.navbar.navbar-inverse
             span.text#host(ng-if='host', ng-cloak, ng-click='switchContext("host")') {{host.LongName}} -&nbsp;
             span.text#roleText(ng-cloak) {{roleText || 'Getting roles...'}}
 
+
     ul.nav.navbar-nav.pull-right.hidden-xs
+
+        li#username(left, hover='{{::user.hover}}') {{::user.short}}
 
         li: #share.support(bs-popover,
                         left,
