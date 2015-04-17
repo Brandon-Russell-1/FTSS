@@ -124,7 +124,7 @@ FTSS.ng.service('security', [
 
 			if ($rootScope.host) return true;
 
-			if (_self.hasRole('host')) {
+			if (_self.hasRole(['mtf', 'scheduling'])) {
 
 				try {
 					$rootScope.host = JSON.parse(localStorage.ftssCached_host);
@@ -263,9 +263,6 @@ FTSS.ng.service('security', [
 
 				// Check for the admin group
 				_isAdmin = _groups.indexOf('admin') > -1;
-
-				// Add special "host" role for mtf/scheduling to use host-centric view
-				_self.hasRole(['mtf', 'scheduling']) && _groups.push('host');
 
 				// Add switchContext() for admins
 				if (_isAdmin) {
