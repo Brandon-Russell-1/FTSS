@@ -42,8 +42,14 @@ FTSS.ng.service('notifier', [
 
 		this.cancelClass = function (data) {
 
-			emailWrapper(
+			var recipients = [
 				FTSS.J4Email,
+				data.FTD.Email,
+				data.Instructor.Email
+			].join(';');
+
+			emailWrapper(
+				recipients,
 				'Scheduled Class Cancelled',
 				'The following class was cancelled:\n\n{{Course.Number}}{{TTMS}} ({{dateRange}}) at {{FTD.LongName}} ({{FTD.LCode}})')
 
@@ -53,8 +59,14 @@ FTSS.ng.service('notifier', [
 
 		this.updateClass = function (data) {
 
-			emailWrapper(
+			var recipients = [
 				FTSS.J4Email,
+			    data.FTD.Email,
+			    data.Instructor.Email
+			].join(';');
+
+			emailWrapper(
+				recipients,
 				'Scheduled Class Change',
 				'The following class dates were changed:\n\n{{Course.Number}}{{TTMS}} at {{FTD.LongName}} ({{FTD.LCode}})\n\n' +
 				'Original: {{oldDateRange}}\nUpdated: {{dateRange}}')
@@ -110,7 +122,7 @@ FTSS.ng.service('notifier', [
 				'__metadata': 'Notifier',
 				'To'        : sanitize(send.to),
 				'Subject'   : sanitize(send.subject),
-				'Body'      : '\n' + sanitize(send.body) + '\n\n\n\nhttp://go.usa.gov/HCAC'
+				'Body'      : '\n' + sanitize(send.body) + '\n\n\n\nhttpx'
 
 			};
 
