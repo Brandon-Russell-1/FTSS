@@ -206,42 +206,14 @@ FTSS.ng.service('security', [
 			$rootScope.rolsceClasses = '';
 			$rootScope.roleText = '';
 
-			/**
-			 * This eliminates the needless server calls for user/group info when developing FTSS.
-			 *
-			 * Yes, someone could easily spoof the global variable (if they paused the code during page load
-			 * and changed it.  However, this is all just client-view stuff anyway.  Additionally, doing so
-			 * would cause them more problems as it would force everything to read from a different SharePoint
-			 * site altogether.  Finally, we make a double check by validating the file name matches.
-			 *
-			 */
-			if (!PRODUCTION && location.pathname === '/dev.html') {
+			// First try to check for the cached FTD settings (before the user data is loaded)
+			_self.checkFTD(false);
 
-				_isAdmin = true;
+			_self.checkHost();
 
-				$rootScope.roleClasses = 'admin';
+			// Load our user data into FTSS
+			SharePoint.user().then(initSecurity);
 
-				$rootScope.roleText = 'DEVELOPER MODE';
-
-				$rootScope.switchContext = _self.switchContext;
-
-				_self.checkFTD(false);
-
-				_self.checkHost();
-
-				$rootScope.ftss.initPage('security');
-
-			} else {
-
-				// First try to check for the cached FTD settings (before the user data is loaded)
-				_self.checkFTD(false);
-
-				_self.checkHost();
-
-				// Load our user data into FTSS
-				SharePoint.user().then(initSecurity);
-
-			}
 		};
 
 
@@ -249,43 +221,56 @@ FTSS.ng.service('security', [
 
 			_user = user;
 
+			// Add a copy of our user data to the rootscope
+			$rootScope.user = angular.copy(user);
+
 			// Check again if this is an FTD user (should only happen the first time for them)
 			_self.checkFTD();
 
-			// Load the SP groups every time
-			SharePoint.groups().then(function (spGroups) {
+			if (!PRODUCTION && location.pathname === '/dev.html') {
 
-				// Extract the name of any groups the user is a member of
-				_groups = _groups.concat(spGroups.name ? [spGroups.name] : _.pluck(spGroups, 'name'));
+				completeSecurity({'name': 'admin'});
 
-				// If no groups were found, just add our "guest" group
-				_groups = _groups.length ? _groups : ['guest'];
+			} else {
 
-				// Check for the admin group
-				_isAdmin = _groups.indexOf('admin') > -1;
+				// Load the SP groups every time
+				SharePoint.groups().then(completeSecurity);
 
-				// Add switchContext() for admins
-				if (_isAdmin) {
-					$rootScope.switchContext = _self.switchContext;
-				}
+			}
 
-				// Used to modify views based on roles
-				$rootScope.roleClasses = _groups.join(' ');
+		}
 
-				// This is the text that is displayed in the top-left corner of the app
-				$rootScope.roleText = _groups.join(' • ')
-					.replace('mtf', 'MTS/UTM')
-					.replace('ftd', 'FTD Scheduler/Production Supervisor')
-					.replace('curriculum', 'Training/Curriculum Manager')
-					.replace('scheduling', 'J4 Scheduler')
-					.replace('admin', 'Administrator')
-					.replace('instructor', 'FTD Member')
-					.replace('guest', 'Visitor');
+		function completeSecurity(spGroups) {
 
-				// Finish the security code
-				$rootScope.ftss.initPage('security');
+			// Extract the name of any groups the user is a member of
+			_groups = _groups.concat(spGroups.name ? [spGroups.name] : _.pluck(spGroups, 'name'));
 
-			});
+			// If no groups were found, just add our "guest" group
+			_groups = _groups.length ? _groups : ['guest'];
+
+			// Check for the admin group
+			_isAdmin = _groups.indexOf('admin') > -1;
+
+			// Add switchContext() for admins
+			if (_isAdmin) {
+				$rootScope.switchContext = _self.switchContext;
+			}
+
+			// Used to modify views based on roles
+			$rootScope.roleClasses = _groups.join(' ');
+
+			// This is the text that is displayed in the top-left corner of the app
+			$rootScope.roleText = _groups.join(' • ')
+				.replace('mtf', 'MTS/UTM')
+				.replace('ftd', 'FTD Scheduler/Production Supervisor')
+				.replace('curriculum', 'Training/Curriculum Manager')
+				.replace('scheduling', 'J4 Scheduler')
+				.replace('admin', 'Administrator')
+				.replace('instructor', 'FTD Member')
+				.replace('guest', 'Visitor');
+
+			// Finish the security code
+			$rootScope.ftss.initPage('security');
 
 		}
 
