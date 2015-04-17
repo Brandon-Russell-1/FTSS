@@ -21,14 +21,21 @@
 
 						var view = $('#mainView'),
 
-						    content = $('#content');
+						    content = $('#content'),
+
+							data = {};
 
 						if (!scope.createData) {
 
 							// Let the view CSS know about this modal so we can do some fun stuff
 							view.addClass('hasModal');
 
-							$('#row-' + scope.data.Id).addClass('modal-selected');
+							// Make a flat copy of our data
+							_.each(scope.groups, function (group) {
+								_.each(group, function (row) {
+									data[row.Id] = row;
+								});
+							});
 
 							// Bind the traverse action which allows navigating between records without closing/opening the modal
 							scope.traverse = scope.update(scope, function (forward) {
@@ -39,10 +46,10 @@
 									var rows, row, pointer;
 
 									// Array of all tr's on the page (with a scope)
-									rows = $('tr.traverse').removeClass('modal-selected');
+									rows = $('tr.traverse');
 
 									// The currently selected row
-									row = $('#row-' + scope.data.Id);
+									row = $('[traverse="' + scope.data.Id + '"]');
 
 									// Our current row index
 									pointer = rows.index(row);
@@ -54,13 +61,8 @@
 										row = rows.eq(--pointer).length && rows.eq(pointer) || rows.last();
 									}
 
-									// Add .modal-selected to the new row
-									row.addClass('modal-selected');
-
-									content.scrollTop(content.scrollTop() + row.offset().top - 250);
-
 									// Copy data back into new scope.data variable
-									scope.data = angular.copy(row.data().$scope.row);
+									scope.data = data[parseInt(row.attr('traverse'), 10)];
 
 									// Reset the form state
 									scope.modal.$setPristine();

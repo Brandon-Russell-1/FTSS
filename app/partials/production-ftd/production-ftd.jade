@@ -37,7 +37,7 @@ include ../mixins
 
                     tr.am-fade-and-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
                                         ng-click='stats()',
-                                        id='row-{{row.Id}}')
+                                        traverse='{{row.Id}}')
 
                         td: .circle(bio-photo='row.Photo', style='width:100px;height:100px')
 

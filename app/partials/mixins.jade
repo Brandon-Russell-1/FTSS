@@ -175,7 +175,7 @@ mixin tableBody(columns)
             ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}',
             class='{{row.style}}',
             ng-dblclick='edit(false)',
-            id='row-{{row.Id}}')
+            traverse='{{row.Id}}')
                 block
 
 mixin googleMap(small, thumb)
