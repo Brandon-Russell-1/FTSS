@@ -224,9 +224,6 @@ FTSS.ng.service('security', [
 			// Shortened display name
 			user.short = user.name.split('USAF')[0];
 
-			// Hover for user details
-			user.hover = [user.name, user.email, user.loginname].join('<br>');
-
 			// Add a copy of our user data to the rootscope
 			$rootScope.user = angular.copy(user);
 

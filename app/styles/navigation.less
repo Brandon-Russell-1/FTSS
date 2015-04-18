@@ -1,3 +1,4 @@
+@import (reference) "../../bower_components/bootstrap/less/variables";
 
 #sidebar-nav {
 	float: left;
@@ -168,27 +169,6 @@ body.admin #ftd:hover, body.admin #host:hover {
 	}
 }
 
-#external-links {
-	position: absolute;
-	bottom: 10px;
-	width: 170px;
-	text-align: center;
-	font-size: .90em;
-	color: #777 !important;
-	letter-spacing: .15em;
-
-	a {
-		color: #777 !important;
-	}
-
-	a:hover {
-		color: rgb(76, 174, 76) !important;
-		border-bottom: 1px solid;
-		font-weight: 800;
-	}
-
-}
-
 #aflogo {
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -197,13 +177,34 @@ body.admin #ftd:hover, body.admin #host:hover {
 }
 
 #aflogo:hover * {
-	fill: #00c1cc !important;
+	fill: rgba(0, 244, 255, 0.36) !important;
 	user-select: none;
 }
 
+.support {
+	cursor: pointer !important;
+	opacity: .6;
+	transition: 300ms ease;
+	color: #fff !important;
+	line-height: 50px;
+}
+
 #username {
-	color: #ccc;
-	line-height: 52px;
+	padding-right: 1em;
+	cursor: default !important;
+	font-weight: 100;
 	font-size: .9em;
-	padding-right: 10px;
+}
+
+a.support {
+	letter-spacing: .15em;
+	border-left: 1px solid #444;
+	font-size: 1.2em !important;
+	font-variant: small-caps;
+}
+
+a.support:hover {
+	opacity: 1;
+	cursor: pointer !important;
+	background-color: @brand-primary !important;
 }

@@ -1,5 +1,7 @@
 include ../partials/mixins
 
+-var userHover = '<dl class="dl-horizontal"><dt>Name</dt><dd>{{::user.name}}</dd></dt><dt>Email</dt><dd>{{::user.email}}</dd><dt>Account</dt><dd>{{::user.loginname}}</dd></dl>';
+
 header.navbar.navbar-inverse
 
     .navbar-header
@@ -11,24 +13,28 @@ header.navbar.navbar-inverse
             span.text#roleText(ng-cloak) {{roleText || 'Getting roles...'}}
 
 
-    ul.nav.navbar-nav.pull-right.hidden-xs
+    ul.nav.navbar-nav.pull-right
 
-        li#username(left, hover='{{::user.hover}}') {{::user.short}}
+        li: #username.support(left,
+                                hoverClass='userInfo',
+                                hover='AFNET User Information',
+                                content=userHover) {{::user.short}}
 
-        li: #share.support(bs-popover,
-                        left,
+        li: a.support(bs-dropdown,
+                        animation='am-fade-and-slide-top',
+                        template='/partials/external-links.html',
+                        data-placement='bottom-right',
+                        container='body') Links
+
+        li: a.support(bs-dropdown=,
                         url-shortner,
                         animation='am-fade-and-slide-top',
-                        hover='topbar-share',
-                        content-template='/partials/url-shortner.html',
+                        template='/partials/url-shortner.html',
                         data-placement='bottom-right',
-                        container='body',
-                        no-arrow)
-                +icon('share')
+                        container='body') Share
 
-        li: .support(left, hover='Click to view the user guide', no-arrow): a(href='guide/intro.html', target='_blank'): +icon('question')
+        li: a.support(href='guide/intro.html', target='_blank') User Guide
 
-        li: .support(style='width:1em')
     //
         li: .support(data-content-template='/partials/support.html',
                         left,
