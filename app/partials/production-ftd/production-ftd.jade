@@ -1,43 +1,20 @@
 include ../mixins
 
-#embed.col-lg-7
+#rightScroll.wrapped(ng-if='!ftss.showAlternateView')
 
-    br
+        div.col-lg-5
 
-    #ftdStats
-
-        h3 Det {{::ftd.Det}} Last 12 Months
-
-        table.table.table-split(style='font-size:1.25em')
-            tr
-                td Instructor Hours
-                td {{::ftdStats.hours | number}}
-            tr
-                td Classes Taught
-                td {{::ftdStats.classes | number}}
-
-            tr
-                td Students
-                td {{::ftdStats.students | number}}
-
-    #ftdChart.am-fade.ng-enter
-        linechart(data='graph', options='graphOptions')
-
-
-
-#rightScroll.wrapped.col-lg-5(ng-if='!ftss.showAlternateView')
-
-        div
-
-            h3 {{groups.false.length}} Instructors
+            h3 {{instructorCount}} Instructors
 
             table.table.table-striped.table-expanded.table-hover
 
                 tbody
 
-                    tr.am-fade-and-slide-right.traverse(ng-repeat='row in groups.false track by row.Id',
+                    tr.am-fade-and-slide-right.traverse(ng-repeat='row in instructors',
                                         ng-click='stats()',
-                                        traverse='{{row.Id}}')
+                                        traverse='{{row.Id}}',
+                                        hover='{{::row.historyList}}',
+                                        hoverClass='leftBarOverlayHover')
 
                         td: .circle(bio-photo='row.Photo', style='width:100px;height:100px')
 
@@ -53,4 +30,54 @@ include ../mixins
                             br
 
                             .pull-left.btn-success(ng-style='{width:row.annualEffectiveness+"%"}') &nbsp;
-                            .pull-left.italics.text-success &nbsp;{{::row.annualHours}} hours/yr
+                            .pull-left.italics.text-success &nbsp;{{::row.stats.annualHours}} hours/yr
+
+#rightScroll.wrapped(ng-if='ftss.showAlternateView')
+
+        div
+
+            h3 Course List
+
+            table.table.table-striped.table-expanded
+
+                thead
+
+                    tr
+
+                        th.w10 Dates
+                        td.w5 PDS
+                        td.w5 Students
+
+                tbody
+
+
+                    tr.am-fade-and-slide-right.traverse(ng-repeat='row in flatList')
+
+                        td {{::row.dateRange}}
+
+                        td {{::row.Course.PDS}}
+
+                        td {{::row.allocatedSeats}}
+
+#embed.col-lg-7.pull-right
+
+    br
+
+    #ftdStats
+
+        h3 Last 12 Months
+
+        table.table.table-split(style='font-size:1.25em')
+            tr
+                td Instructor Hours
+                td {{ftdStats.hours | number}}
+            tr
+                td Classes Taught
+                td {{ftdStats.classes | number}}
+
+            tr
+                td Students
+                td {{ftdStats.students | number}}
+
+    #ftdChart.am-fade.ng-enter
+        linechart(data='graph', options='graphOptions')

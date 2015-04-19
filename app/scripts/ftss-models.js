@@ -132,11 +132,14 @@
 
 		    'production': {
 
+			    'cache' : !PRODUCTION,
 			    'source': 'Scheduled',
 			    'params': {
 				    '$filter': [
 					    'Archived ne true',
-					    'NA ne true'
+					    'NA ne true',
+					    'Start ge ' + (_today - 365),
+					    'Start lt ' + _today
 				    ],
 				    '$select': [
 					    'Start',

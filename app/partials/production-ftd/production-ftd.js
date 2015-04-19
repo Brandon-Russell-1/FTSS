@@ -13,306 +13,298 @@ FTSS.ng.controller(
 		'utilities',
 		function ($scope, $timeout, SharePoint, classProcessor, controllerHelper, loading, utilities) {
 
-			$scope.ftss.searchPlaceholder = 'Type here to search for an instructor';
+			$scope.ftss.searchPlaceholder =
+				'Type here to filter the production data.  Examples: MDS:F-15, PDS:RFV, Robins, wire, 2A5*.';
 			$scope.ftss.hasAlternateView = true;
-			$scope.ftss.hasArchiveOption = true;
 
-			var read = FTSS.models('scheduled');
+			var read = FTSS.models('production');
 
-			$scope.ftd && getProductionData() || utilities.addAsync(getProductionData);
-
-			$scope.$watch('ftss.showAlternateView', function (state) {
-				($scope.$$childHead.redraw || Function)(state);
-			});
+			$scope.ftd ? getProductionData() : utilities.addAsync(getProductionData);
 
 			function getProductionData() {
 
 				loading(true);
 
 				// Only include this unit
-				read.params.$filter = '(UnitId eq ' + $scope.ftd.Id + ')';
+				read.params.$filter.unshift('UnitId eq ' + $scope.ftd.Id);
+				read.params.$filter = read.params.$filter.join(' and ');
 
 				// Request the scheduled data for this unit
-				SharePoint.read(read).then(buildProductionView);
+				SharePoint.read(read).then(
+					function (results) {
 
-			}
+						utilities.addAsync(function () {
 
+							// The filtered list of instructors/members
+							var stats = _(results)
 
-			function buildProductionView(results) {
+									// Reject Training sessions for now
+									.reject('TS')
 
-				// Pass the rest of this op to our async collector just in case the caches aren't loaded yet
-				utilities.addAsync(function () {
+									// Load the cache data for every row (this one is a little expensive)
+									.each(classProcessor.cacheFiller)
 
-					var stats = _(results)
+									// Sort oldest to newest
+									.sortBy('startMoment')
 
-							// Ignore TTMS/NA
-							.reject('TS')
-							.reject('NA')
+									// Then reverse
+									.reverse()
 
-							// Ignore cancelled classes
-							.reject('Archived')
+									// Return the chained value output from lodash
+									.value(),
 
-							// Load the cache data for every row (this one is a little expensive)
-							.each(classProcessor.cacheFiller)
+							// Load the controller
+								self = controllerHelper($scope, {
 
-							// Sort oldest to newest
-							.sortBy('startMoment')
+									'group': 'Instructor.Name',
 
-							// Then reverse
-							.reverse()
+									'modal': 'instructor-stats',
 
-							// Group the data by InstructorID
-							.groupBy('InstructorId')
+									'finalProcess': buildProductionView
 
-							// Return the chained value output from lodash
-							.value(),
+								}),
 
-					// The start of our 12-month range
-						yearStart = moment().add(-12, 'months'),
+							// Builds our monthly statistics objects
+								buildMonths = (function () {
 
-					// End of the 12-month range
-						yearEnd = moment().add(-1, 'months'),
+									var collection = {},
 
-					// Builds our monthly statistics objects
-						buildMonths = (function () {
+										month = moment().add(1, 'months');
 
-							var collection = {},
+									for (var i = 0; i < 12; i++) {
 
-								month = moment();
+										collection[month.add(-1, 'months').format('YYYYMM')] = {
+											'sort'     : parseInt(month.format('YYYYMM'), 10),
+											'text'     : month.format('MMM'),
+											'date'     : month.clone().toDate(),
+											'hours'    : 0,
+											'classes'  : 0,
+											'students' : 0,
+											'impact'   : 0,
+											'available': 0
+										};
 
-							for (var i = 0; i < 12; i++) {
+									}
 
-								collection[month.add(-1, 'months').format('YYYYMM')] = {
-									'sort'     : parseInt(month.format('YYYYMM'), 10),
-									'text'     : month.format('MMM'),
-									'date'     : month.clone().toDate(),
-									'hours'    : 0,
-									'classes'  : 0,
-									'students' : 0,
-									'impact'   : 0,
-									'available': 0
+									return function () {
+
+										return _.cloneDeep(collection);
+
+									}
+
+								}());
+
+							$scope.stats = self.edit();
+
+							// Initialize with the instructor data
+							self.initialize(stats).then();
+
+							function buildProductionView(finalData) {
+
+								// FTD-wide stats
+								var ftdStats = {
+									'hours'   : 0,
+									'classes' : 0,
+									'students': 0,
+									'graph'   : buildMonths()
 								};
 
-							}
+								$scope.flatList = [];
+								$scope.instructors = {};
+								$scope.instructorCount = _.size(finalData);
 
-							return function () {
+								_.each(finalData, function (courses, instructorName) {
 
-								return _.cloneDeep(collection);
+									       var chart = buildMonths(),
 
-							}
+									       // for aggregate instructor stats
+										       stats = {
+											       'annualHours': 0,
+											       'hours'      : 0,
+											       'classes'    : 0,
+											       'students'   : 0
+										       };
 
-						}()),
+									       _.each(courses, function (course) {
 
-					// FTD-wide stats
-						ftdStats = {
-							'hours'   : 0,
-							'classes' : 0,
-							'students': 0,
-							'graph'   : buildMonths()
-						},
+										       var hours = course.Hours || course.Course.Hours || 0,
 
-					// The filtered list of instructors/members
-						data = _(caches.Instructors)
+											       monthIndex = course.startMoment.format('YYYYMM');
 
-							.filter({
-								'UnitId'  : $scope.ftd.Id,
-								'Archived': false
-							})
+										       $scope.flatList.push(course);
 
-							.cloneDeep(),
+										       // Tally all courses taught
+										       stats.classes++;
 
-					// Load the controller
-						self = controllerHelper($scope,
+										       // Tally hours, looking for a manual hours override first
+										       stats.hours += hours;
 
-						                        {
+										       // Tally all students taught
+										       stats.students += course.allocatedSeats;
 
-							                        'sort' : 'Name',
-							                        'modal': 'instructor-stats'
+										       chart[monthIndex].hours += hours;
+										       ftdStats.graph[monthIndex].hours += hours;
+										       ftdStats.graph[monthIndex].classes++;
+										       ftdStats.graph[monthIndex].students += course.allocatedSeats;
+										       ftdStats.graph[monthIndex].impact += (course.allocatedSeats * hours / 8);
+										       ftdStats.graph[monthIndex].available += course.Course.Max;
 
-						                        });
+										       stats.annualHours += hours;
 
-					$scope.stats = self.edit();
+										       ftdStats.classes++;
+										       ftdStats.hours += hours;
+										       ftdStats.students += course.allocatedSeats;
 
-					// Initialize with the instructor data
-					self.initialize(data)
+									       });
 
-						// Pass a function for each instructor
-						.then(function (row) {
+									       $scope.instructors[instructorName] = _.extend(
+										       courses[0].Instructor,
 
-							      var stat = stats[row.Id],
+										       {
 
-								      chart = buildMonths();
+											       'history': courses,
 
-							      row.search = row.Name;
+											       'historyList': _(courses).map(function (event) {
 
-							      // for aggregate instructor stats
-							      row.stats = {
-								      'hours'   : 0,
-								      'classes' : 0,
-								      'students': 0
-							      };
+												       return '<i>' + event.Course.PDS + '</i><b>' + event.startMoment.format('MMM-YY') + '</b>';
 
-							      row.annualHours = 0;
+											       }).join('<br>'),
 
-							      // add the data back to the scope
-							      row.history = stat;
+											       'stats': stats,
 
-							      _.each(stat, function (course) {
+											       'chart': _(chart).sortBy('sort').map(function (item) {
 
-								      var hours = course.Hours || course.Course.Hours || 0;
+												       // We use 175 as the theoratical teaching hours in a month
+												       var pct = item.hours ? Math.round((item.hours / 175) * 100) : 0;
 
-								      // Tally all courses taught
-								      row.stats.classes++;
+												       return '<b><i>' +
+												              (item.hours || '') +
+												              '</i><em style="height:' +
+												              pct +
+												              '%">&nbsp;</em>' +
 
-								      // Tally hours, looking for a manual hours override first
-								      row.stats.hours += hours;
+												              '<i>' +
+												              item.text +
+												              '</i></b>';
 
-								      // Tally all students taught
-								      row.stats.students += course.allocatedSeats;
+											       }).join(''),
 
-								      // If course was taught in the last year, count hours for annualHours
-								      if (course.startMoment > yearStart && course.startMoment < yearEnd) {
+											       // A rough estimate of instructor time utilization
+											       annualEffectiveness: Math.floor(stats.annualHours / 19.2)
 
-									      var monthIndex = course.startMoment.format('YYYYMM');
-
-									      chart[monthIndex].hours += hours;
-									      ftdStats.graph[monthIndex].hours += hours;
-									      ftdStats.graph[monthIndex].classes++;
-									      ftdStats.graph[monthIndex].students += course.allocatedSeats;
-									      ftdStats.graph[monthIndex].impact += (course.allocatedSeats * hours / 8);
-									      ftdStats.graph[monthIndex].available += course.Course.Max;
-
-									      row.annualHours += hours;
-
-									      ftdStats.classes++;
-									      ftdStats.hours += hours;
-									      ftdStats.students += course.allocatedSeats;
-
-								      }
-							      });
-
-							      row.chart = '';
-
-							      _(chart).sortBy('sort').each(function (item) {
-
-								      // We use 175 as the theoratical teaching hours in a month
-								      var pct = item.hours ? Math.round((item.hours / 175) * 100) : 0;
-
-								      row.chart += '<b><i>' +
-								                   (item.hours || '') +
-								                   '</i><em style="height:' +
-								                   pct +
-								                   '%">&nbsp;</em>' +
-
-								                   '<i>' +
-								                   item.text +
-								                   '</i></b>';
-
-							      }).value();
-
-							      // A rough estimate of instructor time utilization
-							      row.annualEffectiveness = Math.floor(row.annualHours / 19.2);
-
-						      });
-
-					$scope.ftdStats = ftdStats;
-
-					_.each(ftdStats.graph, function (month) {
-
-						month.utilization = (month.students / month.available) * 100 || 0;
-
-					});
-
-					$scope.graph = _.sortBy(ftdStats.graph, 'sort');
-
-					// Column
-					$scope.graphOptions = {
-						lineMode   : "basis",
-						tension    : 1,
-						axes       : {
-							x : {
-								type: "date",
-								key : "date"
-							},
-							y : {type: "linear"},
-							y2: {type: "linear"}
-						},
-						tooltipMode: "dots",
-						drawLegend : true,
-						drawDots   : false,
-
-						series       : [
-							{
-								'y'        : "impact",
-								'label'    : "Impact",
-								'type'     : "area",
-								'color'    : "#4CAE4C",
-								'thickness': "4px",
-								'axis'     : "y",
-								'id'       : "series_impact",
-								'color'    : "rgb(76, 174, 76)"
-							},
-							{
-								'y'    : "hours",
-								'label': "Hours",
-								'type' : "column",
-								'axis' : "y",
-								'id'   : "series_hours",
-								'color': "rgb(31, 119, 180)"
-							},
-							{
-								'y'    : "students",
-								'label': "Students",
-								'axis' : "y2",
-								'type' : "column",
-								'id'   : "series_students",
-								'color': "rgb(174, 199, 232)"
-							},
-							{
-								'y'      : 'utilization',
-								'label'  : 'Utilization',
-								'type'   : 'line',
-								thickness: "5px",
-								'axis'   : 'y2',
-								'id'     : 'series_utilization',
-								'color'  : 'rgb(255, 127, 14)'
-							}
-						],
-						'tooltip'    : {
-							'mode'     : 'scrubber',
-							'formatter': function (x, y, series) {
-
-								var text = parseInt(y, 10);
-
-								switch (series.label) {
-
-									case 'Impact':
-										return text + '  days (students * training days)';
-
-									case 'Utilization':
-										return text + '% seat utilization';
-
-									case 'Hours':
-										return text + ' instructor hours';
-
-									default:
-										return text + ' ' + series.label;
+										       }
+									       );
 
 
-								}
+									       $scope.ftdStats = ftdStats;
+
+									       _.each(ftdStats.graph, function (month) {
+
+										       month.utilization = (month.students / month.available) * 100 || 0;
+
+									       });
+
+									       $scope.graph = _.sortBy(ftdStats.graph, 'sort');
+
+									       // Column
+									       $scope.graphOptions = {
+										       lineMode   : "basis",
+										       tension    : 1,
+										       axes       : {
+											       x : {
+												       type: "date",
+												       key : "date"
+											       },
+											       y : {type: "linear"},
+											       y2: {type: "linear"}
+										       },
+										       tooltipMode: "dots",
+										       drawLegend : true,
+										       drawDots   : false,
+
+										       series       : [
+											       {
+												       'y'        : "impact",
+												       'label'    : "Impact",
+												       'type'     : "area",
+												       'color'    : "#4CAE4C",
+												       'thickness': "4px",
+												       'axis'     : "y",
+												       'id'       : "series_impact",
+												       'color'    : "rgb(76, 174, 76)"
+											       },
+											       {
+												       'y'    : "hours",
+												       'label': "Hours",
+												       'type' : "column",
+												       'axis' : "y",
+												       'id'   : "series_hours",
+												       'color': "rgb(31, 119, 180)"
+											       },
+											       {
+												       'y'    : "students",
+												       'label': "Students",
+												       'axis' : "y2",
+												       'type' : "column",
+												       'id'   : "series_students",
+												       'color': "rgb(174, 199, 232)"
+											       },
+											       {
+												       'y'      : 'utilization',
+												       'label'  : 'Utilization',
+												       'type'   : 'line',
+												       thickness: "5px",
+												       'axis'   : 'y2',
+												       'id'     : 'series_utilization',
+												       'color'  : 'rgb(255, 127, 14)'
+											       }
+										       ],
+										       'tooltip'    : {
+											       'mode'     : 'scrubber',
+											       'formatter': function (x, y, series) {
+
+												       var text = parseInt(y, 10);
+
+												       switch (series.label) {
+
+													       case 'Impact':
+														       return text + '  days (students * training days)';
+
+													       case 'Utilization':
+														       return text + '% seat utilization';
+
+													       case 'Hours':
+														       return text + ' instructor hours';
+
+													       default:
+														       return text + ' ' + series.label;
+
+
+												       }
+
+											       }
+										       },
+										       'columnsHGap': 15
+									       };
+
+								       }
+								);
 
 							}
-						},
-						'columnsHGap': 15
-					};
 
-					loading(false);
 
-				});
+						});
 
+
+					}
+				)
+				;
 
 			}
 
+
 		}
+
 	]
-);
+)
+;

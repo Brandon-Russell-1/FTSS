@@ -47,7 +47,6 @@
 	 */
 	pasteAction = function (e) {
 
-
 		if (FTSS.pasteAction) {
 
 			e.stopImmediatePropagation();
