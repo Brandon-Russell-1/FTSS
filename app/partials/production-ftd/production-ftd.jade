@@ -4,29 +4,28 @@ include ../mixins
 
         div.col-lg-5
 
-            h3 {{instructorCount}} Instructors
-
             table.table.table-striped.table-expanded.table-hover
 
                 tbody
 
-                    tr.am-fade-and-slide-right.traverse(ng-repeat='row in instructors',
+                    tr.am-fade-and-slide-left.traverse(ng-repeat='row in instructors track by row.Id',
                                         ng-click='stats()',
                                         traverse='{{row.Id}}',
-                                        hover='{{::row.historyList}}',
+                                            hover='{{row.historyList}}',
                                         hoverClass='leftBarOverlayHover')
 
                         td: .circle(bio-photo='row.Photo', style='width:100px;height:100px')
 
                         td
 
-                            h4 {{::row.Name}}
+                            h4 {{row.Name}}
 
                             br
 
-                            .chartMonths(ng-bind-html='::row.chart | trust_html')
+                            .chartMonths(ng-bind-html='row.chart | trust_html')
 
                             .clearfix
+
                             br
 
                             .pull-left.btn-success(ng-style='{width:row.annualEffectiveness+"%"}') &nbsp;
@@ -38,7 +37,7 @@ include ../mixins
 
             h3 Course List
 
-            table.table.table-striped.table-expanded
+            table.table.table-striped.table-expanded.w45
 
                 thead
 
@@ -71,6 +70,10 @@ include ../mixins
             tr
                 td Instructor Hours
                 td {{ftdStats.hours | number}}
+            tr
+                td Active Instructors
+                td {{ftdStats.instructors | number}}
+
             tr
                 td Classes Taught
                 td {{ftdStats.classes | number}}
