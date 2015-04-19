@@ -15,10 +15,12 @@ header.navbar.navbar-inverse
 
     ul.nav.navbar-nav.pull-right
 
-        li: #username.support(left,
-                                hoverClass='userInfo',
-                                hover='AFNET User Information',
-                                content=userHover) {{::user.short}}
+        li: #username.support(bs-popover,
+                                container='body',
+                                html='true',
+                                placement='bottom-right',
+                                title='AFNET User Information',
+                                content='<div class="userInfo">#{userHover}</div>') {{::user.short}}
 
         li: .a.support(bs-dropdown,
                         animation='am-fade-and-slide-top',
