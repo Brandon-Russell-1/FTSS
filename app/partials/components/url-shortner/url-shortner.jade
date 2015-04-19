@@ -1,5 +1,4 @@
-div(style='width:300px')
-    p Once loaded, click the link below to share.
+#shortner.dropdown-menu
+    p Once loaded, copy or click the link below to share.
 
-    .well.well-sm: b(style='font-size:2em')
-        a(href='mailto:?subject=FTSS%20Link&body=https%3A%2F%2F{{shortURL}}') {{shortURL || 'Loading...'}}
+    .well.well-sm: a(href='mailto:?subject=FTSS%20Link&body=https%3A%2F%2F{{shortURL}}') {{shortURL || 'Loading...'}}

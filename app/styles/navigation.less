@@ -196,14 +196,20 @@ body.admin #ftd:hover, body.admin #host:hover {
 	font-size: .9em;
 }
 
-a.support {
+a.support,
+.a.support {
+	opacity: .75;
+	padding-left: 15px;
+	padding-right: 15px;
 	letter-spacing: .15em;
 	border-left: 1px solid #444;
 	font-size: 1.2em !important;
 	font-variant: small-caps;
+	border-bottom: none!important;
 }
 
-a.support:hover {
+a.support:hover,
+.a.support:hover {
 	opacity: 1;
 	cursor: pointer !important;
 	background-color: @brand-primary !important;

@@ -20,17 +20,19 @@ header.navbar.navbar-inverse
                                 hover='AFNET User Information',
                                 content=userHover) {{::user.short}}
 
-        li: a.support(bs-dropdown,
+        li: .a.support(bs-dropdown,
                         animation='am-fade-and-slide-top',
                         template='/partials/external-links.html',
-                        data-placement='bottom-right',
-                        container='body') Links
+                        placement='bottom-left',
+                        trigger='hover',
+                        container="self",
+                        delay='250',) Links
 
         li: a.support(bs-dropdown=,
                         url-shortner,
                         animation='am-fade-and-slide-top',
                         template='/partials/url-shortner.html',
-                        data-placement='bottom-right',
+                        placement='bottom-right',
                         container='body') Share
 
         li: a.support(href='guide/intro.html', target='_blank') User Guide
