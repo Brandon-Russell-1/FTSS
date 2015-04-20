@@ -645,7 +645,9 @@
 							selectize
 								= FTSS.selectizeInstances[opts.field || attrs.selectize]
 								= $(element).selectize(opts)[0].selectize;
-						} catch (e) {}
+						} catch (e) {
+							utilities.errorHandler(e);
+						}
 
 						selectize && scope.modal && scope.modal
 

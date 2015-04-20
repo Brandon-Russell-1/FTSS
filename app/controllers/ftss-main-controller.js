@@ -146,7 +146,9 @@
 
 						}
 
-					} catch (e) {}
+					} catch (e) {
+						utilities.errorHandler(e);
+					}
 
 				}
 
