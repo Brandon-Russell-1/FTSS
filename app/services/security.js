@@ -222,7 +222,7 @@ FTSS.ng.service('security', [
 			_user = user;
 
 			// Shortened display name
-			user.short = user.name.split('USAF')[0];
+			user.short = user.name ? user.name.split('USAF')[0] : '';
 
 			// Add a copy of our user data to the rootscope
 			$rootScope.user = angular.copy(user);
