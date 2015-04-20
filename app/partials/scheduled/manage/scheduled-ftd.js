@@ -50,6 +50,11 @@ FTSS.ng.controller(
 
 								    oldVal = self.data[newVal.Id] || {};
 
+								dateTools.dateRange(scope.data);
+
+								// Notify the instructor of their scheduled class
+								isNew && notifier.createClass(scope.data);
+
 								if (!isNew && scope.data.TTMS) {
 
 									switch (true) {

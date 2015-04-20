@@ -61,8 +61,8 @@ FTSS.ng.service('notifier', [
 
 			var recipients = [
 				FTSS.J4Email,
-			    data.FTD.Email,
-			    data.Instructor.Email
+				data.FTD.Email,
+				data.Instructor.Email
 			].join(';');
 
 			emailWrapper(
@@ -72,6 +72,24 @@ FTSS.ng.service('notifier', [
 				'Original: {{oldDateRange}}\nUpdated: {{dateRange}}')
 
 			(data);
+
+		};
+
+		this.createClass = function (data) {
+
+			var instructorEmail = caches.Instructors[data.InstructorId].Email;
+
+			if (instructorEmail) {
+
+				emailWrapper(
+					instructorEmail,
+					'{{Course.PDS}} Class Scheduled',
+					'You are scheduled to teach the {{Course.Number}} class during the following dates:\n\n' +
+					'{{dateRange}}\n\nYou can view your teaching schedule anytime by visiting http://go.usa.gov/3WhBE.')
+
+				(data);
+
+			}
 
 		};
 
