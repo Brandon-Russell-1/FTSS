@@ -16,7 +16,11 @@ FTSS.ng.controller(
 
 			$scope.ftss.searchPlaceholder =
 				'Type here to filter the production data.  Examples: MDS:F-15, PDS:RFV, Robins, wire, 2A5*.';
+
 			$scope.ftss.hasAlternateView = true;
+
+			// We don't kill ourselves with watchers, so let's see all the classes
+			$scope.ftss.pageLimit = 9999;
 
 			$scope.ftd ? getProductionData() : utilities.addAsync(getProductionData);
 
