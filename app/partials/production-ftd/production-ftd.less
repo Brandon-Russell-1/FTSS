@@ -82,16 +82,18 @@
 					}
 
 					text {
-						text-anchor: end !important;
+						transform: translate(12px, -5px);
+						text-anchor: start !important;
 						font-size: 12px;
 						font-weight: 600;
 					}
 
 				}
 
-				.tick:first-child line {
-					visibility: hidden;
+				.tick:last-of-type text {
+					display: none !important;
 				}
+
 			}
 		}
 	}

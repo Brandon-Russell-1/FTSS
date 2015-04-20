@@ -17,7 +17,7 @@ directive = function(name, conf) {
 };
 
 directive('linechart', [
-  'n3utils', '$window', '$timeout', '$rootScope', function(n3utils, $window, $timeout, $rootScope) {
+  'n3utils', '$window', '$timeout', function(n3utils, $window, $timeout) {
     var link;
     link = function(scope, element, attrs, ctrl) {
       var dim, initialHandlers, isUpdatingOptions, promise, window_resize, _u;
@@ -34,24 +34,21 @@ directive('linechart', [
         dimensions.width = +(attrs.width || parent.offsetWidth || 900) - left - right;
         dimensions.height = +(attrs.height || parent.offsetHeight || 500) - top - bottom;
       };
-      scope.redraw = function() {
+	    scope.redraw = function (data) {
 
-        // Customized for FTSS
-        var view = $('#mainView');
+		    // Customized for FTSS
+		    var view = $('#mainView');
 
-        scope.updateDimensions(dim);
+		    scope.updateDimensions(dim);
 
-        dim.width = view.width() * ($rootScope.ftss.showAlternateView ?.9 : .55);
-        dim.height = view.height() * .85;
+		    dim.width = view.width() * .55;
+		    dim.height = view.height() * .85;
 
-        scope.update(dim);
+		    scope.update(dim);
 
-        $('.x.axis line').attr('transform', 'rotate(45)').attr('y2', '75');
-        $('.x.axis text').attr('transform', 'rotate(-45)');
-        $('.legend').attr('transform', 'translate(0 40)');
-        $('#ftdChart').addClass('ng-enter-active');
+		    $('#ftdChart').addClass('ng-enter-active');
 
-      };
+	    };
       isUpdatingOptions = false;
       initialHandlers = {
         onSeriesVisibilityChange: function(_arg) {
@@ -1158,6 +1155,7 @@ mod.factory('n3utils', [
         };
       },
       createAxis: function(scale, key, options) {
+
         var axis, o, sides;
         sides = {
           x: 'bottom',
