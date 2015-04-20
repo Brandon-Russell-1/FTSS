@@ -13,10 +13,23 @@
 
 	builder = function (scope, opts) {
 
-		var loaded, modal;
+		var loaded, modal, collection;
 
 		// AngularUI tabs creates a new scope so this will let us handle either situation
 		modal = scope.modal || scope.$parent.modal;
+
+		collection = _.map(!opts.watch &&
+		                   scope.$parent[opts.select] ||
+		                   options[opts.select] ||
+		                   caches[opts.select], function (row) {
+
+			return {
+				'label' : row.label,
+				'search': row.search,
+				'Id'    : row.Id
+			}
+
+		});
 
 		return _.defaults(
 			opts,
@@ -24,11 +37,7 @@
 			{
 				'labelField'  : opts.label || 'label',
 				'maxItems'    : 1,
-				'options'     : (!opts.watch &&
-				                 scope.$parent[opts.select] ||
-				                options[opts.select] ||
-				                caches[opts.select]) ||
-				                null,
+				'options'     : collection,
 				'plugins'     : opts.maxItems > 1 ? [
 					'remove_button'
 				] : null,
