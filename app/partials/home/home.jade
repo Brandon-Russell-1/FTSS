@@ -1,9 +1,5 @@
 include ../mixins
 
-mixin miniLink(page, tag, name)
-    span.link(ng-click='ftss.doNavigate("' + page + '")'): +icon(tag, name)
-
-
 mixin panelGroup(ico, title, type)
     .panel(class='panel-' + type + ' text-' + type)
 
@@ -32,57 +28,25 @@ mixin panelGroup(ico, title, type)
 
             .well
 
-                p(user-message='home-intro')
+                div(user-message='home-intro')
 
-                br
+                .alert.alert-info(ng-if='roleText==="Visitor"')
 
-                #homeInstructions
-
-                    .row
-                        .col-lg-3: +miniLink('scheduled', 'search', 'Search Classes')
-                        .col-lg-9(user-message='navigation-view-scheduled')
-
-                    .row
-                        .col-lg-3: +miniLink('catalog', 'books', 'Course Catalog')
-                        .col-lg-9(user-message='navigation-course-catalog')
-
-                    .row.role.schduling
-                        .col-lg-3: +miniLink('ttms', 'hash', 'Need Class IDs')
-                        .col-lg-9(user-message='navigation-ttms')
-
-
-                    h5.border-bottom.role.ftd.instructor My FTD
-
-                    .row.role.ftd.instructor
-                        .col-lg-3: +miniLink('scheduled-ftd', 'graph_pie', 'Production')
-                        .col-lg-9(user-message='navigation-production-ftd')
-
-                    .row.role.ftd.instructor
-                        .col-lg-3: +miniLink('scheduled-ftd', 'calendar_range', 'Schedule')
-                        .col-lg-9(user-message='navigation-manage-schedule')
-
-                    .row.role.ftd
-                        .col-lg-3: +miniLink('requests', 'download', 'Seat Requests')
-                        .col-lg-9(user-message='navigation-manage-requests')
-
-                    .row.role.ftd.scheduling
-                        .col-lg-3: +miniLink('manage-ftd', 'edit2', 'Manage')
-                        .col-lg-9(user-message='navigation-ftds')
-
-                    //h5.border-bottom.role.mtf.ftd Requirements
-
-                        .row.role.mtf.ftd
-                            .col-lg-3: +miniLink('backlog', 'checklist2', 'Create')
-                            .col-lg-9(user-message='navigation-generate-898')
-
-                        .row.role.mtf.ftd
-                            .col-lg-3: +miniLink('requirements', 'agree', 'Needs Approval')
-                            .col-lg-9(user-message='navigation-898-response')
+                    p.
+                        <b>MTS personnel, UTMs and FTD Schedulers:</b>  Send a digitally signed email to
+                        <a href='mailto:372trs.trg.ftss@us.af.mil?subject=FTSS%20Access%20Request'>982 TRG/FTSS</a>
+                        to request additional rights in FTSS.
 
                     br
+
+                    p.
+                        <b>Instructors:</b>  Contact your scheduler to update your email address in FTSS.
+
                     br
 
-                    .lead For access email <a href='mailto:372trs.trg.ftss@us.af.mil?subject=FTSS%20Access%20Request'>982 TRG/FTSS</a> your primary role: CM/TM, UTM/MTS or FTD Scheduler.
+                    p.
+                        <b>Everyone else:</b>  To request a seat in a class, please share a link with your UTM for them to request the class for you.
+
 
         .col-lg-3
             +panelGroup('flag', 'Course Updates', 'success')
