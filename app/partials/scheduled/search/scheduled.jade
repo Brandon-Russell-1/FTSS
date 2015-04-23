@@ -46,7 +46,7 @@ include ../../mixins
 
                         a.pull-right(href='https://www.google.com/maps/@{{::row.locationCoords}},15z',
                             target='_blank',
-                            bs-popover="<h4>{{::row.FTD.Phone}}</h4><img src='{{::row.map}}'/>",
+                            bs-popover='"<h4>{{::row.FTD.Phone}}</h4><img src={{::row.map}} />"',
                             animation='map',
                             placement='left') {{::row.locationName}}
 
