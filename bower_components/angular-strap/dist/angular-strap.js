@@ -3831,8 +3831,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             if(trigger === 'click') {
               element.on('click', $tooltip.toggle);
             } else if(trigger !== 'manual') {
-              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
-              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
+              // FTSS customization
+              var bindEl = (trigger==='focus' && element.children().length > 0) ? '*': null;
+              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', bindEl, $tooltip.enter);
+              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', bindEl, $tooltip.leave);
               nodeName === 'button' && trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
             }
           });
