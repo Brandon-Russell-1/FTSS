@@ -2,18 +2,24 @@ include ../partials/mixins
 
 #searchButtons.no-pad.pull-right(style='width:100px')
 
-    span#toggleExpand.btn.btn-default(ng-if='ftss.hasAlternateView', ng-click='ftss.doToggleState("showAlternateView")', hover='button-alternate-view', left)
+    span#toggleExpand.btn.btn-default(ng-if='ftss.hasAlternateView',
+                                        ng-click='ftss.doToggleState("showAlternateView")',
+                                        bs-popover='language.button_alternate_view',
+                                        placement='left')
         +icon('flip-view')
         +icon('flip-view-alt')
 
-    span#toggleArchive.btn.btn-default(ng-if='ftss.hasArchiveOption', ng-click='ftss.doToggleState("showArchived")', hover='button-archive', left)
+    span#toggleArchive.btn.btn-default(ng-if='ftss.hasArchiveOption',
+                                        ng-click='ftss.doToggleState("showArchived")',
+                                        bs-popover='language.button_archive',
+                                        placement='left')
         +icon('trash_hide')
         +icon('trash_show')
 
 #searchContainer(ng-class='{tagBox:ftss.isTagBox, singleTag:ftss.singleTag}')
 
     #stats
-        span.badge(ng-class='{overload:ftss.itemCount.overload}', hover='record-count', bottom)
+        span.badge(ng-class='{overload:ftss.itemCount.overload}', bs-popover='language.record_count')
             | {{ftss.itemCount.value}}
             span    ⃰
 
@@ -24,7 +30,7 @@ include ../partials/mixins
                     style='width:100%',
                     tabindex='0')
 
-    #fakeSearchButton.btn.btn-info.white(hover='tagBox-button', top, no-arrow): +icon('arrow-right')
+    #fakeSearchButton.btn.btn-info.white(bs-popover='language.tagBox.button', placement='top', no-arrow): +icon('arrow-right')
 
     #searchBox
 

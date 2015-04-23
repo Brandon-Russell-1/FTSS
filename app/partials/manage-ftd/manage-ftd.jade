@@ -8,7 +8,7 @@ div(ng-class='{addNew:addNew}')
 
         form(name='modal')
 
-            +userInstructions('add-instructor')
+            +userInstructions('add_instructor')
 
             .col-lg-9.form-horizontal
 
@@ -16,7 +16,7 @@ div(ng-class='{addNew:addNew}')
                 h4 {{data.Person.EMAIL}}
 
             .col-lg-3
-                .drag-target(hover='instructors-photo', left)
+                .drag-target(bs-popover='language.instructors_photo', placement='left')
                     .sending(id='spinner'): +spinner()
                     div(bio-photo='data.Photo')
 
@@ -36,12 +36,12 @@ form#embed.col-lg-6.wrapped(ng-show='det.Courses_JSON', name='ftdEdit')
     .row.form-horizontal
 
         .col-lg-7
-            .input-group(explain='units-email', right)
+            .input-group(trigger='focus', bs-popover='language.units_email', placement='right')
                 .input-group-addon.w15: +icon('envelope')
                 input.form-control(ng-model='det.Email', type='email', required)
 
         .col-lg-5
-            .input-group(explain='units-phone', right)
+            .input-group(trigger='focus', bs-popover='units_phone', placement='right')
                 .input-group-addon.w15: +icon('phone')
                 input.form-control(ng-model='det.Phone', type='text', required)
 
@@ -49,7 +49,7 @@ form#embed.col-lg-6.wrapped(ng-show='det.Courses_JSON', name='ftdEdit')
 
     br
 
-    .pds(explain='units-courses', right)
+    .pds(trigger='focus', bs-popover='language.units_courses', placement='right')
         select.wide(selectize='MasterCourseList', bind='det.Courses_JSON', multiple, required)
 
     br

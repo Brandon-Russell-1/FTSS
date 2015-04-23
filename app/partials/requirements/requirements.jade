@@ -34,7 +34,7 @@ div
                     i UNIT FUNDED TDY COURSE
 
                 .pull-right(style='margin-top :-.5em!important',
-                            hover='(optional) Use this button to create a custom 898 for this request for your refrence.  This is not needed for FTSS to function.', left)
+                            bs-popover='"(optional) Use this button to create a custom 898 for this request for your refrence.  This is not needed for FTSS to function."', placement='left')
                     .btn.btn-muted(style='font-size:1.5em', ng-click='edit(true, row)'): +icon('printer')
 
             hr.rollup
@@ -68,9 +68,9 @@ div
                             td.btn-muted
                                 +icon('asterisk')
                                 span(title='{{req.course.Title}}',
-                                        hover='{{req.hover}}',
+                                        bs-popover='req.hover',
                                         style='position:relative;top:-.35em',
-                                        right)
+                                        placement='right')
                                     +icon('info')
 
                             td.left: b {{req.course.PDS}}

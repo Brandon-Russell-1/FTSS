@@ -1,19 +1,19 @@
 #resourceView
     #legend
 
-        .btn-success(hover='Classes with open seats', right)
+        .btn-success(bs-popover='"Classes with open seats"', placement='right')
 
-        .btn-primary(hover='Full classes', right)
+        .btn-primary(bs-popover='"Full classes"', placement='right')
 
-        .btn-warning(hover='Classes currently below student min', right)
+        .btn-warning(bs-popover='"Classes currently below student min"', placement='right')
 
-        .btn-danger(hover='Classes exceeding student max', right)
+        .btn-danger(bs-popover='"Classes exceeding student max"', placement='right')
 
-        .trainingSession(hover='Training Session', right)
+        .trainingSession(bs-popover='"Training Session"', placement='right')
 
-        .mtt(hover='Mobile Training Team', right)
+        .mtt(bs-popover='"Mobile Training Team"', placement='right')
 
-        .unavailable(hover='Instructor unavailability', right)
+        .unavailable(bs-popover='"Instructor unavailability"', placement='right')
 
     iframe#ttmsLoader(name='ttmsLoader')
 

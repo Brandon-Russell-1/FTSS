@@ -11,8 +11,8 @@ include ../mixins
                     tr.am-fade-and-slide-left.traverse(ng-repeat='row in instructors track by row.Id',
                                         ng-click='stats()',
                                         traverse='{{row.Id}}',
-                                            hover='{{row.historyList}}',
-                                        hoverClass='leftBarOverlayHover')
+                                        bs-popover='row.historyList',
+                                        animation='leftBarOverlayHover')
 
                         td: .circle(bio-photo='row.Photo', style='width:100px;height:100px')
 

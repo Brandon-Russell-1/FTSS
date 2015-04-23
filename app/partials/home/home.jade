@@ -8,12 +8,12 @@ mixin panelGroup(ico, title, type)
         .panel-body: block
 
 #slideshowToggle(flickr,
-                    hover='Toggle viewing the AF Week in Photos.',
+                    bs-popover='"Toggle viewing the AF Week in Photos."',
                     no-arrow,
-                    ng-click='toggleSlides = !toggleSlides'): +icon('camera')
+                    ng-click='ftss.toggleSlides = !ftss.toggleSlides'): +icon('camera')
 
 .wrapped(style='top:-4em;padding-top:1em;overflow:hidden',
-            ng-class='{"showContent":!toggleSlides}')
+            ng-class='{"showContent":!ftss.toggleSlides}')
 
     .jumbotron('style="margin:-25px;padding:10px;padding-left:25px"')
         h1 Field Training Scheduling System
@@ -28,7 +28,7 @@ mixin panelGroup(ico, title, type)
 
             .well
 
-                div(user-message='home-intro')
+                div(user-message='home_intro')
 
                 .alert.alert-info(ng-if='roleText==="Visitor"')
 

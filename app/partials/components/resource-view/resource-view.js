@@ -101,9 +101,9 @@
 									if (event.NA) {
 
 										// This creates the HTML for our unavailable blocks
-										instructor.html += '<td hover="' +
+										instructor.html += '<td bs-popover="\'' +
 										                   event.Instructor.Name +
-										                   ' not available for teaching." class="unavailable" colspan="' +
+										                   ' not available for teaching.\'" class="unavailable" colspan="' +
 										                   event.DaysTruncated +
 										                   '" id="' +
 										                   event.Id +
@@ -124,7 +124,7 @@
 
 										// Identify this class as truncated
 										if (event.Days !== event.DaysTruncated) {
-											event.pds = '<i hover="Some days of this class are not visible.">' +
+											event.pds = '<i bs-popover="language.truncated_classes" placement="top">' +
 											            event.pds + '</i>'
 										}
 
@@ -197,9 +197,9 @@
 									html.render += html.monthHeader + html.dayHeader + html.spacer;
 								}
 
-								html.render += '<tr class="event" left hover="' +
+								html.render += '<tr class="event" placement="left" bs-popover="\'' +
 								               instructor.overlay +
-								               '" hoverClass="leftBarOverlayHover"><td></td>' +
+								               '\'" animation="leftBarOverlayHover"><td></td>' +
 								               instructor.html +
 								               '</tr>' +
 								               html.spacer;

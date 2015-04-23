@@ -14,8 +14,7 @@
   ],
   "homepage": "http://getbootstrap.com",
   "main": [
-    "less/bootstrap.less",
-    "dist/js/bootstrap.js"
+    "less/bootstrap.less"
   ],
   "ignore": [
     "/.*",

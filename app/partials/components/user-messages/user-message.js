@@ -7,24 +7,31 @@
 
 	"use strict";
 
-	FTSS.ng.directive('userMessage', function () {
+	FTSS.ng.directive(
+		'userMessage',
 
-		var _cache = FTSS.messages = {};
+		[
 
-		$('#language *').each(function () {
+			'$rootScope',
+			function ($rootScope) {
 
-			_cache[this.id] = this.outerHTML;
+				var _cache = $rootScope.language = {};
 
-		});
+				$('#language *').each(function () {
 
-		return {
-			'link': function ($scope, $el, $attrs) {
+					_cache[this.id] = this.outerHTML;
 
-				$el[0].innerHTML = _cache[$attrs.userMessage] || '';
+				});
+
+				return {
+					'link': function ($scope, $el, $attrs) {
+
+						$el[0].innerHTML = _cache[$attrs.userMessage] || '';
+
+					}
+				};
 
 			}
-		};
-
-	});
+		]);
 
 }());

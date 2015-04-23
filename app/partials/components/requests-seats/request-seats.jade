@@ -19,18 +19,18 @@ form.form-horizontal(name='modal')
 
         div(ng-if='autoApprove')
             h4: +icon('puzzle-piece', 'Requesting Unit')
-            div(explain='scheduled-request-host', right)
+            div(trigger='focus', bs-popover='language.scheduled_request_host', placement='right')
                 select(selectize='Hosts', bind='data.HostId', remember='host')
 
             br
 
         h4: +icon('student_hand', 'Students')
-        div(explain='scheduled-request-students', right)
+        div(trigger='focus', bs-popover='language.scheduled_request_students', placement='right')
             select.wide(selectize='people', max='{{autoApprove ? 99 : row.openSeats}}', placeholder='Search by Last name, First name')
 
         br
 
-        div(explain='scheduled-request-notes', right)
+        div(trigger='focus', bs-popover='language.scheduled_request_notes', placement='right')
             h4: +icon('edit', 'Comments')
             textarea.form-control(ng-model='data.Notes')
 

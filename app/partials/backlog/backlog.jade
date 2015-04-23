@@ -33,7 +33,7 @@ mixin wizardRow(text)
 
     h4(style='clear:both;padding-top:1em') Courses Needed
 
-    .pds(explain='units-courses', right)
+    .pds(bs-popover='units_courses', placement='right', trigger='focus')
         select(selectize='MasterCourseList',
         bind='data.Course_Requirements',
         multiple,
@@ -50,7 +50,7 @@ mixin wizardRow(text)
 
         #dragIcon: +icon('insert')
 
-        +userInstructions('generate-898', true)
+        +userInstructions('generate_898', true)
 
         .clearfix
 
@@ -73,7 +73,7 @@ mixin wizardRow(text)
             .h4.pull-right.pad1
 
                 .pull-right(style='position:relative;top:.2em')
-                    span.pull-right(hover='This is a priority course.')
+                    span.pull-right(bs-popover='"This is a priority course."')
                         +icon('asterisk')
 
                 select.form-control(

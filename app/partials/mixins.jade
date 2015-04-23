@@ -180,7 +180,7 @@ mixin tableBody(columns)
 
 mixin googleMap(small, thumb)
     if small
-        a.no-toggle(href='https://www.google.com/maps/@{{row.Location | nospace}},12z', target='_blank', right, ng-show='row.Location',
+        a.no-toggle(href='https://www.google.com/maps/@{{row.Location | nospace}},12z', target='_blank', placement='right', ng-show='row.Location',
         hover="<img style='width:600px;height:500px' src='https://maps.google.com/maps/api/staticmap?center={{row.Location | nospace}}&zoom=12&size=600x500&sensor=false'/>")
 
             if thumb
@@ -197,11 +197,11 @@ mixin googleMap(small, thumb)
 mixin actions(view, edit, archive, label)
     div.pull-right
         if view
-            span.btn.btn-sm.btn-info.btn-muted.no-archive(ng-click='stats()', hover='View ' + label + ' Stats', left)
+            span.btn.btn-sm.btn-info.btn-muted.no-archive(ng-click='stats()', bs-popover='"View #{label} Stats"', placement='left')
                 +icon('graph_pie')
 
         if edit
-            span.btn.btn-sm.btn-warning.btn-muted.no-archive(ng-click='edit(false)', hover='Edit ' + label, left)
+            span.btn.btn-sm.btn-warning.btn-muted.no-archive(ng-click='edit(false)', bs-popover='"Edit #{label}"', placement='left')
                 +icon('edit')
 
         if archive
@@ -213,7 +213,7 @@ mixin actions(view, edit, archive, label)
 
                 +icon('trash_hide')
 
-            span.btn.btn-sm.btn-success.btn-muted.archive(ng-click='archive()', hover='Restore ' + label, left)
+            span.btn.btn-sm.btn-success.btn-muted.archive(ng-click='archive()', bs-popover='"Restore #{label}"', placement='left')
                 +icon('rotate-left')
 
 
@@ -262,7 +262,7 @@ mixin modalFooter(submitText, defaultShow)
 
 mixin formGroup(label,explain, placement)
 
-    .form-group(explain=explain, placement=placement || 'left')
+    .form-group(bs-popover=explain, placement=placement || 'left', trigger='focus')
         label.col-lg-2.control-label= label
         .col-lg-10
             block

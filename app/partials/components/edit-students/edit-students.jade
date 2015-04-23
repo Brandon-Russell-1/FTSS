@@ -14,14 +14,14 @@ form(name='modal')
 
             tbody
 
-                tr(hover='scheduled-seats-host', right)
+                tr(bs-popover='language.scheduled_seats_host', placement='right')
                     td Reserved Host Seats
                     td.text-center {{::data.Host}}
 
-                tr(hover='scheduled-seats-non-host', right)
+                tr(bs-popover='language.scheduled_seats_non_host', placement='right')
                     td Other Reserved Seats
-                    td.text-center {{::data.Other}}
+                    td.text_center {{::data.Other}}
 
         +loadStudents()
 
-    .modal-footer: .btn.btn-default(ng-click='close()') Continue
+    .modal_footer: .btn.btn-default(ng-click='close()') Continue

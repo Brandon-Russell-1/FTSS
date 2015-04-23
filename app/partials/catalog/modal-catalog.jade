@@ -8,15 +8,15 @@ form.form-horizontal(name='modal')
 
     .modal-body
 
-        +userInstructions('modal-catalog')
+        +userInstructions('modal_catalog')
 
         .row
-            .col-lg-3(explain='catalog-pds', left)
+            .col-lg-3(trigger='focus', bs-popover='language.catalog_pds', placement='left')
                 .input-group
                     .input-group-addon(style='width:55%') PDS
                     input.form-control(ng-model='data.PDS', type='text', required)
 
-            .col-lg-9(explain='catalog-number', right)
+            .col-lg-9(trigger='focus', bs-popover='language.catalog_number', placement='right')
                 .input-group
                     .input-group-addon Number
                     input.form-control(ng-model='data.Number', type='text', required)
@@ -27,18 +27,18 @@ form.form-horizontal(name='modal')
         .row
 
             .col-lg-3
-                .input-group(hover='catalog-priority', left)
+                .input-group(bs-popover='language.catalog_priority', placement='left')
                     .input-group-addon Priority
                     .btn.checkbox(ng-model='data.Priority', bs-checkbox)
                         .yes.css-label
                         .no.css-label
 
-            .col-lg-4(explain='catalog-imds', left)
+            .col-lg-4(trigger='focus', bs-popover='language.catalog_imds', placement='left')
                 .input-group
                     .input-group-addon IMDS
                     input.form-control(ng-model='data.IMDS', type='text')
 
-            .col-lg-5(explain='catalog-g081', right)
+            .col-lg-5(trigger='focus', bs-popover='language.catalog_g081', placement='right')
                 .input-group
                     .input-group-addon G081
                     input.form-control(ng-model='data.G081', type='text')
@@ -46,7 +46,7 @@ form.form-horizontal(name='modal')
         .clearfix(style='height:1em')
 
         .row
-            .col-lg-12(explain='catalog-title', left)
+            .col-lg-12(trigger='focus', bs-popover='language.catalog_title', placement='left')
                 .input-group
                     .input-group-addon(style='width:11.5%') Title
                     input.form-control(ng-model='data.Title', required)
@@ -58,24 +58,24 @@ form.form-horizontal(name='modal')
 
             .col-lg-6
                 h4.light-bottom: +icon('calendar_range', 'Course Length')
-                .col-lg-6.no-pad(explain='catalog-days', left)
+                .col-lg-6.no-pad(trigger='focus', bs-popover='language.catalog_days', placement='left')
                     .input-group
                         input.form-control(ng-model='data.Days', type='number', min='1', max='120', required)
                         .input-group-addon Days
 
-                .col-lg-5.no-pad.pull-right(explain='catalog-hours', bottom)
+                .col-lg-5.no-pad.pull-right(trigger='focus', bs-popover='language.catalog_hours', placement='bottom')
                     .input-group
                         input.form-control(ng-model='data.Hours', type='number', min='8', max='999', required)
                         .input-group-addon Hrs
 
             .col-lg-5.pull-right
                 h4.light-bottom: +icon('student_hand', 'Course Seat Limits')
-                .col-lg-5.no-pad(explain='catalog-min', bottom)
+                .col-lg-5.no-pad(trigger='focus', bs-popover='language.catalog_min', placement='bottom')
                     .input-group
                         input.form-control(ng-model='data.Min', type='number', min='1', max='9', required)
                         .input-group-addon Min
 
-                .col-lg-6.no-pad.pull-right(explain='catalog-max', right)
+                .col-lg-6.no-pad.pull-right(trigger='focus', bs-popover='language.catalog_max', placement='right')
                     .input-group
                         input.form-control(ng-model='data.Max', type='number', min='1', max='99', required)
                         .input-group-addon Max

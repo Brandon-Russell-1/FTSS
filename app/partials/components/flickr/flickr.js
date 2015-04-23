@@ -14,7 +14,6 @@
 
 				return {
 					'restrict': 'A',
-					'scope'   : {},
 					'link'    : function ($scope) {
 
 						var _now = moment(),

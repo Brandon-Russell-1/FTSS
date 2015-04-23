@@ -10,7 +10,7 @@ form(name='modal')
 
     .modal-body
 
-        +userInstructions('modal-hosts')
+        +userInstructions('modal_hosts')
 
         .form-horizontal
 
@@ -27,6 +27,6 @@ form(name='modal')
                 .input-group
 
                     .input-group-addon.w15:  +icon('location')
-                    .input-group-selectize(explain='hosts-location', right): select(selectize='geodata', bind='data.Location')
+                    .input-group-selectize(b-popover='hosts_location', placement='right', trigger='focus'): select(selectize='geodata', bind='data.Location')
 
     +modalFooter()

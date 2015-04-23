@@ -10,8 +10,8 @@ div(ng-controller='supportController')
         br
         | For immediate help, send an email:  372trs.trg.ftss@us.af.mil.
 
-    .input-group(explain="If you can't find an answer below, type your question here and then press ENTER.",
-    right)
+    .input-group(bs-popover='"If you cannot find an answer below, type your question here and then press ENTER."',
+    placement='right')
         .input-group-addon Ask a question:
         p.form-control(contenteditable,
                         ng-model='askQuestion',
@@ -48,8 +48,9 @@ div(ng-controller='supportController')
 
             .input-group(ng-show='comment.reply',
                             style='margin-bottom:15px;margin-left:7%;width:93%!important',
-                            explain="Type your reply and then press ENTER to save.",
-                            right)
+                            bs-popover='"Type your reply and then press ENTER to save."',
+                            trigger='focus',
+                            placement='right')
                 .input-group-addon Add reply:
                 p.form-control(contenteditable,
                                 ng-model='comment.writeReply',

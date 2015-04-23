@@ -23,9 +23,9 @@ include ../mixins
                                                             ng-class='{archived:row.Archived}',
                                                             ng-dblclick='canEdit && edit(false)',
                                                             id='row-{{::row.Id}}',
-                                                            left,
-                                                            hover='{{::row.units}}'
-                                                            hoverClass="leftBarOverlayHover")
+                                                            placement='left',
+                                                            bs-popover='row.units'
+                                                            animation="leftBarOverlayHover")
 
                             td.uppercase
 

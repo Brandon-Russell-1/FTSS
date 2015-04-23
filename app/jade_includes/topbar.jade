@@ -16,9 +16,8 @@ header.navbar.navbar-inverse
     ul.nav.navbar-nav.pull-right
 
         li: #username.support(bs-popover,
-                                container='body',
-                                html='true',
                                 placement='bottom-right',
+                                trigger='click',
                                 title='AFNET User Information',
                                 content='<div class="userInfo">#{userHover}</div>') {{::user.short}}
 

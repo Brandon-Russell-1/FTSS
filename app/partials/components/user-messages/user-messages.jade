@@ -2,7 +2,7 @@
 
     // Home Page =======================================================================================================
 
-    #home-intro
+    #home_intro
 
         p.
             FTSS provides a cradle-to-grave training requirements and scheduling workflow.  FTSS is developed and maintained
@@ -52,97 +52,85 @@
 
 
             dt Miscellaneous
-            dd: ul: li Several performance enhancements were implemented to minimize page-load time.
+            dd: ul: li Several performance enhancements were implemented to minimize page_load time.
 
 
     // Misc
 
-    #popover-priority This is a priority course.
+    #popover_priority This is a priority course.
 
-    #topbar-share Share a link to this page
+    #topbar_share Share a link to this page
 
-    #topbar-settings Update your preferences
+    #topbar_settings Update your preferences
 
-    #topbar-help Ask questions and get support for this page
+    #topbar_help Ask questions and get support for this page
 
-    #tagBox-button Click to begin this search
+    #tagBox_button Click to begin this search
 
     // These are the top navigation area buttons & search boxes listed from left to right ==============================
 
-    #record-count.
-        Displays the record  count for your search.  If the background is <span style="color:#d58512;font-weight:800">orange</span>,
+    #record_count.
+        Displays the record  count for your search.  If the background is <span style="color:#d58512;font_weight:800">orange</span>,
         then not all records are being shown due to a search you entered or because there were too many records found.
 
-    #button-clear Clear this search
+    #button_clear Clear this search
 
-    #button-grouping Change how data is grouped
+    #button_grouping Change how data is grouped
 
-    #button-sorting Change how data is sorted
+    #button_sorting Change how data is sorted
 
-    #button-alternate-view Toggle alternate view of data
+    #button_alternate_view Toggle alternate view of data
 
-    #button-archive Toggle visibility of archived data
+    #button_archive Toggle visibility of archived data
 
 
     // Navigation instructions =========================================================================================
 
-    #navigation-generate-898 UTMs or MTFs import IMDS or G081 training reports to build an 898
+    #navigation_generate_898 UTMs or MTFs import IMDS or G081 training reports to build an 898
 
-    #navigation-898-response Generated 898s are routed for approval to the FTD
+    #navigation_898_response Generated 898s are routed for approval to the FTD
 
-    #navigation-view-scheduled Once classes are built, available seats will be advertised here
+    #navigation_view_scheduled Once classes are built, available seats will be advertised here
 
-    #navigation-manage-requests Additional seat requests are approved or denied by the FTD here
+    #navigation_manage_requests Additional seat requests are approved or denied by the FTD here
 
-    #navigation-manage-schedule View only for FTD schedulers to build & manage their teaching schedule
+    #navigation_manage_schedule View only for FTD schedulers to build & manage their teaching schedule
 
-    #navigation-ttms Reserved for J4 schedulers, classes needing TTMS class #s are here
+    #navigation_ttms Reserved for J4 schedulers, classes needing TTMS class #s are here
 
-    #navigation-course-catalog Update the Master Course List (Curriculum Managers only)
+    #navigation_course_catalog Update the Master Course List (Curriculum Managers only)
 
-    #navigation-instructors Add, remove or update FTD instructors
+    #navigation_instructors Add, remove or update FTD instructors
 
-    #navigation-ftds Edit FTD courses taught or contact email
+    #navigation_ftds Edit FTD courses taught or contact email
 
-    #navigation-host-units Add, remove or update host units
+    #navigation_host_units Add, remove or update host units
 
 
     // Generate 898 Page ===============================================================================================
 
-    #generate-898.
+    #generate_898.
         This page shows the current backlog for a unit and enables you to generate an electronic 898. To get started,
         view a course, select the FTD you will request from (the closest available will be selected by default), and
         select the students who will take the course that month. As you select the students, a summary list on the
         right will display your draft 898. Once your list is complete, click each FTD base header on the right side
         to confirm and submit each base 898 request for MTF CC/Chief approval.
 
-    #backlog-graph-view Click to toggle the backlog graphs & statistics for this unit.
+    #backlog_graph_view Click to toggle the backlog graphs & statistics for this unit.
 
 
-    #modal-backlog.
+    #modal_backlog.
         Verify the month of this request, courses, FTD and student names.  Once everything looks good, press "Verify"
         and then "Submit".
 
-    #backlog-drag-drop.
+    #backlog_drag_drop.
         Click to import a AAA background product from IMDS; you can also just drag & drop the file or
         text onto this window or copy/paste straight from IMDS.
 
-    #modal-aaa-eval.
+    #modal_aaa_eval.
         The text below was pulled from this AAA report to create the backlog.  You can use this to validate the parsed
         data within FTSS.  The second section lists all courses marked as Scheduled in IMDS or previously requested
         within FTSS but not updated.  This list is informational only.
-
-
-    // 898 Requirements approval page ==================================================================================
-
-    #requirements  This page lists 898 requests that are pending approval at some level.  Here's the approval order:
-        p
-            ol
-                li Military Training Flight
-                li Host Unit Group/CC (or designated authority per AFI 36-2232, par 3.1)
-                li For MAJCOM-funded TDY courses, MAJCOM A4QT
-                li Finally, the FTD must approve/build the courses
-
 
     // Course Catalog Page =============================================================================================
 
@@ -152,36 +140,36 @@
         course information above to refine your search. Only Squadron Training and Curriculum Managers can alter this
         information.
 
-    #modal-catalog
+    #modal_catalog
         h4:b.text-center APPLICATION-WIDE CHANGE
         p.
             Editing the Course Catalog will affect all users of this course.  Please ensure you are aware of the
             implications of any changes before continuing.
 
-    #catalog-pds The unique, short-code for this course
+    #catalog_pds The unique, short-code for this course
 
-    #catalog-mds The airframe associated with this course
+    #catalog_mds The airframe associated with this course
 
-    #catalog-afsc The AFSC taught in this course.
+    #catalog_afsc The AFSC taught in this course.
         example 2A6X4
 
-    #catalog-number Course Number
+    #catalog_number Course Number
         example J4AMP2A6X4 A00A
 
-    #catalog-imds (Optional) The IMDS course number used for 593 imports and searches by course number
+    #catalog_imds (Optional) The IMDS course number used for 593 imports and searches by course number
 
-    #catalog-title Course Title
+    #catalog_title Course Title
         example A-10 Fuel Systems
 
-    #catalog-days Total number of course days
+    #catalog_days Total number of course days
 
-    #catalog-hours Total number of course hours 
+    #catalog_hours Total number of course hours
 
-    #catalog-min The minimum number of seats
+    #catalog_min The minimum number of seats
 
-    #catalog-max The maximum number of seats
+    #catalog_max The maximum number of seats
 
-    #catalog-priority A Check mark indicates this course is a prioirty course (listed on the CAF/MCL). This is used for prioritizing 898 requirements
+    #catalog_priority A Check mark indicates this course is a prioirty course (listed on the CAF/MCL). This is used for prioritizing 898 requirements
 
 
 
@@ -192,18 +180,18 @@
         Use this page to add, edit or archive instructors. Instructor bio photos and email can be added,
         but are not required.
 
-    #add-instructor
+    #add_instructor
        p Type the name and email (or AFNET account) of the user you want to add.  This is required for them to see this screen.
        .italics To add a bio photo, drag the image into this dialog box.
 
-    #instructors-name Enter the users name as Rank First Last
+    #instructors_name Enter the users name as Rank First Last
         example SSgt Jane Doe or Mr. John Doe
 
-    #instructors-email.
+    #instructors_email.
         Enter the member's AFNET email address or account id.  This is how we give access to the schedule/production data
-        for other users in your FTD.  They will have read-only priveleges, but will be able to see all data for this FTD.
+        for other users in your FTD.  They will have read-only privileges, but will be able to see all data for this FTD.
 
-    #instructors-photo (Optional) Drag and drop a photo here to add/update this instructor's photo
+    #instructors_photo (Optional) Drag and drop a photo here to add/update this instructor's photo
 
 
 
@@ -217,19 +205,19 @@
 
         p.italics.bold.text-center ***You must refresh FTSS (press F5) after updating data on this page***
 
-    #modal-units.
+    #modal_units.
         Update FTD contact email and list of courses taught at the unit displayed above.
         An 898 cannot be generated or class built unless the course is first listed below.
 
-    #units-email This email address will be used to send FTSS notifications to the FTD
+    #units_email This email address will be used to send FTSS notifications to the FTD
 
-    #units-phone The DSN phone number for your scheduling/production office
+    #units_phone The DSN phone number for your scheduling/production office
 
-    #units-courses.
+    #units_courses.
         Add every course offered by this FTD here.  You can search by PDS, MDS, AFSC, Course Number,
         et cetera, or you can copy & paste a list of PDSs here
 
-    #manage-ftd-no-instructors Add instructors by clicking the green button on the right.
+    #manage_ftd_no_instructors Add instructors by clicking the green button on the right.
 
 
 
@@ -240,19 +228,19 @@
           Use this page to add or edit hosts units (groups).  If the unit has a local FTD, be sure to add that
           to the unit as this is used for determining if this is a local or TDY request.
 
-    #modal-hosts.
+    #modal_hosts.
          You must add your Host Unit before you load students into FTSS. Host units should be no lower than the
          group level unless you are a detachment (eg 826 AMXS at Nellis AFB is detached from their group at Moody AFB).
 
-    #hosts-name Ex: 461 MXG
+    #hosts_name Ex: 461 MXG
 
-    #hosts-ftd.
+    #hosts_ftd.
         Be sure to choose a local FTD only if your unit would not need to go TDY when attending that FTD.
         If you have no local FTDs, leave this cell blank.
 
-    #hosts-email This email address will be used to send FTSS notifications to the unit
+    #hosts_email This email address will be used to send FTSS notifications to the unit
 
-    #hosts-location Add zip code of unit
+    #hosts_location Add zip code of unit
 
 
 
@@ -275,62 +263,62 @@
         will be a green "Request Seats" button if you are able, if you have problems, please contact the FTSS support
         team.
 
-    #scheduled-ftd.
+    #scheduled_ftd.
         This page is only visible to FTD Production Supervisors and their detachment supervision.  This page shows the
         detachment class schedule for all future scheduled classes and those that ended within the past week.  Use the
         green button on the right to build a class or double click an existing class to edit or cancel it. Once a class
         is built, it will be advertised on the class Search page.
 
-    #scheduled-seats-host These are seats reserved by the FTD for the host.
+    #scheduled_seats_host These are seats reserved by the FTD for the host.
 
-    #scheduled-seats-non-host These are seats reserved by the FTD for other units besides the host.
+    #scheduled_seats_non_host These are seats reserved by the FTD for other units besides the host.
 
-    #scheduled-seats-approved These are seat requests that have been approved by the FTD.
+    #scheduled_seats_approved These are seat requests that have been approved by the FTD.
 
-    #scheduled-seats-pending These are seats that are still pending FTD approval.
+    #scheduled_seats_pending These are seats that are still pending FTD approval.
 
-    #scheduled-edit-ts Type the Training Session course number
+    #scheduled_edit_ts Type the Training Session course number
 
-    #scheduled-edit-ftd Choose the FTD that is hosting this class
+    #scheduled_edit_ftd Choose the FTD that is hosting this class
 
-    #scheduled-edit-course Choose the course that is being scheduled
+    #scheduled_edit_course Choose the course that is being scheduled
 
-    #scheduled-edit-instructor Choose the instructor for this scheduled class or unavailability
+    #scheduled_edit_instructor Choose the instructor for this scheduled class or unavailability
 
-    #scheduled-edit-location (Optional) Specify a room or building # for this class.  This data is only seen by your FTD.
+    #scheduled_edit_location (Optional) Specify a room or building # for this class.  This data is only seen by your FTD.
 
-    #scheduled-edit-dates Identify the class start and stop dates
+    #scheduled_edit_dates Identify the class start and stop dates
 
-    #scheduled-edit-notes (Optional) Type any special notes for this scheduled class
+    #scheduled_edit_notes (Optional) Type any special notes for this scheduled class
 
-    #scheduled-edit-na-notes (Optional) Type a description of the unavailability
+    #scheduled_edit_na_notes (Optional) Type a description of the unavailability
         example Example: Leave local area or TDY to Paradise
 
-    #scheduled-edit-reserved
+    #scheduled_edit_reserved
         | Enter any previously-established seat reservations.  If you are not using FTSS for the 898 process, you will
         | want to put the number of seats you are building for this class here.
 
         example These numbers reflect reservations made outside of FTSS
 
-    #scheduled-edit-hours-deviation.
+    #scheduled_edit_hours_deviation.
         (Recommended but optional) For class length deviations, use this field to record the correct hours.
         This data is displayed on the Manage FTD  page that shows instructor utilization.
 
-    #scheduled-request-host.
+    #scheduled_request_host.
         Choose the unit name that the students are currently assigned to.  If the unit is not listed, it will need to be
         created on the Host Units page (you will need to have UTM, MTS or FTD rights to do so).
 
-    #scheduled-request-students
+    #scheduled_request_students
         | Type last, first for each student to search the GAL.  If the student cannot be found, just type their rank
         | and fullname and click "Add ...".
 
         example Press enter or tab after each name to add it to the request.
 
-    #scheduled-request-notes (Optional) Add any additional notes for this request.
+    #scheduled_request_notes (Optional) Add any additional notes for this request.
 
-    #scheduled-edit-ttms.
+    #scheduled_edit_ttms.
         Type or edit the TTMS class #.  Typically this is created by the J4 schedulers after the class is built.  You
-        can create a new class with text in this field for it to not show up for J4 (center-gen).  Later, you can empty
+        can create a new class with text in this field for it to not show up for J4 (center_gen).  Later, you can empty
         this text box for J4 to see it and generate the class #.
 
     // Seats Requests Page =================================================================================================
@@ -338,19 +326,20 @@
     #requests.
         This page allows the FTD to respond to seat requests.
 
-    #edit-students View pending/approved seats.
+    #edit_students View pending/approved seats.
 
-    #load-ttms.
+    #load_ttms.
         Click to view the start/grad roster for this class.  <b>You'll need to be logged into TTMS already for this to work</b>,
-        so make sure you click the TTMS link in the bottom-left corner or go to https://sm.ttms.us.af.mil in a different
+        so make sure you click the TTMS link in the bottom_left corner or go to https://sm.ttms.us.af.mil in a different
         window first.
 
-    #my-unit.
+    #my_unit.
         This page lets you view current and past seat requests.  Eventually, you will be able to add new requirements here
         as well.  To view old seat requests, click the trash can icon in the top-right corner.  The view students button
         will show you all seat requests/responses for a given class (even from other units).
 
 
+    #truncated_classes Some days of this class are not visible.
 
 
 

@@ -28,9 +28,9 @@ include ../../mixins
 
         .row(ng-if='!ftss.showAlternateView',
                 ng-repeat='row in group track by row.Id',
-                left,
-                hover='{{::row.ClassNotes}}'
-                hoverClass="leftBarOverlayHover")
+                placement='left',
+                bs-popover='row.ClassNotes'
+                animation="leftBarOverlayHover")
 
             .btn.btn-success.openSeats(ng-click='requestSeats()') {{::row.openSeats}}
 
@@ -46,9 +46,9 @@ include ../../mixins
 
                         a.pull-right(href='https://www.google.com/maps/@{{::row.locationCoords}},15z',
                             target='_blank',
-                            hover="<h4>{{::row.FTD.Phone}}</h4><img src='{{::row.map}}'/>",
-                            hoverClass='map',
-                            left) {{::row.locationName}}
+                            bs-popover="<h4>{{::row.FTD.Phone}}</h4><img src='{{::row.map}}'/>",
+                            animation='map',
+                            placement='left') {{::row.locationName}}
 
                         .pull-right.hideDefault.lightText {{::row.Instructor.Name}}&nbsp|&nbsp;
 

@@ -56,7 +56,8 @@
 			'$compileProvider',
 			'$sceDelegateProvider',
 			'cfpLoadingBarProvider',
-			function ($routeProvider, $modalProvider, $locationProvider, $compileProvider, $sceDelegateProvider, cfpLoadingBarProvider) {
+			'$popoverProvider',
+			function ($routeProvider, $modalProvider, $locationProvider, $compileProvider, $sceDelegateProvider, cfpLoadingBarProvider, $popoverProvider) {
 
 				// Disable angular debugging for production mode
 				$compileProvider.debugInfoEnabled(!PRODUCTION);
@@ -83,7 +84,7 @@
 					'admin-instructors',
 					'reset',
 					'production-ftd',
-				    'my-unit'
+					'my-unit'
 				];
 
 				while (routes.length) {
@@ -122,6 +123,13 @@
 					'container': 'body',
 					'animation': 'am-fade-and-scale',
 					'template' : '/partials/modal-template.html'
+				});
+
+				angular.extend($popoverProvider.defaults, {
+					'html'     : true,
+					'trigger'  : 'hover',
+					'container': 'body',
+					'autoClose': true
 				});
 
 			}
