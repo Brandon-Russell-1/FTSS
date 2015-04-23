@@ -178,10 +178,11 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.na,uglyGreenBu
 
     +modalFooter('Submit', '!data.Start || !data.Days')
 
-    #cancelClass.btn.btn-danger.btn-labeled.white.hideSetUnavailable(bs-popover,
+    #cancelClass.btn.btn-danger.btn-labeled.white(bs-popover,
+                                    trigger='click',
                                     placement='right',
                                     ng-if='!createData && !data.Archived',
                                     template='/partials/popover-cancel-class.html')
 
                 span.btn-label: +icon('trash_hide')
-                span Cancel Class
+                span Cancel Event
