@@ -101,9 +101,9 @@
 									if (event.NA) {
 
 										// This creates the HTML for our unavailable blocks
-										instructor.html += '<td bs-popover="\'' +
+										instructor.html += '<td ng-click="editClass(' + event.Id + ')" bs-popover="\'' +
 										                   event.Instructor.Name +
-										                   ' not available for teaching.\'" class="unavailable" colspan="' +
+										                   ' not available for teaching.\'" class="unavailable compile" colspan="' +
 										                   event.DaysTruncated +
 										                   '" id="' +
 										                   event.Id +
@@ -242,7 +242,7 @@
 							};
 
 							// Compile our directives/click actions
-							$compile(tbody.getElementsByClassName('mark'))(scope);
+							$compile(tbody.getElementsByClassName('compile'))(scope);
 
 							loading(false);
 
