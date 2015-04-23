@@ -30,7 +30,7 @@ include ../../mixins
                 ng-repeat='row in group track by row.Id',
                 placement='left',
                 bs-popover='row.ClassNotes'
-                animation="leftBarOverlayHover")
+                custom-class="leftBarOverlayHover")
 
             .btn.btn-success.openSeats(ng-click='requestSeats()') {{::row.openSeats}}
 
@@ -47,7 +47,7 @@ include ../../mixins
                         a.pull-right(href='https://www.google.com/maps/@{{::row.locationCoords}},15z',
                             target='_blank',
                             bs-popover='"<h4>{{::row.FTD.Phone}}</h4><img src={{::row.map}} />"',
-                            animation='map',
+                            custom-class='map',
                             placement='left') {{::row.locationName}}
 
                         .pull-right.hideDefault.lightText {{::row.Instructor.Name}}&nbsp|&nbsp;

@@ -30,9 +30,8 @@ form.form-horizontal(name='modal')
 
         br
 
-        div(trigger='focus', bs-popover='language.scheduled_request_notes', placement='right')
-            h4: +icon('edit', 'Comments')
-            textarea.form-control(ng-model='data.Notes')
+        h4: +icon('edit', 'Comments')
+        textarea.form-control(ng-model='data.Notes', trigger='focus', bs-popover='language.scheduled_request_notes', placement='right')
 
         br
 

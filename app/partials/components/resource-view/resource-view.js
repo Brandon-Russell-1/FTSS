@@ -197,7 +197,7 @@
 									html.render += html.monthHeader + html.dayHeader + html.spacer;
 								}
 
-								html.render += '<tr class="event" placement="left" bs-popover="\'' +
+								html.render += '<tr class="event compile" placement="left" bs-popover="\'' +
 								               instructor.overlay +
 								               '\'" animation="leftBarOverlayHover"><td></td>' +
 								               instructor.html +
