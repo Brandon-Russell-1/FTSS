@@ -25,7 +25,8 @@
 			'utilities',
 			'sharepointFilters',
 			'$route',
-			function ($rootScope, $location, $routeParams, security, loading, utilities, sharepointFilters, $route) {
+			'SharePoint',
+			function ($rootScope, $location, $routeParams, security, loading, utilities, sharepointFilters, $route, SharePoint) {
 
 				_TIMER.add('main');
 
