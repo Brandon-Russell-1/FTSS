@@ -11,8 +11,9 @@ FTSS.ng.service('security', [
 	'SharePoint',
 	'$modal',
 	'$rootScope',
+	'$timeout',
 
-	function (SharePoint, $modal, $rootScope) {
+	function (SharePoint, $modal, $rootScope, $timeout) {
 
 		"use strict";
 
@@ -53,8 +54,11 @@ FTSS.ng.service('security', [
 		 */
 		this.switchContext = function (contextType) {
 
+			// Workaround for our variable naming vs role naming conflict
+			var role = (contextType === 'host') ? 'mtf' : 'ftd';
+
 			// Verify authorization first
-			if (_self.hasRole(contextType)) {
+			if (_self.hasRole(role)) {
 
 				// Create an object that will pass up from the child scope
 				$rootScope[contextType] = {};
@@ -122,15 +126,13 @@ FTSS.ng.service('security', [
 
 		this.checkHost = function () {
 
+			$rootScope.host = JSON.parse(localStorage.ftssCached_host || false);
+
 			if ($rootScope.host) return true;
 
 			if (_self.hasRole(['mtf', 'scheduling'])) {
 
-				try {
-					$rootScope.host = JSON.parse(localStorage.ftssCached_host);
-				} catch (e) {
-					caches.Hosts && _self.switchContext('host');
-				}
+				caches.Hosts && _self.switchContext('host');
 
 			}
 
@@ -141,6 +143,8 @@ FTSS.ng.service('security', [
 		 *
 		 */
 		this.checkFTD = function () {
+
+			$rootScope.ftd = JSON.parse(localStorage.ftssCached_ftd || false);
 
 			if ($rootScope.ftd) return true;
 
@@ -153,28 +157,23 @@ FTSS.ng.service('security', [
 			                 ].filter(function (e) {return e}) : [],
 
 			// First try to load from localStorage, otherwise attempt to load from cache
-				ftd = JSON.parse(localStorage.ftssCached_ftd || false) ||
+				ftd = caches.Instructors && identifier.length && _(caches.Instructors)
 
-				      (caches.Instructors && identifier.length && _(caches.Instructors)
+						// Remove empty accounts
+						.filter('Email')
 
-					      // Remove empty accounts
-					      .filter('Email')
+						// Try to perform our match against the array elements
+						.find(function (test) {
 
-					      // Try to perform our match against the array elements
-					      .find(function (test) {
+							      var check = test.Email.toLowerCase().trim();
+							      return (identifier.indexOf(check) > -1);
 
-						            var check = test.Email.toLowerCase().trim();
-						            return (identifier.indexOf(check) > -1);
-
-					            }));
+						      });
 
 			if (ftd) {
 
 				// Load the $rootScope.ftd variable
 				$rootScope.ftd = caches.Units ? caches.Units[ftd.UnitId || ftd.Id] : ftd;
-
-				// Add the "instructor" group to this user
-				_groups.push('instructor');
 
 				// Push this back to localStorage for future use
 				localStorage.ftssCached_ftd = JSON.stringify(
@@ -182,6 +181,8 @@ FTSS.ng.service('security', [
 						'Id'      : $rootScope.ftd.Id,
 						'LongName': $rootScope.ftd.LongName
 					});
+
+				window.location.reload();
 
 			} else {
 
@@ -219,20 +220,20 @@ FTSS.ng.service('security', [
 
 		function initSecurity(user) {
 
-			_user = user;
+			_user = user[0] || user;
 
 			// Shortened display name
-			user.short = user.name ? user.name.split('USAF')[0] : '';
+			user.short = _user.name ? _user.name.split('USAF')[0] : '';
 
 			// Add a copy of our user data to the rootscope
-			$rootScope.user = angular.copy(user);
+			$rootScope.user = angular.copy(_user);
 
 			// Check again if this is an FTD user (should only happen the first time for them)
 			_self.checkFTD();
 
 			if (!PRODUCTION && location.pathname === '/dev.html') {
 
-				completeSecurity({'name': 'admin'});
+				completeSecurity({'name': 'guest'});
 
 			} else {
 
@@ -257,6 +258,13 @@ FTSS.ng.service('security', [
 			// Add switchContext() for admins
 			if (_isAdmin) {
 				$rootScope.switchContext = _self.switchContext;
+			}
+
+			if ($rootScope.ftd && _groups.indexOf('guest') > -1) {
+
+				// Add the "instructor" group to this user
+				_groups = ['instructor'];
+
 			}
 
 			// Used to modify views based on roles
