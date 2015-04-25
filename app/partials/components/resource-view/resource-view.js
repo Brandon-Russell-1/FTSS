@@ -101,12 +101,10 @@
 									if (event.NA) {
 
 										// This creates the HTML for our unavailable blocks
-										instructor.html += '<td ng-click="editClass(' + event.Id + ')" bs-popover="\'' +
+										instructor.html += '<td ng-click="editClass(' + event.Id + ')" placement="top" bs-popover="\'' +
 										                   event.Instructor.Name +
-										                   ' not available for teaching.\'" class="unavailable compile" colspan="' +
+										                   ' not available for teaching.\'" class="unavailable" colspan="' +
 										                   event.DaysTruncated +
-										                   '" id="' +
-										                   event.Id +
 										                   '"><div class="details italics">' +
 										                   (event.ClassNotes || '') +
 										                   '</div></td>';
