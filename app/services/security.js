@@ -233,7 +233,7 @@ FTSS.ng.service('security', [
 
 			if (!PRODUCTION && location.pathname === '/dev.html') {
 
-				completeSecurity({'name': 'guest'});
+				completeSecurity({'name': 'admin'});
 
 			} else {
 
