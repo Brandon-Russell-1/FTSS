@@ -207,6 +207,7 @@ mixin actions(view, edit, archive, label)
         if archive
             span.btn.btn-sm.btn-danger.btn-muted.no-archive(
             bs-popover,
+            trigger='click',
             placement='left',
             container='body',
             template='/partials/popover-archive-' + label + '.html')

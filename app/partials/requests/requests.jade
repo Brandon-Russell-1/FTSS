@@ -32,13 +32,13 @@ include ../mixins
                     .overrideLabel(edit-students)
 
                     .btn.btn-sm.btn-success.btn-muted.no-archive(
-                        bs-tooltip='Approve seat request',
                         bs-popover,
+                        trigger='click',
                         placement='left',
                         template='/partials/popover-approve-request.html'): +icon('check')
 
                     .btn.btn-sm.btn-danger.btn-muted.no-archive(
-                        bs-tooltip='Deny seat request',
                         bs-popover,
+                        trigger='click',
                         placement='left',
                         template='/partials/popover-deny-request.html'): +icon('times')
