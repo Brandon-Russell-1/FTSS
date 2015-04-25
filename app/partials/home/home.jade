@@ -7,10 +7,7 @@ mixin panelGroup(ico, title, type)
 
         .panel-body: block
 
-#slideshowToggle(flickr,
-                    bs-popover='"Toggle viewing the AF Week in Photos."',
-                    no-arrow,
-                    ng-click='ftss.toggleSlides = !ftss.toggleSlides'): +icon('camera')
+#slideshowToggle(flickr, ng-click='ftss.toggleSlides = !ftss.toggleSlides'): +icon('camera')
 
 .wrapped(style='top:-4em;padding-top:1em;overflow:hidden',
             ng-class='{"showContent":!ftss.toggleSlides}')
