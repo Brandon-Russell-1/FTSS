@@ -137,7 +137,7 @@
 							// Create the basic data to send
 							var send = {
 								'__metadata': 'Audit',
-								'P'         : location.hash
+								'P'         :  (window.failover ? 'FAILOVER   ' : '') +  location.hash
 							};
 
 							FTSS.performance(send);

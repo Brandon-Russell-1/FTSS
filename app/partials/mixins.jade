@@ -31,6 +31,7 @@ mixin initScripts(production, noFallback)
             window.utils = {};
             window.caches = {};
             window.PRODUCTION = #{production};
+            window.failover = noFallback;
 
             // add a class for IE 10
             if (Function('/*@cc_on return document.documentMode===10@*/')()) {
