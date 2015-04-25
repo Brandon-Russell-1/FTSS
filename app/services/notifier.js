@@ -36,7 +36,7 @@ FTSS.ng.service('notifier', [
 				'The {{host}} has requested {{seats}} seats for the {{dates}} class:\n\n' +
 				'{{students}}\n\n{{notes}}\n\n\nView this request: https://cs1.eis.af.mil/sites/ftss#requests')
 
-			(data);
+			(data, true);
 
 		};
 
@@ -50,8 +50,8 @@ FTSS.ng.service('notifier', [
 
 			emailWrapper(
 				recipients,
-				'Scheduled Class Cancelled',
-				'The following class was cancelled:\n\n{{Course.Number}}{{TTMS}} ({{dateRange}}) at {{FTD.LongName}} ({{FTD.LCode}})')
+				'Scheduled Class Canceled',
+				'The following class was canceled:\n\n{{Course.Number}}{{TTMS}} ({{dateRange}}) at {{FTD.LongName}} ({{FTD.LCode}})')
 
 			(data);
 
@@ -87,7 +87,7 @@ FTSS.ng.service('notifier', [
 					'You are scheduled to teach the {{Course.Number}} class during the following dates:\n\n' +
 					'{{dateRange}}\n\nYou can view your teaching schedule anytime by visiting http://go.usa.gov/3WhBE.')
 
-				(data);
+				(data, true);
 
 			}
 
@@ -101,7 +101,7 @@ FTSS.ng.service('notifier', [
 				'Seat request for {{Class.Course.Number}} ({{Class.dateRange}}) {{Status}}.' +
 				'\n\n{{students}}\n\nFTD Notes:{{Response}}\n\n\nView all your requests: https://cs1.eis.af.mil/sites/ftss#my-unit')
 
-			(data);
+			(data, true);
 
 		};
 
@@ -116,13 +116,13 @@ FTSS.ng.service('notifier', [
 		 */
 		function emailWrapper(to, subject, body) {
 
-			return function (data) {
+			return function (data, excludeLink) {
 				sendEmail(
 					{
 						'to'     : _.template(to)(data),
 						'subject': _.template(subject)(data),
 						'body'   : _.template(body)(data)
-					});
+					}, excludeLink);
 			}
 
 		}
@@ -133,14 +133,14 @@ FTSS.ng.service('notifier', [
 		 * Use to send email notification to a user.  The requester is automatically CC'd.
 		 * @param send Object Must have to, subject, body properties.
 		 */
-		function sendEmail(send) {
+		function sendEmail(send, excludeLink) {
 
 			var sendClean = {
 
 				'__metadata': 'Notifier',
 				'To'        : sanitize(send.to),
 				'Subject'   : sanitize(send.subject),
-				'Body'      : '\n' + sanitize(send.body) + '\n\n\n\nhttpx'
+				'Body'      : '\n' + sanitize(send.body) + (excludeLink ? '' : '\n\n\n\nhttps://cs1.eis.af.mil/sites/ftss')
 
 			};
 
