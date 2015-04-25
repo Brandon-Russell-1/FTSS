@@ -60,7 +60,7 @@
 									} else {
 
 										// Otherwise, empty the html and hide it
-										$el[0].className = 'hide';
+										$el[0].className = 'mask-img invalid';
 
 										$el[0].innerHTML = '';
 
