@@ -8,7 +8,7 @@ include ../mixins
 
     +grouping()
 
-        +tableBody(columns)(placement='left', hover='{{::row.studentList}}', hoverClass="leftBarOverlayHover")
+        +tableBody(columns)(placement='left', bs-popover='row.studentList', custom-class="leftBarOverlayHover")
 
             td
                 .double.approved(bs-popover='"Request approved"'): +icon('check')

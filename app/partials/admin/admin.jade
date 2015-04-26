@@ -19,10 +19,7 @@ include ../mixins
                     .pull-left {{comment.CreatedBy.Name}}
                     .pull-right {{comment.TimeAgo}}
 
-            .input-group(ng-show='comment.reply',
-                            style='margin-bottom:15px;margin-left:7%;width:93%!important',
-                            explain="Type your reply and then press ENTER to save.",
-                            placement='right')
+            .input-group(ng-show='comment.reply', style='margin-bottom:15px;margin-left:7%;width:93%!important')
                 .input-group-addon Add reply:
                 p.form-control(contenteditable,
                                 ng-model='comment.writeReply',

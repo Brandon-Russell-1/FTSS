@@ -182,7 +182,7 @@ mixin tableBody(columns)
 mixin googleMap(small, thumb)
     if small
         a.no-toggle(href='https://www.google.com/maps/@{{row.Location | nospace}},12z', target='_blank', placement='right', ng-show='row.Location',
-        hover="<img style='width:600px;height:500px' src='https://maps.google.com/maps/api/staticmap?center={{row.Location | nospace}}&zoom=12&size=600x500&sensor=false'/>")
+        bs-popver='"<img style=\'width:600px;height:500px\' src=\'https://maps.google.com/maps/api/staticmap?center={{row.Location | nospace}}&zoom=12&size=600x500&sensor=false\'/>"')
 
             if thumb
                 img.img-thumbnail(src=thumb)
