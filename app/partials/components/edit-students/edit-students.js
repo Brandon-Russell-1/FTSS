@@ -92,7 +92,7 @@
 										// The FTD response
 										'Response': request.Response,
 
-										// The current status--"Cancelled" if there are no more seats allocated
+										// The current status--"Canceled" if there are no more seats allocated
 										'Status': (request.peopleCount < 1) ? 'Cancelled' : request.Status,
 
 										// Copy the updated student list from selectize
