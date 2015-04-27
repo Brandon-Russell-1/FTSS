@@ -89,11 +89,16 @@ FTSS.ng.service('utilities', [
 		 */
 		this.navigate = function (pg) {
 
-			loading(true);
+			// Only navigate for a different page
+			if (pg !== $rootScope.ftss.viewTitle) {
 
-			$rootScope.ftss.searchText = '';
+				loading(true);
 
-			$location.path('/' + pg);
+				$rootScope.ftss.searchText = '';
+
+				$location.path('/' + pg);
+
+			}
 
 		};
 
