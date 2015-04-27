@@ -58,7 +58,7 @@
 								          val.map(Number) : Number(val)) || val || null;
 
 							// Update the field with the value(s)
-							if (oldVal !== newVal) {
+							if (!_.isEqual(oldVal, newVal)) {
 
 								// Split our dotted notation into an array
 								var test = opts.field.split('.'),
@@ -72,10 +72,12 @@
 								// Write the changes to the child property on the parent object
 								item[prop] = newVal;
 
+								console.log('setval:' + JSON.stringify(newVal));
+
 								// This will allow us to retain the last used setting for faster pre-filling of data
 								if (opts.remember) {
 
-									localStorage['FTSS-selectize-' + opts.remember] = newVal;
+									localStorage['FTSS-selectize-' + opts.remember] = JSON.stringify(newVal);
 
 								}
 
@@ -97,12 +99,7 @@
 								// Make sure we add the value to the list if it's new
 								if (opts.create && val && options[opts.select]) {
 
-									options[opts.select]
-
-										.push({
-											'label': val,
-											'Id'   : val
-										});
+									options[opts.select].push({'label': val, 'Id': val});
 
 								}
 
@@ -115,37 +112,37 @@
 				},
 				'onInitialize': function () {
 
-					var self, setup;
+					var self = this,
 
-					self = this;
+						remember = opts.remember && JSON.parse(localStorage['FTSS-selectize-' + opts.remember] || false);
 
-					setup = function () {
+					scope.$watch(opts.field, setup);
 
-						var remember;
+					function setup(val) {
 
-						// Check to see if remember is enabled for this field
-						if (opts.remember) {
-							remember = localStorage['FTSS-selectize-' + opts.remember];
+						if (val && (val.length || val > 0)) {
+
+							console.log('setup');
+
+							// Set the value based on the current model
+							val && self.setValue(val);
+
+							remember = false;
+
 						}
-
-						// Try to add options again if they weren't loaded before
-						if (!opts.watch && options[opts.select]) {
-							self.addOption(options[opts.select]);
-						}
-
-						loaded = remember;
-
-						// Set the value based on the current model
-						self.setValue(utilities.deepRead(scope, opts.field) || remember);
 
 						self.refreshOptions(false);
 
 						// Mark the first load as done
 						loaded = true;
 
-					};
+						if (remember) {
 
-					scope.$watch(opts.field, setup);
+							self.setValue(remember);
+							remember = false;
+
+						}
+					}
 
 				}
 			});
@@ -502,7 +499,7 @@
 
 					// @todo need to work this out for backlog.js--needs scope.row
 					//	parent = $scope.request || $scope.row || $scope.data || $scope;
-						parent = $scope.request || $scope.data || $scope;
+						parent = attrs.parent ? $scope[attrs.parent] : $scope.request || $scope.data || $scope;
 
 					timeout(function () {
 
