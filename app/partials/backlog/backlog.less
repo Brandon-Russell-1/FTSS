@@ -42,7 +42,9 @@
 	vertical-align: text-bottom;
 }
 
-#scrollTarget.col-lg-9 {
+#scrollTarget {
+	margin-top: 50px; margin-left: 25%;
+	width: 74%;
 	height: ~'calc(100% - 75px)';
 	.no-pad {
 		& > .alert {
@@ -109,31 +111,15 @@
 
 #backlog {
 
+	.wide right {
+		display: none;
+	}
+
 	#pageActions {
 		display: none !important;
 	}
-
-	#mainView {
-		height: 98%;
-		top: 15px;
-	}
 	#content {
 		overflow: hidden;
-	}
-	.modal-dialog {
-		width: 85%;
-		.table {
-			margin-bottom: 0;
-		}
-	}
-	.modal-header {
-		input {
-			font-size: 1.2em;
-			border: none !important;
-			height: inherit;
-			text-align: right;
-			margin-top: -.25em;
-		}
 	}
 
 	#datePicker {
@@ -146,6 +132,8 @@
 	}
 
 	#mainView {
+		height: 98%;
+		top: 15px;
 
 		.dropdown-menu {
 			z-index: 50;

@@ -18,7 +18,7 @@ mixin wizardRow(text)
 
 .clearfix
 
-.col-lg-2
+.col-lg-3
 
     br
 
@@ -33,103 +33,84 @@ mixin wizardRow(text)
 
     h4(style='clear:both;padding-top:1em') Courses Needed
 
-    .pds(bs-popover='units_courses', placement='right', trigger='focus')
-        select(selectize='MasterCourseList',
-        bind='data.Course_Requirements',
-        multiple,
-        ng-if='loaded')
+    // .pds(bs-popover='units_courses', placement='right', trigger='focus')
+    .pds(ng-if='loaded')
+        select.wide(selectize='MasterCourseList', bind='data.Course_Requirements', multiple, remember='898')
+
 
     .text-info.info.italics.pull-right
         +icon('info-circle')
         small You can paste PDS codes
 
 
-#scrollTarget.wrapped.addNew.col-lg-7(ng-any-drop, style='margin-top:50px;margin-left:16.5%')
+#scrollTarget.wrapped.addNew.col-lg-9.no-pad(ng-any-drop)
 
-    .no-pad
+    #dragIcon: +icon('insert')
 
-        #dragIcon: +icon('insert')
+    +userInstructions('generate_898', true)
 
-        +userInstructions('generate_898', true)
+    .clearfix
 
-        .clearfix
+    br
 
-        br
+    .well.well-sm.am-fade-and-scale(id='{{row.PDS}}',
+                            ng-repeat='row in flatData track by row.Id',
+                            ng-class='{priority:row.priority}',
+                            ng-form='modal')
 
-        .well.well-sm.am-fade-and-scale(id='{{row.PDS}}',
-                                ng-repeat='row in flatData track by row.Id',
-                                ng-class='{priority:row.priority}',
-                                ng-form='modal')
+        .h4.pull-left
 
-            .h4.pull-left
+            .btnFake.white(class='btn-{{row.detRequest.style}}')
+                span.bigLetter {{row.peopleCount}}
+                span(style='font-size:1.15em') {{row.Number}} - {{row.PDS}}
+                span#tdyOrLocal
+                    +icon('plane')
+                    +icon('exclamation-circle')
 
-                .btnFake.white(class='btn-{{row.detRequest.style}}')
-                    span.bigLetter {{row.peopleCount}}
-                    span(style='font-size:1.15em') {{row.Number}} - {{row.PDS}}
-                    span#tdyOrLocal
-                        +icon('plane')
-                        +icon('exclamation-circle')
+        .h4.pull-right.pad1
 
-            .h4.pull-right.pad1
+            .pull-right(style='position:relative;top:.2em')
+                span.pull-right(bs-popover='"This is a priority course."')
+                    +icon('asterisk')
 
-                .pull-right(style='position:relative;top:.2em')
-                    span.pull-right(bs-popover='"This is a priority course."')
-                        +icon('asterisk')
-
-                select.form-control(
-                        ng-change='updateGrouping()',
-                        ng-model='row.detRequest',
-                        ng-options='ftd as ftd.distanceText for ftd in row.Units')
-
-            .clearfix
-
-            .slide
-
-                .courseTitle {{row.Title}}
-
-                .alert.alert-danger(ng-if='row.Units.length < 1')
-                    .lead *** No available FTD's found! ***
-                    p: b Please verify {{row.PDS}} is the correct course.
-
-                .row
-                    .col-lg-6
-                        h4.soft-bottom-border Student names ({{row.Min}} Min / {{row.Max}} Max)
-                        select.wide( selectize='people',
-                                max='99')
-
-                        .text-danger.am-fade-and-slide-bottom.text-center
-                            em(ng-show='getOver(row)') FYI, you've exceeded this course's max capacity
-                            em(ng-show='getUnder(row)') FYI, you're under the student minimum for this course
-
-                        br
-
-                        h4.soft-bottom-border Notes to the FTD
-                        textarea.form-control(ng-model='row.Notes')
-
-                    .col-lg-6
-                        table.table.table-split#stats898
-                            tbody
-                                tr(ng-repeat='label in monthLabels')
-                                    td.w40 {{label}}
-                                    td.w60
-                                        input.w40(ng-model='row.History.r[$index]', placeholder='Requested')
-                                        input.w40.pull-right(ng-model='row.History.b[$index]', placeholder='Built')
+            select.form-control(
+                    ng-change='updateGrouping()',
+                    ng-model='row.detRequest',
+                    ng-options='ftd as ftd.distanceText for ftd in row.Units')
 
         .clearfix
 
-#backlogRequests.col-lg-3
+        .slide
 
-    .wrapped
+            .courseTitle {{row.Title}}
 
-        .well.well-sm.am-fade-and-slide-top(ng-repeat='(unit, courses) in groups')
-            h4.animateColorFast(class='btn-{{courses[0].detRequest.style}}', ng-click='edit(true, courses)') {{unit}}
-                .pull-right.white
-                    +icon('plus-circle')
-                    +icon('arrow-circle-o-right')
+            .alert.alert-danger(ng-if='row.Units.length < 1')
+                .lead *** No available FTD's found! ***
+                p: b Please verify {{row.PDS}} is the correct course.
 
-            ul.list-group(style='margin:0')
-                li.list-group-item(ng-repeat='crs in courses',
-                                    ng-class='{limit:(getUnder(crs) || getOver(crs))}',
-                                    ng-if='crs.peopleCount')
-                    span.badge {{crs.peopleCount}}
-                    h5: span.a(scroll-to='crs.PDS') {{crs.Number}}
+            .row
+                .col-lg-12
+                    h4.soft-bottom-border Student names ({{row.Min}} Min / {{row.Max}} Max)
+                    select.wide(selectize='people', max='99', parent='row', placeholder='Search by Last name, First name')
+
+                    .text-danger.am-fade-and-slide-bottom.text-right
+                        em(ng-show='getOver(row)') FYI, you've exceeded this course's max capacity
+                        em(ng-show='getUnder(row)') FYI, you're under the student minimum for this course
+
+            br
+
+            .row
+
+                .col-lg-6
+
+                    h4.soft-bottom-border Notes to the FTD
+                    textarea.form-control(ng-model='row.Notes')
+
+                .col-lg-6
+                    table.table.table-split#stats898
+                        tbody
+                            tr(ng-repeat='label in monthLabels')
+                                td.w40 {{label}}
+                                td.w60
+                                    input.w40(ng-model='row.History.r[$index]', placeholder='Requested')
+                                    input.w40.pull-right(ng-model='row.History.b[$index]', placeholder='Built')
