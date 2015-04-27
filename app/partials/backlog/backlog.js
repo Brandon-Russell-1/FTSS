@@ -42,17 +42,18 @@ FTSS.ng.controller(
 
 				});
 
+				$scope.data = {};
+
+				$scope.old = {};
+
+				$scope.history = {};
+
+				$scope.month = moment().add(3, 'months');
+
+				$scope.data.Course_Requirements = [];
+
 				self.bind().then(function (backlogStats) {
 
-					$scope.myHost = caches.Hosts[hostId];
-
-					$scope.data = {};
-
-					$scope.old = {};
-
-					$scope.history = {};
-
-					$scope.month = moment().add(3, 'months');
 					// Iterate over our stats data--this will tell us if a user has already been submitted before and track our history
 					_.each(backlogStats, function (stat) {
 
@@ -70,7 +71,7 @@ FTSS.ng.controller(
 
 							// We have to make -1 a 0 (the default is -1 when FTD hasn't responded)
 							h.built += (course[0] < 1) ? 0 : course[0];
-								h.required += course[1].length;
+							h.required += course[1].length;
 
 						});
 
@@ -92,7 +93,7 @@ FTSS.ng.controller(
 
 						($scope.ftss.itemCount.value > 0),
 
-						$scope.groups ? _($scope.flatData).pluck( 'peopleCount').sum(): false,
+						$scope.groups ? _($scope.flatData).pluck('peopleCount').sum() : false,
 
 						(($scope.requests || {}).count > 0)
 
@@ -161,6 +162,8 @@ FTSS.ng.controller(
 					if ($scope.loaded && text) {
 
 						var courses = {};
+
+						$scope.myHost = caches.Hosts[hostId];
 
 						// Using the host.FTD property (if it exists) add the ftd object
 						$scope.myFTD = $scope.myHost.FTD ? caches.Units[$scope.myHost.FTD] : false;
