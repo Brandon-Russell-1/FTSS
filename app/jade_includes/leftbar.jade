@@ -10,15 +10,15 @@ ul#dashboard-menu
     +link('catalog', 'books', 'Course Catalog')
     +link('ttms', 'hash', 'Need Class IDs', 'role scheduling')
 
-    li.role.mtf: h4 My Unit
-    +link('my-unit', 'agree', 'Seat Requests', 'role scheduling mtf')
-    +link('backlog', 'checklist2', 'Requirements', 'role')
-
     li.role.ftd.instructor: h4 My FTD
     +link('production-ftd', 'graph_pie', 'Production', 'role ftd instructor')
     +link('scheduled-ftd', 'calendar_range', 'Schedule', 'role ftd instructor')
     +link('requests', 'download', 'Seat Requests', 'role ftd')
     +link('manage-ftd', 'edit2', 'Manage', 'role ftd')
+
+    li.role.mtf: h4 My Unit
+    +link('my-unit', 'agree', 'Seat Requests', 'role scheduling mtf')
+    +link('backlog', 'checklist2', 'Requirements', 'role')
 
     li.role: h4 Admin
     +link('admin-hosts', 'puzzle-piece', 'Host Units', 'role')
