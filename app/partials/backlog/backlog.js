@@ -147,7 +147,7 @@ FTSS.ng.controller(
 
 							labels = $scope.monthLabels = [];
 
-						_.times(4, function () {
+						_.times(3, function () {
 							labels.push(instance.add(-1, 'months').format('MMM YYYY'));
 						});
 
