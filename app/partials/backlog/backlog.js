@@ -176,19 +176,18 @@ FTSS.ng.controller(
 							// This will loop over each FTD and add itself to any courses in our list
 							_.each(caches.Units, function (u) {
 
-								if (course.Units.length < 5 && u.Courses_JSON.indexOf(courseId) > -1) {
+								var local = ($scope.myFTD.Id === u.Id);
+
+								if (local || (course.Units.length < 5 && u.Courses_JSON.indexOf(courseId) > -1)) {
 
 									var unit = {'Base': u.Base};
 
 									// Add the unit to the list of available FTDs for this course
 									course.Units.push(unit);
 
-									// Local if the host's FTD is requested
-									unit.local = ($scope.myFTD.Id === u.Id);
+									course.hasLocal = course.hasLocal || local;
 
-									course.hasLocal = course.hasLocal || unit.local;
-
-									if (unit.local) {
+									if (local) {
 
 										// For local, set the distance text to Local and distanceInt to 0 for sorting
 										unit.distance = 'Local';
@@ -214,7 +213,7 @@ FTSS.ng.controller(
 						self.initialize(courses).then(function (d) {
 
 							// Finalize listFTD
-							d.listFTD = _.sortBy(d.Units, 'distanceInt');
+							d.Units = _.sortBy(d.Units, 'distanceInt');
 
 							// Pre-check our closest FTD if available
 							d.detRequest = d.Units[0] || false;
