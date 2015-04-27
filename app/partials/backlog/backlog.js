@@ -172,7 +172,7 @@ FTSS.ng.controller(
 						// Iterate over all the requirements
 						_.each(text, function (courseId) {
 
-							var course = courses[courseId.Id] = angular.copy(caches.MasterCourseList[courseId]);
+							var course = courses[courseId] = angular.copy(caches.MasterCourseList[courseId]);
 
 							// This will loop over each FTD and add itself to any courses in our list
 							_.each(caches.Units, function (u) {
