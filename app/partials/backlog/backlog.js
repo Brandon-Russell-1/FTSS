@@ -52,6 +52,7 @@ FTSS.ng.controller(
 
 					$scope.history = {};
 
+					$scope.month = moment().add(3, 'months');
 					// Iterate over our stats data--this will tell us if a user has already been submitted before and track our history
 					_.each(backlogStats, function (stat) {
 
