@@ -50,7 +50,7 @@ mixin panelGroup(ico, title, type)
                 h4.italics.text-center(ng-if='courseUpdates.length < 1') No course changes
                 h4(ng-repeat='course in courseUpdates') {{::course.PDS}} - {{::course.Number}}
 
-            div(ng-if='!notChrome')
+            div(ng-if='notChrome')
                 +panelGroup('info-circle', 'Google Chrome', 'info')
                     h5.text-justify.
                         Google Chrome is now authorized for all AFNET computers.  If you already have it installed,
