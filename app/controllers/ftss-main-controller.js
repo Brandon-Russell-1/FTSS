@@ -30,35 +30,44 @@
 
 				_TIMER.add('main');
 
-				if ($location.path() === '/reset') {
+				/**
+				 * Performs cache invalidation to fix random caching issues
+				 * @constructor
+				 */
+				$rootScope.checkReset = function () {
 
-					$rootScope.ABORT = true;
+					if ($location.path() === '/reset') {
 
-					try {
+						$rootScope.ABORT = true;
 
-						// Clear the session storage used for DoD Consent tracking
-						window.sessionStorage.clear();
+						try {
 
-						// Clear the local storage use for preferences/
-						window.localStorage.clear();
+							// Clear the session storage used for DoD Consent tracking
+							window.sessionStorage.clear();
 
-						// Attempt to flush the IndexedDB cache as well
-						SharePoint._flushCache(function () {
+							// Clear the local storage use for preferences/
+							window.localStorage.clear();
 
-							window.location = '#home';
-							window.location.reload(true);
+							// Attempt to flush the IndexedDB cache as well
+							SharePoint._flushCache(function () {
 
-						});
+								window.location = '#home';
+								window.location.reload(true);
 
-					} catch (e) {
+							});
 
-						_self.errorHandler(e);
+						} catch (e) {
+
+							_self.errorHandler(e);
+
+						}
+
 
 					}
 
-					return;
+				};
 
-				}
+				$rootScope.checkReset();
 
 				$rootScope.ftss = {
 
@@ -90,6 +99,8 @@
 
 					// Start the loading feedback
 					loading(true);
+
+					$rootScope.checkReset();
 
 					// Determine if we need to process tags for this view
 					$rootScope.ftss.isTagBox = !!sharepointFilters.map();
@@ -159,7 +170,7 @@
 							// Create the basic data to send
 							var send = {
 								'__metadata': 'Audit',
-								'P'         :  (window.failover ? 'FAILOVER   ' : '') +  location.hash
+								'P'         : (window.failover ? 'FAILOVER   ' : '') + location.hash
 							};
 
 							FTSS.performance(send);
