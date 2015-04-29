@@ -223,34 +223,6 @@ FTSS.ng.service('utilities', [
 		};
 
 		/**
-		 * Destroys all local caches and resets the app
-		 */
-		this.masterReset = function () {
-
-			try {
-
-				// Clear the session storage used for DoD Consent tracking
-				window.sessionStorage.clear();
-
-				// Clear the local storage use for preferences/
-				window.localStorage.clear();
-
-				// Attempt to flush the IndexedDB cache as well
-				SharePoint._flushCache(function () {
-
-					window.location = '#home';
-					window.location.reload(true);
-
-				});
-
-			} catch (e) {
-
-				_self.errorHandler(e);
-
-			}
-		};
-
-		/**
 		 * Automatically uploads diagnostic info in the background when errors occur
 		 *
 		 * @param err
