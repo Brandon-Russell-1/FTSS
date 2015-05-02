@@ -72,8 +72,6 @@
 								// Write the changes to the child property on the parent object
 								item[prop] = newVal;
 
-								console.log('setval:' + JSON.stringify(newVal));
-
 								// This will allow us to retain the last used setting for faster pre-filling of data
 								if (opts.remember) {
 
@@ -121,8 +119,6 @@
 					function setup(val) {
 
 						if (val && (val.length || val > 0)) {
-
-							console.log('setup');
 
 							// Set the value based on the current model
 							val && self.setValue(val);
