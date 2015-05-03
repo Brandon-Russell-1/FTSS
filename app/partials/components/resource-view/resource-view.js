@@ -191,7 +191,7 @@
 
 								// For extra large groups,
 								if (index % 10 < 1 &&
-								    (html.instructors.length < 5 || (html.instructors.length - index) > 5)) {
+								    (html.instructors.length < 6 || (html.instructors.length - index) > 5)) {
 									html.render += html.monthHeader + html.dayHeader + html.spacer;
 								}
 
