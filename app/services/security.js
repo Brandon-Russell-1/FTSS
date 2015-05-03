@@ -27,15 +27,15 @@ FTSS.ng.service('security', [
 
 				'requests': ['mtf', 'ftd'],
 
-				'manage-ftd': ['ftd', 'scheduling'],
+				'manage-ftd': ['ftd'],
 
-				'scheduled-ftd': ['ftd', 'scheduling', 'instructor'],
+				'scheduled-ftd': ['ftd', 'instructor'],
 
 				'production-ftd': ['ftd', 'instructor'],
 
 				'backlog': ['mtf', 'ftd'],
 
-				'my-unit': ['mtf', 'scheduling'],
+				'my-unit': ['mtf'],
 
 				'ttms': ['scheduling']
 
