@@ -370,6 +370,11 @@ FTSS.ng.service('utilities', [
 
 			if (_.all(_completed)) {
 
+				// Handle unauthorized access
+				if (!security.isAuthorized()) {
+					_self.navigate('home');
+				}
+
 				security.checkFTD();
 				security.checkHost();
 
