@@ -17,7 +17,6 @@
 			function ($timeout, SharePoint, classProcessor, utilities, security) {
 
 				return {
-					'restrict'   : 'A',
 					'scope'      : true,
 					'templateUrl': function (elem, attrs) {
 						return '/partials/edit-students-' + (attrs.templateurl || 'placeholder') + '.html';

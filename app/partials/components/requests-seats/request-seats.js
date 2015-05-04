@@ -20,16 +20,29 @@
 			function ($timeout, SharePoint, classProcessor, utilities, notifier) {
 
 				return {
-					'restrict'   : 'E',
 					'templateUrl': '/partials/request-seats-button.html',
 					'replace'    : true,
 					'scope'      : true,
-					'link'       : function ($scope) {
+					'link'       : function ($scope, el) {
 
-						var modal;
+						var modal,
+
+							now = moment().startOf('day');
 
 						if (!$scope.canRequest) {
 							return;
+						}
+
+						// For resources view, we have to lookup the data first
+						if ($scope.getRow) {
+
+							$scope.row = $scope.getRow(el[0].getAttribute('lookup'));
+
+							// Do not show request seat button for classes that have already started
+							if ($scope.row.startMoment < now) {
+								el[0].innerHTML = '';
+								return;
+							}
 						}
 
 						// We use .data because of child scopes with a modal
@@ -37,8 +50,8 @@
 							'HostId': $scope.host.Id
 						};
 
-						// Action performed when the user presses the request seat button (use $parent for external use)
-						$scope.$parent.requestSeats = function () {
+						// Action performed when the user presses the request seat button
+						$scope.requestSeats = function () {
 
 							//  Action performed when the users presses submit
 							$scope.submit = function () {
