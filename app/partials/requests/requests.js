@@ -35,10 +35,12 @@ FTSS.ng.controller(
 
 				var scope = this,
 
+					row = scope.row,
+
 					send = [
 						// Update the request item
 						{
-							'__metadata': scope.row.__metadata,
+							'__metadata': row.__metadata,
 							'Status'    : status,
 							'Response'  : response
 						},
@@ -46,8 +48,8 @@ FTSS.ng.controller(
 						// Update the approved seat count for the related class
 						{
 							'cache'     : true,
-							'__metadata': scope.row.Class.__metadata,
-							'Approved'  : (scope.row.Class.Approved || 0) + scope.row.data.peopleCount
+							'__metadata': row.Class.__metadata,
+							'Approved'  : (row.Class.Approved || 0) + row.data.peopleCount
 						}
 
 					];
@@ -58,15 +60,15 @@ FTSS.ng.controller(
 					if (results.success) {
 
 						// update fields needed for notifier service
-						scope.row.Status = status;
-						scope.row.Response = response;
-						scope.row.students = _.keys(scope.row.Students_JSON).join('\n');
+						row.Status = status;
+						row.Response = response;
+						row.students = _.keys(row.Students_JSON).join('\n');
 
 						// Send our email update
-						notifier.respondToRequest(scope.row);
+						notifier.respondToRequest(row);
 
 						// Update the model by removing this item
-						delete self.data[scope.row.Id];
+						delete self.data[row.Id];
 						self.process();
 
 						utilities.alert.update();
