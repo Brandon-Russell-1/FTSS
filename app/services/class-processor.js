@@ -186,7 +186,8 @@ FTSS.ng.service('classProcessor', [
 					row.Instructor.Name,
 					'unavailable',
 					row.startMoment.format('MMMM'),
-					row.ClassNotes
+					row.ClassNotes,
+					'#na'
 				].join(' ');
 
 			} else {
@@ -195,11 +196,29 @@ FTSS.ng.service('classProcessor', [
 				_self.cacheFiller(row);
 
 				// Determine classes (color codes) based on openSeats
-				row.className = row.openSeats > 0 ? 'success' :
+				row.className =
 
-				                row.openSeats < 0 ? 'danger' :
+					row.MTT ? 'mtt' :
 
-				                'warning';
+					row.TS ? 'trainingSession' :
+
+					(row.allocatedSeats < row.Course.Min) ? 'short' :
+
+					row.openSeats > 0 ? 'success' :
+
+					row.openSeats < 0 ? 'danger' :
+
+					'warning';
+
+				// Setup our smart filters
+				row.search = {
+					'success'        : 'open',
+					'warning'        : 'full',
+					'danger'         : 'over',
+					'short'          : 'under',
+					'mtt'            : 'mtt',
+					'trainingSession': 'ts'
+				}[row.className];
 
 				// Map the status to our colors codes
 				row.availability = {
@@ -221,6 +240,7 @@ FTSS.ng.service('classProcessor', [
 
 				// Setup our search fields for this view
 				row.search = [
+					'#' + row.search,
 					row.ClassNotes,
 					row.Course.text,
 					row.Instructor.Name || 'needs instructor',
@@ -230,6 +250,8 @@ FTSS.ng.service('classProcessor', [
 					'room:' + row.Location
 
 				].join(' ');
+
+
 
 				// Hide the J4 notes if they have the leading #
 				row.J4Notes = (row.J4Notes && row.J4Notes[0] === '#') ? '' : row.J4Notes;

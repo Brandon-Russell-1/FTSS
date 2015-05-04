@@ -331,7 +331,7 @@ mixin loadStudents()
                     dd(ng-repeat='(student, email) in ::request.Students_JSON') {{student}}
 
                 div(ng-if='canEditSeats')
-                    dt Students(s)
+                    dt Student(s)
                     dd: select.wide(selectize='people', max="99")
 
                 br
