@@ -33,16 +33,6 @@ FTSS.ng.controller(
 
 					self.initialize(data).then(function (row) {
 
-						/*	d.search = d.Unit;
-
-						 // Add the FTD data if this unit has one assigned
-						 if (d.FTD) {
-						 d.det = caches.Units[d.FTD];
-						 d.Location = d.det.Location;
-						 d.search += d.det.search;
-						 }
-						 */
-
 						classProcessor.cacheFiller(row.Class);
 
 						// Get the requested seat count

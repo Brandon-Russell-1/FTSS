@@ -251,8 +251,6 @@ FTSS.ng.service('classProcessor', [
 
 				].join(' ');
 
-
-
 				// Hide the J4 notes if they have the leading #
 				row.J4Notes = (row.J4Notes && row.J4Notes[0] === '#') ? '' : row.J4Notes;
 
