@@ -1,0 +1,33 @@
+include ../../mixins
+
+td(class='mark {{className}}',  colspan='{{DaysTruncated}}')
+
+    .circle(bio-photo='"{{bioPhoto}}"')
+
+    span.pds {{pds}}&nbsp;
+    span.instructor {{name}}
+    span.location {{Location}}
+
+    .details
+
+        .container
+
+            h4.border-bottom {{Course.Number}}{{TTMS}}
+                .pull-right {{dateRange}}
+
+            .clearfix
+
+            i.wideText {{Course.Title}}
+
+            br
+
+            p {{notesHTML}}
+
+            h4.text-center
+
+                .col-lg-5: div(edit-students, lookup='{{Id}}')
+
+                .col-lg-6: div(request-seats, lookup='{{Id}}')
+
+
+            .clearfix

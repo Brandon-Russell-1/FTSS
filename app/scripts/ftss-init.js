@@ -84,7 +84,8 @@
 					'admin-instructors',
 					'reset',
 					'production-ftd',
-					'my-unit'
+					'my-unit',
+					'my-ftd'
 				];
 
 				while (routes.length) {
@@ -162,7 +163,7 @@
 	              } : {
 
 		              // These are the ng-sharepoint parameters for the DEVELOPMENT version of FTSS
-		              'offline'     : false,
+		              'offline'     : true,
 		              'baseURL'     : base + 'dev2/_vti_bin/ListData.svc/',
 		              'user'        : {'url': base + 'dev2/_vti_bin/UserGroup.asmx'},
 		              'people'      : {'url': base + 'dev2/_vti_bin/People.asmx'},

@@ -378,6 +378,14 @@ FTSS.ng.service('utilities', [
 				security.checkFTD();
 				security.checkHost();
 
+				if ($rootScope.host && $rootScope.host.Id) {
+
+					var ftd = caches.Hosts[$rootScope.host.Id].FTD;
+
+					$rootScope.ftd = $rootScope.ftd || caches.Units[ftd] || false;
+
+				}
+
 				if ($rootScope.ftss.isTagBox) {
 
 					sharepointFilters.refresh();

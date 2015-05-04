@@ -37,6 +37,8 @@ FTSS.ng.service('security', [
 
 				'my-unit': ['mtf'],
 
+				'my-ftd': ['mtd'],
+
 				'ttms': ['scheduling']
 
 			},
@@ -130,7 +132,7 @@ FTSS.ng.service('security', [
 
 			if ($rootScope.host) return true;
 
-			if (_self.hasRole(['mtf', 'scheduling'])) {
+			if (_self.hasRole(['mtf'])) {
 
 				caches.Hosts && _self.switchContext('host');
 

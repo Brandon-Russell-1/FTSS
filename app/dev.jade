@@ -60,7 +60,7 @@ html(lang='en', ng-app='FTSS')
 
     body(ng-controller='mainController',
                 id='{{ftss.viewTitle}}',
-                ng-class='{archived:ftss.showArchived,alternateView:ftss.showAlternateView}',
+                ng-class='{archived:ftss.showArchived,alternateView:ftss.showAlternateView,withFTD:ftd.Id&&host.Id}',
                 class='{{roleClasses}}')
 
         img#bg1
