@@ -160,7 +160,7 @@ FTSS.ng.service('classProcessor', [
 			if (request.Class) {
 				request.studentList = '<h5>Class #' + (request.Class.TTMS || ' Pending') + '</h5>' +
 				                      '<em>' + _.keys(request.Students_JSON).join('</em><em>') + '</em>' +
-				                      '<f>Requested: ' + request.date + '<br>By: ' + request.CreatedBy.Name + '</f>';
+				                      '<br><f>Requested: ' + request.date + '<br>By: ' + request.CreatedBy.Name + '</f>';
 			}
 
 
