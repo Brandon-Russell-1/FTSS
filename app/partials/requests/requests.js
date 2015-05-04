@@ -47,7 +47,7 @@ FTSS.ng.controller(
 						{
 							'cache'     : true,
 							'__metadata': scope.row.Class.__metadata,
-							'Approved'  : (scope.row.Class.Approved || 0) + scope.seatCount
+							'Approved'  : (scope.row.Class.Approved || 0) + scope.row.data.peopleCount
 						}
 
 					];
