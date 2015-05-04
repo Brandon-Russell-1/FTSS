@@ -1,19 +1,19 @@
 #resourceView
     #legend
 
-        .btn-success(bs-popover='"Classes with open seats"', placement='right')
+        .btn-success(bs-popover='"View classes with open seats"', placement='left', custom-class="leftBarOverlayHover", ng-click='filter("open")')
 
-        .btn-primary(bs-popover='"Full classes"', placement='right')
+        .btn-primary(bs-popover='"View full classes"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("full")')
 
-        .btn-warning(bs-popover='"Classes currently below student min"', placement='right')
+        .btn-warning(bs-popover='"View classes currently below student min"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("under")')
 
-        .btn-danger(bs-popover='"Classes exceeding student max"', placement='right')
+        .btn-danger(bs-popover='"View classes exceeding student max"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("over")')
 
-        .trainingSession(bs-popover='"Training Session"', placement='right')
+        .trainingSession(bs-popover='"View Training Sessions"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("ts")')
 
-        .mtt(bs-popover='"Mobile Training Team"', placement='right')
+        .mtt(bs-popover='"View Mobile Training Teams"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("mtt")')
 
-        .unavailable(bs-popover='"Instructor unavailability"', placement='right')
+        .unavailable(bs-popover='"View instructor unavailability"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("na")')
 
     iframe#ttmsLoader(name='ttmsLoader')
 

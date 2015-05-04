@@ -34,6 +34,13 @@
 
 							tbody = $el.find('tbody')[0];
 
+						// Enable our smart filters (clickable legend)
+						scope.filter = function (text) {
+
+							scope.ftss.searchText = '#' + text;
+
+						};
+
 						scope.$watch(watch, function (groups, last) {
 
 							// Only do something on a change
@@ -127,22 +134,11 @@
 										}
 
 										// Only show the bio photo if there is room for it
-										event.bioPhoto =  event.DaysTruncated > 3 ? event.Instructor.Photo : '';
+										event.bioPhoto = event.DaysTruncated > 3 ? event.Instructor.Photo : '';
 
 										// Trim the instructor name if days are shorter than 12
 										event.name = (event.DaysTruncated > 12) ?
 										             event.Instructor.Name : '';
-
-										// Match MTT classes
-										event.className = event.MTT ? 'mtt' :
-
-											// Add trainingSession class if TTMS contains TS
-											              event.TS ? 'trainingSession' :
-
-											                  // Id short classes
-											              (event.allocatedSeats < event.Course.Min) ? 'short' :
-
-											              event.className;
 
 										// Add the noPhoto classes when the photo is not visible
 										if (!event.bioPhoto) { event.className += ' noPhoto'}
@@ -197,7 +193,7 @@
 
 								html.render += '<tr class="event compile" placement="left" bs-popover="\'' +
 								               instructor.overlay +
-								               '\'" animation="leftBarOverlayHover"><td></td>' +
+								               '\'" custom-class="leftBarOverlayHover"><td></td>' +
 								               instructor.html +
 								               '</tr>' +
 								               html.spacer;
@@ -269,10 +265,10 @@
 
 									// Create the month if it doesn't exist
 									html.months[month] = html.months[month] || {
-										'month'  : month,
-										'sort'   : parseInt(minClone.format('YYYYMM'), 10),
-										'colspan': 0
-									};
+											'month'  : month,
+											'sort'   : parseInt(minClone.format('YYYYMM'), 10),
+											'colspan': 0
+										};
 
 									// Increase the colspan by one to match days of month
 									html.months[month].colspan++;
