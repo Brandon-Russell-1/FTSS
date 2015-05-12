@@ -1,3 +1,6 @@
+@import (reference) "../../../bower_components/bootstrap/less/variables.less";
+@import (reference) "../../styles/mixins.less";
+
 .btn-label {
 	.lbl-search {
 		margin-bottom: 0;
@@ -105,13 +108,9 @@
 
 }
 
-#backlogRequests h4 .plus-circle, #backlogRequests h4:hover .lbl-arrow-circle-o-right {
-	display: none;
-}
-
 #backlog {
 
-	.wide right {
+	.wide .item right {
 		display: none;
 	}
 
@@ -135,15 +134,70 @@
 		height: 98%;
 		top: 15px;
 
-		.dropdown-menu {
-			z-index: 50;
+		.wrapped {
+			margin-top: 50px;
 		}
 
-		.selectize-dropdown {
-			width: 300% !important;
+		.panel-default {
+			border: 1px solid #ddd;
+			border-radius: 5px 5px 0 0;
+			margin-bottom: 15px;
+			background: #f9f9f9;
 
-			.selectize-dropdown-content {
+			.panel-heading {
+				font-size: 1.5em;
+				background: @classOpenSeats;
+
+				.count {
+					font-weight: 800;
+					font-size: 1.5em;
+					line-height: .9em;
+					padding-right: .25em;
+				}
+			}
+
+		}
+
+		#over, #under { display: none; }
+
+		.over #over, .under:not(.empty) #under { display: block }
+
+		.under .panel-heading { background: @classUnderBooked }
+		.over .panel-heading { background: @classUnderBooked }
+		.empty .panel-heading { background: @instructorUnavailable; }
+
+		.datepicker {
+			z-index: 1 !important;
+		}
+
+		.selectize-input input {
+			width: 95% !important;
+		}
+
+		#ftdPicker {
+
+			.item {
+				font-size: 1.5em;
+			}
+			.selectize-dropdown {
 				width: 100% !important;
+			}
+
+		}
+
+		#coursePicker {
+
+			.selectize-control {
+
+				.selectize-dropdown {
+					width: 300% !important;
+
+					.selectize-dropdown-content {
+						width: 100% !important;
+					}
+
+				}
+
 			}
 
 		}
@@ -152,7 +206,7 @@
 			font-style: italic;
 			font-size: 1.25em;
 			letter-spacing: .1em;
-			padding: .5em 0 .5em;
+			margin-bottom: 1em;
 		}
 	}
 

@@ -10,107 +10,94 @@ mixin wizardRow(text)
 .col-lg-12
     .wizard
         ul.steps
-            li(class='{{getProgress(0)}}'): +wizardRow('Choose Month')
-            li(class='{{getProgress(1)}}'): +wizardRow('Identify Courses')
-            li(class='{{getProgress(2)}}'): +wizardRow('Add Students')
-            li(class='{{getProgress(3)}}'): +wizardRow('Verify Request')
-            li(class='{{getProgress(4)}}'): +wizardRow('Send to FTD')
+            li(class='{{getProgress(0)}}'): +wizardRow('Choose a FTD')
+            li(class='{{getProgress(1)}}'): +wizardRow('Choose a Month')
+            li(class='{{getProgress(2)}}'): +wizardRow('Identify Courses')
+            li(class='{{getProgress(3)}}'): +wizardRow('Add Students')
+            li(class='{{getProgress(4)}}'): +wizardRow('Verify Request')
+            li(class='{{getProgress(5)}}'): +wizardRow('Send to FTD')
 
 .clearfix
 
-.col-lg-3
-
-    br
-
-    #datePicker
-        input.hide(type='text',
-                    ng-model='month',
-                    data-date-format='MMMM yyyy',
-                    data-min-view=1,
-                    data-min-date='today',
-                    bs-datepicker,
-                    bs-show='loaded')
-
-    h4(style='clear:both;padding-top:1em') Courses Needed
-
-    // .pds(bs-popover='units_courses', placement='right', trigger='focus')
-    .pds(ng-if='loaded')
-        select.wide(selectize='MasterCourseList', bind='data.Course_Requirements', multiple, remember='898')
+.wrapped.addNew.no-pad(ng-any-drop)
 
 
-    .text-info.info.italics.pull-right
-        +icon('info-circle')
-        small These courses will be remembered next month
+    .col-lg-3
 
+        br
 
-#scrollTarget.wrapped.addNew.col-lg-9.no-pad(ng-any-drop)
+        #ftdPicker: select(ng-if='unitList.length', selectize='unitList', bind='data.targetFTD', remember='898-ftd', sort='distanceInt', placeholder='Choose a FTD')
 
-    #dragIcon: +icon('insert')
-
-    +userInstructions('generate_898', true)
-
-    .clearfix
-
-    br
-
-    .well.well-sm.am-fade-and-scale(id='{{row.PDS}}',
-                            ng-repeat='row in flatData track by row.Id',
-                            ng-class='{priority:row.priority}',
-                            ng-form='modal')
-
-        .h4.pull-left
-
-            .btnFake.white(class='btn-{{row.detRequest.style}}')
-                span.bigLetter {{row.peopleCount}}
-                span(style='font-size:1.15em') {{row.Number}} - {{row.PDS}}
-                span#tdyOrLocal
-                    +icon('plane')
-                    +icon('exclamation-circle')
-
-        .h4.pull-right.pad1
-
-            .pull-right(style='position:relative;top:.2em')
-                span.pull-right(bs-popover='"This is a priority course."')
-                    +icon('asterisk')
-
-            select.form-control(
-                    ng-change='updateGrouping()',
-                    ng-model='row.detRequest',
-                    ng-options='ftd as ftd.distanceText for ftd in row.Units')
+        #datePicker
+            input.hide(type='text',
+                        ng-model='data.month',
+                        data-date-format='MMMM yyyy',
+                        data-min-view=1,
+                        data-min-date='today',
+                        bs-datepicker,
+                        bs-show='loaded')
 
         .clearfix
 
-        .slide
+        br
 
-            .courseTitle {{row.Title}}
+        #coursePicker.pds(ng-if='data.targetFTD')
+            select.wide(selectize='coursesDropdown', bind='data.Course_Requirements', multiple, remember='898', placeholder='Identify Courses')
 
-            .alert.alert-danger(ng-if='row.Units.length < 1')
-                .lead *** No available FTD's found! ***
-                p: b Please verify {{row.PDS}} is the correct course.
 
-            .row
-                .col-lg-12
-                    h4.soft-bottom-border Student names ({{row.Min}} Min / {{row.Max}} Max)
-                    select.wide(selectize='people', max='99', parent='row', placeholder='Search by Last name, First name')
+            .text-info.info.italics.pull-right
+                +icon('info-circle')
+                small These courses will be remembered next month
 
-                    .text-danger.am-fade-and-slide-bottom.text-right
-                        em(ng-show='getOver(row)') FYI, you've exceeded this course's max capacity
-                        em(ng-show='getUnder(row)') FYI, you're under the student minimum for this course
+    .col-lg-9
 
-            br
+        #dragIcon: +icon('insert')
 
-            .row
+        +userInstructions('generate_898', true)
 
-                .col-lg-6
+        .clearfix
 
-                    h4.soft-bottom-border Notes to the FTD
-                    textarea.form-control(ng-model='row.Notes')
+        br
 
-                .col-lg-6
-                    table.table.table-split#stats898
-                        tbody
-                            tr(ng-repeat='label in monthLabels')
-                                td.w40 {{label}}
-                                td.w60
-                                    input.w40(ng-model='row.History.r[$index]', placeholder='Requested')
-                                    input.w40.pull-right(ng-model='row.History.b[$index]', placeholder='Built')
+        .panel-default.am-fade-and-slide-right(id='{{row.PDS}}',
+                                ng-repeat='row in flatData track by row.Id',
+                                ng-form='modal',
+                                ng-class='{empty:!row.peopleCount,under:getUnder(row),over:getOver(row)}')
+
+            .panel-heading
+                .pull-left.count {{row.peopleCount}}
+                .pull-left | {{row.PDS}} - {{row.Number}}
+                .pull-right {{row.imds_g081}}
+                .clearfix
+
+            .panel-body
+
+                .courseTitle {{row.Title}}
+
+                .clearfix
+
+
+                .row
+                    .col-lg-7
+                        select.wide(selectize='people', max='99', parent='row', placeholder='Add student names, search by last name, first name')
+
+                        .pull-left ({{row.Min}} Min / {{row.Max}} Max)
+                        .text-danger.am-fade-and-slide-bottom.pull-right
+                            em#over FYI, you've exceeded this course's max capacity
+                            em#under FYI, you're under the student minimum for this course
+
+                    .col-lg-5
+
+                        table.table.table-split#stats898
+                            tbody
+                                tr(ng-repeat='label in monthLabels')
+                                    td.w40 {{label}}
+                                    td.w60
+                                        input.w40(ng-model='row.History.r[$index]', placeholder='Requested')
+                                        input.w40.pull-right(ng-model='row.History.b[$index]', placeholder='Given')
+
+                    .clearfix
+
+                    br
+
+                textarea.form-control(ng-model='row.Notes', placeholder='Type any notes for this course here')

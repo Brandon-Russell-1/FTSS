@@ -14,9 +14,9 @@ FTSS.ng.controller(
 
 		function ($scope, SharePoint, $timeout, controllerHelper, utilities, loading, geodata) {
 
-			$scope.$watch('host.Id', function (hostId) {
+			utilities.addAsync(generateRequirements);
 
-				if (!hostId) return;
+			function generateRequirements() {
 
 				loading(true);
 
@@ -28,7 +28,7 @@ FTSS.ng.controller(
 
 					'model': 'requirements_stats',
 
-					'filter': 'HostId eq ' + hostId,
+					'filter': 'HostId eq ' + $scope.host.Id,
 
 					'finalProcess': function (groups) {
 
@@ -43,15 +43,33 @@ FTSS.ng.controller(
 
 				});
 
-				$scope.data = {};
+				$scope.data = {
+					'month': moment().add(3, 'months')
+				};
 
 				$scope.old = {};
 
 				$scope.history = {};
 
-				$scope.month = moment().add(3, 'months');
-
 				$scope.data.Course_Requirements = [];
+
+				$scope.myHost = caches.Hosts[$scope.host.Id];
+
+				// Using the host.FTD property (if it exists) add the ftd object
+				$scope.myFTD = $scope.myHost.FTD ? caches.Units[$scope.myHost.FTD] : false;
+
+				$scope.myHost.Location = $scope.myFTD.Location || $scope.myFTD;
+
+				$scope.unitList = _.map(angular.copy(caches.Units), function (unit) {
+
+					geodata.distances(unit, $scope.myHost.Location, unit.Location);
+
+					unit.distanceInt = unit.distanceInt || unit.Base;
+					unit.label = '<b>' + unit.Base + '</b><right>' + unit.distance + '</right>';
+
+					return unit;
+
+				});
 
 				self.bind().then(function (backlogStats) {
 
@@ -90,7 +108,9 @@ FTSS.ng.controller(
 
 					var map = [
 
-						$scope.month,
+						$scope.data.targetFTD,
+
+						$scope.data.month,
 
 						($scope.ftss.itemCount.value > 0),
 
@@ -131,17 +151,14 @@ FTSS.ng.controller(
 
 				$scope.getUnder = function (row) { return row.peopleCount < row.Min };
 
-				$scope.updateGrouping = function () {
+				$scope.$watch('data.targetFTD', function (ftd) {
 
-					$scope.groups = _.groupBy(self.data, function (gp) {
+					// Bind the unit.courses to coursesDropdown for selectize
+					$scope.coursesDropdown = caches.Units[ftd].Courses;
 
-						return gp.detRequest.Base;
+				});
 
-					});
-
-				};
-
-				$scope.$watch('month', function (month) {
+				$scope.$watch('data.month', function (month) {
 
 					if (month) {
 
@@ -164,64 +181,14 @@ FTSS.ng.controller(
 
 						var courses = {};
 
-						$scope.myHost = caches.Hosts[hostId];
-
-						// Using the host.FTD property (if it exists) add the ftd object
-						$scope.myFTD = $scope.myHost.FTD ? caches.Units[$scope.myHost.FTD] : false;
-
-						if ($scope.myFTD) {
-							$scope.myHost.Location = $scope.myFTD.Location;
-						}
-
 						// Iterate over all the requirements
 						_.each(text, function (courseId) {
 
-							var course = courses[courseId] = angular.copy(caches.MasterCourseList[courseId]);
-
-							// This will loop over each FTD and add itself to any courses in our list
-							_.each(caches.Units, function (u) {
-
-								var local = ($scope.myFTD.Id === u.Id);
-
-								if (local || (course.Units.length < 5 && u.Courses_JSON.indexOf(courseId) > -1)) {
-
-									var unit = {'Base': u.Base};
-
-									// Add the unit to the list of available FTDs for this course
-									course.Units.push(unit);
-
-									course.hasLocal = course.hasLocal || local;
-
-									if (local) {
-
-										// For local, set the distance text to Local and distanceInt to 0 for sorting
-										unit.distance = 'Local';
-										unit.distanceInt = 0;
-
-									} else {
-
-										geodata.distances(unit, $scope.myHost.Location, u.Location);
-
-									}
-
-									unit.style = (unit.distanceInt < 50) ? 'info' : 'warning';
-
-									unit.distanceText = u.Base + ' (' + unit.distance + ')';
-
-								}
-
-							});
-
+							courses[courseId] = angular.copy(caches.MasterCourseList[courseId]);
 
 						});
 
 						self.initialize(courses).then(function (d) {
-
-							// Finalize listFTD
-							d.Units = _.sortBy(d.Units, 'distanceInt');
-
-							// Pre-check our closest FTD if available
-							d.detRequest = d.Units[0] || false;
 
 							d.peopleCount = 0;
 
@@ -231,7 +198,7 @@ FTSS.ng.controller(
 
 				});
 
-			});
+			}
 
 		}
 	]
