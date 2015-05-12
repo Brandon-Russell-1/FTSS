@@ -37,7 +37,7 @@ FTSS.ng.service('security', [
 
 				'my-unit': ['mtf'],
 
-				'my-ftd': ['mtd'],
+				'my-ftd': ['mtf'],
 
 				'ttms': ['scheduling']
 
