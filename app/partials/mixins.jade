@@ -314,6 +314,11 @@ mixin confirmPopover(className, title, text, action)
 
             .clearfix
 
+mixin downloadCSV()
+    .add-button.btn.btn-labeled.btn-primary(ng-click='export()', style='top:155px')
+        span.btn-label.white: +icon('disk')
+        span.text  &nbsp;Download
+
 mixin loadStudents()
     h4.italics(ng-if='loadingStudents') Please wait, loading the list of students...
 
