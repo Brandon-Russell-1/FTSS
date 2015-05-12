@@ -4,10 +4,22 @@ FTSS.ng.service('notifier', [
 
 	'SharePoint',
 
+	/**
+	 * @name notifier
+	 * @param SharePoint
+	 */
 	function (SharePoint) {
 
+		/**
+		 * @name notifier#generic
+		 * @type {sendEmail}
+		 */
 		this.generic = sendEmail;
 
+		/**
+		 * @name notifier#j4Update
+		 * @param {Object} data
+		 */
 		this.j4Update = function (data) {
 
 			emailWrapper('{{FTD.Email}}',
@@ -18,6 +30,10 @@ FTSS.ng.service('notifier', [
 
 		};
 
+		/**
+		 * @name notifier#autoApprove
+		 * @param {Object} data
+		 */
 		this.autoApprove = function (data) {
 
 			emailWrapper('{{recipients}}',
@@ -28,6 +44,10 @@ FTSS.ng.service('notifier', [
 
 		};
 
+		/**
+		 * @name notifier#requestSeats
+		 * @param {Object} data
+		 */
 		this.requestSeats = function (data) {
 
 			emailWrapper(
@@ -40,6 +60,10 @@ FTSS.ng.service('notifier', [
 
 		};
 
+		/**
+		 * @name notifier#cancelClass
+		 * @param {Object} data
+		 */
 		this.cancelClass = function (data) {
 
 			var recipients = [
@@ -57,6 +81,10 @@ FTSS.ng.service('notifier', [
 
 		};
 
+		/**
+		 * @name notifier#updateClass
+		 * @param {Object} data
+		 */
 		this.updateClass = function (data) {
 
 			var recipients = [
@@ -75,6 +103,10 @@ FTSS.ng.service('notifier', [
 
 		};
 
+		/**
+		 * @name notifier#createClass
+		 * @param {Object} data
+		 */
 		this.createClass = function (data) {
 
 			var instructorEmail = caches.Instructors[data.InstructorId].Email;
@@ -93,6 +125,10 @@ FTSS.ng.service('notifier', [
 
 		};
 
+		/**
+		 * @name notifier#respondToRequest
+		 * @param {Object} data
+		 */
 		this.respondToRequest = function (data) {
 
 			emailWrapper(

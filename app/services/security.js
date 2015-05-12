@@ -11,9 +11,14 @@ FTSS.ng.service('security', [
 	'SharePoint',
 	'$modal',
 	'$rootScope',
-	'$timeout',
 
-	function (SharePoint, $modal, $rootScope, $timeout) {
+	/**
+	 *
+	 * @param SharePoint
+	 * @param $modal
+	 * @param $rootScope
+	 */
+	function (SharePoint, $modal, $rootScope) {
 
 		"use strict";
 

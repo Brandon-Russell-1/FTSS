@@ -11,6 +11,7 @@ FTSS.ng.controller(
 		'utilities',
 		'loading',
 		'geodata',
+
 		function ($scope, SharePoint, $timeout, controllerHelper, utilities, loading, geodata) {
 
 			$scope.$watch('host.Id', function (hostId) {

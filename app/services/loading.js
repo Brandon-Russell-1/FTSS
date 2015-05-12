@@ -10,7 +10,8 @@ FTSS.ng.service('loading', [
 		 * Handles the page loading indicators (mouse & spinner)
 		 * Always determines whether content is visible or not
 		 *
-		 * @param loading
+		 * @name loading
+		 * @param {boolean} updateState
 		 */
 		return function (updateState) {
 

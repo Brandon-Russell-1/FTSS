@@ -18,6 +18,9 @@ FTSS.ng.service('utilities', [
 
 		var _jobs = [],
 
+			/**
+			 * @name utilities
+			 */
 			_self = this,
 
 			_completed = {
@@ -28,7 +31,8 @@ FTSS.ng.service('utilities', [
 		/**
 		 * Collects async operations that are only executed once the page is initialized
 		 *
-		 * @param job
+		 * @name utilities#addAsync
+		 * @param {Function} job
 		 */
 		this.addAsync = function (job) {
 
@@ -43,7 +47,9 @@ FTSS.ng.service('utilities', [
 
 		/**
 		 * Disables the page spinner/loading functions and marks everything as complete
-		 * @param callback
+		 *
+		 * @name utilities#setLoaded
+		 * @param {Function} callback
 		 */
 		this.setLoaded = function (callback) {
 
@@ -61,6 +67,8 @@ FTSS.ng.service('utilities', [
 
 		/**
 		 * Used to create a permaLink for a given page for bookmarking/sharing
+		 *
+		 * @name utilities#setPermaLink
 		 */
 		this.setPermaLink = function () {
 
@@ -85,18 +93,20 @@ FTSS.ng.service('utilities', [
 
 		/**
 		 * Performs our page navigation function
-		 * @param pg
+		 *
+		 * @name utilities#navigate
+		 * @param {String} page
 		 */
-		this.navigate = function (pg) {
+		this.navigate = function (page) {
 
 			// Only navigate for a different page
-			if (pg !== $rootScope.ftss.viewTitle) {
+			if (page !== $rootScope.ftss.viewTitle) {
 
 				loading(true);
 
 				$rootScope.ftss.searchText = '';
 
-				$location.path('/' + pg);
+				$location.path('/' + page);
 
 			}
 
@@ -105,6 +115,7 @@ FTSS.ng.service('utilities', [
 		/**
 		 * Modal dialog helper
 		 *
+		 * @name utilities#modal
 		 * @param template
 		 * @param $scope
 		 */
@@ -126,35 +137,24 @@ FTSS.ng.service('utilities', [
 		};
 
 		/**
-		 * Our app-wide alert notification system, this will eventually replace all the other message garbage polluting MainController
+		 * Our app-wide alert notification system
 		 */
 		window.$alert = this.alert = (function () {
 
-			var builder;
-
-			builder = function (opts) {
-
-				$alert(_.defaults(opts || {}, {
-					'title'    : 'Record Updated!',
-					'content'  : 'Your changes were saved successfully.',
-					'placement': 'top-right',
-					'type'     : 'success',
-					'duration' : 3,
-					'show'     : true
-				}));
-
-			};
-
 			return {
 
+				// @name utilities.alert.generic
 				'generic': builder,
 
+				// @name utilities.alert.create
 				'create': function () {
 					builder({'title': 'Record Created!'});
 				},
 
+				// @name utilities.alert.update
 				'update': builder,
 
+				// @name utilities.alert.error
 				'error': function (err) {
 
 					_self.errorHandler(err);
@@ -167,6 +167,23 @@ FTSS.ng.service('utilities', [
 					});
 				}
 			};
+
+			/**
+			 *
+			 * @param {Object} opts
+			 */
+			function builder(opts) {
+
+				$alert(_.defaults(opts || {}, {
+					'title'    : 'Record Updated!',
+					'content'  : 'Your changes were saved successfully.',
+					'placement': 'top-right',
+					'type'     : 'success',
+					'duration' : 3,
+					'show'     : true
+				}));
+
+			}
 
 		}());
 
@@ -187,6 +204,7 @@ FTSS.ng.service('utilities', [
 		 *
 		 * deepRead(data, "a1.b2.c2.any.random.number.of.non-existant.properties") => false
 		 *
+		 * @name utilities#deepRead
 		 * @param {object} data - The collection to iterate over
 		 * @param {string} expression - The string expression to evaluate
 		 *
@@ -211,6 +229,8 @@ FTSS.ng.service('utilities', [
 		/**
 		 *  Generates a date offset UUID for our photo
 		 *  http://stackoverflow.com/a/8809472/467373
+		 *
+		 * @name utilities#generateUUID
 		 */
 		this.generateUUID = function () {
 			var d = new Date().getTime();
@@ -225,6 +245,7 @@ FTSS.ng.service('utilities', [
 		/**
 		 * Automatically uploads diagnostic info in the background when errors occur
 		 *
+		 * @name utilities#errorHandler
 		 * @param err
 		 */
 		this.errorHandler = function (err) {
@@ -254,6 +275,7 @@ FTSS.ng.service('utilities', [
 		/**
 		 * Performs highlighting of matched search tags to allow users to see exactly what search terms had hits
 		 *
+		 * @name utilities#tagHighlight
 		 * @param {Array} [data] - the data returned from SharePoint.read()
 		 */
 		this.tagHighlight = function (data) {
@@ -328,8 +350,9 @@ FTSS.ng.service('utilities', [
 		/**
 		 * Delete old class data from the recordset before processing
 		 *
-		 * @param data
-		 * @param daysToKeep
+		 * @name utilities#purgeOldClasses
+		 * @param {Object} data
+		 * @param {Number} daysToKeep
 		 */
 		this.purgeOldClasses = function (data, daysToKeep) {
 
@@ -348,6 +371,7 @@ FTSS.ng.service('utilities', [
 		 *
 		 * http://stackoverflow.com/a/2901298/467373
 		 *
+		 * @name utilities#prettyNumber
 		 * @param x Number the number to chop up
 		 * @returns {*} String the pretty version of our number
 		 */
@@ -361,6 +385,11 @@ FTSS.ng.service('utilities', [
 		/**
 		 * Performs the final page initialization.  This is called by multiple async operations so we must
 		 * make several checks before running.
+		 *
+		 * @name utilities#initPage
+		 *
+		 * @param {String} action
+		 * @param {boolean} pending
 		 */
 		this.initPage = function (action, pending) {
 

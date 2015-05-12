@@ -41,7 +41,8 @@ FTSS.ng.service('controllerHelper', [
 				 * Creates a $scope.$watcher to perform actions on change.  This function will call sharePoint.read() and pass
 				 * the returned data to a promise, then().
 				 *
-				 * @param String prop the $scope property to watch, "loaded" will be a bind-once watcher, "filter" will stay
+				 * @name controllerHelper#bind
+				 * @param {String} watchTarget prop the $scope property to watch, "loaded" will be a bind-once watcher, "filter" will stay
 				 * bound and add the filter to model.params.$filter before passing the promise.
 				 *
 				 * @returns {{then: 'then'}}
@@ -151,6 +152,7 @@ FTSS.ng.service('controllerHelper', [
 				/**
 				 * Initializes the received data and calls any extra init functions from the controller
 				 *
+				 * @name controllerHelper#initialize
 				 * @param data
 				 * @returns {{then: 'then'}}
 				 */
@@ -194,6 +196,7 @@ FTSS.ng.service('controllerHelper', [
 
 				/**
 				 *
+				 * @name controllerHelper#process
 				 * @param data
 				 */
 				'process': function (data) {
@@ -213,6 +216,7 @@ FTSS.ng.service('controllerHelper', [
 				 * Controller Post-Processor
 				 * Here we setup sifter() for full-text searching
 				 *
+				 * @name controllerHelper#postProcess
 				 * @param data
 				 */
 				'postProcess': function (data) {
@@ -388,6 +392,7 @@ FTSS.ng.service('controllerHelper', [
 				 * & update actions and fire an optional post-processor to do more fancy stuff with the data from the
 				 * parent controller
 				 *
+				 * @name controllerHelper#edit
 				 * @param callback Function acts as a data post-processor for the calling controller to manipulate modal data
 				 * @returns {Function}
 				 */
@@ -450,6 +455,8 @@ FTSS.ng.service('controllerHelper', [
 				 *
 				 * This is FTSS's version of a record deletion; the record Archived attribute is flipped with this function
 				 * to mark as archived/deleted
+				 *
+				 * @name controllerHelper#archive
 				 */
 				'archive': function () {
 
@@ -502,6 +509,7 @@ FTSS.ng.service('controllerHelper', [
 				/**
 				 * Low-level CRUD wrapper
 				 *
+				 * @name controllerHelper#_postCRUD
 				 * @param data
 				 * @param callback
 				 * @param noProcess
@@ -525,6 +533,7 @@ FTSS.ng.service('controllerHelper', [
 				/**
 				 * Low-level Create wrapper
 				 *
+				 * @name controllerHelper#_create
 				 * @param send
 				 * @param callback
 				 * @param noProcess
@@ -550,6 +559,7 @@ FTSS.ng.service('controllerHelper', [
 				/**
 				 * Low-level Update wrapper
 				 *
+				 * @name controllerHelper#_update
 				 * @param scope
 				 * @param send
 				 * @param callback
@@ -590,6 +600,7 @@ FTSS.ng.service('controllerHelper', [
 				/**
 				 * Inline update wrapper for items that should be updated after a change automatically
 				 *
+				 * @name controllerHelper#inlineUpdate
 				 * @param field
 				 * @param callback
 				 */
@@ -611,6 +622,7 @@ FTSS.ng.service('controllerHelper', [
 				/**
 				 * Performs our update to the SP model.  Sends only changes to the server for efficiency and handles update response
 				 *
+				 * @name controllerHelper#update
 				 * @param scope
 				 * @returns {Function}
 				 */

@@ -8,6 +8,10 @@ FTSS.ng.service('geodata', [
 
 			var _self = this;
 
+			/**
+			 * @name geodata#index
+			 * @type Object
+			 */
 			this.index = {
 				"Altus AFB"                                       : [34.661713, -99.282616],
 				"Anacostia NSF"                                   : [38.856586, -77.009483],
@@ -605,6 +609,10 @@ FTSS.ng.service('geodata', [
 				"Youngstown ARS"                                  : [41.25742, -80.679474]
 			};
 
+			/**
+			 * name geodata#map
+			 * @type {Array}
+			 */
 			this.map = _.map(_self.index, function (row, key) {
 
 				return {
@@ -621,6 +629,7 @@ FTSS.ng.service('geodata', [
 			/**
 			 * Calculate distance between two coordinates
 			 *
+			 * @name geodata#distanceCalc
 			 * @param start
 			 * @param end
 			 * @returns {number}
@@ -652,6 +661,12 @@ FTSS.ng.service('geodata', [
 				}
 			};
 
+			/**
+			 * @name geodata#distances
+			 * @param row
+			 * @param start
+			 * @param end
+			 */
 			this.distances = function (row, start, end) {
 
 				// attemp  Cartesian calculation for a distance estimate

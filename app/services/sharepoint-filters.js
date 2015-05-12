@@ -9,6 +9,7 @@ FTSS.ng.service('sharepointFilters', [
 
 		"use strict";
 
+		// @name sharepointFilters
 		var _self = this,
 
 			_filterMaps = {
@@ -29,6 +30,10 @@ FTSS.ng.service('sharepointFilters', [
 			};
 
 
+		/**
+		 * @name sharepointFilters#map
+		 * @returns {*}
+		 */
 		this.map = function () {
 
 			return _filterMaps[$location.path().split('/')[1]];
@@ -37,6 +42,8 @@ FTSS.ng.service('sharepointFilters', [
 
 		/**
 		 * When the view is updated, this will update the page-specific filters for tagBox or SearchBox
+		 *
+		 * @name sharepointFilters#refresh
 		 */
 		this.refresh = (function () {
 
@@ -76,6 +83,7 @@ FTSS.ng.service('sharepointFilters', [
 		 *
 		 * Converts user-selected tags{} into the SharePoint friendly filter query
 		 *
+		 * @name sharepointFilters#compile
 		 * @param tags Object
 		 * @returns {*}
 		 */

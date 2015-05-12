@@ -283,8 +283,8 @@
 	/**
 	 * Allows us to capture a copy of the model without corrupting the original (immutable models FTW)
 	 *
-	 * @param  modelName String
-	 * @returns model Object
+	 * @param {String} modelName
+	 * @returns {Object} model
 	 */
 	FTSS.models = function (modelName) {
 

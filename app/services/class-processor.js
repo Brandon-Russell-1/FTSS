@@ -4,12 +4,18 @@ FTSS.ng.service('classProcessor', [
 
 	'dateTools',
 
+	/**
+	 * @name classProcessor
+	 */
 	function (dateTools) {
-
-		"use strict";
 
 		var _self = this;
 
+		/**
+		 * Performs conversion of scheduled class data from JSON to a downloadable CSV file
+		 *
+		 * @name classProcessor#csvExport
+		 */
 		this.csvExport = function () {
 
 			var scope = this,
@@ -73,6 +79,7 @@ FTSS.ng.service('classProcessor', [
 		/**
 		 * Cache Filler adds any missing cache lookups
 		 *
+		 * @name classProcessor#cacheFiller
 		 * @param row
 		 */
 		this.cacheFiller = function (row) {
@@ -119,6 +126,8 @@ FTSS.ng.service('classProcessor', [
 
 		/**
 		 * Simple request cache filler
+		 *
+		 * @name classProcessor#requestProcessor
 		 */
 		this.requestProcessor = function (requests) {
 
@@ -126,6 +135,13 @@ FTSS.ng.service('classProcessor', [
 
 		};
 
+		/**
+		 * Re-decorate our request item with cache/style/count info
+		 *
+		 * @name classProcessor#singleRequestProcess
+		 * @param {Object} request
+		 * @returns {Object} request
+		 */
 		this.singleRequestProcess = function (request) {
 
 			// Get the Host info from cache
@@ -168,6 +184,10 @@ FTSS.ng.service('classProcessor', [
 
 		};
 
+		/**
+		 * @name classProcessor#processRow
+		 * @param row
+		 */
 		this.processRow = function (row) {
 
 			// For fake courses (unavalability events), we only need to load a few pieces of data
@@ -262,6 +282,12 @@ FTSS.ng.service('classProcessor', [
 
 		};
 
+		/**
+		 * @name classProcessor#getOpenSeats
+		 * @param data
+		 * @param countOnly
+		 * @returns {*}
+		 */
 		this.getOpenSeats = function (data, countOnly) {
 
 			// Only attempt this if a CourseID exists

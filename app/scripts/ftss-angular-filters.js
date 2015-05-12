@@ -7,7 +7,6 @@
 
 	"use strict";
 
-
 	/**
 	 * Description:
 	 *     removes white space from text. useful for html values that cannot have spaces

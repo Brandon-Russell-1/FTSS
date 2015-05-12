@@ -8,6 +8,9 @@ FTSS.ng.service('dateTools', [
 
 		    _familyDay = 'AETC Family Day',
 
+			/**
+			 * @name dateTools
+			 */
 		    _self = this,
 
 		    /**
@@ -54,6 +57,7 @@ FTSS.ng.service('dateTools', [
 		/**
 		 * Calendar-friendly list of holidays and AETC down days
 		 *
+		 * @name dateTools#downDays
 		 * @type {Array}
 		 */
 		this.downDays = _.map(_downDays, function (label, date) {
@@ -69,6 +73,7 @@ FTSS.ng.service('dateTools', [
 		/**
 		 * Simple array of down days in the format YYYY-MM-DD
 		 *
+		 * @name dateTools#downDaysSimple
 		 * @type {Array}
 		 */
 		this.downDaysSimple = _.keys(_downDays);
@@ -76,6 +81,7 @@ FTSS.ng.service('dateTools', [
 		/**
 		 * Convert a _y2k day offset to the actual day
 		 *
+		 * @name dateTools#startDayFinder
 		 * @param days
 		 * @returns {*}
 		 */
@@ -88,8 +94,9 @@ FTSS.ng.service('dateTools', [
 		/**
 		 * Convert a moment to the _y2k day offset
 		 *
-		 * @param start
-		 * @returns {*}
+		 * @name dateTools#startDayCreator
+		 * @param {moment} start
+		 * @returns {Number} startOffset
 		 */
 		this.startDayCreator = function (start) {
 
@@ -100,7 +107,8 @@ FTSS.ng.service('dateTools', [
 		/**
 		 * Create a text date range from a start/end pair
 		 *
-		 * @param row
+		 * @name dateTools#dateRange
+		 * @param {Object} row
 		 */
 		this.dateRange = function (row) {
 
@@ -117,7 +125,8 @@ FTSS.ng.service('dateTools', [
 		/**
 		 * Check if this is a down day (holiday/family day)
 		 *
-		 * @param date
+		 * @name datetools#isDownDay
+		 * @param {moment} date
 		 * @returns boolean
 		 */
 		this.isDownDay = function (date) {
@@ -129,7 +138,7 @@ FTSS.ng.service('dateTools', [
 		/**
 		 * Check if this is a weekend
 		 *
-		 * @param date
+		 * @param {moment} date
 		 * @returns {boolean}
 		 */
 		this.isWeekend = function (date) {

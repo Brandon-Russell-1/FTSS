@@ -84,6 +84,7 @@ FTSS.ng.service('courseNumberParser', [
 
 		/**
 		 * Takes a course number and parses the official AETC MDS based off the course number
+		 * @name courseNumberParser
 		 */
 		return function(course) {
 
