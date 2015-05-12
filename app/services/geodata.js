@@ -638,8 +638,8 @@ FTSS.ng.service('geodata', [
 
 				if (start && end) {
 
-					start = JSON.parse('[' + start + ']');
-					end = JSON.parse('[' + end + ']');
+					start = _self.index[start] || JSON.parse('[' + start + ']');
+					end = _self.index[end] || JSON.parse('[' + end + ']');
 
 					var deg2rad = function (deg) {
 						return deg * (Math.PI / 180);
@@ -669,14 +669,14 @@ FTSS.ng.service('geodata', [
 			 */
 			this.distances = function (row, start, end) {
 
-				// attemp  Cartesian calculation for a distance estimate
-				var d = _self.distanceCalc(start, end) || 'unknown';
+				// attempt Cartesian calculation for a distance estimate (except local)
+				var d = (start === end) ? 1 : _self.distanceCalc(start, end);
 
-				// If the results aren't valid, just set distanceInt to past the Sun--yes, overkill?
-				row.distanceInt = parseInt(d, 10) || 99999999;
+				// Need this as a number for sorting
+				row.distanceInt = parseInt(d, 10);
 
 				// we can't just use toLocale() thanks to our favorite browser (IE)...grrrr
-				row.distance = utilities.prettyNumber(d) + ' miles'
+				row.distance = row.distanceInt ? (row.distanceInt < 50 ? 'local' : utilities.prettyNumber(d) + ' miles') : '';
 
 			}
 
