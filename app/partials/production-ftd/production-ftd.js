@@ -22,6 +22,8 @@ FTSS.ng.controller(
 			// We don't kill ourselves with watchers, so let's see all the classes
 			$scope.ftss.pageLimit = 9999;
 
+			$scope.export = classProcessor.csvExport;
+
 			$scope.ftd ? getProductionData() : utilities.addAsync(getProductionData);
 
 			function getProductionData() {
