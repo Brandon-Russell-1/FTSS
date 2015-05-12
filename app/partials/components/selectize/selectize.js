@@ -24,10 +24,11 @@
 		                   caches[opts.select], function (row) {
 
 			return {
+				'sort'  : row[opts.sort],
 				'label' : row.label,
 				'search': row.search,
 				'Id'    : row.Id
-			}
+			};
 
 		});
 
@@ -579,14 +580,16 @@
 						if (attrs.bind) {
 
 							opts = builder(scope, {
-								'label'   : attrs.label,
-								'inline'  : attrs.hasOwnProperty('inline'),
-								'remember': attrs.remember,
-								'watch'   : attrs.watch,
-								'select'  : attrs.selectize,
-								'field'   : attrs.bind,
-								'create'  : attrs.hasOwnProperty('create'),
-								'maxItems': parseInt(attrs.max) || (attrs.hasOwnProperty('multiple') ? 999 : 1)
+								'sort'     : attrs.sort,
+								'sortField': attrs.sort && 'sort',
+								'label'    : attrs.label,
+								'inline'   : attrs.hasOwnProperty('inline'),
+								'remember' : attrs.remember,
+								'watch'    : attrs.watch,
+								'select'   : attrs.selectize,
+								'field'    : attrs.bind,
+								'create'   : attrs.hasOwnProperty('create'),
+								'maxItems' : parseInt(attrs.max) || (attrs.hasOwnProperty('multiple') ? 999 : 1)
 							});
 
 						} else {
