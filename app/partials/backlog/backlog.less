@@ -1,61 +1,6 @@
 @import (reference) "../../../bower_components/bootstrap/less/variables.less";
 @import (reference) "../../styles/mixins.less";
 
-.btn-label {
-	.lbl-search {
-		margin-bottom: 0;
-	}
-}
-
-#dragIcon {
-	position: absolute;
-	top: 20%;
-	left: 30%;
-	font-size: 12em;
-	opacity: .75;
-	display: none;
-}
-
-.dragover {
-	#dragIcon {
-		display: block;
-	}
-}
-
-.btnFake {
-	display: inline-block;
-	padding: 6px 12px;
-	margin-bottom: 0;
-	font-size: 14px;
-	font-weight: normal;
-	line-height: 1.42857143;
-	text-align: center;
-	white-space: nowrap;
-	vertical-align: middle;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	background-image: none;
-	border: 1px solid transparent;
-	border-radius: 4px;
-}
-
-.btnFake span {
-	vertical-align: text-bottom;
-}
-
-#scrollTarget {
-	margin-top: 50px; margin-left: 25%;
-	width: 74%;
-	height: ~'calc(100% - 75px)';
-	.no-pad {
-		& > .alert {
-			width: 100%;
-		}
-	}
-}
-
 #backlogRequests {
 	position: absolute;
 	right: 5px;
@@ -110,13 +55,29 @@
 
 #backlog {
 
-	.wide .item right {
+	#dragIcon {
+		position: absolute;
+		top: 20%;
+		left: 30%;
+		font-size: 12em;
+		opacity: .75;
+		display: none;
+	}
+
+	.dragover {
+		#dragIcon {
+			display: block;
+		}
+	}
+
+	.item right {
 		display: none;
 	}
 
 	#pageActions {
 		display: none !important;
 	}
+
 	#content {
 		overflow: hidden;
 	}
@@ -147,15 +108,34 @@
 			.panel-heading {
 				font-size: 1.5em;
 				background: @classOpenSeats;
-
-				.count {
-					font-weight: 800;
-					font-size: 1.5em;
-					line-height: .9em;
-					padding-right: .25em;
+				
+				.min-max {
+					font-size:.85em;
+					margin-left:.75em;
+					line-height: 1.6em;
 				}
 			}
 
+		}
+
+		.count {
+			font-weight: 800;
+			font-size: 1.75em;
+			line-height: .75em;
+			padding-right: .25em;
+		}
+
+		.courseTitle {
+			font-style: italic;
+			font-size: 1.25em;
+			letter-spacing: .1em;
+			margin-bottom: 1em;
+			
+			.pull-right {
+				font-style: normal;
+				letter-spacing: normal;
+				font-weight: 700;
+			}
 		}
 
 		#over, #under { display: none; }
@@ -202,110 +182,6 @@
 
 		}
 
-		.courseTitle {
-			font-style: italic;
-			font-size: 1.25em;
-			letter-spacing: .1em;
-			margin-bottom: 1em;
-		}
 	}
 
-	#tdyOrLocal svg {
-		top: 4px;
-		font-size: 1.5em;
-	}
-
-	.pad1 {
-		padding: 1%;
-	}
-}
-
-#main-stats.slideOut {
-	transition: 500ms ease;
-	left: 100%;
-	#backlogStats {
-		left: -40px;
-	}
-}
-
-.animateColor {
-	transition: background 3s ease-in;
-}
-
-.animateColorFast {
-	transition: background 500ms;
-}
-
-.h4 {
-	select {
-		font-size: 18px;
-	}
-	.icon-plane {
-		position: relative;
-		top: -.3em;
-		left: .2em;
-	}
-	.btnFake {
-		transition: all 500ms ease !important;
-		.icon-exclamation-circle {
-			display: none;
-		}
-		.icon-plane {
-			transition: opacity 500ms ease;
-			width: 0;
-			opacity: 0;
-		}
-		.bigLetter {
-			border-right: 1px solid white;
-			font-size: 2em;
-			line-height: .75em;
-			padding-right: .35em;
-			margin-right: .35em;
-			& + {
-				span {
-					font-size: 1.25em;
-					position: relative;
-					top: .15em;
-					& + {
-						span {
-							font-size: 1.3em;
-							position: relative;
-							top: .25em;
-						}
-					}
-				}
-			}
-		}
-	}
-	.btn-danger {
-		.icon-exclamation-circle {
-			top: -.3em;
-			position: relative;
-			display: inline;
-		}
-	}
-	.btn-warning {
-		.icon-plane {
-			transition: opacity 500ms ease;
-			opacity: 1;
-			width: 2em;
-		}
-	}
-}
-
-.soft-bottom-border {
-	line-height: 1.42857143;
-	padding: 6px;
-	vertical-align: bottom;
-	margin-bottom: 5px;
-	font-weight: bold;
-	font-size: 1em;
-}
-
-#stats898 {
-	input {
-		margin-left: 2%;
-		line-height: normal;
-		font-weight: normal;
-	}
 }

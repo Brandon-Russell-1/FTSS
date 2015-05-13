@@ -24,7 +24,7 @@ FTSS.ng.controller(
 
 					'sort': 'Number',
 
-					'group': 'detRequest.Base',
+					'group': 'MDS',
 
 					'model': 'requirements_stats',
 
@@ -32,12 +32,6 @@ FTSS.ng.controller(
 
 					'finalProcess': function (groups) {
 
-						$scope.flatData = [];
-
-						// Make a flat copy of our data forth main list
-						_.each(groups, function (group) {
-							$scope.flatData = $scope.flatData.concat(group);
-						});
 
 					}
 
@@ -154,7 +148,7 @@ FTSS.ng.controller(
 				$scope.$watch('data.targetFTD', function (ftd) {
 
 					// Bind the unit.courses to coursesDropdown for selectize
-					$scope.coursesDropdown = caches.Units[ftd].Courses;
+					$scope.coursesDropdown = ftd && caches.Units[ftd].Courses;
 
 				});
 
