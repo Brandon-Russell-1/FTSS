@@ -224,30 +224,9 @@
 
 		    },
 
-		    'requirements': {
-
-			    'cache' : true,
-			    'source': 'Requirements',
-			    'params': {
-				    '$expand': 'CreatedBy',
-				    '$select': [
-					    'UnitId',
-					    'HostId',
-					    'DateNeeded',
-					    'Requirements_JSON',
-					    'ApprovedCC',
-					    'ApprovedMAJCOM',
-					    'Funded',
-					    'TDY',
-					    'Notes',
-					    'CreatedBy/Name',
-					    'CreatedBy/WorkEMail'
-				    ]
-			    }
-		    },
-
 		    'requirements_stats': {
 
+			    'cache': true,
 			    'source': 'RequirementsStats',
 			    'params': {
 				    '$select': [
