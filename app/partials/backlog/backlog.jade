@@ -10,12 +10,11 @@ mixin wizardRow(text)
 .col-lg-12
     .wizard
         ul.steps
-            li(class='{{getProgress(0)}}'): +wizardRow('Choose a FTD')
-            li(class='{{getProgress(1)}}'): +wizardRow('Choose a Month')
-            li(class='{{getProgress(2)}}'): +wizardRow('Identify Courses')
-            li(class='{{getProgress(3)}}'): +wizardRow('Add Students')
-            li(class='{{getProgress(4)}}'): +wizardRow('Verify Request')
-            li(class='{{getProgress(5)}}'): +wizardRow('Send to FTD')
+            li(ng-class='progress.ftd'): +wizardRow('Choose a FTD')
+            li(ng-class='progress.month'): +wizardRow('Choose a Month')
+            li(ng-class='progress.courses'): +wizardRow('Identify Courses')
+            li(ng-class='progress.seats'): +wizardRow('Identify Requirements')
+            li(ng-class='progress.submit'): +wizardRow('Submit for Verification/Approval')
 
 .clearfix
 
@@ -83,49 +82,47 @@ mixin wizardRow(text)
                         .true PRIORITY COURSE
                         .false Regular Course
 
-                    .row
+                    #reqs898
+                        table.table.table-split
+                            thead
+                                tr
+                                    th.hide
+                                    th Priority<br>Course
+                                    th Total<br>Backlog
+                                    th Priority<br>Backlog
+                                    th Seats<br>Needed
+                            tbody
+                                tr
+                                    td.hide
+                                    td
+                                        .checkbox(ng-model='row.Priority', bs-checkbox)
+                                            .yes.css-label
+                                            .no.css-label
+                                    td: input.form-control(ng-model='row.backlog', type='number', min='0', max='999', required)
+                                    td: input.form-control(ng-model='row.backlogPriority', type='number', min='0', max='999', required)
+                                    td: input.form-control(ng-model='row.required', type='number', min='0', max='99', required, ng-change='countSeats()')
 
-                        .col-lg-6
-                            table.table.table-split#reqs898
-                                thead
-                                    tr
-                                        th.hide
-                                        th.w5 Priority
-                                        th.w20 Total Backlog
-                                        th.w20 Priority Backlog
-                                        th.w20 Seats Needed
-                                tbody
-                                    tr
-                                        td.hide
-                                        td
-                                            .checkbox(ng-model='row.Priority', bs-checkbox)
-                                                .yes.css-label
-                                                .no.css-label
-                                        td: input.form-control(ng-model='row.backlog', type='number', min='0', max='999', required)
-                                        td: input.form-control(ng-model='row.backlogPriority', type='number', min='0', max='999', required)
-                                        td: input.form-control(ng-model='row.required', type='number', min='0', max='99', required)
+                        .text-danger.text-center
+                            em#under FYI, you're under the student minimum for this course
 
-                            .text-danger.text-center
-                                em#under FYI, you're under the student minimum for this course
+                    #stats898
+                        table.table.table-split
+                            thead
+                                tr
+                                    th
+                                    th(ng-repeat='label in monthLabels', ng-bind-html='label|trust_html')
 
-                        .col-lg-6
-                            table.table.table-split#stats898
-                                thead
-                                    tr
-                                        th
-                                        th(ng-repeat='label in monthLabels') {{label}}
+                            tbody
 
-                                tbody
+                                tr
+                                    td Seats<br>Requested
+                                    td(ng-repeat='i in [0,1,2]')
+                                        input.form-control(ng-model='row.History[i][0]', type='number', min='0', max='99', required)
 
-                                    tr
-                                        td Requested
-                                        td(ng-repeat='i in [0,1,2]')
-                                            input.form-control(ng-model='row.History[i][0]', type='number', min='0', max='99', required)
-
-                                    tr
-                                        td Given
-                                        td(ng-repeat='i in [0,1,2]')
-                                            input.form-control(ng-model='row.History[i][1]', type='number', min='0', max='99', required)
+                                tr
+                                    td Seats<br>Given
+                                    td(ng-repeat='i in [0,1,2]')
+                                        input.form-control(ng-model='row.History[i][1]', type='number', min='0', max='99', required)
 
 
 

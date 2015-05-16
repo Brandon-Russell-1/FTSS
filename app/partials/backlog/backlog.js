@@ -22,6 +22,16 @@ FTSS.ng.controller(
 
 				loading(true);
 
+				$scope.progress = {
+
+					'ftd'    : 'pending',
+					'month'  : 'pending',
+					'courses': 'pending',
+					'seats'  : 'pending',
+					'submit' : 'pending'
+
+				};
+
 				$scope.history = {};
 
 				// Load the host data
@@ -59,6 +69,10 @@ FTSS.ng.controller(
 
 				$scope.$watch('data.targetFTD', function (ftd) {
 
+					$scope.progress.ftd = ftd ? 'complete' : 'active';
+					$scope.progress.month = ftd ? 'complete' : 'pending';
+					$scope.progress.courses = ftd ? 'active' : 'pending';
+
 					if (ftd) {
 
 						// Bind the unit.courses to coursesDropdown for selectize
@@ -91,52 +105,26 @@ FTSS.ng.controller(
 
 				});
 
+				$scope.countSeats = function () {
 
-				/**
-				 * Used by the requirements wizard to report current progress for the user
-				 *
-				 * @param step
-				 * @returns {string}
-				 */
-				$scope.getProgress = function (step) {
+					var allHaveSeats = true;
 
-					var map = [
+					$scope.totalCount = 0;
 
-						$scope.data.targetFTD,
+					_.each($scope.groups, function (group) {
 
-						$scope.data.month,
+						var required = _(group).pluck('required');
 
-						($scope.ftss.itemCount.value > 0),
+						allHaveSeats = allHaveSeats && required.all();
 
-						$scope.groups ? _($scope.groups).pluck('required').sum() : false,
+						$scope.totalCount += required.sum();
+					});
 
-						(($scope.requests || {}).count > 0)
-
-					];
-
-					switch (step) {
-
-						case 0:
-							return map[0] ? 'complete' : 'active';
-
-						case 1:
-							return !map[0] ? 'pending' :
-
-							       map[1] ? 'complete' : 'active';
-
-						case 2:
-							return (!map[0] || !map[1]) ? 'pending' :
-
-							       map[2] ? 'complete' : 'active';
-
-						case 3:
-							return (!map[0] || !map[1] || !map[2]) ? 'pending' :
-
-							       map[3] ? 'complete' : 'active';
-
-						case 4:
-							return _.all(map) ? 'active' : 'pending';
-
+					if ($scope.totalCount && allHaveSeats) {
+						$scope.progress.seats = 'complete';
+						$scope.progress.submit = 'active';
+					} else {
+						$scope.progress.submit = 'pending';
 					}
 
 				};
@@ -152,7 +140,7 @@ FTSS.ng.controller(
 							labels = $scope.monthLabels = [];
 
 						_.times(3, function () {
-							labels.push(instance.add(1, 'months').format('MMM YYYY'));
+							labels.push(instance.add(1, 'months').format('MMM<br>YYYY'));
 						});
 
 						processCourseRequirements();
@@ -167,6 +155,8 @@ FTSS.ng.controller(
 
 					text = text || $scope.courses;
 
+					$scope.progress.courses = text ? 'complete' : $scope.data.targetFTD ? 'active' : 'pending';
+
 					if ($scope.loaded && self && text) {
 
 						var refMonth = $scope.data.month.clone().add(-5, 'months'),
@@ -178,6 +168,8 @@ FTSS.ng.controller(
 							courses = {};
 
 						$scope.courses = text;
+
+						$scope.progress.seats = ($scope.progress.courses === 'complete') ? 'active' : 'pending';
 
 						// Iterate over all the requirements
 						_.each(text, function (courseId) {
