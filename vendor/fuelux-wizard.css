@@ -71,12 +71,12 @@
 
 .wizard ul li.complete {
     color: #468847;
-    background: #dff0d8;
+    background: rgb(205,229,205);
 }
 
 
 .wizard ul li.complete .chevron:before {
-    border-left: 14px solid #dff0d8;
+    border-left: 14px solid rgb(205,229,205);
 }
 
 .wizard ul li.active {
@@ -86,10 +86,6 @@
 
 .wizard ul li.active .chevron:before {
     border-left: 14px solid #f1f6fc;
-}
-
-.wizard ul li .badge {
-    margin-right: 8px;
 }
 
 .wizard ul li:first-child {
@@ -142,12 +138,4 @@
 
 .step-content .active .btn-group .active {
     display: inline-block;
-}
-
-.complete .badge {
-    background-color: #468847;
-}
-
-.active .badge {
-    background-color: #3a87ad;
 }
