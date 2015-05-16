@@ -97,6 +97,24 @@
 
 		.wrapped {
 			margin-top: 50px;
+
+			#leftColumn {
+				position: fixed;
+				width: 300px;
+				left: 193px;
+				top: 135px;
+				bottom: 15px;
+				z-index: 200;
+			}
+
+			#rightColumn {
+				position: absolute;
+				width: ~"calc(100% - 350px)";
+				right: 15px;
+				top: 0;
+				bottom: 15px;
+			}
+
 		}
 
 		.panel-default {
@@ -104,14 +122,15 @@
 			border-radius: 5px 5px 0 0;
 			margin-bottom: 15px;
 			background: #f9f9f9;
+			position: relative;
 
 			.panel-heading {
 				font-size: 1.5em;
-				background: @classOpenSeats;
-				
+				background: rgba(76, 174, 76, .75);
+
 				.min-max {
-					font-size:.85em;
-					margin-left:.75em;
+					font-size: .85em;
+					margin-left: .75em;
 					line-height: 1.6em;
 				}
 			}
@@ -121,8 +140,12 @@
 		.count {
 			font-weight: 800;
 			font-size: 1.75em;
-			line-height: .75em;
-			padding-right: .25em;
+			padding-right: .5em;
+			line-height: .8em;
+			color: #fff;
+			text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4),
+			0px 8px 13px rgba(0, 0, 0, 0.1),
+			0px 18px 23px rgba(0, 0, 0, 0.1);
 		}
 
 		.courseTitle {
@@ -130,7 +153,7 @@
 			font-size: 1.25em;
 			letter-spacing: .1em;
 			margin-bottom: 1em;
-			
+
 			.pull-right {
 				font-style: normal;
 				letter-spacing: normal;
@@ -138,16 +161,94 @@
 			}
 		}
 
-		#over, #under { display: none; }
+		#reqs898 input,
+		#stats898 input {
+			width: 4em !important;
+			text-align: center;
+			font-weight: 700;
+			font-size: 1.25em;
+			border-width: 1px;
+			border-style: solid;
+		}
 
-		.over #over, .under:not(.empty) #under { display: block }
+		#stats898 {
+			margin-top: 1.35em;
+		}
 
-		.under .panel-heading { background: @classUnderBooked }
-		.over .panel-heading { background: @classUnderBooked }
-		.empty .panel-heading { background: @instructorUnavailable; }
+		#reqs898 td:last-child {
+			width: 6em;
+			text-align: center;
+		}
+		/*
+				#reqs898 input {
+					font-size:2em;
+					height: 2em;
+				}*/
+
+		textarea {
+			width: 100%;
+			height: 6em;
+		}
+
+		.panel-default:not(:hover) {
+			input, textarea {
+				background: none !important;
+				border-color: transparent !important;
+				outline: none !important;
+				box-shadow: none;
+			}
+		}
+
+		.form-control {
+			border-radius: 5px;
+		}
+
+		 #under { display: none; }
+
+		.panel-heading {
+			transition: all ease 750ms;
+		}
+
+		.checkbox {
+			zoom: 1.5;
+			margin: 0;
+			cursor: pointer;
+			.css-label {
+				margin: 0 auto;
+			}
+
+		}
+
+		.under:not(.empty) #under { display: block; margin-bottom: 1em }
+
+		.under .panel-heading { background: rgba(240, 173, 78, .75) }
+		.empty .panel-heading { background: rgba(170, 170, 170, .75); }
+
+		#priority {
+			letter-spacing: .15em;
+
+			.true {
+				font-weight: 700;
+				letter-spacing: .2em;
+			}
+
+			&:not(.active) {
+				background: #ddd;
+				color: #222;
+			}
+
+			&:not(.active) .true,
+			&.active .false {
+				display: none;
+			}
+		}
 
 		.datepicker {
 			z-index: 1 !important;
+
+			.btn-primary {
+				background: #555 !important;
+			}
 		}
 
 		.selectize-input input {
@@ -170,10 +271,18 @@
 			.selectize-control {
 
 				.selectize-dropdown {
-					width: 300% !important;
+					position: fixed;
+					left: 510px !important;
+					top: 115px !important;
+					bottom: 0px !important;
+					width: ~"calc(100% - 510px)" !important;
+					z-index: 100;
+					overflow: auto;
 
 					.selectize-dropdown-content {
 						width: 100% !important;
+						height: 100% !important;
+						overflow: visible;
 					}
 
 				}

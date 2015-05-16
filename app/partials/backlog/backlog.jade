@@ -22,7 +22,7 @@ mixin wizardRow(text)
 .wrapped.no-add.no-pad(ng-any-drop)
 
 
-    .col-lg-3
+    #leftColumn
 
         br
 
@@ -42,13 +42,13 @@ mixin wizardRow(text)
         br
 
         #coursePicker.pds(ng-if='data.targetFTD')
-            select.wide(selectize='coursesDropdown', bind='data.Course_Requirements', multiple, remember='898', placeholder='Identify Courses')
+            select(selectize='coursesDropdown', bind='data.Course_Requirements', multiple, remember='898', placeholder='Identify Courses')
 
             .text-info.info.italics.pull-right
                 +icon('info-circle')
                 small These courses will be remembered next month
 
-    .col-lg-9
+    #rightColumn
 
         #dragIcon: +icon('insert')
 
@@ -63,11 +63,13 @@ mixin wizardRow(text)
             .panel-default.am-fade-and-slide-right(id='{{row.PDS}}',
                                     ng-repeat='row in group track by row.Id',
                                     ng-form='modal',
-                                    ng-class='{empty:!row.peopleCount,under:getUnder(row),over:getOver(row)}')
+                                    ng-class='{empty:!row.required,under:getUnder(row)}')
+
+
 
                 .panel-heading
-                    .pull-left.count {{row.peopleCount}}
-                    .pull-left | {{row.PDS}} - {{row.Number}}
+                    .pull-left.count {{row.required}}
+                    .pull-left {{row.PDS}} - {{row.Number}}
                     .pull-left.min-max ({{row.Min}} Min / {{row.Max}} Max)
                     .pull-right {{row.imds_g081}}
                     .clearfix
@@ -77,39 +79,55 @@ mixin wizardRow(text)
                     .courseTitle {{row.Title}}
                         .pull-right {{row.Days}} Days
 
-                    .btn.btn-primary(ng-model='row.Priority',
-                                        bs-checkbox,
-                                        data-true-value='Priority Course',
-                                        data-false-value='Regular Course') Priority
+                    //#priority.btn.btn-info(ng-model='row.Priority', bs-checkbox)
+                        .true PRIORITY COURSE
+                        .false Regular Course
 
                     .row
-                        .col-lg-7
-                            select.wide(selectize='people', max='99', parent='row', placeholder='Add student names, search by last name, first name')
 
-                            .text-danger.am-fade-and-slide-bottom.pull-right
-                                em#over FYI, you've exceeded this course's max capacity
-                                em#under FYI, you're under the student minimum for this course
-
-                        .col-lg-5
-
-                            table.table.table-split#stats898
+                        .col-lg-6
+                            table.table.table-split#reqs898
+                                thead
+                                    tr
+                                        th.hide
+                                        th.w5 Priority
+                                        th.w20 Total Backlog
+                                        th.w20 Priority Backlog
+                                        th.w20 Seats Needed
                                 tbody
                                     tr
-                                        td.w30 Backlog
-                                        td.w70
-                                            input.col-lg-5(ng-model='row.History.r[$index]', placeholder='Normal')
-                                            .col-lg-1
-                                            input.col-lg-5(ng-model='row.History.b[$index]', placeholder='Priority')
+                                        td.hide
+                                        td
+                                            .checkbox(ng-model='row.Priority', bs-checkbox)
+                                                .yes.css-label
+                                                .no.css-label
+                                        td: input.form-control(ng-model='row.backlog', type='number', min='0', max='999', required)
+                                        td: input.form-control(ng-model='row.backlogPriority', type='number', min='0', max='999', required)
+                                        td: input.form-control(ng-model='row.required', type='number', min='0', max='99', required)
 
-                                    tr(ng-repeat='label in monthLabels')
-                                        td.w30 {{label}}
-                                        td.w70
-                                            input.col-lg-5(ng-model='row.History.r[$index]', placeholder='Requested')
-                                            .col-lg-1
-                                            input.col-lg-5(ng-model='row.History.b[$index]', placeholder='Given')
+                            .text-danger.text-center
+                                em#under FYI, you're under the student minimum for this course
 
-                        .clearfix
+                        .col-lg-6
+                            table.table.table-split#stats898
+                                thead
+                                    tr
+                                        th
+                                        th(ng-repeat='label in monthLabels') {{label}}
 
-                        br
+                                tbody
+
+                                    tr
+                                        td Requested
+                                        td(ng-repeat='i in [0,1,2]')
+                                            input.form-control(ng-model='row.History[i][0]', type='number', min='0', max='99', required)
+
+                                    tr
+                                        td Given
+                                        td(ng-repeat='i in [0,1,2]')
+                                            input.form-control(ng-model='row.History[i][1]', type='number', min='0', max='99', required)
+
+
 
                     textarea.form-control(ng-model='row.Notes', placeholder='Type any notes for this course here')
+
