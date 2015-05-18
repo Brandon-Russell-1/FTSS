@@ -159,7 +159,7 @@ FTSS.ng.controller(
 
 					if ($scope.loaded && self && text) {
 
-						var refMonth = $scope.data.month.clone().add(-5, 'months'),
+						var refMonth = moment($scope.data.month).clone().add(-5, 'months'),
 
 							months = _.times(3, function () {
 								return refMonth.add(1, 'months').format('YYYY.MM');
