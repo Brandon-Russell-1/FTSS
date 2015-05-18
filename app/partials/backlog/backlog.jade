@@ -62,9 +62,7 @@ mixin wizardRow(text)
             .panel-default.am-fade-and-slide-right(id='{{row.PDS}}',
                                     ng-repeat='row in group track by row.Id',
                                     ng-form='modal',
-                                    ng-class='{empty:!row.required,under:getUnder(row)}')
-
-
+                                    ng-class='{empty:!row.required,under:row.required<row.Min,over:row.required>row.Max}')
 
                 .panel-heading
                     .pull-left.count {{row.required}}
@@ -77,10 +75,6 @@ mixin wizardRow(text)
 
                     .courseTitle {{row.Title}}
                         .pull-right {{row.Days}} Days
-
-                    //#priority.btn.btn-info(ng-model='row.Priority', bs-checkbox)
-                        .true PRIORITY COURSE
-                        .false Regular Course
 
                     #reqs898
                         table.table.table-split
@@ -103,7 +97,9 @@ mixin wizardRow(text)
                                     td: input.form-control(ng-model='row.required', type='number', min='0', max='99', required, ng-change='countSeats()')
 
                         .text-danger.text-center
-                            em#under FYI, you're under the student minimum for this course
+                            em#under This class may not be built do a seat minimum of {{row.Min}}
+                            em#over This may require more than one class due to a seat maximum of {{row.Max}}
+
 
                     #stats898
                         table.table.table-split

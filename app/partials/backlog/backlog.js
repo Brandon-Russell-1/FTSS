@@ -129,8 +129,6 @@ FTSS.ng.controller(
 
 				};
 
-				$scope.getUnder = function (row) { return row.required < row.Min };
-
 				$scope.$watch('data.month', function (month) {
 
 					if (month) {
