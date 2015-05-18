@@ -107,27 +107,9 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 x 574
                 y 120
-            value FTD
-            format
-                datatype string
-                presentation
-                    casetype upper
-            justify right
-        field(sid='FTD')
-            scrollhoriz wordwrap
-            scrollvert fixed
-            value {{To}}
-            format
-                datatype string
-                constraints
-                    mandatory on
-                presentation
-                    casetype upper
-            itemlocation
-                x 617
-                y 120
-            next CAFMCL
-            previous HOST
+            value FTD: {{To}}
+            justify left
+
         data(sid='disk2')
             filename disk.png
             mimetype image/png
@@ -156,28 +138,11 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
                 | +fq8AAAAAElFTkSuQmCC
         label(sid='HOST_LABEL')
             itemlocation
-                x 50
+                x 0
                 y 120
-            value MTS
-            format
-                datatype string
-                presentation
-                    casetype upper
-            justify right
-        field(sid='HOST')
-            scrollhoriz wordwrap
-            scrollvert fixed
-            value {{From}}
-            format
-                datatype string
-                constraints
-                    mandatory on
-                presentation
-                    casetype upper
-            itemlocation
-                x 102
-            next FTD
-            previous REQUESTOR
+            value Host Unit:  {{From}}
+            justify left
+
         button(sid='SIGNATURE1')
             itemlocation
                 x 617
@@ -282,27 +247,14 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 x 487
                 y 1
-                width 121
-            value Requestor
+                width 450
+            value Signed By {{Creator}}
             format
                 datatype string
                 presentation
                     casetype upper
             justify right
-        field(sid='REQUESTOR')
-            scrollhoriz wordwrap
-            scrollvert fixed
-            value {{Creator}}
-            format
-                datatype string
-                constraints
-                    mandatory on
-                presentation
-                    casetype upper
-            itemlocation
-                x 617
-            next HOST
-            previous MONTH
+
         data(sid='Header1')
             filename Header.jpg
             mimetype image/jpeg

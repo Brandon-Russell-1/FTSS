@@ -56,14 +56,15 @@
 							});
 
 
-							_.each(data.Requirements, function (course) {
+							_.each(data.Requirements, function (course, index) {
 
 								course.offset = offset;
 								course.offsetTitle = offsetTitle;
-								course.cafmcl = course.Priority ? 'on' : 'off';
+								course.offsetLine = (index < 1) ? 265 : offset - 25;
+								course.cafmcl = course.Priority ? '*' : '';
 
-								course.stats1 = course.History[1].join('/');
-								course.stats2 = course.History[2].join('/');
+								course.stats1 = course.History[1].join('/').replace('0/0', '0');
+								course.stats2 = course.History[2].join('/').replace('0/0', '0');
 								course.stats3 = course.required;
 								course.Notes = course.Notes || '';
 
