@@ -48,6 +48,8 @@ mixin wizardRow(text)
                 small These courses will be remembered next month. Search by PDS, MDS, AFSC, Number, Title, IMDS or G081 codes.
 
 
+        #totals(ng-if='totalCount') TOTAL: {{data.Course_Requirements.length}} COURSES / {{totalCount}} SEATS
+
     #rightColumn
 
         #dragIcon: +icon('insert')
