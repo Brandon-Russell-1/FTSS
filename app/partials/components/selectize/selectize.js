@@ -356,6 +356,7 @@
 							course.text = [
 								'pds:' + course.PDS,
 								'mds:' + course.MDS,
+								course.imds_g081.replace(/\s/g, ''),
 								course.Number,
 								course.Title
 							].join(' ');
