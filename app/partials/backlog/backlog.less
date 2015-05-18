@@ -144,11 +144,11 @@
 			}
 
 			th {
-				font-variant: small-caps!important;
+				font-variant: small-caps !important;
 				text-transform: none;
 				font-size: 1.25em;
 				text-align: left;
-				padding-left: .5em!important;
+				padding-left: .5em !important;
 			}
 
 			td input {
@@ -180,14 +180,14 @@
 				font-weight: 700;
 			}
 		}
-		
+
 		#reqs898, #stats898 {
 			min-width: 30em;
 			max-width: 48%;
 			width: 40%;
 			float: left;
 		}
-		
+
 		#stats898 {
 			float: right;
 		}
@@ -237,7 +237,7 @@
 			border-radius: 5px;
 		}
 
-		 #under { display: none; }
+		#under, #over { display: none; }
 
 		.panel-heading {
 			transition: all ease 750ms;
@@ -254,28 +254,18 @@
 
 		}
 
-		.under:not(.empty) #under { display: block; margin-bottom: 1em }
+		.under:not(.empty) #under,
+		.over:not(.empty) #over {
+			display: block;
+			margin-bottom: 1em
+		}
 
 		.under .panel-heading { background: rgba(240, 173, 78, .75) }
 		.empty .panel-heading { background: rgba(170, 170, 170, .75); }
 
 		#priority {
-			letter-spacing: .15em;
-
-			.true {
-				font-weight: 700;
-				letter-spacing: .2em;
-			}
-
-			&:not(.active) {
-				background: #ddd;
-				color: #222;
-			}
-
-			&:not(.active) .true,
-			&.active .false {
-				display: none;
-			}
+			font-weight: 700;
+			letter-spacing: .2em;
 		}
 
 		.datepicker {
@@ -324,6 +314,15 @@
 
 			}
 
+		}
+
+		#totals {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			color: #999;
+			font-size: 1.35em;
+			text-align: center;
 		}
 
 	}
