@@ -20,7 +20,7 @@ FTSS.ng.controller(
 
 			function generateRequirements() {
 
-				loading(true);
+				$scope.totalCount = 0;
 
 				$scope.progress = {
 

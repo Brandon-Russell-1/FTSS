@@ -14,7 +14,11 @@ mixin wizardRow(text)
             li(ng-class='progress.month'): +wizardRow('Choose a Month')
             li(ng-class='progress.courses'): +wizardRow('Identify Courses')
             li(ng-class='progress.seats'): +wizardRow('Identify Requirements')
-            li(ng-class='progress.submit'): +wizardRow('Submit for Verification/Approval')
+            li(ng-class='progress.submit'): +wizardRow('Sign 898')
+
+        .actions.btn.btn-success.btn-labeled.hide(ng-class='progress.submit')
+            span.btn-label.white: +icon('check-circle')
+            span.text(e898) &nbsp;&nbsp;Sign & Submit
 
 .clearfix
 

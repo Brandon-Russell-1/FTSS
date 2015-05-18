@@ -18,45 +18,68 @@
 			function ($templateCache) {
 
 				return {
-					'restrict': 'E',
+					'restrict': 'A',
 					'link'    : function ($scope, $el) {
 
-						var wrapper = $templateCache.get('/partials/e898-wrapper.html'),
+						$el.bind('click', function () {
 
-						    header = $templateCache.get('/partials/e898-header.html'),
+							var wrapper = $templateCache.get('/partials/e898-wrapper.html'),
 
-						    courseRow = $templateCache.get('/partials/e898-course.html'),
+								header = $templateCache.get('/partials/e898-header.html'),
 
-						    data = angular.copy($scope.data),
+								courseRow = $templateCache.get('/partials/e898-course.html'),
 
-						    offset = 272,
+								data = {
 
-						    offsetTitle = 311,
+									'To'          : caches.Units[$scope.data.targetFTD].LongName,
+									'From'        : $scope.myHost.Unit,
+									'Month'       : $scope.data.month.format('MMM-YYYY'),
+									'Creator'     : $scope.user.short,
+									'Date'        : moment().format('D MMM YYYY'),
+									'Stats1'      : $scope.monthLabels[1].split('<br>')[0],
+									'Stats2'      : $scope.monthLabels[2].split('<br>')[0],
+									'Stats3'      : $scope.data.month.format('MMM'),
+									'Requirements': []
+								},
 
-						    formData = _.template(header)(data),
+								offset = 272,
 
-						    courseData = '';
+								offsetTitle = 311,
 
-						_.each(data.Requirements, function (course) {
+								formData = _.template(header)(data),
 
-							course.offset = offset;
-							course.offsetTitle = offsetTitle;
-							course.cafmcl = course.priority ? 'yes' : 'no';
+								courseData = '';
 
-							courseData += _.template(courseRow)(course)
+							// Copy all our requirements into a single array
+							_.each($scope.groups, function (group) {
+								data.Requirements = data.Requirements.concat(group);
+							});
 
-								.replace(/_INDEX_/g, course.course.Id);
 
-							offset += 115;
-							offsetTitle += 115;
+							_.each(data.Requirements, function (course) {
+
+								course.offset = offset;
+								course.offsetTitle = offsetTitle;
+								course.cafmcl = course.Priority ? 'on' : 'off';
+
+								course.stats1 = course.History[1].join('/');
+								course.stats2 = course.History[2].join('/');
+								course.stats3 = course.required;
+								course.Notes = course.Notes || '';
+
+								courseData += _.template(courseRow)(course)
+
+									.replace(/_INDEX_/g, course.Id);
+
+								offset += 115;
+								offsetTitle += 115;
+
+							});
+
+							var blob = new Blob([formData.replace('<!-- COURSEDATA-->', courseData)], {type: "application/x-xfdl"});
+							saveAs(blob, '898.xfdl');
 
 						});
-
-						$el[0].outerHTML = wrapper
-
-							.replace('{{formData}}', formData
-
-								         .replace('<!-- COURSES-->', courseData));
 
 					}
 				};
