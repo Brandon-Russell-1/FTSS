@@ -107,20 +107,15 @@ FTSS.ng.controller(
 
 				$scope.countSeats = function () {
 
-					var allHaveSeats = true;
-
 					$scope.totalCount = 0;
 
 					_.each($scope.groups, function (group) {
 
-						var required = _(group).pluck('required');
+						$scope.totalCount += _(group).pluck('required').sum();
 
-						allHaveSeats = allHaveSeats && required.all();
-
-						$scope.totalCount += required.sum();
 					});
 
-					if ($scope.totalCount && allHaveSeats) {
+					if ($scope.totalCount) {
 						$scope.progress.seats = 'complete';
 						$scope.progress.submit = 'active';
 					} else {
@@ -153,7 +148,7 @@ FTSS.ng.controller(
 
 					text = text || $scope.courses;
 
-					$scope.progress.courses = text ? 'complete' : $scope.data.targetFTD ? 'active' : 'pending';
+					$scope.progress.courses = text && text.length ? 'complete' : $scope.data.targetFTD ? 'active' : 'pending';
 
 					if ($scope.loaded && self && text) {
 
