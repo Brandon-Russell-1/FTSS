@@ -31,24 +31,28 @@
 
 								data = {
 
+									'Email'       : caches.Units[$scope.data.targetFTD].Email,
 									'To'          : caches.Units[$scope.data.targetFTD].LongName,
 									'From'        : $scope.myHost.Unit,
-									'Month'       : $scope.data.month.format('MMM-YYYY'),
+									'Month'       : $scope.data.month.format('MMMM YYYY'),
 									'Creator'     : $scope.user.short,
 									'Date'        : moment().format('D MMM YYYY'),
 									'Stats1'      : $scope.monthLabels[1].split('<br>')[0],
 									'Stats2'      : $scope.monthLabels[2].split('<br>')[0],
 									'Stats3'      : $scope.data.month.format('MMM'),
-									'Requirements': []
+									'Requirements': [],
+									'Encoded'     : window.btoa(JSON.stringify($scope.data))
 								},
 
-								offset = 272,
+								offset = 0,
 
-								offsetTitle = 311,
+								offsetTitle = 39,
 
-								formData = _.template(header)(data),
+								courseData = '',
 
-								courseData = '';
+								ftdSigs = '';
+
+							data.FileName = _.template('{{From}} 898 for {{To}} - {{Month}}.xfdl')(data);
 
 							// Copy all our requirements into a single array
 							_.each($scope.groups, function (group) {
@@ -60,7 +64,7 @@
 
 								course.offset = offset;
 								course.offsetTitle = offsetTitle;
-								course.offsetLine = (index < 1) ? 265 : offset - 25;
+								course.offsetLine = (index < 1) ? -10 : offset - 25;
 								course.cafmcl = course.Priority ? '*' : '';
 
 								course.stats1 = course.History[1].join('/').replace('0/0', '0');
@@ -75,10 +79,19 @@
 								offset += 115;
 								offsetTitle += 115;
 
+								ftdSigs += '<itemref>Given' + course.Id + '</itemref><itemref>Notes' + course.Id + '</itemref>';
+
 							});
 
-							var blob = new Blob([formData.replace('<!-- COURSEDATA-->', courseData)], {type: "application/x-xfdl"});
-							saveAs(blob, '898.xfdl');
+							var blob = new Blob([
+
+								_.template(header)(data)
+									.replace('<!-- FTDSIGN-->', ftdSigs)
+									.replace('<!-- COURSEDATA-->', courseData)
+
+							], {type: 'application/vnd.xfdl'});
+
+							saveAs(blob, data.FileName);
 
 						});
 

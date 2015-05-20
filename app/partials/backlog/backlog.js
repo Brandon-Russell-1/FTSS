@@ -63,6 +63,9 @@ FTSS.ng.controller(
 					// Default to 3 months out
 					'month': moment().add(3, 'months'),
 
+					// The requesting unit
+					'host' : $scope.host.Id,
+
 					// Default to the host's local FTD
 					'targetFTD': $scope.myFTD && $scope.myFTD.Id
 				};

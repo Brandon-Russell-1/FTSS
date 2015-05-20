@@ -11,7 +11,10 @@ label(sid='PDS_INDEX_')
     itemlocation
         x 58
         y {{offset}}
-        width 42
+        width 48
+    fontinfo
+        fontname Cambria
+        size 12
 
 label(sid='CAFMCL_INDEX_')
     itemlocation
@@ -54,31 +57,46 @@ label(sid='Month2_INDEX_')
         width 59
     justify center
 
-field(sid='Month3_INDEX_')
-    scrollhoriz never
-    scrollvert never
+label(sid='Month3_INDEX_')
     value {{stats3}}
     itemlocation
         x 497
         y {{offset}}
         width 59
-    format
-        datatype string
-        presentation
-            casetype upper
-        constraints
-            mandatory on
     justify center
-    next CourseNotes_INDEX_
+    fontinfo
+        fontname Calibri
+        size 12
+        effect bold
 
 label(sid='CourseTitle_INDEX_')
     value {{Title}}
     itemlocation
-        x 110
+        x 58
         y {{offsetTitle}}
-        width 445
+        width 432
+    fontinfo
+        fontname Calibri
+        size 11
+        effect italic
 
-field(sid='CourseNotes_INDEX_')
+combobox(sid='Given_INDEX_', appearance='compact')
+    itemlocation
+        x 507
+        y {{offsetTitle}}
+        width 59
+    previous Month3_INDEX_
+    next Notes_INDEX_
+    fontinfo
+        fontname Cambria
+        size 12
+        effect bold
+
+    justify center
+
+    group FTD_RESPONSE
+
+field(sid='Notes_INDEX_')
     scrollhoriz never
     scrollvert fixed
     value Min/Max: {{Min}}/{{Max}}, Days: {{Days}} \r{{Notes}}
@@ -87,7 +105,6 @@ field(sid='CourseNotes_INDEX_')
         y {{offset}}
         width 380
         height 70
-    previous Month3_INDEX_
+    previous Given_INDEX_
     format
         datatype string
-        presentation
