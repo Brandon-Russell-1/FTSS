@@ -11,6 +11,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
                 size 12
             printsettings
                 dialog
+                header
             saveformat application/vnd.xfdl
             ufv_settings
                 menu
@@ -22,11 +23,21 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             label Electronic 898 - Updated 15 May 2015 for FTSS, https://cs1.eis.af.mil/sites/ftss
             designer:pagesize 960;1260
             printbgcolor transparent
+            printsettings
+                header
+                    left {{Month}} 898
+                    middle FROM: {{From}}
+                    right TO: {{To}}
+                footer
+                    left MAT: {{Creator}}
+
+                outputformat pdf
+
         toolbar(sid='TOOLBAR')
             itemlocation
                 x 0
                 y 0
-                height 200
+            bgcolor #eeeeee
 
         label(sid='HeaderLogo')
             itemlocation
@@ -34,7 +45,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
                 x -15
                 y -10
                 height 80
-                width 905
+                width 835
             image PAGE1.Header1
             imagemode clip
 
@@ -56,9 +67,9 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
         button(sid='SAVE1')
             itemlocation
                 within TOOLBAR
-                x 875
+                x 870
                 y -5
-                width 60
+                width 65
                 height 50
             type saveas
             value Save
@@ -73,7 +84,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
                 within TOOLBAR
                 x 807
                 y -5
-                width 60
+                width 70
                 height 50
             type submit
             url mailto:{{Email}}?subject={{From}} 898 for {{Month}}&amp;filename={{FileName}}
@@ -154,16 +165,27 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
                 optiontype triggeritem
                 optiontype coordinates
 
-        label(sid='Notes')
-            value
-                | MTS: Verify this 898 and route for approval IAW AFI 36-2650.  Once signed by the designated approval authority, click the envelope in the top-right corner to send to the FTD for final coordination.
-                | FTD:  Build the classes in FTSS, complete this document and upload to FTSS.
+        label(sid='mtsNotes')
+            value MTS: Verify this 898 and route for approval IAW AFI 36-2650.  Once signed by the designated approval authority, click the envelope in the top-right corner to send to the FTD for final coordination.
             itemlocation
                 within TOOLBAR
                 x 15
                 y 175
                 width 945
                 height 85
+            fontcolor #777777
+            fontinfo
+                fontname Calibri
+                size 11
+
+        label(sid='ftdNotes')
+            value FTD:  Build the classes in FTSS, complete this document and upload to FTSS.
+            itemlocation
+                within TOOLBAR
+                x 15
+                y 230
+                width 945
+                height 50
             fontcolor #777777
             fontinfo
                 fontname Calibri
@@ -183,7 +205,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 within TOOLBAR
                 x 250
-                y 65
+                y 70
                 width 740
             value Created {{Date}} by {{Creator}}
             format
@@ -200,7 +222,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 within TOOLBAR
                 x 7
-                y 264
+                y 274
                 width 42
             value
                 | PRI
@@ -213,7 +235,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 within TOOLBAR
                 x 58
-                y 264
+                y 274
                 width 42
             value
                 | PDS
@@ -226,7 +248,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 within TOOLBAR
                 x 111
-                y 285
+                y 295
                 width 180
             value Course Number
             fontinfo
@@ -238,7 +260,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 within TOOLBAR
                 x 303
-                y 264
+                y 274
                 width 65
             value
                 | Total
@@ -252,7 +274,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 within TOOLBAR
                 x 368
-                y 285
+                y 295
                 width 59
             value {{Stats1}}
             fontinfo
@@ -264,7 +286,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 within TOOLBAR
                 x 426
-                y 285
+                y 295
                 width 73
             value {{Stats2}}
             fontinfo
@@ -276,7 +298,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 within TOOLBAR
                 x 498
-                y 285
+                y 295
                 width 59
             value {{Stats3}}
             fontinfo
@@ -288,7 +310,7 @@ XFDL(xmlns:custom='http://www.ibm.com/xmlns/prod/XFDL/Custom', xmlns:designer='h
             itemlocation
                 within TOOLBAR
                 x 574
-                y 285
+                y 295
                 width 380
             value Remarks
             fontinfo

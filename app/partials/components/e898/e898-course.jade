@@ -57,7 +57,7 @@ label(sid='Month2_INDEX_')
         width 59
     justify center
 
-label(sid='Month3_INDEX_')
+label(sid='Requested_INDEX_')
     value {{stats3}}
     itemlocation
         x 497
@@ -81,6 +81,10 @@ label(sid='CourseTitle_INDEX_')
         effect italic
 
 combobox(sid='Given_INDEX_', appearance='compact')
+    visible(compute='Requested_INDEX_.value == "0" ? "off" : "on"')
+    format
+        constraints
+            mandatory(compute='Requested_INDEX_.value != "0" && SIGNATURE2.signer != "" ? "on" : "off"')
     itemlocation
         x 507
         y {{offsetTitle}}
@@ -91,9 +95,7 @@ combobox(sid='Given_INDEX_', appearance='compact')
         fontname Cambria
         size 12
         effect bold
-
     justify center
-
     group FTD_RESPONSE
 
 field(sid='Notes_INDEX_')

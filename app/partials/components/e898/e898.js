@@ -59,29 +59,40 @@
 								data.Requirements = data.Requirements.concat(group);
 							});
 
+							_(data.Requirements)
 
-							_.each(data.Requirements, function (course, index) {
+								// List our required classes first
+								.sortByOrder(function (row) {
 
-								course.offset = offset;
-								course.offsetTitle = offsetTitle;
-								course.offsetLine = (index < 1) ? -10 : offset - 25;
-								course.cafmcl = course.Priority ? '*' : '';
+									             return (row.required ? 'a' : 'b') + row.PDS;
 
-								course.stats1 = course.History[1].join('/').replace('0/0', '0');
-								course.stats2 = course.History[2].join('/').replace('0/0', '0');
-								course.stats3 = course.required;
-								course.Notes = course.Notes || '';
+								             })
 
-								courseData += _.template(courseRow)(course)
+								// Load fields for the XFDL courses
+								.each(function (course, index) {
 
-									.replace(/_INDEX_/g, course.Id);
+									      course.offset = offset;
+									      course.offsetTitle = offsetTitle;
+									      course.offsetLine = (index < 1) ? -10 : offset - 25;
+									      course.cafmcl = course.Priority ? '*' : '';
 
-								offset += 115;
-								offsetTitle += 115;
+									      course.stats1 = course.History[1].join('/').replace('0/0', '0');
+									      course.stats2 = course.History[2].join('/').replace('0/0', '0');
+									      course.stats3 = course.required;
+									      course.Notes = course.Notes || '';
 
-								ftdSigs += '<itemref>Given' + course.Id + '</itemref><itemref>Notes' + course.Id + '</itemref>';
+									      courseData += _.template(courseRow)(course)
 
-							});
+										      .replace(/_INDEX_/g, course.Id);
+
+									      offset += 115;
+									      offsetTitle += 115;
+
+									      ftdSigs += '<itemref>Given' + course.Id + '</itemref><itemref>Notes' + course.Id + '</itemref>';
+
+								      })
+
+								.value();
 
 							var blob = new Blob([
 
