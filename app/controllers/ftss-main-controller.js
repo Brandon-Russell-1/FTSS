@@ -149,42 +149,9 @@
 
 					FTSS.pasteAction = false;
 
-					logNavigation();
-
 					utilities.initPage();
 
 				});
-
-
-				/**
-				 * Sends user navigation and page-load statistics to our audit list
-				 */
-				function logNavigation() {
-
-					// Wrap in a try/catch as this is just some extra logging info
-					try {
-
-						// Only apply to production app
-						if (PRODUCTION) {
-
-							// Create the basic data to send
-							var send = {
-								'__metadata': 'Audit',
-								'P'         : (window.failover ? 'FAILOVER   ' : '') + location.hash
-							};
-
-							FTSS.performance(send);
-
-							// Send to SP without showing loading bar
-							SharePoint.create(send, null, {'ignoreLoadingBar': true});
-
-						}
-
-					} catch (e) {
-						utilities.errorHandler(e);
-					}
-
-				}
 
 			}
 		]);
