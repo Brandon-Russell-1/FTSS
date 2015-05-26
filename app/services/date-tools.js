@@ -95,10 +95,12 @@ FTSS.ng.service('dateTools', [
 		 * Convert a moment to the _y2k day offset
 		 *
 		 * @name dateTools#startDayCreator
-		 * @param {moment} start
+		 * @param {moment|Number} start The moment object to reference or month offset to start from
 		 * @returns {Number} startOffset
 		 */
 		this.startDayCreator = function (start) {
+
+			start = _.isNumber(start) ? moment().add(start, 'months').startOf('month') : start;
 
 			return start.diff(_y2k, 'days');
 
