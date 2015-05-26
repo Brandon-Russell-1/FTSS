@@ -121,16 +121,17 @@ FTSS.ng.service('utilities', [
 		 */
 		this.modal = function (template, $scope) {
 
-			var scope = $scope.$new();
+			var modal = $modal(
+					{
+						'placement'      : $scope.modalPlacement || 'top',
+						'contentTemplate': '/partials/' + template + '.html',
+						'scope'          : $scope,
+						'show'           : true
+					}),
 
-			scope.modal = $modal(
-				{
-					contentTemplate: '/partials/' + template + '.html',
-					scope          : scope,
-					show           : true
-				});
+				scope = modal.$scope;
 
-			scope.close = scope.modal.destroy;
+			scope.close = modal.destroy;
 
 			return scope;
 
