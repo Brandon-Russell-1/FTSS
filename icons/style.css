@@ -1,0 +1,102 @@
+[class^="icon-"], [class*=" icon-"] {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+/* ================================================================================
+Example showing how to change the color/size of the icons:
+.icon-name {
+	font-size: 32px; // works because "width" & "height" were set using em units
+	color: red; // works because "fill" was set to "currentColor"
+}
+================================================================================ */
+
+.icon-camera {
+	width: 1.0712890625em;
+}
+
+.icon-approve {
+	width: 0.9541015625em;
+}
+
+.icon-deny {
+	width: 0.9541015625em;
+}
+
+.icon-home {
+	width: 1.08984375em;
+}
+
+.icon-share {
+	width: 1.0576171875em;
+}
+
+.icon-asterisk {
+	width: 0.9287109375em;
+}
+
+.icon-times {
+	width: 0.7861328125em;
+}
+
+.icon-check-square-o {
+	width: 0.9287109375em;
+}
+
+.icon-arrow-up {
+	width: 0.9287109375em;
+}
+
+.icon-arrow-down {
+	width: 0.9287109375em;
+}
+
+.icon-plane {
+	width: 0.7861328125em;
+}
+
+.icon-phone {
+	width: 0.7861328125em;
+}
+
+.icon-building-o {
+	width: 0.7861328125em;
+}
+
+.icon-puzzle-piece {
+	width: 0.9287109375em;
+}
+
+.icon-dollar {
+	width: 0.5712890625em;
+}
+
+.icon-af_logo {
+	width: 1.125em;
+}
+
+.icon-question {
+	width: 0.9912109375em;
+}
+
+.icon-reset {
+	width: 0.892578125em;
+}
+
+.icon-wait {
+	width: 1.0830078125em;
+}
+
+.icon-checklist {
+	width: 0.53125em;
+}
+
+.icon-graph_pie {
+	width: 0.9375em;
+}
+
+.icon-instructor_wide {
+	width: 1.0732421875em;
+}
