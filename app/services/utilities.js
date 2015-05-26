@@ -359,9 +359,9 @@ FTSS.ng.service('utilities', [
 
 			var limit = dateTools.startDayCreator(moment().add(0 - daysToKeep, 'days'));
 
-			_.each(data, function (row) {
+			_.each(data, function (row, key) {
 
-				((row.Start + row.Days) < limit) && delete data[row.Id];
+				((row.Start + row.Days) < limit) && delete data[key];
 
 			});
 
