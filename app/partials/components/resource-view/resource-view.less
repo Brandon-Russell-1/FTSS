@@ -140,9 +140,21 @@
 		border: none;
 
 		td:first-child {
-			width: 50px;
+			text-align: left;
+		}
+
+		tr:not(.header) td:first-child {
+			width: 150px;
 			display: block;
 			border: none;
+			font-size: .95em;
+			color: #999;
+			letter-spacing: -.05em;
+			font-weight: 100;
+		}
+		
+		tr:hover td:first-child {
+			color: #000;
 		}
 
 		.event td:first-child:hover {
@@ -200,6 +212,10 @@
 	.header {
 		text-align: center;
 		font-weight: 700;
+
+		td:first-child {
+			padding-top: 2em;
+		}
 	}
 
 	.days {

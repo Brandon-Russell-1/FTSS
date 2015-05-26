@@ -193,7 +193,7 @@
 
 								html.render += '<tr class="event compile" placement="left" bs-popover="\'' +
 								               instructor.overlay +
-								               '\'" custom-class="leftBarOverlayHover"><td></td>' +
+								               '\'" custom-class="leftBarOverlayHover"><td>' + instructor[0].Instructor.Name + '</td>' +
 								               instructor.html +
 								               '</tr>' +
 								               html.spacer;
@@ -298,7 +298,7 @@
 								html.monthHeader += '</tr>';
 
 								html.dayHeader =
-									'<tr class="header days"><td>List<br>View</td>' + html.days.join('') + '</tr>';
+									'<tr class="header days"><td>Instructor</td>' + html.days.join('') + '</tr>';
 
 							}
 
