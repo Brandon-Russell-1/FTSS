@@ -4,6 +4,10 @@ div(ng-if='canEdit'): +addButton('Create Class')
 
 +downloadCSV()
 
+.add-button.btn.btn-labeled.btn-dark.white(ng-if='me.Id', ng-click='unavailable()', style='top:200px;color:#fff!important')
+    span.btn-label: +icon('unavailable')
+    span.text  &nbsp;I'm Not Available On...
+
 .wrapped.addNew
 
     +userInstructions('scheduled_ftd', true)

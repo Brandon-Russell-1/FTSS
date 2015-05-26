@@ -1,0 +1,29 @@
+include ../../mixins
+
+form.form-horizontal(name='modal')
+
+    .modal-header.caps: h3: +icon('unavailable', '{{me.Name}} Not Available')
+
+    .modal-body.uglyGreenButton
+
+        .col-lg-4
+
+            +userInstructions('scheduled_unavailable')
+
+            br
+
+            textarea.form-control(type='text',
+                                    placeholder='Type here to explain the unavailability.',
+                                    ng-model='data.Notes',
+                                    trigger='focus', bs-popover='language.scheduled_edit_na_notes',
+                                    placement='right',
+                                    style='height:150px')
+
+        .col-lg-8
+
+            #instructorCalendar.addEvent(ui-calendar, ng-model='eventsInstructor')
+
+        .clearfix
+
+
+    +modalFooter('Submit', '!data.Start || !data.Days')

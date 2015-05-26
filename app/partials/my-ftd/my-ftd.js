@@ -32,28 +32,12 @@ FTSS.ng.controller(
 
 					'filter': [
 						'UnitId eq ' + $scope.ftd.Id,
-						'Archived ne true'
+						'Start gt ' +  dateTools.startDayCreator(-2)
 					].join(' and ')
 
 				});
 
-				self.bind().then(function (data) {
-
-					// Delete classes that ended more than 30 days aga
-					utilities.purgeOldClasses(data, 3);
-
-					// Finish data binding and processing
-					self.initialize(data).then(function (row) {
-
-						if (row.NA) {
-							row.ClassNotes = '';
-						}
-
-						classProcessor.processRow(row);
-
-					});
-
-				});
+				classProcessor.interleaveRequest(self, $scope);
 
 			}
 

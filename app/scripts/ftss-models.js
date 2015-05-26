@@ -14,250 +14,256 @@
 	// Keep track of today's integer
 	var _today = moment().diff(moment('2000-01-01'), 'days'),
 
-	    // Our internal collection of models--these are immutable! :-)
-	    _models = {
+	// Our internal collection of models--these are immutable! :-)
+		_models = {
 
-		    'users': {
+			'users': {
 
-			    'source': 'UserInformationList',
-			    'params': {
-				    '$select': [
-					    'Name',
-				        'WorkEMail'
-				    ]
-			    }
+				'source': 'UserInformationList',
+				'params': {
+					'$select': [
+						'Name',
+						'WorkEMail'
+					]
+				}
 
-		    },
+			},
 
-		    'catalog': {
+			'catalog': {
 
-			    'cache' : true,
-			    'source': 'MasterCourseList',
-			    'params': {
-				    '$select': [
-					    'PDS',
-					    'Days',
-					    'Hours',
-					    'Min',
-					    'Max',
-					    'Title',
-					    'Number',
-					    'IMDS',
-					    'G081',
-					    'Priority'
-				    ]
-			    }
+				'cache' : true,
+				'source': 'MasterCourseList',
+				'params': {
+					'$select': [
+						'PDS',
+						'Days',
+						'Hours',
+						'Min',
+						'Max',
+						'Title',
+						'Number',
+						'IMDS',
+						'G081',
+						'Priority'
+					]
+				}
 
-		    },
+			},
 
-		    'units': {
+			'units': {
 
-			    'cache' : true,
-			    'source': 'Units',
-			    'params': {
-				    '$select': [
-					    'Base',
-					    'Det',
-					    'Email',
-					    'Phone',
-					    'Location',
-					    'LCode',
-					    'Courses_JSON'
-				    ]
-			    }
+				'cache' : true,
+				'source': 'Units',
+				'params': {
+					'$select': [
+						'Base',
+						'Det',
+						'Email',
+						'Phone',
+						'Location',
+						'LCode',
+						'Courses_JSON'
+					]
+				}
 
-		    },
+			},
 
-		    'hosts': {
+			'hosts': {
 
-			    'cache'  : true,
-			    'source' : 'HostUnits',
-			    'params' : {
-				    '$select': [
-					    'Unit',
-					    'FTD',
-					    'Location',
-					    'Email'
-				    ]
-			    },
-			    'version': 1
+				'cache'  : true,
+				'source' : 'HostUnits',
+				'params' : {
+					'$select': [
+						'Unit',
+						'FTD',
+						'Location',
+						'Email'
+					]
+				},
+				'version': 1
 
-		    },
+			},
 
-		    'instructors': {
+			'instructors': {
 
-			    'cache' : true,
-			    'source': 'Instructors',
-			    'params': {
-				    '$select': [
-					    'UnitId',
-					    'Name',
-					    'Email',
-					    'Photo',
-					    'Archived'
-				    ]
-			    }
+				'cache' : true,
+				'source': 'Instructors',
+				'params': {
+					'$select': [
+						'UnitId',
+						'Name',
+						'Email',
+						'Photo',
+						'Archived'
+					]
+				}
 
-		    },
+			},
 
-		    'requests': {
+			'requests': {
 
-			    'source': 'Requests',
-			    'params': {
-				    '$expand': [
-					    'Class',
-				        'CreatedBy'
-				    ],
-				    '$select': [
-					    'Status',
-					    'HostId',
-					    'UnitId',
-					    'Notes',
-					    'Response',
-					    'Students_JSON',
-					    'Created',
-					    'CreatedBy/Name',
-					    'Class/Id',
-					    'Class/TTMS',
-					    'Class/CourseId',
-					    'Class/Start',
-					    'Class/Days',
-					    'Class/Host',
-					    'Class/Other',
-					    'Class/Approved'
-				    ]
-			    }
+				'source': 'Requests',
+				'params': {
+					'$expand': [
+						'Class',
+						'CreatedBy'
+					],
+					'$select': [
+						'Status',
+						'HostId',
+						'UnitId',
+						'Notes',
+						'Response',
+						'Students_JSON',
+						'Created',
+						'CreatedBy/Name',
+						'Class/Id',
+						'Class/TTMS',
+						'Class/CourseId',
+						'Class/Start',
+						'Class/Days',
+						'Class/Host',
+						'Class/Other',
+						'Class/Approved'
+					]
+				}
 
-		    },
+			},
 
-		    'scheduled': {
+			'scheduled': {
 
-			    'cache' : true,
-			    'source': 'Scheduled',
-			    'params': {
-				    '$select': [
-					    'Archived',
-					    'UnitId',
-					    'CourseId',
-					    'Start',
-					    'Days',
-					    'Hours',
-					    'InstructorId',
-					    'Host',
-					    'Other',
-					    'Approved',
-					    'ClassNotes',
-					    'J4Notes',
-					    'TTMS',
-					    'MTT',
-					    'TS',
-					    'NA',
-				        'Location'
-				    ]
-			    }
+				'cache' : true,
+				'source': 'Scheduled',
+				'params': {
+					'$select': [
+						'UnitId',
+						'CourseId',
+						'Start',
+						'Days',
+						'Hours',
+						'InstructorId',
+						'Host',
+						'Other',
+						'Approved',
+						'ClassNotes',
+						'J4Notes',
+						'TTMS',
+						'MTT',
+						'TS',
+						'Location'
+					]
+				}
 
-		    },
+			},
 
-		    'scheduledSearch': {
+			'scheduledSearch': {
 
-			    'cache' : !PRODUCTION,
-			    'source': 'Scheduled',
-			    'params': {
-				    '$filter': [
-					    'Archived ne true',
-					    'NA ne true',
-					    'Start ge ' + _today
-				    ],
-				    '$select': [
-					    'UnitId',
-					    'MTT',
-					    'CourseId',
-					    'Start',
-					    'Days',
-					    'InstructorId',
-					    'Host',
-					    'Other',
-					    'Approved',
-					    'ClassNotes',
-					    'TTMS',
-					    'TS'
-				    ]
-			    }
+				'cache' : !PRODUCTION,
+				'source': 'Scheduled',
+				'params': {
+					'$filter': ['Start ge ' + _today],
+					'$select': [
+						'UnitId',
+						'MTT',
+						'CourseId',
+						'Start',
+						'Days',
+						'InstructorId',
+						'Host',
+						'Other',
+						'Approved',
+						'ClassNotes',
+						'TTMS',
+						'TS'
+					]
+				}
 
-		    },
+			},
 
-		    'ttms': {
+			'ttms': {
 
-			    'source': 'Scheduled',
-			    'params': {
-				    '$filter': [
-					    // Only items needing action
-					    'TTMS eq null',
-					    // Only items starting after today
-					    'Start gt ' + _today,
-					    // Ignore unavailability and training sessions
-					    'CourseId gt 1',
-					    // Ignore cancelled classes
-					    'Archived ne true'
-				    ],
-				    '$select': [
-					    'UnitId',
-					    'CourseId',
-					    'Start',
-					    'Days',
-					    'ClassNotes',
-					    'J4Notes'
-				    ]
-			    }
+				'source': 'Scheduled',
+				'params': {
+					'$filter': [
+						// Only items needing action
+						'TTMS eq null',
+						// Only items starting after today
+						'Start gt ' + _today,
+						// Ignore training sessions
+						'CourseId gt 1'
+					],
+					'$select': [
+						'UnitId',
+						'CourseId',
+						'Start',
+						'Days',
+						'ClassNotes',
+						'J4Notes'
+					]
+				}
 
-		    },
+			},
 
-		    'courseInvalidate': {
+			'unavailable': {
 
-			    'source': 'Scheduled',
-			    'params': {
-				    '$select': [
-					    'Start',
-					    'TTMS'
-				    ]
-			    }
+				'cache' : true,
+				'source': 'Unavailable',
+				'params': {
+					'$select': [
+						'InstructorId',
+						'Start',
+						'Days'
+					]
+				}
 
-		    },
+			},
 
-		    'requirements_stats': {
+			'courseInvalidate': {
 
-			    'cache': true,
-			    'source': 'RequirementsStats',
-			    'params': {
-				    '$select': [
-					    'Month',
-					    'Data_JSON'
-				    ]
-			    }
+				'source': 'Scheduled',
+				'params': {
+					'$select': [
+						'Start',
+						'TTMS'
+					]
+				}
 
-		    },
+			},
 
-		    'support': {
+			'requirements_stats': {
 
-			    'debounce': 3,
-			    'cache'   : true,
-			    'source'  : 'Support',
-			    'params'  : {
-				    '$expand': 'CreatedBy',
-				    '$select': [
-					    'Page',
-					    'Thread',
-					    'Staff',
-					    'Comment',
-					    'Created',
-					    'CreatedBy/Name',
-					    'CreatedBy/WorkEMail'
-				    ]
-			    }
+				'cache' : true,
+				'source': 'RequirementsStats',
+				'params': {
+					'$select': [
+						'Month',
+						'Data_JSON'
+					]
+				}
 
-		    }
+			},
 
-	    };
+			'support': {
+
+				'debounce': 3,
+				'cache'   : true,
+				'source'  : 'Support',
+				'params'  : {
+					'$expand': 'CreatedBy',
+					'$select': [
+						'Page',
+						'Thread',
+						'Staff',
+						'Comment',
+						'Created',
+						'CreatedBy/Name',
+						'CreatedBy/WorkEMail'
+					]
+				}
+
+			}
+
+		};
 
 	/**
 	 * Allows us to capture a copy of the model without corrupting the original (immutable models FTW)
@@ -265,9 +271,13 @@
 	 * @param {String} modelName
 	 * @returns {Object} model
 	 */
-	FTSS.models = function (modelName) {
+	FTSS.models = function (modelName, filters) {
 
-		return _.cloneDeep(_models[modelName]);
+		var model = _.cloneDeep(_models[modelName]);
+
+		model.params.$filter = _.defaults(filters, model.params.$filter);
+
+		return model;
 
 	};
 

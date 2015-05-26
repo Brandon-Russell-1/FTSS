@@ -2,14 +2,92 @@
 
 FTSS.ng.service('classProcessor', [
 
+	'utilities',
 	'dateTools',
+	'SharePoint',
+	'$q',
 
 	/**
 	 * @name classProcessor
 	 */
-	function (dateTools) {
+		function (utilities, dateTools, SharePoint, $q) {
 
 		var _self = this;
+
+		/**
+		 * Perform data aggregation of classes & instructor availabilitiy
+		 *
+		 * @name classProcessor#interleaveRequest
+		 * @param {ControllerHelper} self
+		 * @param {Scope} $scope
+		 * @param {Boolean} isFTD
+		 * @returns {Promise}
+		 */
+		this.interleaveRequest = function (self, $scope, isFTD) {
+
+			// Use $q.defer for promise-style callback
+			var defer = $q.defer(),
+
+			// THe combined collection of data
+				collection = {},
+
+			// THe model for getting instructor availability
+				unavailableModel = FTSS.models('unavailable', [
+					'Start gt ' + dateTools.startDayCreator(-3),
+					'UnitId eq ' + $scope.ftd.Id
+				].join(' and '));
+
+			isFTD && unavailableModel.params.$select.push('Notes');
+
+			// Execute availability SP call
+			SharePoint.read(unavailableModel).then(dataCombiner);
+
+			// Execute schedule class SP call
+			self.bind().then(dataCombiner);
+
+			// Return our promise
+			return defer.promise;
+
+			/**
+			 * Perform data grouping of class/unavailability
+			 * @param data
+			 */
+			function dataCombiner(data) {
+
+				// Check for first run
+				var empty = _.isEmpty(collection);
+
+				// Add each row to the collection
+				_.each(data, function (row) {
+					// Give us a unique index based off of list(Id) format
+					collection[row.__metadata.uri.split('/').pop()] = row;
+				});
+
+				// On the second run, fire completion
+				if (!empty) {
+
+					// We use async to make sure everything else is loaded (caches/security)
+					utilities.addAsync(function () {
+
+						// Fire our then() callback
+						defer.resolve(collection);
+
+						// Delete classes that ended more than 30 days aga
+						utilities.purgeOldClasses(collection, 3);
+
+						// Finish data binding and processing
+						self.initialize(collection).then(_self.processRow);
+
+						// Get a copy of the data into rawSchedule for showing in modal
+						$scope.rawSchedule = angular.copy(collection);
+
+					});
+
+				}
+
+			}
+
+		};
 
 		/**
 		 * Performs conversion of scheduled class data from JSON to a downloadable CSV file
@@ -188,13 +266,19 @@ FTSS.ng.service('classProcessor', [
 		 * @name classProcessor#processRow
 		 * @param row
 		 */
-		this.processRow = function (row) {
+		this.processRow = function (row, key) {
+
+			row.Key = key;
 
 			// For fake courses (unavalability events), we only need to load a few pieces of data
-			if (row.NA) {
+			if (row.__metadata.type === 'Microsoft.SharePoint.DataService.UnavailableItem') {
+
+				row.NA = true;
 
 				// Add our class for this event
 				row.className = 'ignore';
+
+				row.ClassNotes = row.Notes;
 
 				// Try to load the instructor's data
 				row.Instructor = caches.Instructors[row.InstructorId] || {};

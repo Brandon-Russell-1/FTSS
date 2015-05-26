@@ -493,7 +493,7 @@ FTSS.ng.service('controllerHelper', [
 								data.__metadata.etag = resp.headers('etag');
 
 								// Copy the updated back to the original dataset
-								actions.data[data.Id] = angular.copy(data);
+								actions.data[data.Key || data.Id] = angular.copy(data);
 
 								// Call actions.process() to reprocess the data by our controllers
 								actions.process();
@@ -520,7 +520,7 @@ FTSS.ng.service('controllerHelper', [
 					data.updated = true;
 
 					// Copy the updated back to the original dataset
-					actions.data[data.Id] = angular.copy(data);
+					actions.data[data.Key || data.Id] = angular.copy(data);
 
 					// If there is a callback, then fire it
 					callback && callback(data);
@@ -642,7 +642,7 @@ FTSS.ng.service('controllerHelper', [
 							scope.submitted = true;
 
 							// Keep a copy of the original data for comparison
-							old = actions.data[scope.data.Id] || {};
+							old = actions.data[scope.data.Key || scope.data.Id] || {};
 
 							// Reference l
 							fields = FTSS.models(opts.model).params.$select;
