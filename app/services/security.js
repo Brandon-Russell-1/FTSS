@@ -18,7 +18,7 @@ FTSS.ng.service('security', [
 	 * @param $modal
 	 * @param $rootScope
 	 */
-	function (SharePoint, $modal, $rootScope) {
+		function (SharePoint, $modal, $rootScope) {
 
 		"use strict";
 
@@ -151,49 +151,34 @@ FTSS.ng.service('security', [
 		 */
 		this.checkFTD = function () {
 
+			// Try to match this user to an instructor
+			$rootScope.me = _.find(caches.Instructors, {Email:  _user.email || _user.loginname});
+
+			// See if we already have an FTD in cache
 			$rootScope.ftd = JSON.parse(localStorage.ftssCached_ftd || false);
 
+			// Abort if FTD already loaded
 			if ($rootScope.ftd) return true;
 
-			// Check for email and login name
-			var identifier = _user ?
-
-			                 [
-				                 (_user.email || '').toLowerCase().trim() || false,
-				                 (_user.loginname || '').toLowerCase().trim() || false
-			                 ].filter(function (e) {return e}) : [],
-
-			// First try to load from localStorage, otherwise attempt to load from cache
-				ftd = caches.Instructors && identifier.length && _(caches.Instructors)
-
-						// Remove empty accounts
-						.filter('Email')
-
-						// Try to perform our match against the array elements
-						.find(function (test) {
-
-							      var check = test.Email.toLowerCase().trim();
-							      return (identifier.indexOf(check) > -1);
-
-						      });
-
-			if (ftd) {
+			// If Units are loaded and this user is an instructor
+			if (caches.Units && $rootScope.me) {
 
 				// Load the $rootScope.ftd variable
-				$rootScope.ftd = caches.Units ? caches.Units[ftd.UnitId || ftd.Id] : ftd;
+				$rootScope.ftd = caches.Units[$rootScope.me.UnitId];
 
-				// Push this back to localStorage for future use
+				// Push this back to localStorage for next time
 				localStorage.ftssCached_ftd = JSON.stringify(
 					{
 						'Id'      : $rootScope.ftd.Id,
 						'LongName': $rootScope.ftd.LongName
 					});
 
+				// Hackish, reload the page
 				window.location.reload();
 
 			} else {
 
-				if (identifier && caches.Instructors) {
+				if (caches.Instructors) {
 
 					// If the user was not found, send to switch FTD to check for the FTD role
 					_self.switchContext('ftd');
