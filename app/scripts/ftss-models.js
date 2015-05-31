@@ -271,13 +271,9 @@
 	 * @param {String} modelName
 	 * @returns {Object} model
 	 */
-	FTSS.models = function (modelName, filters) {
+	FTSS.models = function (modelName) {
 
-		var model = _.cloneDeep(_models[modelName]);
-
-		model.params.$filter = _.defaults(filters, model.params.$filter);
-
-		return model;
+		return  _.cloneDeep(_models[modelName]);
 
 	};
 
