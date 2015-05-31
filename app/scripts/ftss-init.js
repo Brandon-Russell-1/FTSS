@@ -14,28 +14,7 @@
 	// Remove our slow load message
 	clearTimeout(window.slowLoad);
 
-	// Attemp to log once and only once our user activity
-	if (PRODUCTION) {
-
-		try {
-
-			_TIMER.add('ftss');
-
-			// Send to SP without showing loading bar
-			SharePoint.create(
-				{
-					'__metadata': 'Audit',
-					'P'         : (window.failover ? 'FAILOVER   ' : '') + location.hash,
-					'D'         : (window.performance.now() > 9999) ? _TIMER.get() : ''
-				},
-
-				null,
-
-				{'ignoreLoadingBar': true});
-
-		} catch (e) {}
-
-	}
+	_TIMER.add('ftss');
 
 	/**
 	 * Create the Angular module & declare dependencies

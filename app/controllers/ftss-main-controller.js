@@ -30,6 +30,27 @@
 
 				_TIMER.add('main');
 
+				// Attempt to log once and only once our user activity
+				if (PRODUCTION) {
+
+					try {
+
+						// Send to SP without showing loading bar
+						SharePoint.create(
+							{
+								'__metadata': 'Audit',
+								'P'         : (window.failover ? 'FAILOVER   ' : '') + location.hash,
+								'D'         : (window.performance.now() > 15000) ? _TIMER.get() : ''
+							},
+
+							null,
+
+							{'ignoreLoadingBar': true});
+
+					} catch (e) {}
+
+				}
+
 				/**
 				 * Performs cache invalidation to fix random caching issues
 				 * @constructor
