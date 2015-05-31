@@ -170,7 +170,7 @@
 		              'baseURL'     : base + 'live/_vti_bin/ListData.svc/',
 		              'user'        : {'url': base + 'live/_vti_bin/UserGroup.asmx'},
 		              'people'      : {'url': 'https://cs1.eis.af.mil/_vti_bin/People.asmx'},
-		              'cacheVersion': 27
+		              'cacheVersion': 29
 
 	              } : {
 
@@ -179,7 +179,7 @@
 		              'baseURL'     : base + 'dev2/_vti_bin/ListData.svc/',
 		              'user'        : {'url': base + 'dev2/_vti_bin/UserGroup.asmx'},
 		              'people'      : {'url': base + 'dev2/_vti_bin/People.asmx'},
-		              'cacheVersion': 27
+		              'cacheVersion': 29
 
 	              });
 
