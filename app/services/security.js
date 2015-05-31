@@ -151,8 +151,12 @@ FTSS.ng.service('security', [
 		 */
 		this.checkFTD = function () {
 
+			var matcher = (_user.email || _user.loginname || '').toLowerCase().trim();
+
 			// Try to match this user to an instructor
-			$rootScope.me = _.find(caches.Instructors, {Email:  _user.email || _user.loginname});
+			$rootScope.me = _.find(caches.Instructors, function (row) {
+				return row.Email.toLowerCase().trim() === matcher;
+			});
 
 			// See if we already have an FTD in cache
 			$rootScope.ftd = JSON.parse(localStorage.ftssCached_ftd || false);
