@@ -18,7 +18,6 @@ FTSS.ng.controller(
 				'Type here to search the schedule.  Examples: MDS:F-15, PDS:RFV, Robins, wire, 2A5*, March.';
 
 			$scope.ftss.hasAlternateView = true;
-			$scope.ftss.hasArchiveOption = true;
 
 			$scope.ftd ? getSchedule() : utilities.addAsync(getSchedule);
 
