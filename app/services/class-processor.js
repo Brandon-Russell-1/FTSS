@@ -32,10 +32,14 @@ FTSS.ng.service('classProcessor', [
 				collection = {},
 
 			// THe model for getting instructor availability
-				unavailableModel = FTSS.models('unavailable', [
-					'Start gt ' + dateTools.startDayCreator(-3),
-					'UnitId eq ' + $scope.ftd.Id
-				].join(' and '));
+				unavailableModel = FTSS.models('unavailable'),
+
+				count = 0;
+
+			unavailableModel.params.$filter = [
+				'Start gt ' + dateTools.startDayCreator(-3),
+				'UnitId eq ' + $scope.ftd.Id
+			].join(' and ');
 
 			isFTD && unavailableModel.params.$select.push('Notes');
 
@@ -54,8 +58,7 @@ FTSS.ng.service('classProcessor', [
 			 */
 			function dataCombiner(data) {
 
-				// Check for first run
-				var empty = _.isEmpty(collection);
+				count++;
 
 				// Add each row to the collection
 				_.each(data, function (row) {
@@ -64,7 +67,7 @@ FTSS.ng.service('classProcessor', [
 				});
 
 				// On the second run, fire completion
-				if (!empty) {
+				if (count > 1) {
 
 					// We use async to make sure everything else is loaded (caches/security)
 					utilities.addAsync(function () {
