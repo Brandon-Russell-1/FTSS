@@ -67,7 +67,7 @@ FTSS.ng.controller(
 
 							var newVal = scope.data,
 
-								oldVal = self.data[newVal.Id] || {};
+								oldVal = self.data[newVal.Key] || {};
 
 							dateTools.dateRange(scope.data);
 
@@ -84,13 +84,6 @@ FTSS.ng.controller(
 										classProcessor.cacheFiller(newVal);
 										scope.data.oldDateRange = oldVal.dateRange;
 										notifier.updateClass(scope.data);
-										break;
-
-									// Course is archived
-									case (newVal.Archived):
-										// Force this date into obscurity (alternate archived process)
-										scope.data.Start = 1;
-										notifier.cancelClass(scope.data);
 
 								}
 
@@ -239,16 +232,26 @@ FTSS.ng.controller(
 
 					};
 
+					/**
+					 * Cancel event
+					 */
 					$scope.cancelEvent = function () {
 
 						var scope = this;
 
+						// We set the start day to 1 to indicate a cancellation
 						self._update(scope, {
 							'__metadata': scope.data.__metadata,
 							'Start'     : 1
 						}, function () {
 
+							// If this is class with a TTMS & not a TS, send an email to J4 about this class
+							scope.data.TTMS && !scope.data.TS && notifier.cancelClass(scope.data);
+
+							// Remore from the model
 							delete self.data[scope.data.Key];
+
+							// Close the dialog
 							scope.close();
 
 						})
