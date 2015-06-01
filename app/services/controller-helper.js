@@ -62,9 +62,14 @@ FTSS.ng.service('controllerHelper', [
 
 					$scope.showHelp = (localStorage['FTSS_show_help_' + page] !== '');
 
-					$scope.hideHelp = function () {
-						$scope.showHelp = localStorage['FTSS_show_help_' + page] = '';
+					$scope.hideHelp = function (always) {
+
+						$scope.showHelp = '';
+
+						if (always) { localStorage['FTSS_show_help_' + page] = '' }
+
 					};
+
 
 					// Return the promise, then()
 					return {

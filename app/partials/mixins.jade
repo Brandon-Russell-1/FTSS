@@ -222,10 +222,10 @@ mixin actions(view, edit, archive, label)
 mixin userInstructions(text, ignore)
     if ignore
         .alert.alert-warning.alert-dismissable(ng-if='showHelp')
-            .close(data-dismiss='alert') &times;
+            .close(ng-click='hideHelp()') &times;
             .pageMessage(user-message=text)
             if ignore
-                .hideHelp.btn.btn-link(ng-click='hideHelp()', data-dismiss='alert') Don't show this anymore
+                .hideHelp.btn.btn-link(ng-click='hideHelp(true)', data-dismiss='alert') Don't show this anymore
             .clearfix
     else
         .alert.alert-warning.alert-dismissable
