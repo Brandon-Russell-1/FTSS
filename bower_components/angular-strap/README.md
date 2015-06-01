@@ -1,4 +1,6 @@
-# [AngularStrap](http://mgcrea.github.io/angular-strap) [![Build Status](http://img.shields.io/travis/mgcrea/angular-strap/master.svg?style=flat)](http://travis-ci.org/mgcrea/angular-strap) [![devDependency Status](http://img.shields.io/david/dev/mgcrea/angular-strap.svg?style=flat)](https://david-dm.org/mgcrea/angular-strap#info=devDependencies) [![Coverage Status](http://img.shields.io/codeclimate/coverage/github/mgcrea/angular-strap.svg?style=flat)](https://codeclimate.com/github/mgcrea/angular-strap) [![Tips](http://img.shields.io/gratipay/mgcrea.svg?style=flat)](https://gratipay.com/mgcrea)
+# [AngularStrap](http://mgcrea.github.io/angular-strap)
+
+[![Build Status](http://img.shields.io/travis/mgcrea/angular-strap/master.svg?style=flat)](http://travis-ci.org/mgcrea/angular-strap) [![devDependency Status](http://img.shields.io/david/dev/mgcrea/angular-strap.svg?style=flat)](https://david-dm.org/mgcrea/angular-strap#info=devDependencies) [![Coverage Status](http://img.shields.io/codeclimate/coverage/github/mgcrea/angular-strap.svg?style=flat)](https://codeclimate.com/github/mgcrea/angular-strap) [![Climate Status](https://img.shields.io/codeclimate/github/mgcrea/angular-strap.svg?style=flat)](https://codeclimate.com/github/mgcrea/angular-strap) [![Tips](http://img.shields.io/gratipay/mgcrea.svg?style=flat)](https://gratipay.com/mgcrea)
 
 [![Banner](http://mgcrea.github.io/angular-strap/images/snippet.png)](http://mgcrea.github.io/angular-strap)
 
@@ -34,6 +36,7 @@ $ bower install angular-strap --save
 >
 ``` html
 <script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
 <script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
 ```
@@ -42,7 +45,7 @@ $ bower install angular-strap --save
 
 >
 ``` js
-angular.module('myApp', ['mgcrea.ngStrap']);
+angular.module('myApp', ['ngAnimate', 'mgcrea.ngStrap']);
 ```
 
 
@@ -54,6 +57,7 @@ AngularStrap is tested with `karma` against the latest stable release of Angular
 
 >
 	$ npm install
+	$ bower install
 	$ gulp test
 
 You can build the latest version using `gulp`.
