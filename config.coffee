@@ -15,7 +15,6 @@ exports.config =
         'js/vendor.js': /^(bower_components|vendor)/
       order :
         before: [
-          'vendor/init_globals.js',
           'bower_components/jquery/dist/jquery.js',
           'app/scripts/angular-sharepoint.js',
           'app/scripts/ftss-init.js'
