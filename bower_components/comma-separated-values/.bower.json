@@ -37,7 +37,6 @@
     "commit": "d36b359824dbc7a5da671cada7de5c89645458c6"
   },
   "_source": "git://github.com/knrz/CSV.js.git",
-  "_target": "~3.6.1",
-  "_originalSource": "comma-separated-values",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "comma-separated-values"
 }
