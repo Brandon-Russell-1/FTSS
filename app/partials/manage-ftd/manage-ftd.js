@@ -56,28 +56,19 @@ FTSS.ng.controller(
 						},
 						'success'    : function () {
 
-							// When complete, remove the spinner and refresh the photo directive
-							var finish = function () {
-
-								spinner.removeClass('submitting');
-								spinner.data().update();
-
-							};
-
 							// Add the new photo URL back to the scope
 							scope.row.Photo = rand;
 
 							// If this an existing item, call inlineUpdate();
-							if (scope.row.Id) {
+							scope.row.Id ? self.inlineUpdate.call(scope, 'Photo', finish) : finish();
 
-								self.inlineUpdate.call(scope, 'Photo', finish);
-
-							} else {
-								finish();
-							}
+							// When complete, remove the spinner and refresh the photo directive
+							function finish() { spinner.removeClass('submitting') }
 
 						},
+
 						error        : utilities.alert.error
+
 					});
 				};
 
