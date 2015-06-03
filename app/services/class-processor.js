@@ -177,9 +177,7 @@ FTSS.ng.service('classProcessor', [
 			// Try to add the instructor data
 			row.Instructor = caches.Instructors[row.InstructorId] || {};
 
-			row.etca = row.Course && row.TTMS ?
-			           'https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id=' + row.Course.Number :
-			           '';
+			row.etca = 'https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id=' + row.Course.Number;
 
 			// Add course data for TS
 			if (row.TS) {

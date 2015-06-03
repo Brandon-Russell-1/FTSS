@@ -12,7 +12,8 @@ td(class='mark {{className}}',  colspan='{{DaysTruncated}}')
 
         .container
 
-            h4.border-bottom {{Course.Number}}{{TTMS}}
+            h4.border-bottom
+                a.btn-link(ng-click='$event.stopPropagation()', href='{{etca}}', target='_blank') {{Course.Number}}{{TTMS}}
                 .pull-right {{dateRange}}
 
             .clearfix
