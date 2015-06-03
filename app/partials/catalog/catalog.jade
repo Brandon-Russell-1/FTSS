@@ -19,13 +19,11 @@ include ../mixins
                     thead: th Course
 
                     tbody
-                        tr.am-slide-top.traverse(ng-repeat='row in group track by row.Id',
-                                                    ng-class='{archived:row.Archived}',
-                                                    ng-dblclick='canEdit && edit(false)',
-                                                    id='row-{{::row.Id}}',
-                                                    placement='left',
-                                                    bs-popover='row.units'
-                                                    custom-class="leftBarOverlayHover")
+                        tr.am-slide-top(ng-repeat='row in group track by row.Id',
+                                            ng-dblclick='canEdit && edit(false)',
+                                            placement='left',
+                                            bs-popover='row.units'
+                                            custom-class="leftBarOverlayHover")
 
                             td.uppercase
 
@@ -36,9 +34,6 @@ include ../mixins
 
                                     .small.pull-right.peek {{::row.imds_g081}}
 
-                                .pull-right.archiveOnly(style='margin-right:10%') *** ARCHIVED COURSE ***
-
                                 .peek.italics.wideText {{::row.Title}}
-
 
     iframe(name='etca') {{::FocusCourse}}

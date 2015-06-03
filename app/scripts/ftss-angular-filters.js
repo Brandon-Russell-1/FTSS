@@ -19,12 +19,6 @@
 		};
 	});
 
-	FTSS.ng.filter('courseNumber', function () {
-		return function (input) {
-			return input || 'Some Random Course?';
-		};
-	});
-
 	FTSS.ng.filter('trust_html',
 	               [
 		               '$sce',
