@@ -3186,7 +3186,7 @@ angular.module('mgcrea.ngStrap.tab', [])
       self.$panes = $scope.$panes = [];
 
       // DEPRECATED: $viewChangeListeners, please use $activePaneChangeListeners
-      // Because we deprecated ngModel usage, we rename viewChangeListeners to 
+      // Because we deprecated ngModel usage, we rename viewChangeListeners to
       // activePaneChangeListeners to make more sense.
       self.$activePaneChangeListeners = self.$viewChangeListeners = [];
 
@@ -3202,7 +3202,7 @@ angular.module('mgcrea.ngStrap.tab', [])
         self.$panes.splice(index, 1);
 
         if (index < activeIndex) {
-          // we removed a pane before the active pane, so we need to 
+          // we removed a pane before the active pane, so we need to
           // decrement the active pane index
           activeIndex--;
         }
@@ -4314,7 +4314,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         }
 
         $tooltip.leave = function() {
-
           clearTimeout(timeout);
           hoverState = 'out';
           if (!options.delay || !options.delay.hide) {
@@ -4331,7 +4330,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
         var _blur;
         var _tipToHide;
         $tooltip.hide = function(blur) {
-
           if(!$tooltip.$isShown) return;
           scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
 
@@ -4474,8 +4472,10 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             if(trigger === 'click') {
               element.on('click', $tooltip.toggle);
             } else if(trigger !== 'manual') {
-              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
-              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
+              // FTSS customization
+              var bindEl = (trigger==='focus' && element.children().length > 0) ? '*': null;
+              element.on(trigger === 'hover' ? 'mouseenter' : 'focus', bindEl, $tooltip.enter);
+              element.on(trigger === 'hover' ? 'mouseleave' : 'blur', bindEl, $tooltip.leave);
               nodeName === 'button' && trigger !== 'hover' && element.on(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
             }
           });
@@ -4488,8 +4488,9 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
             if(trigger === 'click') {
               element.off('click', $tooltip.toggle);
             } else if(trigger !== 'manual') {
-              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
-              element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
+              // FTSS customization
+              var bindEl = (trigger==='focus' && element.children().length > 0) ? '*': element;
+              element.off(trigger === 'hover' ? 'mouseenter' : 'focus', bindEl, $tooltip.enter);
               nodeName === 'button' && trigger !== 'hover' && element.off(isTouch ? 'touchstart' : 'mousedown', $tooltip.$onFocusElementMouseDown);
             }
           }
@@ -4518,7 +4519,6 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
           $timeout(function() {
             // Stop propagation when clicking inside tooltip
             tipElement.on('click', stopEventPropagation);
-
             // Hide when clicking outside tooltip
             $body.on('click', $tooltip.hide);
 

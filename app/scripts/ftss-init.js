@@ -120,8 +120,7 @@
 				angular.extend($popoverProvider.defaults, {
 					'html'     : true,
 					'trigger'  : 'hover',
-					'container': 'body',
-					'autoClose': true
+					'container': 'body'
 				});
 
 			}
