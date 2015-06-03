@@ -1,38 +1,35 @@
-      showScrubber: (svg, glass, axes, data, options, columnWidth) ->
+      showScrubber: (svg, glass, axes, data, options, dispatch, columnWidth) ->
         that = this
         glass.on('mousemove', ->
           svg.selectAll('.glass-container').attr('opacity', 1)
-          that.updateScrubber(svg, d3.mouse(this), axes, data, options, columnWidth)
+          that.updateScrubber(svg, d3.mouse(this), axes, data, options, dispatch, columnWidth)
         )
         glass.on('mouseout', ->
           glass.on('mousemove', null)
           svg.selectAll('.glass-container').attr('opacity', 0)
         )
 
-      getClosestPoint: (values, value) ->
-        # Dichotomy FTW
-        left = 0
-        right = values.length - 1
+      getClosestPoint: (values, xValue) ->
+        # Create a bisector
+        xBisector = d3.bisector( (d) -> d.x ).left
+        i = xBisector(values, xValue)
 
-        i = Math.round((right - left)/2)
-        while true
-          if value < values[i].x
-            right = i
-            i = i - Math.ceil((right-left)/2)
-          else
-            left = i
-            i = i + Math.floor((right-left)/2)
+        # Return min and max if index is out of bounds
+        return values[0] if i is 0
+        return values[values.length - 1] if i > values.length - 1
+        
+        # get element before bisection
+        d0 = values[i - 1]
 
-          if i in [left, right]
-            if Math.abs(value - values[left].x) < Math.abs(value - values[right].x)
-              i = left
-            else
-              i = right
-            break
+        # get element after bisection
+        d1 = values[i]
 
-        return values[i]
+        # get nearest element
+        d = if xValue - d0.x > d1.x - xValue then d1 else d0
 
-      updateScrubber: (svg, [x, y], axes, data, options, columnWidth) ->
+        return d
+
+      updateScrubber: (svg, [x, y], axes, data, options, dispatch, columnWidth) ->
         ease = (element) -> element.transition().duration(50)
         that = this
         positions = []
@@ -46,7 +43,12 @@
 
           item.attr('opacity', 1)
 
-          v = that.getClosestPoint(series.values, axes.xScale.invert(x))
+          xInvert = axes.xScale.invert(x)
+          yInvert = axes.yScale.invert(y)
+
+          v = that.getClosestPoint(series.values, xInvert)
+
+          dispatch.focus(v, series.values.indexOf(v), [xInvert, yInvert])
 
           text = v.x + ' : ' + v.y
           if options.tooltip.formatter
@@ -66,11 +68,11 @@
 
           side = if series.axis is 'y2' then 'right' else 'left'
 
-          x = axes.xScale(v.x)
+          xPos = axes.xScale(v.x)
           if side is 'left'
-            side = 'right' if x + that.getTextBBox(lText[0][0]).x - 10 < 0
+            side = 'right' if xPos + that.getTextBBox(lText[0][0]).x - 10 < 0
           else if side is 'right'
-            side = 'left' if x + sizes.right > that.getTextBBox(svg.select('.glass')[0][0]).width
+            side = 'left' if xPos + sizes.right > that.getTextBBox(svg.select('.glass')[0][0]).width
 
           if side is 'left'
             ease(right).attr('opacity', 0)
@@ -79,7 +81,15 @@
             ease(right).attr('opacity', 1)
             ease(left).attr('opacity', 0)
 
-          positions[index] = {index, x: x, y: axes[v.axis + 'Scale'](v.y + v.y0), side, sizes}
+          positions[index] = {index, x: xPos, y: axes[v.axis + 'Scale'](v.y + v.y0), side, sizes}
+
+          # Use a coloring function if defined, else use a color string value
+          color = if angular.isFunction(series.color) \
+            then series.color(v, series.values.indexOf(v)) else series.color
+          
+          # Color the elements of the scrubber
+          item.selectAll('circle').attr('stroke', color)
+          item.selectAll('path').attr('fill', color)
 
         positions = this.preventOverlapping(positions)
 

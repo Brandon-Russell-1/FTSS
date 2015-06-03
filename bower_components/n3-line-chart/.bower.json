@@ -1,7 +1,7 @@
 {
   "name": "n3-line-chart",
-  "version": "1.1.6",
-  "main": "build/line-chart.js",
+  "version": "1.1.9",
+  "main": "build/line-chart.min.js",
   "ignore": [
     "**/.*",
     "bower_components",
@@ -23,11 +23,11 @@
     "angular-mocks": "*"
   },
   "homepage": "https://github.com/n3-charts/line-chart",
-  "_release": "1.1.6",
+  "_release": "1.1.9",
   "_resolution": {
     "type": "version",
-    "tag": "1.1.6",
-    "commit": "d3995576badb102c790b3a26aedcf1294f5b33d7"
+    "tag": "1.1.9",
+    "commit": "61d21e274edcf838fea83bfbed902e5b0d3db77c"
   },
   "_source": "git://github.com/n3-charts/line-chart.git",
   "_target": "*",

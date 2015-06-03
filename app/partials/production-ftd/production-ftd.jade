@@ -82,5 +82,5 @@ include ../mixins
                 td Students
                 td {{ftdStats.students | number}}
 
-    #ftdChart.am-fade.ng-enter
+    #ftdChart.am-fade.ng-enter(ng-class='graph?"ng-enter-active":""')
         linechart(data='graph', options='graphOptions')

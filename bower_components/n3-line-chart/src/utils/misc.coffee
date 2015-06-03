@@ -6,6 +6,29 @@
       getDefaultMargins: ->
         return {top: 20, right: 50, bottom: 60, left: 50}
 
+      getDefaultThumbnailMargins: ->
+        return {top: 1, right: 1, bottom: 2, left: 0}
+
+      getElementDimensions: (element, width, height) ->
+        dim = {}
+        parent = element
+
+        top = this.getPixelCssProp(parent, 'padding-top')
+        bottom = this.getPixelCssProp(parent, 'padding-bottom')
+        left = this.getPixelCssProp(parent, 'padding-left')
+        right = this.getPixelCssProp(parent, 'padding-right')
+
+        dim.width = +(width || parent.offsetWidth || 900) - left - right
+        dim.height = +(height || parent.offsetHeight || 500) - top - bottom
+
+        return dim
+
+      getDimensions: (options, element, attrs) ->
+        dim = this.getElementDimensions(element[0].parentElement, attrs.width, attrs.height)
+        dim = angular.extend(options.margin, dim)
+
+        return dim
+
       clean: (element) ->
         d3.select(element)
           .on('keydown', null)
@@ -35,67 +58,72 @@
       createContent: (svg) ->
         svg.append('g').attr('class', 'content')
 
-      createGlass: (svg, dimensions, handlers, axes, data, options, columnWidth) ->
+      createGlass: (svg, dimensions, handlers, axes, data, options, dispatch, columnWidth) ->
+        that = this
+
         glass = svg.append('g')
           .attr(
             'class': 'glass-container'
             'opacity': 0
           )
 
-        items = glass.selectAll('.scrubberItem')
-          .data(data)
-          .enter()
+        scrubberGroup = glass.selectAll('.scrubberItem')
+          .data(data).enter()
             .append('g')
               .attr('class', (s, i) -> "scrubberItem series_#{i}")
 
-        g = items.append('g')
-          .attr('class': (s, i) -> "rightTT")
+        scrubberGroup.each (s, i) ->
 
-        g.append('path')
-          .attr(
-            'class': (s, i) -> "scrubberPath series_#{i}"
-            'y': '-7px'
-            'fill': (s) -> s.color
-          )
+          item = d3.select(this)
 
-        this.styleTooltip(g.append('text')
-          .style('text-anchor', 'start')
-          .attr(
-            'class': (d, i) -> "scrubberText series_#{i}"
-            'height': '14px'
-            'transform': 'translate(7, 3)'
-            'text-rendering': 'geometric-precision'
-          ))
-          .text (s) -> s.label || s.y
+          g = item.append('g')
+            .attr('class': "rightTT")
 
-        g2 = items.append('g')
-          .attr('class': (s, i) -> "leftTT")
+          g.append('path')
+            .attr(
+              'class': "scrubberPath series_#{i}"
+              'y': '-7px'
+              'fill': s.color
+            )
 
-        g2.append('path')
-          .attr(
-            'class': (s, i) -> "scrubberPath series_#{i}"
-            'y': '-7px'
-            'fill': (s) -> s.color
-          )
+          that.styleTooltip(g.append('text')
+            .style('text-anchor', 'start')
+            .attr(
+              'class': (d, i) -> "scrubberText series_#{i}"
+              'height': '14px'
+              'transform': 'translate(7, 3)'
+              'text-rendering': 'geometric-precision'
+            ))
+            .text(s.label || s.y)
 
-        this.styleTooltip(g2.append('text')
-          .style('text-anchor', 'end')
-          .attr(
-            'class': (d, i) -> "scrubberText series_#{i}"
-            'height': '14px'
-            'transform': 'translate(-13, 3)'
-            'text-rendering': 'geometric-precision'
-          ))
-          .text (s) -> s.label || s.y
+          g2 = item.append('g')
+            .attr('class': "leftTT")
 
-        items.append('circle')
-          .attr(
-            'class': (s, i) -> "scrubberDot series_#{i}"
-            'fill': 'white'
-            'stroke': (s) -> s.color
-            'stroke-width': '2px'
-            'r': 4
-          )
+          g2.append('path')
+            .attr(
+              'class': "scrubberPath series_#{i}"
+              'y': '-7px'
+              'fill': s.color
+            )
+
+          that.styleTooltip(g2.append('text')
+            .style('text-anchor', 'end')
+            .attr(
+              'class': "scrubberText series_#{i}"
+              'height': '14px'
+              'transform': 'translate(-13, 3)'
+              'text-rendering': 'geometric-precision'
+            ))
+            .text(s.label || s.y)
+
+          item.append('circle')
+            .attr(
+              'class': "scrubberDot series_#{i}"
+              'fill': 'white'
+              'stroke': s.color
+              'stroke-width': '2px'
+              'r': 4
+            )
 
         glass.append('rect')
           .attr(
@@ -106,7 +134,7 @@
           .style('fill', 'white')
           .style('fill-opacity', 0.000001)
           .on('mouseover', ->
-            handlers.onChartHover(svg, d3.select(d3.event.target), axes, data, options, columnWidth)
+            handlers.onChartHover(svg, d3.select(this), axes, data, options, dispatch, columnWidth)
           )
 
 
@@ -166,31 +194,6 @@
 
         return straightened
 
-      resetMargins: (dimensions) ->
-        defaults = this.getDefaultMargins()
-
-        dimensions.left = defaults.left
-        dimensions.right = defaults.right
-        dimensions.top = defaults.top
-        dimensions.bottom = defaults.bottom
-
-      adjustMargins: (dimensions, options) ->
-        this.resetMargins(dimensions)
-        return unless options.axes?
-
-        {y, y2} = options.axes
-
-        dimensions.left = y?.width if y?.width?
-        dimensions.right = y2?.width if y2?.width?
-
-        return
-
-      adjustMarginsForThumbnail: (dimensions, axes) ->
-        dimensions.top = 1
-        dimensions.bottom = 2
-        dimensions.left = 0
-        dimensions.right = 1
-
       estimateSideTooltipWidth: (svg, text) ->
         t = svg.append('text')
         t.text('' + text)
@@ -202,7 +205,7 @@
         return bbox
 
       getTextBBox: (svgTextElement) ->
-        return svgTextElement.getBBox()
+        return if svgTextElement isnt null then svgTextElement.getBBox() else {}
 
       getWidestTickWidth: (svg, axisKey) ->
         max = 0
@@ -219,8 +222,9 @@
         data.forEach (row) ->
           series.forEach (series) ->
             v = row[series.y]
-            if series.axis? and options.axes[series.axis]?.labelFunction
-              v = options.axes[series.axis].labelFunction(v)
+            
+            if series.axis? and options.axes[series.axis]?.ticksFormatter
+              v = options.axes[series.axis].ticksFormatter(v)
 
             return unless v?
 

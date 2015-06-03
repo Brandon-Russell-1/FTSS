@@ -1,5 +1,5 @@
 ###
-line-chart - v1.1.6 - 04 February 2015
+line-chart - v1.1.9 - 25 May 2015
 https://github.com/n3-charts/line-chart
 Copyright (c) 2015 n3-charts
 ###
@@ -14,27 +14,13 @@ directive = (name, conf) ->
 directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $timeout) ->
   link  = (scope, element, attrs, ctrl) ->
     _u = n3utils
-    dim = _u.getDefaultMargins()
+    dispatch = _u.getEventDispatcher()
 
     # Hacky hack so the chart doesn't grow in height when resizing...
     element[0].style['font-size'] = 0
 
-    scope.updateDimensions = (dimensions) ->
-      parent = element[0].parentElement
-
-      top = _u.getPixelCssProp(parent, 'padding-top')
-      bottom = _u.getPixelCssProp(parent, 'padding-bottom')
-      left = _u.getPixelCssProp(parent, 'padding-left')
-      right = _u.getPixelCssProp(parent, 'padding-right')
-
-      dimensions.width = +(attrs.width || parent.offsetWidth || 900) - left - right
-      dimensions.height = +(attrs.height || parent.offsetHeight || 500) - top - bottom
-
-      return
-
     scope.redraw = ->
-      scope.updateDimensions(dim)
-      scope.update(dim)
+      scope.update()
 
       return
 
@@ -44,11 +30,11 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
         scope.options.series[index].visible = newVisibility
         scope.$apply()
 
-    scope.update = (dimensions) ->
+    scope.update = () ->
       options = _u.sanitizeOptions(scope.options, attrs.mode)
       handlers = angular.extend(initialHandlers, _u.getTooltipHandlers(options))
       dataPerSeries = _u.getDataPerSeries(scope.data, options)
-
+      dimensions = _u.getDimensions(options, element, attrs)
       isThumbnail = attrs.mode is 'thumbnail'
 
       _u.clean(element[0])
@@ -69,11 +55,6 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
       if dataPerSeries.length
         _u.setScalesDomain(axes, scope.data, options.series, svg, options)
 
-      if isThumbnail
-        _u.adjustMarginsForThumbnail(dimensions, axes)
-      else
-        _u.adjustMargins(dimensions, options)
-
       _u.createContent(svg, handlers)
 
       if dataPerSeries.length
@@ -81,20 +62,50 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
 
         _u
           .drawArea(svg, axes, dataPerSeries, options, handlers)
-          .drawColumns(svg, axes, dataPerSeries, columnWidth, options, handlers)
+          .drawColumns(svg, axes, dataPerSeries, columnWidth, options, handlers, dispatch)
           .drawLines(svg, axes, dataPerSeries, options, handlers)
 
         if options.drawDots
-          _u.drawDots(svg, axes, dataPerSeries, options, handlers)
+          _u.drawDots(svg, axes, dataPerSeries, options, handlers, dispatch)
 
       if options.drawLegend
-        _u.drawLegend(svg, options.series, dimensions, handlers)
+        _u.drawLegend(svg, options.series, dimensions, handlers, dispatch)
 
       if options.tooltip.mode is 'scrubber'
-        _u.createGlass(svg, dimensions, handlers, axes, dataPerSeries, options, columnWidth)
+        _u.createGlass(svg, dimensions, handlers, axes, dataPerSeries, options, dispatch, columnWidth)
       else if options.tooltip.mode isnt 'none'
         _u.addTooltips(svg, dimensions, options.axes)
 
+    updateEvents = ->
+      
+      # Deprecated: this will be removed in 2.x
+      if scope.oldclick
+        dispatch.on('click', scope.oldclick)
+      else if scope.click
+        dispatch.on('click', scope.click)
+      else
+        dispatch.on('click', null)
+
+      # Deprecated: this will be removed in 2.x
+      if scope.oldhover
+        dispatch.on('hover', scope.oldhover)
+      else if scope.hover
+        dispatch.on('hover', scope.hover)
+      else
+        dispatch.on('hover', null)
+
+      # Deprecated: this will be removed in 2.x
+      if scope.oldfocus
+        dispatch.on('focus', scope.oldfocus)
+      else if scope.focus
+        dispatch.on('focus', scope.focus)
+      else
+        dispatch.on('focus', null)
+
+      if scope.toggle
+        dispatch.on('toggle', scope.toggle)
+      else
+        dispatch.on('toggle', null)
 
     promise = undefined
     window_resize = ->
@@ -104,17 +115,25 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
     $window.addEventListener('resize', window_resize)
 
     scope.$watch('data', scope.redraw, true)
-    scope.$watch('options', (-> scope.update(dim)) , true)
+    scope.$watch('options', scope.redraw , true)
+    scope.$watch('[click, hover, focus, toggle]', updateEvents)
+    
+    # Deprecated: this will be removed in 2.x
+    scope.$watch('[oldclick, oldhover, oldfocus]', updateEvents)
 
   return {
     replace: true
     restrict: 'E'
-    scope: {data: '=', options: '='}
+    scope:
+      data: '=', options: '=',
+      # Deprecated: this will be removed in 2.x
+      oldclick: '=click',  oldhover: '=hover',  oldfocus: '=focus',
+      # Events
+      click: '=onClick',  hover: '=onHover',  focus: '=onFocus',  toggle: '=onToggle'
     template: '<div></div>'
     link: link
   }
 ])
-
 # ----
 
 # /tmp/utils.coffee
@@ -247,7 +266,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           return x1(index) - keys.length*columnWidth/2
 
 
-      drawColumns: (svg, axes, data, columnWidth, options, handlers) ->
+      drawColumns: (svg, axes, data, columnWidth, options, handlers, dispatch) ->
         data = data.filter (s) -> s.type is 'column'
 
         x1 = this.getColumnAxis(data, columnWidth, options)
@@ -258,51 +277,48 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           .data(data)
           .enter().append("g")
             .attr('class', (s) -> 'columnGroup series_' + s.index)
-            .style('stroke', (s) -> s.color)
-            .style('fill', (s) -> s.color)
-            .style('fill-opacity', 0.8)
             .attr('transform', (s) -> "translate(" + x1(s) + ",0)")
-            .on('mouseover', (series) ->
-              target = d3.select(d3.event.target)
 
-              handlers.onMouseOver?(svg, {
-                series: series
-                x: target.attr('x')
-                y: axes[series.axis + 'Scale'](target.datum().y0 + target.datum().y)
-                datum: target.datum()
+        colGroup.each (series) ->
+          d3.select(this).selectAll("rect")
+            .data(series.values)
+            .enter().append("rect")
+              .style({
+                'stroke': series.color
+                'fill': series.color
+                'stroke-opacity': (d) -> if d.y is 0 then '0' else '1'
+                'stroke-width': '1px'
+                'fill-opacity': (d) -> if d.y is 0 then 0 else 0.7
               })
-            )
-            .on('mouseout', (d) ->
-              d3.select(d3.event.target).attr('r', 2)
-              handlers.onMouseOut?(svg)
-            )
-
-        colGroup.selectAll("rect")
-          .data (d) -> d.values
-          .enter().append("rect")
-            .style({
-              'stroke-opacity': (d) -> if d.y is 0 then '0' else '1'
-              'stroke-width': '1px'
-              'fill-opacity': (d) -> if d.y is 0 then 0 else 0.7
-            })
-
-            .attr(
-              width: columnWidth
-              x: (d) -> axes.xScale(d.x)
-              height: (d) ->
-                return axes[d.axis + 'Scale'].range()[0] if d.y is 0
-                return Math.abs(axes[d.axis + 'Scale'](d.y0 + d.y) - axes[d.axis + 'Scale'](d.y0))
-              y: (d) ->
-                if d.y is 0 then 0 else axes[d.axis + 'Scale'](Math.max(0, d.y0 + d.y))
-            )
+              .attr(
+                width: columnWidth
+                x: (d) -> axes.xScale(d.x)
+                height: (d) ->
+                  return axes[d.axis + 'Scale'].range()[0] if d.y is 0
+                  return Math.abs(axes[d.axis + 'Scale'](d.y0 + d.y) - axes[d.axis + 'Scale'](d.y0))
+                y: (d) ->
+                  if d.y is 0 then 0 else axes[d.axis + 'Scale'](Math.max(0, d.y0 + d.y))
+              )
+              .on('click': (d, i) -> dispatch.click(d, i))
+              .on('mouseover', (d, i) ->
+                dispatch.hover(d, i)
+                handlers.onMouseOver?(svg, {
+                  series: series
+                  x: axes.xScale(d.x)
+                  y: axes[d.axis + 'Scale'](d.y0 + d.y)
+                  datum: d
+                }, options.axes)
+              )
+              .on('mouseout', (d) ->
+                handlers.onMouseOut?(svg)
+              )
 
         return this
-
 # ----
 
 
 # src/utils/dots.coffee
-      drawDots: (svg, axes, data, options, handlers) ->
+      drawDots: (svg, axes, data, options, handlers, dispatch) ->
         dotGroup = svg.select('.content').selectAll('.dotGroup')
           .data data.filter (s) -> s.type in ['line', 'area'] and s.drawDots
           .enter().append('g')
@@ -322,18 +338,21 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
               'stroke': 'white'
               'stroke-width': '2px'
             )
+            .on('click': (d, i) -> dispatch.click(d, i))
+            .on('mouseover': (d, i) -> dispatch.hover(d, i))
 
         if options.tooltip.mode isnt 'none'
           dotGroup.on('mouseover', (series) ->
             target = d3.select(d3.event.target)
+            d = target.datum()
             target.attr('r', (s) -> s.dotSize + 2)
 
             handlers.onMouseOver?(svg, {
               series: series
               x: target.attr('cx')
               y: target.attr('cy')
-              datum: target.datum()
-            })
+              datum: d
+            }, options.axes)
           )
           .on('mouseout', (d) ->
             d3.select(d3.event.target).attr('r', (s) -> s.dotSize)
@@ -342,6 +361,20 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
         return this
 
+# ----
+
+
+# src/utils/events.coffee
+      getEventDispatcher: () ->
+        
+        events = [
+          'focus',
+          'hover',
+          'click',
+          'toggle'
+        ]
+
+        return d3.dispatch.apply(this, events)
 # ----
 
 
@@ -391,20 +424,31 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
         return widths
 
-      drawLegend: (svg, series, dimensions, handlers) ->
+      drawLegend: (svg, series, dimensions, handlers, dispatch) ->
         that = this
         legend = svg.append('g').attr('class', 'legend')
 
         d = 16
+
         svg.select('defs').append('svg:clipPath')
           .attr('id', 'legend-clip')
           .append('circle').attr('r', d/2)
 
-        item = legend.selectAll('.legendItem')
+        groups = legend.selectAll('.legendItem')
           .data(series)
 
-        items = item.enter().append('g')
-            .attr(
+        groups.enter().append('g')
+          .on('click', (s, i) ->
+            visibility = !(s.visible isnt false)
+            dispatch.toggle(s, i, visibility)
+            handlers.onSeriesVisibilityChange?({
+              series: s,
+              index: i,
+              newVisibility: visibility
+            })
+          )
+        
+        groups.attr(
               'class': (s, i) -> "legendItem series_#{i} #{s.axis}"
               'opacity': (s, i) ->
                 if s.visible is false
@@ -413,61 +457,63 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
                 return '1'
             )
+          .each (s) ->
+            item = d3.select(this)
+            item.append('circle')
+              .attr(
+                'fill': s.color
+                'stroke': s.color
+                'stroke-width': '2px'
+                'r': d/2
+              )
 
-        item.on('click', (s, i) ->
-          handlers.onSeriesVisibilityChange?({
-            series: s,
-            index: i,
-            newVisibility: !(s.visible isnt false)
-          })
-        )
+            item.append('path')
+              .attr(
+                'clip-path': 'url(#legend-clip)'
+                'fill-opacity': if s.type in ['area', 'column'] then '1' else '0'
+                'fill': 'white'
+                'stroke': 'white'
+                'stroke-width': '2px'
+                'd': that.getLegendItemPath(s, d, d)
+              )
 
-        item.append('circle')
-          .attr(
-            'fill': (s) -> s.color
-            'stroke': (s) -> s.color
-            'stroke-width': '2px'
-            'r': d/2
-          )
+            item.append('circle')
+              .attr(
+                'fill-opacity': 0
+                'stroke': s.color
+                'stroke-width': '2px'
+                'r': d/2
+              )
 
-        item.append('path')
-          .attr(
-            'clip-path': 'url(#legend-clip)'
-            'fill-opacity': (s) -> if s.type in ['area', 'column'] then '1' else '0'
-            'fill': 'white'
-            'stroke': 'white'
-            'stroke-width': '2px'
-            'd': (s) -> that.getLegendItemPath(s, d, d)
-          )
+            item.append('text')
+              .attr(
+                'class': (d, i) -> "legendText series_#{i}"
+                'font-family': 'Courier'
+                'font-size': 10
+                'transform': 'translate(13, 4)'
+                'text-rendering': 'geometric-precision'
+              )
+              .text(s.label || s.y)
 
-        item.append('circle')
-          .attr(
-            'fill-opacity': 0
-            'stroke': (s) -> s.color
-            'stroke-width': '2px'
-            'r': d/2
-          )
+        # Translate every legend g node to its position
+        translateLegends = () ->
+          [left, right] = that.computeLegendLayout(svg, series, dimensions)
+          groups
+            .attr(
+              'transform': (s, i) ->
+                if s.axis is 'y'
+                  return "translate(#{left.shift()},#{dimensions.height-40})"
+                else
+                  return "translate(#{right.shift()},#{dimensions.height-40})"
+            )
 
+        # We need to call this once, so the
+        # legend text does not blink on every update
+        translateLegends()
 
-        item.append('text')
-          .attr(
-            'class': (d, i) -> "legendText series_#{i}"
-            'font-family': 'Courier'
-            'font-size': 10
-            'transform': 'translate(13, 4)'
-            'text-rendering': 'geometric-precision'
-          )
-          .text (s) -> s.label || s.y
-
-
-        [left, right] = this.computeLegendLayout(svg, series, dimensions)
-        items.attr(
-          'transform': (s, i) ->
-            if s.axis is 'y'
-              return "translate(#{left.shift()},#{dimensions.height-40})"
-            else
-              return "translate(#{right.shift()},#{dimensions.height-40})"
-        )
+        # now once again,
+        # to make sure, text width gets really! computed properly
+        setTimeout(translateLegends, 0)
 
         return this
 
@@ -566,7 +612,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
               x: mousePos[0]
               y: mousePos[1]
               datum: interpDatum
-            })
+            }, options.axes)
 
           lineGroup
             .on 'mousemove', interpolateData
@@ -600,6 +646,29 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
       getDefaultMargins: ->
         return {top: 20, right: 50, bottom: 60, left: 50}
 
+      getDefaultThumbnailMargins: ->
+        return {top: 1, right: 1, bottom: 2, left: 0}
+
+      getElementDimensions: (element, width, height) ->
+        dim = {}
+        parent = element
+
+        top = this.getPixelCssProp(parent, 'padding-top')
+        bottom = this.getPixelCssProp(parent, 'padding-bottom')
+        left = this.getPixelCssProp(parent, 'padding-left')
+        right = this.getPixelCssProp(parent, 'padding-right')
+
+        dim.width = +(width || parent.offsetWidth || 900) - left - right
+        dim.height = +(height || parent.offsetHeight || 500) - top - bottom
+
+        return dim
+
+      getDimensions: (options, element, attrs) ->
+        dim = this.getElementDimensions(element[0].parentElement, attrs.width, attrs.height)
+        dim = angular.extend(options.margin, dim)
+
+        return dim
+
       clean: (element) ->
         d3.select(element)
           .on('keydown', null)
@@ -629,67 +698,72 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
       createContent: (svg) ->
         svg.append('g').attr('class', 'content')
 
-      createGlass: (svg, dimensions, handlers, axes, data, options, columnWidth) ->
+      createGlass: (svg, dimensions, handlers, axes, data, options, dispatch, columnWidth) ->
+        that = this
+
         glass = svg.append('g')
           .attr(
             'class': 'glass-container'
             'opacity': 0
           )
 
-        items = glass.selectAll('.scrubberItem')
-          .data(data)
-          .enter()
+        scrubberGroup = glass.selectAll('.scrubberItem')
+          .data(data).enter()
             .append('g')
               .attr('class', (s, i) -> "scrubberItem series_#{i}")
 
-        g = items.append('g')
-          .attr('class': (s, i) -> "rightTT")
+        scrubberGroup.each (s, i) ->
 
-        g.append('path')
-          .attr(
-            'class': (s, i) -> "scrubberPath series_#{i}"
-            'y': '-7px'
-            'fill': (s) -> s.color
-          )
+          item = d3.select(this)
 
-        this.styleTooltip(g.append('text')
-          .style('text-anchor', 'start')
-          .attr(
-            'class': (d, i) -> "scrubberText series_#{i}"
-            'height': '14px'
-            'transform': 'translate(7, 3)'
-            'text-rendering': 'geometric-precision'
-          ))
-          .text (s) -> s.label || s.y
+          g = item.append('g')
+            .attr('class': "rightTT")
 
-        g2 = items.append('g')
-          .attr('class': (s, i) -> "leftTT")
+          g.append('path')
+            .attr(
+              'class': "scrubberPath series_#{i}"
+              'y': '-7px'
+              'fill': s.color
+            )
 
-        g2.append('path')
-          .attr(
-            'class': (s, i) -> "scrubberPath series_#{i}"
-            'y': '-7px'
-            'fill': (s) -> s.color
-          )
+          that.styleTooltip(g.append('text')
+            .style('text-anchor', 'start')
+            .attr(
+              'class': (d, i) -> "scrubberText series_#{i}"
+              'height': '14px'
+              'transform': 'translate(7, 3)'
+              'text-rendering': 'geometric-precision'
+            ))
+            .text(s.label || s.y)
 
-        this.styleTooltip(g2.append('text')
-          .style('text-anchor', 'end')
-          .attr(
-            'class': (d, i) -> "scrubberText series_#{i}"
-            'height': '14px'
-            'transform': 'translate(-13, 3)'
-            'text-rendering': 'geometric-precision'
-          ))
-          .text (s) -> s.label || s.y
+          g2 = item.append('g')
+            .attr('class': "leftTT")
 
-        items.append('circle')
-          .attr(
-            'class': (s, i) -> "scrubberDot series_#{i}"
-            'fill': 'white'
-            'stroke': (s) -> s.color
-            'stroke-width': '2px'
-            'r': 4
-          )
+          g2.append('path')
+            .attr(
+              'class': "scrubberPath series_#{i}"
+              'y': '-7px'
+              'fill': s.color
+            )
+
+          that.styleTooltip(g2.append('text')
+            .style('text-anchor', 'end')
+            .attr(
+              'class': "scrubberText series_#{i}"
+              'height': '14px'
+              'transform': 'translate(-13, 3)'
+              'text-rendering': 'geometric-precision'
+            ))
+            .text(s.label || s.y)
+
+          item.append('circle')
+            .attr(
+              'class': "scrubberDot series_#{i}"
+              'fill': 'white'
+              'stroke': s.color
+              'stroke-width': '2px'
+              'r': 4
+            )
 
         glass.append('rect')
           .attr(
@@ -700,7 +774,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           .style('fill', 'white')
           .style('fill-opacity', 0.000001)
           .on('mouseover', ->
-            handlers.onChartHover(svg, d3.select(d3.event.target), axes, data, options, columnWidth)
+            handlers.onChartHover(svg, d3.select(this), axes, data, options, dispatch, columnWidth)
           )
 
 
@@ -760,31 +834,6 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
         return straightened
 
-      resetMargins: (dimensions) ->
-        defaults = this.getDefaultMargins()
-
-        dimensions.left = defaults.left
-        dimensions.right = defaults.right
-        dimensions.top = defaults.top
-        dimensions.bottom = defaults.bottom
-
-      adjustMargins: (dimensions, options) ->
-        this.resetMargins(dimensions)
-        return unless options.axes?
-
-        {y, y2} = options.axes
-
-        dimensions.left = y?.width if y?.width?
-        dimensions.right = y2?.width if y2?.width?
-
-        return
-
-      adjustMarginsForThumbnail: (dimensions, axes) ->
-        dimensions.top = 1
-        dimensions.bottom = 2
-        dimensions.left = 0
-        dimensions.right = 1
-
       estimateSideTooltipWidth: (svg, text) ->
         t = svg.append('text')
         t.text('' + text)
@@ -796,7 +845,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
         return bbox
 
       getTextBBox: (svgTextElement) ->
-        return svgTextElement.getBBox()
+        return if svgTextElement isnt null then svgTextElement.getBBox() else {}
 
       getWidestTickWidth: (svg, axisKey) ->
         max = 0
@@ -813,8 +862,9 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
         data.forEach (row) ->
           series.forEach (series) ->
             v = row[series.y]
-            if series.axis? and options.axes[series.axis]?.labelFunction
-              v = options.axes[series.axis].labelFunction(v)
+            
+            if series.axis? and options.axes[series.axis]?.ticksFormatter
+              v = options.axes[series.axis].ticksFormatter(v)
 
             return unless v?
 
@@ -832,6 +882,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           tooltip: {mode: 'scrubber'}
           lineMode: 'linear'
           tension: 0.7
+          margin: this.getDefaultMargins()
           axes: {
             x: {type: 'linear', key: 'x'}
             y: {type: 'linear'}
@@ -844,29 +895,48 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
         }
 
       sanitizeOptions: (options, mode) ->
-        return this.getDefaultOptions() unless options?
+        options ?= {}
 
         if mode is 'thumbnail'
           options.drawLegend = false
           options.drawDots = false
           options.tooltip = {mode: 'none', interpolate: false}
 
+        # Parse and sanitize the options
         options.series = this.sanitizeSeriesOptions(options.series)
         options.stacks = this.sanitizeSeriesStacks(options.stacks, options.series)
-
         options.axes = this.sanitizeAxes(options.axes, this.haveSecondYAxis(options.series))
-
-        options.lineMode or= 'linear'
-        options.tension = if /^\d+(\.\d+)?$/.test(options.tension) then options.tension else 0.7
-
-        this.sanitizeTooltip(options)
-
+        options.tooltip = this.sanitizeTooltip(options.tooltip)
+        options.margin = this.sanitizeMargins(options.margin)
+        
+        options.lineMode or= this.getDefaultOptions().lineMode
+        options.tension = if /^\d+(\.\d+)?$/.test(options.tension) then options.tension \
+          else this.getDefaultOptions().tension
+        
         options.drawLegend = options.drawLegend isnt false
         options.drawDots = options.drawDots isnt false
-
         options.columnsHGap = 5 unless angular.isNumber(options.columnsHGap)
 
+        defaultMargin = if mode is 'thumbnail' then this.getDefaultThumbnailMargins() \
+          else this.getDefaultMargins()
+
+        # Use default values where no options are defined
+        options.series = angular.extend(this.getDefaultOptions().series, options.series)
+        options.axes = angular.extend(this.getDefaultOptions().axes, options.axes)
+        options.tooltip = angular.extend(this.getDefaultOptions().tooltip, options.tooltip)
+        options.margin = angular.extend(defaultMargin, options.margin)
+
         return options
+
+      sanitizeMargins: (options) ->
+        attrs = ['top', 'right', 'bottom', 'left']
+        margin = {}
+
+        for opt, value of options
+          if opt in attrs
+            margin[opt] = parseFloat(value)
+
+        return margin
 
       sanitizeSeriesStacks: (stacks, series) ->
         return [] unless stacks?
@@ -885,20 +955,21 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
         return stacks
 
       sanitizeTooltip: (options) ->
-        if !options.tooltip
-          options.tooltip = {mode: 'scrubber'}
-          return
+        if !options
+          return {mode: 'scrubber'}
 
-        if options.tooltip.mode not in ['none', 'axes', 'scrubber']
-          options.tooltip.mode = 'scrubber'
+        if options.mode not in ['none', 'axes', 'scrubber']
+          options.mode = 'scrubber'
 
-        if options.tooltip.mode is 'scrubber'
-          delete options.tooltip.interpolate
+        if options.mode is 'scrubber'
+          delete options.interpolate
         else
-          options.tooltip.interpolate = !!options.tooltip.interpolate
+          options.interpolate = !!options.interpolate
 
-        if options.tooltip.mode is 'scrubber' and options.tooltip.interpolate
+        if options.mode is 'scrubber' and options.interpolate
           throw new Error('Interpolation is not supported for scrubber tooltip mode.')
+
+        return options
 
       sanitizeSeriesOptions: (options) ->
         return [] unless options?
@@ -969,7 +1040,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
       getSanitizedNumber: (value) ->
         return undefined unless value?
 
-        number = parseInt(value, 10)
+        number = parseFloat(value)
 
         if isNaN(number)
           $log.warn("Invalid extremum value : #{value}, deleting it.")
@@ -982,6 +1053,37 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
         options.type or= 'linear'
 
+        # labelFunction is deprecated and will be remvoed in 2.x
+        # please use ticksFormatter instead
+        if options.labelFunction?
+          options.ticksFormatter = options.labelFunction
+
+        # String to format tick values
+        if options.ticksFormat?
+
+          if options.type is 'date'
+            # Use d3.time.format as formatter
+            options.ticksFormatter = d3.time.format(options.ticksFormat)
+            
+          else
+            # Use d3.format as formatter
+            options.ticksFormatter = d3.format(options.ticksFormat)
+
+          # use the ticksFormatter per default
+          # if no tooltip format or formatter is defined
+          options.tooltipFormatter ?= options.ticksFormatter
+
+        # String to format tooltip values
+        if options.tooltipFormat?
+
+          if options.type is 'date'
+            # Use d3.time.format as formatter
+            options.tooltipFormatter = d3.time.format(options.tooltipFormat)
+            
+          else
+            # Use d3.format as formatter
+            options.tooltipFormatter = d3.format(options.tooltipFormat)
+        
         this.sanitizeExtrema(options)
 
         return options
@@ -1089,7 +1191,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
         axis = d3.svg.axis()
           .scale(scale)
           .orient(sides[key])
-          .tickFormat(o?.labelFunction)
+          .tickFormat(o?.ticksFormatter)
 
         return axis unless o?
 
@@ -1153,6 +1255,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           groups.push([series]) unless isInStack
 
         groups.forEach (group) ->
+          group = group.filter(Boolean)
           minY = Math.min(minY, d3.min(data, (d) ->
             group.reduce ((a, s) -> Math.min(a, d[s.y]) ), Number.POSITIVE_INFINITY
           ))
@@ -1218,41 +1321,38 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
 
 # src/utils/scrubber.coffee
-      showScrubber: (svg, glass, axes, data, options, columnWidth) ->
+      showScrubber: (svg, glass, axes, data, options, dispatch, columnWidth) ->
         that = this
         glass.on('mousemove', ->
           svg.selectAll('.glass-container').attr('opacity', 1)
-          that.updateScrubber(svg, d3.mouse(this), axes, data, options, columnWidth)
+          that.updateScrubber(svg, d3.mouse(this), axes, data, options, dispatch, columnWidth)
         )
         glass.on('mouseout', ->
           glass.on('mousemove', null)
           svg.selectAll('.glass-container').attr('opacity', 0)
         )
 
-      getClosestPoint: (values, value) ->
-        # Dichotomy FTW
-        left = 0
-        right = values.length - 1
+      getClosestPoint: (values, xValue) ->
+        # Create a bisector
+        xBisector = d3.bisector( (d) -> d.x ).left
+        i = xBisector(values, xValue)
 
-        i = Math.round((right - left)/2)
-        while true
-          if value < values[i].x
-            right = i
-            i = i - Math.ceil((right-left)/2)
-          else
-            left = i
-            i = i + Math.floor((right-left)/2)
+        # Return min and max if index is out of bounds
+        return values[0] if i is 0
+        return values[values.length - 1] if i > values.length - 1
+        
+        # get element before bisection
+        d0 = values[i - 1]
 
-          if i in [left, right]
-            if Math.abs(value - values[left].x) < Math.abs(value - values[right].x)
-              i = left
-            else
-              i = right
-            break
+        # get element after bisection
+        d1 = values[i]
 
-        return values[i]
+        # get nearest element
+        d = if xValue - d0.x > d1.x - xValue then d1 else d0
 
-      updateScrubber: (svg, [x, y], axes, data, options, columnWidth) ->
+        return d
+
+      updateScrubber: (svg, [x, y], axes, data, options, dispatch, columnWidth) ->
         ease = (element) -> element.transition().duration(50)
         that = this
         positions = []
@@ -1266,7 +1366,12 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
           item.attr('opacity', 1)
 
-          v = that.getClosestPoint(series.values, axes.xScale.invert(x))
+          xInvert = axes.xScale.invert(x)
+          yInvert = axes.yScale.invert(y)
+
+          v = that.getClosestPoint(series.values, xInvert)
+
+          dispatch.focus(v, series.values.indexOf(v), [xInvert, yInvert])
 
           text = v.x + ' : ' + v.y
           if options.tooltip.formatter
@@ -1286,11 +1391,11 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
           side = if series.axis is 'y2' then 'right' else 'left'
 
-          x = axes.xScale(v.x)
+          xPos = axes.xScale(v.x)
           if side is 'left'
-            side = 'right' if x + that.getTextBBox(lText[0][0]).x - 10 < 0
+            side = 'right' if xPos + that.getTextBBox(lText[0][0]).x - 10 < 0
           else if side is 'right'
-            side = 'left' if x + sizes.right > that.getTextBBox(svg.select('.glass')[0][0]).width
+            side = 'left' if xPos + sizes.right > that.getTextBBox(svg.select('.glass')[0][0]).width
 
           if side is 'left'
             ease(right).attr('opacity', 0)
@@ -1299,7 +1404,15 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
             ease(right).attr('opacity', 1)
             ease(left).attr('opacity', 0)
 
-          positions[index] = {index, x: x, y: axes[v.axis + 'Scale'](v.y + v.y0), side, sizes}
+          positions[index] = {index, x: xPos, y: axes[v.axis + 'Scale'](v.y + v.y0), side, sizes}
+
+          # Use a coloring function if defined, else use a color string value
+          color = if angular.isFunction(series.color) \
+            then series.color(v, series.values.indexOf(v)) else series.color
+          
+          # Color the elements of the scrubber
+          item.selectAll('circle').attr('stroke', color)
+          item.selectAll('path').attr('fill', color)
 
         positions = this.preventOverlapping(positions)
 
@@ -1442,7 +1555,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           }
 
       styleTooltip: (d3TextElement) ->
-        return d3TextElement.attr({
+        return d3TextElement.style({
           'font-family': 'monospace'
           'font-size': 10
           'fill': 'white'
@@ -1512,18 +1625,18 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
             )
           )
 
-      onMouseOver: (svg, event) ->
-        this.updateXTooltip(svg, event)
+      onMouseOver: (svg, event, axesOptions) ->
+        this.updateXTooltip(svg, event, axesOptions.x)
 
         if event.series.axis is 'y2'
-          this.updateY2Tooltip(svg, event)
+          this.updateY2Tooltip(svg, event, axesOptions.y2)
         else
-          this.updateYTooltip(svg, event)
+          this.updateYTooltip(svg, event, axesOptions.y)
 
       onMouseOut: (svg) ->
         this.hideTooltips(svg)
 
-      updateXTooltip: (svg, {x, datum, series}) ->
+      updateXTooltip: (svg, {x, datum, series}, xAxisOptions) ->
         xTooltip = svg.select("#xTooltip")
 
         xTooltip.transition()
@@ -1532,13 +1645,18 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
             'transform': "translate(#{x},0)"
           )
 
-        textX = datum.x
+        _f = xAxisOptions.tooltipFormatter
+        textX = if _f then _f(datum.x) else datum.x
 
         label = xTooltip.select('text')
         label.text(textX)
 
+        # Use a coloring function if defined, else use a color string value
+        color = if angular.isFunction(series.color) \
+          then series.color(datum, series.values.indexOf(datum)) else series.color
+
         xTooltip.select('path')
-          .attr('fill', series.color)
+          .style('fill', color)
           .attr('d', this.getXTooltipPath(label[0][0]))
 
       getXTooltipPath: (textElement) ->
@@ -1555,7 +1673,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           'l' + (-p) + ' ' + h/4 + ' ' +
           'l' + (-w/2 + p) + ' 0z'
 
-      updateYTooltip: (svg, {y, datum, series}) ->
+      updateYTooltip: (svg, {y, datum, series}, yAxisOptions) ->
         yTooltip = svg.select("#yTooltip")
         yTooltip.transition()
           .attr(
@@ -1563,8 +1681,11 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
             'transform': "translate(0, #{y})"
           )
 
+        _f = yAxisOptions.tooltipFormatter
+        textY = if _f then _f(datum.y) else datum.y
+
         label = yTooltip.select('text')
-        label.text(datum.y)
+        label.text(textY)
         w = this.getTextBBox(label[0][0]).width + 5
 
         label.attr(
@@ -1572,26 +1693,37 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           'width': w
         )
 
+        # Use a coloring function if defined, else use a color string value
+        color = if angular.isFunction(series.color) \
+          then series.color(datum, series.values.indexOf(datum)) else series.color
+
         yTooltip.select('path')
-          .attr('fill', series.color)
+          .style('fill', color)
           .attr('d', this.getYTooltipPath(w))
 
-      updateY2Tooltip: (svg, {y, datum, series}) ->
+      updateY2Tooltip: (svg, {y, datum, series}, yAxisOptions) ->
         y2Tooltip = svg.select("#y2Tooltip")
         y2Tooltip.transition()
           .attr('opacity', 1.0)
 
+        _f = yAxisOptions.tooltipFormatter
+        textY = if _f then _f(datum.y) else datum.y
+
         label = y2Tooltip.select('text')
-        label.text(datum.y)
+        label.text(textY)
         w = this.getTextBBox(label[0][0]).width + 5
         label.attr(
           'transform': 'translate(7, ' + (parseFloat(y) + 3) + ')'
           'w': w
         )
 
+        # Use a coloring function if defined, else use a color string value
+        color = if angular.isFunction(series.color) \
+          then series.color(datum, series.values.indexOf(datum)) else series.color
+
         y2Tooltip.select('path')
+          .style('fill', color)
           .attr(
-            'fill': series.color
             'd': this.getY2TooltipPath(w)
             'transform': 'translate(0, ' + y + ')'
           )

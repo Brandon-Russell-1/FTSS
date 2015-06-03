@@ -1,4 +1,4 @@
-# n3-line-chart [![Build Status](https://travis-ci.org/n3-charts/line-chart.svg?branch=master)](https://travis-ci.org/n3-charts/line-chart)
+# n3-line-chart [![Build Status](https://travis-ci.org/n3-charts/line-chart.svg?branch=master)](https://travis-ci.org/n3-charts/line-chart) [![Join the chat at https://gitter.im/n3-charts/line-chart](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/n3-charts/line-chart)
 
 ![](https://raw.githubusercontent.com/n3-charts/line-chart/gh-pages/assets/images/n3-charts.png)
 
@@ -47,9 +47,12 @@ Options must be an object with a series array. It should look like this :
 ```js
 $scope.options = {
   axes: {
-    x: {key: 'x', labelFunction: function(value) {return value;}, type: 'linear', min: 0, max: 10, ticks: 2},
+    x: {key: 'x', ticksFormat: '.2f', type: 'linear', min: 0, max: 10, ticks: 2},
     y: {type: 'linear', min: 0, max: 1, ticks: 5},
     y2: {type: 'linear', min: 0, max: 1, ticks: [1, 2, 3, 4]}
+  },
+  margin: {
+    left: 100
   },
   series: [
     {y: 'value', color: 'steelblue', thickness: '2px', type: 'area', striped: true, label: 'Pouet'},
@@ -68,7 +71,10 @@ The `axes` keys can be undefined. Otherwise, it can contain an `x̀` key with th
 
  + `key` : optional, defines where the chart will look for abscissas values in the data (default is 'x').
  + `type` : optional, can be either 'date' or 'linear' (default is 'linear'). If set to 'date', the chart will expect Date objects as abscissas. No transformation is done by the chart itself, so the behavior is basically D3.js' time scale's.
- + `labelFunction` : optional, allows to format the axis' ticklabels. Must be a function that accepts a single argument and returns a string.
+ + `ticksFormat` : optional, format string, that is parsed with d3.format (d3.time.format for type 'date') to format the axis' ticklabels. Default behavior: the raw value is used unformatted
+ + `ticksFormatter` : optional, function that allows to format the axis' ticklabels; must be a function that accepts a single argument and returns a string.
+ + `tooltipFormat` : optional, format string, that is parsed with d3.format (d3.time.format for type 'date') to format the axis' tooltip values (tooltip mode 'axes'). Default behavior: uses the same format as `ticksFormat`
+ + `tooltipFormatter` : optional, function that allows to format the axis' tooltip values (tooltip mode 'axes'); must be a function that accepts a single argument and returns a string.
  + `min` : optional, forces the axis minimum value (default is computed from data)
  + `max` : optional, forces the axis maximum value (default is computed from data)
  + `ticks` : optional, configures the axis' ticks (can be either a number or an array, more on this [here][3])
@@ -102,6 +108,14 @@ The `tooltip` must be an object which contains the following properties :
  + `interpolate` : can be either `true`or `false`. Default is `false`. Will be ignored if the tooltip's mode is not `axes`.
  + `formatter` : optional, allows to catch the tooltip before it gets rendered. Must be a function that takes `x`, `y` and `series` as arguments and returns a string. Ignored when mode is not `scrubber`.
 
+##### Margin
+With the `margin` option one can customize the following margins of the chart :
+
++ top
++ left
++ bottom
++ right
+
 ##### Optional stuff
 Additionally, you can set `lineMode` to a value between these :
 
@@ -134,6 +148,62 @@ This is more a hack. The chart usually tries to infer its own dimensions regardi
 ```html
 <linechart width="150" height="100"></linechart>
 ```
+
+#### Custom events
+We can attach event handlers for *click*, *hover*, *focus* and *toggle* events of the chart.
+
+##### Click
+The event handler for the *click* event get's triggered when the mouse clicks on a dot or column of the chart in tooltip modes *none* and *axes*.
+
+```js
+$scope.onClick = function(d, i){
+  console.log(d, i);
+}
+```
+
+```html
+<linechart data="data" options="options" on-click="onClick"></linechart>
+```
+
+##### Hover
+The event handler for the *hover* event get's triggered when the mouse hovers over a dot or column of the chart in tooltip modes *none* and *axes*.
+
+```js
+$scope.onHover = function(d, i){
+  console.log(d, i);
+}
+```
+
+```html
+<linechart data="data" options="options" on-hover="onHover"></linechart>
+```
+
+##### Focus
+The event handler for a *focus* event get's triggered when the mouse hovers over the chart in tooltip mode *scrubber*.
+
+```js
+$scope.onFocus = function(d, i, position){
+  console.log(d, i, position);
+}
+```
+
+```html
+<linechart data="data" options="options" on-focus="onFocus"></linechart>
+```
+
+##### Toggle
+The event handler for a *toggle* event get's triggered when a series changes its visibility.
+
+```js
+$scope.onToggle = function(d, i, visible){
+  console.log(d, i, visible);
+}
+```
+
+```html
+<linechart data="data" options="options" on-toggle="onToggle"></linechart>
+```
+
 
 ### Building
 Fetch the repo :
@@ -169,7 +239,7 @@ $ grunt travis
 ### Contributing
 You're welcome to submit issues and PRs. However, please make sure :
 
-- to link a plunker with your issue ([here's one to start from](http://plnkr.co/edit/C9fHwXzo90LlRSkt6cjI?p=preview))
+- to link a plunker with your issue ([here's one to start from](http://plnkr.co/edit/2hqP1VfrsmrYydezW35G?p=preview))
 - to add tests to your pull requests
 
 

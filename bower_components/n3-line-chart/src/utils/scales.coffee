@@ -97,7 +97,7 @@
         axis = d3.svg.axis()
           .scale(scale)
           .orient(sides[key])
-          .tickFormat(o?.labelFunction)
+          .tickFormat(o?.ticksFormatter)
 
         return axis unless o?
 
@@ -161,6 +161,7 @@
           groups.push([series]) unless isInStack
 
         groups.forEach (group) ->
+          group = group.filter(Boolean)
           minY = Math.min(minY, d3.min(data, (d) ->
             group.reduce ((a, s) -> Math.min(a, d[s.y]) ), Number.POSITIVE_INFINITY
           ))

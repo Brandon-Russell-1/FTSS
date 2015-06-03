@@ -1,4 +1,4 @@
-      drawDots: (svg, axes, data, options, handlers) ->
+      drawDots: (svg, axes, data, options, handlers, dispatch) ->
         dotGroup = svg.select('.content').selectAll('.dotGroup')
           .data data.filter (s) -> s.type in ['line', 'area'] and s.drawDots
           .enter().append('g')
@@ -18,18 +18,21 @@
               'stroke': 'white'
               'stroke-width': '2px'
             )
+            .on('click': (d, i) -> dispatch.click(d, i))
+            .on('mouseover': (d, i) -> dispatch.hover(d, i))
 
         if options.tooltip.mode isnt 'none'
           dotGroup.on('mouseover', (series) ->
             target = d3.select(d3.event.target)
+            d = target.datum()
             target.attr('r', (s) -> s.dotSize + 2)
 
             handlers.onMouseOver?(svg, {
               series: series
               x: target.attr('cx')
               y: target.attr('cy')
-              datum: target.datum()
-            })
+              datum: d
+            }, options.axes)
           )
           .on('mouseout', (d) ->
             d3.select(d3.event.target).attr('r', (s) -> s.dotSize)
