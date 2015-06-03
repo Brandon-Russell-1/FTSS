@@ -18,13 +18,13 @@ FTSS.ng.controller(
 
 			var self = controllerHelper($scope, {
 
-				    'sort' : 'startMoment',
-				    'group': 'course',
-				    'model': 'ttms'
+					'sort' : 'startMoment',
+					'group': 'course',
+					'model': 'ttms'
 
-			    }),
+				}),
 
-			    today = moment();
+				today = moment();
 
 			$scope.inlineUpdate = function (field, setArchive) {
 
@@ -46,60 +46,53 @@ FTSS.ng.controller(
 
 			};
 
-			self
+			self.bind().then(function (data) {
 
-				.bind()
+				self.initialize(data).then(function (row) {
 
-				.then(function (data) {
+					// Call cacheFiller to add extra cached data
+					classProcessor.cacheFiller(row);
 
-					      // We do not need an edit function for this view
-					      $scope.edit = angular.noop;
+					// Track how many days until the class beings
+					row.daysUntil = row.startMoment.diff(today, 'days');
 
-					      self.initialize(data).then(function (row) {
+					// Archive classes that have already started
+					if (row.daysUntil < 0) {
+						row.Archived = true;
+					}
 
-						      // Call cacheFiller to add extra cached data
-						      classProcessor.cacheFiller(row);
+					// Fix our search for this view
+					row.search = [
+						row.ClassNotes,
+						row.Course.text,
+						row.Instructor.Name,
+						row.FTD.text
+					].join(' ');
 
-						      // Track how many days until the class beings
-						      row.daysUntil = row.startMoment.diff(today, 'days');
+					// This is the grouping header
+					row.course = [
+						row.Course.PDS,
+						' - ',
+						row.Course.Number,
+						' (Max: ',
+						row.Course.Max,
+						')'
+					].join('');
 
-						      // Archive classes that have already started
-						      if (row.daysUntil < 0) {
-							      row.Archived = true;
-						      }
+					// This will give visual cues if the class is starting soon
+					if (-1 < row.daysUntil && row.daysUntil < 10) {
 
-						      // Fix our search for this view
-						      row.search = [
-							      row.ClassNotes,
-							      row.Course.text,
-							      row.Instructor.Name,
-							      row.FTD.text
-						      ].join(' ');
+						// If very soon make it red, otherwise, make it yellow
+						row.style = (row.daysUntil < 3) ? 'danger text-danger' : 'warning text-warning';
 
-						      // This is the grouping header
-						      row.course = [
-							      row.Course.PDS,
-							      ' - ',
-							      row.Course.Number,
-							      ' (Max: ',
-							      row.Course.Max,
-							      ')'
-						      ].join('');
+						// Add some extra search terms to filter by upcoming classes
+						row.search += ' soon late upcoming attention action';
 
-						      // This will give visual cues if the class is starting soon
-						      if (-1 < row.daysUntil && row.daysUntil < 10) {
+					}
 
-							      // If very soon make it red, otherwise, make it yellow
-							      row.style = (row.daysUntil < 3) ? 'danger text-danger' : 'warning text-warning';
+				});
 
-							      // Add some extra search terms to filter by upcoming classes
-							      row.search += ' soon late upcoming attention action';
-
-						      }
-
-					      });
-
-				      });
+			});
 
 		}
 	]);

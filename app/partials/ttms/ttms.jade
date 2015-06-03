@@ -1,29 +1,36 @@
 include ../mixins
 
-- var columns = {Location: 20, Dates:20, Notes: 50}
+.wrapped.noAdd
 
-+tableHeader(false, columns, 'ttms')
+    +userInstructions('ttms', true)
 
-    td.topFix
-        b {{::row.FTD.LCode}}:&nbsp;
-        span {{::row.FTD.LongName}}
+    +grouping()
 
-    td.bold.topFix {{::row.dateRange}}
+        table.table.table-striped.table-expanded.table-hover
 
-    td
+            tbody
+                tr.am-fade-and-slide-left(ng-repeat='row in group track by row.Id', class='{{::row.style}}')
 
-        p.form-control.wideText(contenteditable,
-                                ng-model='row.J4Notes',
-                                onEnter='inlineUpdate("J4Notes", false)',
-                                placeholder='Type to leave notes for the FTD, prefix with # to not send an email')
+                    td.topFix
+                        b {{::row.FTD.LCode}}:&nbsp;
+                        span {{::row.FTD.LongName}}
 
-        p(ng-if='row.ClassNotes')
-            b FTD Notes:&nbsp;
-            span.italics {{::row.ClassNotes}}
+                    td.bold.topFix {{::row.dateRange}}
 
-    td
+                    td
 
-        p.form-control.pull-right.wideText(contenteditable,
-                                            ng-model='row.TTMS',
-                                            onEnter='inlineUpdate("TTMS", true)',
-                                            placeholder='Class #')
+                        p.form-control.wideText(contenteditable,
+                                                ng-model='row.J4Notes',
+                                                onEnter='inlineUpdate("J4Notes", false)',
+                                                placeholder='Type to leave notes for the FTD, prefix with # to not send an email')
+
+                        p(ng-if='row.ClassNotes')
+                            b FTD Notes:&nbsp;
+                            span.italics {{::row.ClassNotes}}
+
+                    td
+
+                        p.form-control.pull-right.wideText(contenteditable,
+                                                            ng-model='row.TTMS',
+                                                            onEnter='inlineUpdate("TTMS", true)',
+                                                            placeholder='Class #')
