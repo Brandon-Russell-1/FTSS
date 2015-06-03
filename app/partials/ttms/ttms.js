@@ -90,7 +90,7 @@ FTSS.ng.controller(
 						      if (-1 < row.daysUntil && row.daysUntil < 10) {
 
 							      // If very soon make it red, otherwise, make it yellow
-							      row.styles = (row.daysUntil < 3) ? 'danger text-danger' : 'warning text-warning';
+							      row.style = (row.daysUntil < 3) ? 'danger text-danger' : 'warning text-warning';
 
 							      // Add some extra search terms to filter by upcoming classes
 							      row.search += ' soon late upcoming attention action';
