@@ -400,9 +400,19 @@ FTSS.ng.service('utilities', [
 
 			if (_.all(_completed)) {
 
+				if (FTSS.captureETCA) {
+
+					var tags = _.find(caches.MasterCourseList, {'Number': FTSS.captureETCA}).Id || '';
+
+					FTSS.captureETCA = false;
+
+					return $location.path('scheduled/' + btoa('{"c":[' + tags + ']}'));
+
+				}
+
 				// Handle unauthorized access
 				if (!security.isAuthorized()) {
-					_self.navigate('home');
+					return _self.navigate('home');
 				}
 
 				security.checkFTD();

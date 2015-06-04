@@ -171,4 +171,7 @@
 	// Base path for bio photos
 	FTSS.photoURL = base + 'media/photos/';
 
+	// Let us handle course referrals from ETCA
+	FTSS.captureETCA = decodeURIComponent((document.referrer || '').split('as_course_id=')[1] || '').toUpperCase().trim();
+
 }());

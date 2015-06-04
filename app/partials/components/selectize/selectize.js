@@ -317,6 +317,9 @@
 						// Add MCL to Selectize with row callback
 						loaded(response, 'MasterCourseList', function (course) {
 
+							// Ensure our course # is always uppercase
+							course.Number = course.Number.toUpperCase().trim();
+
 							// Save for later  our unit listings
 							course.Units = [];
 
