@@ -14,11 +14,14 @@ mixin wizardRow(text)
             li(ng-class='progress.month'): +wizardRow('Choose a Month')
             li(ng-class='progress.courses'): +wizardRow('Identify Courses')
             li(ng-class='progress.seats'): +wizardRow('Identify Requirements')
-            li(ng-class='progress.submit'): +wizardRow('Sign 898')
+            li#preview(ng-class='progress.seats', e898)
+                .btn.btn-info.btn-labeled
+                    span.btn-label.white: +icon('search')
+                    span.text &nbsp;&nbsp;&nbsp;Preview 898
 
         .actions.btn.btn-success.btn-labeled.hide(ng-class='progress.submit')
             span.btn-label.white: +icon('check-circle')
-            span.text(e898) &nbsp;&nbsp;Sign & Submit
+            span.text(e898) &nbsp;&nbsp;Submit to FTD
 
 .clearfix
 
@@ -124,7 +127,7 @@ mixin wizardRow(text)
 
                                 tr
                                     td Seats<br>Given
-                                    td(ng-repeat='i in [0,1,2]')
+                                    td(ng-repeat='i in [0,1]')
                                         input.form-control(ng-model='row.History[i][1]', type='number', min='0', max='99', required)
 
 
