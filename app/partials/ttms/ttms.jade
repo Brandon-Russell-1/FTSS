@@ -11,13 +11,13 @@ include ../mixins
             tbody
                 tr.am-fade-and-slide-left(ng-repeat='row in group track by row.Id', class='{{::row.style}}')
 
-                    td.topFix
+                    td.w20.topFix
                         b {{::row.FTD.LCode}}:&nbsp;
                         span {{::row.FTD.LongName}}
 
-                    td.bold.topFix {{::row.dateRange}}
+                    td.w20.bold.topFix {{::row.dateRange}}
 
-                    td
+                    td.w50
 
                         p.form-control.wideText(contenteditable,
                                                 ng-model='row.J4Notes',
@@ -28,7 +28,7 @@ include ../mixins
                             b FTD Notes:&nbsp;
                             span.italics {{::row.ClassNotes}}
 
-                    td
+                    td.w15
 
                         p.form-control.pull-right.wideText(contenteditable,
                                                             ng-model='row.TTMS',
