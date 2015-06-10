@@ -4,7 +4,7 @@ include ../mixins
 
 #leftContainer
 
-    div(ng-if='canEdit'): +addButton('Add Course')
+    div(ng-if='isAdmin'): +addButton('Add Course')
 
     .wrapped
 

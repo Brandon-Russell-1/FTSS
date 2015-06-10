@@ -83,7 +83,10 @@ FTSS.ng.controller(
 			self.bind().then(function (data) {
 
 				// Only permit special roles read/write access (still has server-level security)
-				$scope.canEdit = security.hasRole('admin');
+				$scope.canEdit = security.hasRole(['curriculum', 'scheduling']);
+
+				// Only admins can add new classes to the catalog
+				$scope.isAdmin = security.hasRole('admin');
 
 				self.initialize(data).then(function (course) {
 
