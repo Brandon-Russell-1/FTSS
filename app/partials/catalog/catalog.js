@@ -9,7 +9,8 @@ FTSS.ng.controller(
 		'controllerHelper',
 		'security',
 		'courseNumberParser',
-		function ($scope, SharePoint, controllerHelper, security, courseNubmerParser) {
+		'utilities',
+		function ($scope, SharePoint, controllerHelper, security, courseNubmerParser, utilities) {
 
 			$scope.ftss.searchPlaceholder =
 				'Type here to search the catalog.  Examples: MDS:F-15, PDS:RFV, Robins, wire, 2A5*.';
@@ -85,6 +86,20 @@ FTSS.ng.controller(
 				// Only permit special roles read/write access (still has server-level security)
 				$scope.canEdit = security.hasRole(['curriculum', 'scheduling']);
 
+				/**
+				 * Handle user row click actions
+				 * @param courseNumber
+				 */
+				$scope.rowClick = function (courseNumber) {
+
+					// For privileged accounts, edit the course--everyone else search for open seats
+					$scope.canEdit ? $scope.edit.call(this, false) : function () {
+						FTSS.captureETCA = courseNumber;
+						utilities.navigate('search');
+					}
+
+				};
+
 				// Only admins can add new classes to the catalog
 				$scope.isAdmin = security.hasRole('admin');
 
@@ -130,5 +145,6 @@ FTSS.ng.controller(
 
 
 			});
+
 		}
 	]);

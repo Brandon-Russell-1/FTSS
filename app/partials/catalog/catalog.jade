@@ -16,11 +16,9 @@ include ../mixins
 
                 table.table.table-striped.rollup
 
-                    thead: th Course
-
                     tbody
                         tr.am-slide-top(ng-repeat='row in group track by row.Id',
-                                            ng-dblclick='canEdit && edit(false)',
+                                            ng-click='rowClick(row.Number)',
                                             placement='left',
                                             bs-popover='row.units'
                                             custom-class="leftBarOverlayHover")
@@ -28,7 +26,7 @@ include ../mixins
                             td.uppercase
 
                                 h4 {{::row.PDS}}&nbsp;-&nbsp;
-                                    a(target='etca',
+                                    a(ng-click='$event.stopPropagation()', target='etca',
                                         href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{::row.Number}}')
                                         | {{::row.Number}}
 
