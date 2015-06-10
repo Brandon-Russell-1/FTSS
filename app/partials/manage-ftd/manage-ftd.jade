@@ -27,7 +27,7 @@ div(ng-class='{addNew:addNew}')
             +modalFooter('data.Person')
 
 
-form#embed.col-lg-6.wrapped(ng-show='det.Courses_JSON', name='ftdEdit')
+form#embed.col-lg-6.wrapped(ng-if='det.Courses_JSON', name='ftdEdit')
 
     +userInstructions('units', true)
 
@@ -49,8 +49,10 @@ form#embed.col-lg-6.wrapped(ng-show='det.Courses_JSON', name='ftdEdit')
 
     br
 
-    .pds(trigger='focus', bs-popover='language.units_courses', placement='right')
-        select.wide(selectize='MasterCourseList', bind='det.Courses_JSON', multiple, required)
+    #coursePicker.pds
+        select(selectize='MasterCourseList', bind='det.Courses_JSON', multiple, required)
+        .text-info.info.italics.pull-right
+            small(user-message='units_courses')
 
     br
 
