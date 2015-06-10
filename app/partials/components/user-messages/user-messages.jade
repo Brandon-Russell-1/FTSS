@@ -1,3 +1,5 @@
+include ../../mixins
+
 #language
 
     // Home Page =======================================================================================================
@@ -13,6 +15,27 @@
         br
 
 
+        // ---------------------
+
+        h4.border-bottom Program Updates
+            .pull-right (10 June 2015)
+
+        dl.dl-horizontal
+
+            dt Improvements
+            dd
+                ul
+                    li Users can now click a course in the catalog to search for open seats
+                    li Archive button (trashcan) will only be visible when there is hidden/archived data
+                    li Added user feedback for class searches that have no openings
+                    li Restructured the FTD class management screen to make it easier for dets that teach many courses
+
+            dt Fixed
+            dd
+                ul
+                    li Sheppard personnel unable to edit course catalog
+                    li Classes still showing up after they were cancelled
+                    li Strange sorting for long lists of selected items
 
         // ---------------------
 
@@ -21,7 +44,7 @@
 
         dl.dl-horizontal
 
-            dt New Features
+            dt Improvements
             dd
                 ul
                     li.
@@ -31,7 +54,7 @@
                     li Added ETCA links to FTD and MTS schedule views
 
 
-            dt Bug Fixes
+            dt Fixed
             dd
                 ul
                     li Issue with input fields losing focus on click
@@ -46,7 +69,7 @@
 
         dl.dl-horizontal
 
-            dt New Features
+            dt Improvements
             dd
                 ul
                     li.
@@ -62,11 +85,11 @@
                     li Added CSV download capability to production and my-ftd views
 
 
-            dt Bug Fixes
+            dt Fixed
             dd
                 ul
                     li Redesigned part of class scheduling system due to critical flaw in SharePoint
-                    li Several minor visual alignment issues corrected
+                    li Several minor visual alignment issues
 
 
         // ---------------------
@@ -76,7 +99,7 @@
 
         dl.dl-horizontal
 
-            dt New Features
+            dt Improvements
             dd
                 ul
                     li.
@@ -88,15 +111,15 @@
                         search for a given event type or course status.
 
 
-            dt Bug Fixes
+            dt Fixed
             dd
                 ul
-                    li Fixed photo drag & drop user feedback
-                    li Fixed issue when trying to navigate to the same page more than once
-                    li Fixed #reset link failing to complete
-                    li Fixed unauthorized page handler
-                    li Fixed broken calendar view when exactly 5 instructors were listed
-                    li Fixed seat counts not updating after approving requests
+                    li Photo drag & drop user feedback
+                    li Issue when trying to navigate to the same page more than once
+                    li #reset link failing to complete
+                    li Unauthorized page handler
+                    li Broken calendar view when exactly 5 instructors were listed
+                    li Seat counts not updating after approving requests
 
         // ---------------------
 
@@ -105,14 +128,14 @@
 
         dl.dl-horizontal
 
-            dt Bug Fixes
+            dt Fixed
             dd
                 ul
-                    li Fixed editing/canceling of instructor TDY/leave events
-                    li Fixed user auditing error in console
-                    li Fixed new instructors not being detected the first time
-                    li Fixed issues with some UTMs/MTS personnel not seeing their unit
-                    li Fixed error being thrown when adding/updating instructor photos
+                    li Editing/canceling of instructor TDY/leave events
+                    li User auditing error in console
+                    li New instructors not being detected the first time
+                    li Issues with some UTMs/MTS personnel not seeing their unit
+                    li Error being thrown when adding/updating instructor photos
 
         //  ---------------------
         h4.border-bottom Program Updates
@@ -120,39 +143,22 @@
 
         dl.dl-horizontal
 
-            dt 898/New Requirements
-            dd: ul: li We are still actively working to complete this feature and hope to be done in the coming weeks.
-
-            dt Seat Requests
+            dt Improvements
             dd
                 ul
                     li UTMs/MTS personnel now have a "My Unit" section that let's them view all previous and pending seat requests for their unit.
-
                     li Seat requests are now fully editable and cancelable by schedulers.
-
                     li Some email notification issues were fixed.
-
                     li Seat requests now support AFNET GAL lookups, use last, first to find students.
-
-            dt Scheduling
-            dd
-                ul
                     li The one-day offset issue for overseas units is now fixed.
                     li Several frequently-used training sites were added to a "links" dropdown menu (top-right corner).
                     li If already registered, instructors will now receive an email when they are scheduled for a class or the dates change.
                     li Overlapping courses should not shift classes in the schedule view anymore.
                     li A new room field was added as an extra, internal tracking tool for classes.
-
-            dt Production
-            dd
-                ul
                     li The production page was significantly updated and now supports full search/graph auto updates.
                     li Several issues with how the data was graphed were corrected.
                     li An alternate class list was added (still a work in progress).
-
-
-            dt Miscellaneous
-            dd: ul: li Several performance enhancements were implemented to minimize page load time.
+                    li Several performance enhancements to minimize page load time.
 
 
     // Misc
