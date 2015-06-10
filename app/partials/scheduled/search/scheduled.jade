@@ -1,9 +1,11 @@
 include ../../mixins
 
-.wrapped.noAdd(ng-class='{autoApprove:autoApprove}')
+.wrapped.noAdd(ng-class='{autoApprove:autoApprove,hasArchived:ftss.itemCount.archived}')
     +userInstructions('scheduled', true)
 
-    .group(ng-repeat='(header, group) in groups')
+    .alert.alert-info.text-info.lead(ng-if='isEmpty()', user-message='scheduled_no_classes_found')
+
+    .group(ng-if='!isEmpty()', ng-repeat='(header, group) in groups')
 
         .lead(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
 
@@ -20,7 +22,7 @@ include ../../mixins
 
         // --------------------------------------------------------
 
-        resource-view(ng-if='ftss.showAlternateView', bind='group.instructors', template='/partials/resource-view-event-search.html')
+        //        resource-view(ng-if='ftss.showAlternateView', bind='group.instructors', template='/partials/resource-view-event-search.html')
 
         // --------------------------------------------------------
 
