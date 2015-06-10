@@ -67,7 +67,7 @@ FTSS.ng.controller(
 
 						},
 
-						error        : utilities.alert.error
+						error: utilities.alert.error
 
 					});
 				};
@@ -137,9 +137,7 @@ FTSS.ng.controller(
 
 			$scope.$watch('det.Courses_JSON', function (courses, old) {
 
-				if (old) {
-					$scope.ftdEdit.$setDirty();
-				}
+				old && $scope.ftdEdit.$setDirty();
 
 			});
 

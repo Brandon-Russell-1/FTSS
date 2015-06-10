@@ -27,41 +27,43 @@ div(ng-class='{addNew:addNew}')
             +modalFooter('data.Person')
 
 
-form#embed.col-lg-6.wrapped(ng-if='det.Courses_JSON', name='ftdEdit')
+form#embed.col-lg-6.wrapped(name='ftdEdit')
 
     +userInstructions('units', true)
 
-    h3 {{det.Courses_JSON.length}} Courses Taught
+    div(ng-if='det.Courses_JSON')
 
-    .row.form-horizontal
+        h3 {{det.Courses_JSON.length}} Courses Taught
 
-        .col-lg-7
-            .input-group(trigger='focus', bs-popover='language.units_email', placement='right')
-                .input-group-addon.w15: +icon('envelope')
-                input.form-control(ng-model='det.Email', type='email', required)
+        .row.form-horizontal
 
-        .col-lg-5
-            .input-group(trigger='focus', bs-popover='units_phone', placement='right')
-                .input-group-addon.w15: +icon('phone')
-                input.form-control(ng-model='det.Phone', type='text', required)
+            .col-lg-7
+                .input-group(trigger='focus', bs-popover='language.units_email', placement='right')
+                    .input-group-addon.w15: +icon('envelope')
+                    input.form-control(ng-model='det.Email', type='email', required)
 
-    .clearfix
+            .col-lg-5
+                .input-group(trigger='focus', bs-popover='language.units_phone', placement='right')
+                    .input-group-addon.w15: +icon('phone')
+                    input.form-control(ng-model='det.Phone', type='text', required)
 
-    br
+        .clearfix
 
-    #coursePicker.pds
-        select(selectize='MasterCourseList', bind='det.Courses_JSON', multiple, required)
-        .text-info.info.italics.pull-right
-            small(user-message='units_courses')
+        br
 
-    br
+        #coursePicker.pds
+            select(selectize='MasterCourseList', bind='det.Courses_JSON', multiple, required)
+            .text-info.info.italics.pull-right
+                small(user-message='units_courses')
 
-    #floatSubmit.pull-right.btn.btn-success.btn-labeled(ng-click='updateFTD()',
-                                    ng-hide='modal.$invalid || det.submitted || !ftdEdit.$dirty')
+        br
 
-        span.btn-label.white: +icon('check-circle')
+        #floatSubmit.pull-right.btn.btn-success.btn-labeled(ng-click='updateFTD()',
+                                        ng-hide='modal.$invalid || det.submitted || !ftdEdit.$dirty')
 
-        span.text &nbsp;Update FTD
+            span.btn-label.white: +icon('check-circle')
+
+            span.text &nbsp;Update FTD
 
 
 #rightScroll.wrapped.col-lg-6.addNew
