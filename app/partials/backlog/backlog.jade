@@ -87,12 +87,12 @@ mixin wizardRow(text)
                         .pull-right {{row.Days}} Days
 
                     #reqs898
-                        table.table.table-split
+                        table.table.table-split(ng-class='{isPriority:row.Priority}')
                             thead
                                 tr
                                     th.hide
                                     th Priority<br>Course
-                                    th Total<br>Backlog
+                                    th.ifPriority Total<br>Backlog
                                     th Priority<br>Backlog
                                     th Seats<br>Needed
                             tbody
@@ -102,7 +102,7 @@ mixin wizardRow(text)
                                         .checkbox(ng-model='row.Priority', bs-checkbox)
                                             .yes.css-label
                                             .no.css-label
-                                    td: input.form-control(ng-model='row.backlog', type='number', min='0', max='999', required)
+                                    td.ifPriority: input.form-control(ng-model='row.backlog', type='number', min='0', max='999', required)
                                     td: input.form-control(ng-model='row.backlogPriority', type='number', min='0', max='999', required)
                                     td: input.form-control(ng-model='row.required', type='number', min='0', max='99', required, ng-change='countSeats()')
 

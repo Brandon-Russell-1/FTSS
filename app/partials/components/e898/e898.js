@@ -56,7 +56,7 @@
 
 							// Copy all our requirements into a single array
 							_.each($scope.groups, function (group) {
-								data.Requirements = data.Requirements.concat(group);
+								data.Requirements = _.cloneDeep(data.Requirements.concat(group));
 							});
 
 							_(data.Requirements)
@@ -79,11 +79,15 @@
 									      course.stats1 = course.History[1].join('/').replace('0/0', '0');
 									      course.stats2 = course.History[2].join('/').replace('0/0', '0');
 									      course.stats3 = course.required;
-									      course.Notes = course.Notes || '';
 
-									      courseData += _.template(courseRow)(course)
+									      // Track unique priority backlogs
+									      course.notes = (course.backlogPriority && course.backlogPriority !== course.backlog ?
 
-										      .replace(/_INDEX_/g, course.Id);
+									                     '***PRIORITY BACKLOG:  ' + course.backlogPriority + '  ***\r' : '')
+
+									                     + (course.Notes || '');
+
+									      courseData += _.template(courseRow)(course).replace(/_INDEX_/g, course.Id);
 
 									      offset += 115;
 									      offsetTitle += 115;
