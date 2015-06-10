@@ -174,4 +174,7 @@
 	// Let us handle course referrals from ETCA
 	FTSS.captureETCA = decodeURIComponent((document.referrer || '').split('as_course_id=')[1] || '').toUpperCase().trim();
 
+	// Just a quick reminder we are not in production mode
+	!PRODUCTION && console.log('DEVELOPMENT ENVIRONMENT');
+
 }());
