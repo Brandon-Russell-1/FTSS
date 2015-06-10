@@ -605,7 +605,6 @@
 			}
 
 			self.updateOriginalInput();
-			self.refreshItems();
 			self.refreshState();
 			self.updatePlaceholder();
 			self.isSetup = true;
@@ -1310,7 +1309,6 @@
 			var self     = this;
 			var settings = self.settings;
 			var options  = this.getSearchOptions();
-
 			// validate user-provided result scoring function
 			if (settings.score) {
 				calculateScore = self.settings.score.apply(this, [query]);
@@ -1691,7 +1689,10 @@
 		 * @param {string} value
 		 */
 		addItems: function(values) {
-			var items = $.isArray(values) ? values : [values];
+			var options = this.options,
+
+				items = $.isArray(values) ? _.sortBy(values, function(item) {return options[item].label}) : [values];
+
 			for (var i = 0, n = items.length; i < n; i++) {
 				this.isPending = (i < n - 1);
 				this.addItem(items[i]);
@@ -1730,6 +1731,7 @@
 				}
 
 				if (self.isSetup && !self.isPending) {
+
 					$options = self.$dropdown_content.find('[data-selectable]');
 
 					// update menu / remove the option (if this is not one item being added as part of series)
@@ -1842,22 +1844,6 @@
 			}
 
 			return true;
-		},
-
-		/**
-		 * Re-renders the selected item lists.
-		 */
-		refreshItems: function() {
-			this.lastQuery = null;
-
-			if (this.isSetup) {
-				for (var i = 0; i < this.items.length; i++) {
-					this.addItem(this.items);
-				}
-			}
-
-			this.refreshState();
-			this.updateOriginalInput();
 		},
 
 		/**
@@ -2093,19 +2079,6 @@
 				self.removeItem(values.pop());
 			}
 
-//			self.showInput();
-//			self.positionDropdown();
-//			self.refreshOptions(true);
-
-
-			// select previous option
-			/*if (option_select) {
-				$option_select = self.getOption(option_select);
-				if ($option_select.length) {
-					self.setActiveOption($option_select);
-				}
-			}*/
-
 			self.refreshSelected();
 
 			return true;
@@ -2334,22 +2307,6 @@
 		},
 
 		/**
-		 * Clears the render cache for a template. If
-		 * no template is given, clears all render
-		 * caches.
-		 *
-		 * @param {string} templateName
-		 */
-		clearCache: function(templateName) {
-			var self = this;
-			if (typeof templateName === 'undefined') {
-				self.renderCache = {};
-			} else {
-				delete self.renderCache[templateName];
-			}
-		},
-
-		/**
 		 * Determines whether or not to display the
 		 * create item prompt, given a user input.
 		 *
@@ -2413,32 +2370,6 @@
 
 		copyClassesToDropdown: true,
 
-		/*
-		load            : null, // function(query, callback) { ... }
-		score           : null, // function(search) { ... }
-		onInitialize    : null, // function() { ... }
-		onChange        : null, // function(value) { ... }
-		onItemAdd       : null, // function(value, $item) { ... }
-		onItemRemove    : null, // function(value) { ... }
-		onClear         : null, // function() { ... }
-		onOptionAdd     : null, // function(value, data) { ... }
-		onOptionRemove  : null, // function(value) { ... }
-		onOptionClear   : null, // function() { ... }
-		onDropdownOpen  : null, // function($dropdown) { ... }
-		onDropdownClose : null, // function($dropdown) { ... }
-		onType          : null, // function(str) { ... }
-		onDelete        : null, // function(values) { ... }
-		*/
-
-		render: {
-			/*
-			item: null,
-			optgroup: null,
-			optgroup_header: null,
-			option: null,
-			option_create: null
-			*/
-		}
 	};
 
 
@@ -2592,92 +2523,6 @@
 
 	$.fn.selectize.defaults = Selectize.defaults;
 
-
-	Selectize.define('drag_drop', function(options) {
-		if (!$.fn.sortable) throw new Error('The "drag_drop" plugin requires jQuery UI "sortable".');
-		if (this.settings.mode !== 'multi') return;
-		var self = this;
-
-		self.lock = (function() {
-			var original = self.lock;
-			return function() {
-				var sortable = self.$control.data('sortable');
-				if (sortable) sortable.disable();
-				return original.apply(self, arguments);
-			};
-		})();
-
-		self.unlock = (function() {
-			var original = self.unlock;
-			return function() {
-				var sortable = self.$control.data('sortable');
-				if (sortable) sortable.enable();
-				return original.apply(self, arguments);
-			};
-		})();
-
-		self.setup = (function() {
-			var original = self.setup;
-			return function() {
-				original.apply(this, arguments);
-
-				var $control = self.$control.sortable({
-					items: '[data-value]',
-					forcePlaceholderSize: true,
-					disabled: self.isLocked,
-					start: function(e, ui) {
-						ui.placeholder.css('width', ui.helper.css('width'));
-						$control.css({overflow: 'visible'});
-					},
-					stop: function() {
-						$control.css({overflow: 'hidden'});
-						var active = self.$activeItems ? self.$activeItems.slice() : null;
-						var values = [];
-						$control.children('[data-value]').each(function() {
-							values.push($(this).attr('data-value'));
-						});
-						self.setValue(values);
-						self.setActiveItem(active);
-					}
-				});
-			};
-		})();
-
-	});
-
-	Selectize.define('dropdown_header', function(options) {
-		var self = this;
-
-		options = $.extend({
-			title         : 'Untitled',
-			headerClass   : 'selectize-dropdown-header',
-			titleRowClass : 'selectize-dropdown-header-title',
-			labelClass    : 'selectize-dropdown-header-label',
-			closeClass    : 'selectize-dropdown-header-close',
-
-			html: function(data) {
-				return (
-					'<div class="' + data.headerClass + '">' +
-						'<div class="' + data.titleRowClass + '">' +
-							'<span class="' + data.labelClass + '">' + data.title + '</span>' +
-							'<a href="javascript:void(0)" class="' + data.closeClass + '">&times;</a>' +
-						'</div>' +
-					'</div>'
-				);
-			}
-		}, options);
-
-		self.setup = (function() {
-			var original = self.setup;
-			return function() {
-				original.apply(self, arguments);
-				self.$dropdown_header = $(options.html(options));
-				self.$dropdown.prepend(self.$dropdown_header);
-			};
-		})();
-
-	});
-
 	/**
 	 * Plugin: "optgroup_columns" (selectize.js)
 	 * Copyright (c) 2013 Simon Hewitt & contributors
@@ -2811,34 +2656,6 @@
 			};
 		})();
 
-	});
-
-	Selectize.define('restore_on_backspace', function(options) {
-		var self = this;
-
-		options.text = options.text || function(option) {
-			return option[this.settings.labelField];
-		};
-
-		this.onKeyDown = (function(e) {
-			var original = self.onKeyDown;
-			return function(e) {
-				var index, option;
-				if (e.keyCode === KEY_BACKSPACE && this.$control_input.val() === '' && !this.$activeItems.length) {
-					index = this.caretPos - 1;
-					if (index >= 0 && index < this.items.length) {
-						option = this.options[this.items[index]];
-						if (this.deleteSelection(e)) {
-							this.setTextboxValue(options.text.apply(this, [option]));
-							this.refreshOptions(true);
-						}
-						e.preventDefault();
-						return;
-					}
-				}
-				return original.apply(this, arguments);
-			};
-		})();
 	});
 
 	return Selectize;
