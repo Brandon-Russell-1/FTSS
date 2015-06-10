@@ -241,6 +241,7 @@ FTSS.ng.controller(
 
 						// We set the start day to 1 to indicate a cancellation
 						self._update(scope, {
+							'cache'     : true,
 							'__metadata': scope.data.__metadata,
 							'Start'     : 1
 						}, function () {
@@ -248,7 +249,7 @@ FTSS.ng.controller(
 							// If this is class with a TTMS & not a TS, send an email to J4 about this class
 							scope.data.TTMS && !scope.data.TS && notifier.cancelClass(scope.data);
 
-							// Remore from the model
+							// Remove from the model
 							delete self.data[scope.data.Key];
 
 							// Close the dialog

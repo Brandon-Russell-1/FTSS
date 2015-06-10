@@ -132,9 +132,9 @@
 
 			'scheduled': {
 
-				'cache' : true,
-				'source': 'Scheduled',
-				'params': {
+				'cache'  : true,
+				'source' : 'Scheduled',
+				'params' : {
 					'$select': [
 						'UnitId',
 						'CourseId',
@@ -152,7 +152,8 @@
 						'TS',
 						'Location'
 					]
-				}
+				},
+				'version': 1
 
 			},
 
@@ -273,7 +274,7 @@
 	 */
 	FTSS.models = function (modelName) {
 
-		return  _.cloneDeep(_models[modelName]);
+		return _.cloneDeep(_models[modelName]);
 
 	};
 
