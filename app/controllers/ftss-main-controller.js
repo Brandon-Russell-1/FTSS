@@ -151,7 +151,8 @@
 					$rootScope.ftss.itemCount = {
 						'total'   : 0,
 						'value'   : '-',
-						'overload': false
+						'overload': false,
+						'archived': 0
 					};
 
 					// The user full-text search

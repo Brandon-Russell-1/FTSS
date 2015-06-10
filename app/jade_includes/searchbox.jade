@@ -1,6 +1,6 @@
 include ../partials/mixins
 
-#searchButtons.no-pad.pull-right(style='width:100px')
+#searchButtons.no-pad.pull-right(style='width:100px;height:38px')
 
     span#toggleExpand.btn.btn-default(ng-if='ftss.hasAlternateView',
                                         ng-click='ftss.doToggleState("showAlternateView")',
@@ -9,12 +9,13 @@ include ../partials/mixins
         +icon('flip-view')
         +icon('flip-view-alt')
 
-    span#toggleArchive.btn.btn-default(ng-if='ftss.hasArchiveOption',
+    span#toggleArchive.btn.btn-default(ng-if='ftss.hasArchiveOption && ftss.itemCount.archived',
                                         ng-click='ftss.doToggleState("showArchived")',
                                         bs-popover='language.button_archive',
                                         placement='left')
         +icon('trash_hide')
         +icon('trash_show')
+
 
 #searchContainer(ng-class='{tagBox:ftss.isTagBox, singleTag:ftss.singleTag}')
 

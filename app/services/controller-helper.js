@@ -314,6 +314,7 @@ FTSS.ng.service('controllerHelper', [
 									$scope.groups = false;
 									$scope.ftss.itemCount.value = '-';
 									$scope.ftss.itemCount.overload = false;
+									$scope.ftss.itemCount.archived = _.countBy(sifter.data, 'Archived');
 
 									// Create our sorted groups and put in our scope
 									$scope.groups = _(sifter)
