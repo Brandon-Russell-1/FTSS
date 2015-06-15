@@ -1,8 +1,10 @@
 exports.config =
 # See docs at http://brunch.readthedocs.org/en/latest/config.html.
+  server:
+    port: 8080
   conventions:
-    assets : /^app\/assets\//
-    ignored: /^(app\/styles\/overrides|(.*?\/|app\/partials\/includes)?[_][a-zA-Z0-9]*)|(app\/.*?\.spec\.js)|(app\/.*?\.spec\.coffee)/
+    assets : /^app[\\/]assets[\\/]/
+    ignored: /^(app[\\/]styles[\\/]overrides|(.*?[\\/]|app[\\/]partials[\\/]includes)?[_][a-zA-Z0-9]*)|(app[\\/].*?\.spec\.js)|(app[\\/].*?\.spec\.coffee)/
   modules    :
     definition: false
     wrapper   : false
@@ -15,12 +17,17 @@ exports.config =
         'js/vendor.js': /^(bower_components|vendor)/
       order :
         before: [
+          'bower_components\\jquery\\dist\\jquery.js',
           'bower_components/jquery/dist/jquery.js',
-          'app/scripts/angular-sharepoint.js',
+          'appscripts\\angular-sharepoint.js',
+          'appscripts/angular-sharepoint.js',
+          'app\\scripts\\ftss-init.js'
           'app/scripts/ftss-init.js'
         ]
         after : [
+          'app\\scripts\\dodconsent.js',
           'app/scripts/dodconsent.js',
+          'vendor\\lib_log.js'
           'vendor/lib_log.js'
         ]
 
@@ -29,7 +36,9 @@ exports.config =
         'css/app.css': /^(app|vendor|bower_components)/
       order :
         after : [
+          'app\\styles\\theme.css',
           'app/styles/theme.css',
+          'app\\styles\\roles.css'
           'app/styles/roles.css'
         ]
 
