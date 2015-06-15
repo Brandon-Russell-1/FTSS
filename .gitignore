@@ -29,3 +29,4 @@ coverage
 coverage/*
 
 app/scripts/helper.js
+app/services/ng-sharepoint.js
