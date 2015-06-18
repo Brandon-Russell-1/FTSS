@@ -217,6 +217,7 @@ FTSS.ng.controller(
 							// Create our event on SP
 							self._create({
 
+								'cache'       : true,
 								'__metadata'  : 'Unavailable',
 								'UnitId'      : $scope.ftd.Id,
 								'InstructorId': $scope.me.Id,
