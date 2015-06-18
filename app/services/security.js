@@ -28,9 +28,9 @@ FTSS.ng.service('security', [
 
 				'admin-instructors': ['admin'],
 
-				'requirements': ['mtf', 'ftd'],
+				'requirements': ['mts', 'ftd'],
 
-				'requests': ['mtf', 'ftd'],
+				'requests': ['utm', 'mts', 'ftd'],
 
 				'manage-ftd': ['ftd'],
 
@@ -38,11 +38,11 @@ FTSS.ng.service('security', [
 
 				'production-ftd': ['ftd', 'instructor'],
 
-				'backlog': ['mtf', 'ftd'],
+				'backlog': ['mts', 'ftd'],
 
-				'my-unit': ['mtf'],
+				'my-unit': ['mts'],
 
-				'my-ftd': ['mtf'],
+				'my-ftd': ['mts'],
 
 				'ttms': ['scheduling']
 
@@ -62,7 +62,7 @@ FTSS.ng.service('security', [
 		this.switchContext = function (contextType) {
 
 			// Workaround for our variable naming vs role naming conflict
-			var role = (contextType === 'host') ? 'mtf' : 'ftd';
+			var role = (contextType === 'host') ? ['utm', 'mts'] : 'ftd';
 
 			// Verify authorization first
 			if (_self.hasRole(role)) {
@@ -137,7 +137,7 @@ FTSS.ng.service('security', [
 
 			if ($rootScope.host) return true;
 
-			if (_self.hasRole(['mtf'])) {
+			if (_self.hasRole(['utm', 'mts'])) {
 
 				caches.Hosts && _self.switchContext('host');
 
@@ -268,7 +268,8 @@ FTSS.ng.service('security', [
 
 			// This is the text that is displayed in the top-left corner of the app
 			$rootScope.roleText = _groups.join(' • ')
-				.replace('mtf', 'MTS/UTM')
+				.replace('utm', 'Unit Training Manager')
+				.replace('mts', 'MTS Personnel')
 				.replace('ftd', 'FTD Scheduler/Production Supervisor')
 				.replace('curriculum', 'Training/Curriculum Manager')
 				.replace('scheduling', 'J4 Scheduler')

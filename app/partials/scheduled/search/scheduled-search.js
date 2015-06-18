@@ -39,7 +39,7 @@ FTSS.ng.controller(
 
 				$scope.autoApprove = security.hasRole(['ftd', 'scheduling']);
 
-				$scope.canEdit = $scope.canRequest = security.hasRole(['mtf', 'ftd', 'scheduling']);
+				$scope.canEdit = $scope.canRequest = security.hasRole(['utm', 'mts', 'ftd', 'scheduling']);
 
 				/**
 				 * Determines if we had no search results or not

@@ -70,7 +70,7 @@ FTSS.ng.controller(
 
 						      d.steps = [
 							      {
-								      'text'  : 'MTF',
+								      'text'  : 'MTS',
 								      'status': 'complete'
 							      },
 
