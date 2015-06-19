@@ -107,7 +107,7 @@ FTSS.ng.service('controllerHelper', [
 
 										} else {
 
-											finalize();
+											finalize(watch);
 
 										}
 
