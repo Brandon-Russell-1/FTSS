@@ -66,7 +66,7 @@ FTSS.ng.service('calendarSupport', [
 
 				};
 
-			// Setup uour empty calendar for FullCalendar
+			// Setup our empty calendar for FullCalendar
 			scope.eventsInstructor = [];
 
 			// Monitors the InstructorId to load their teaching schedule
