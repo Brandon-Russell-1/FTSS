@@ -271,7 +271,7 @@ FTSS.ng.service('classProcessor', [
 
 			row.Key = key;
 
-			// For fake courses (unavalability events), we only need to load a few pieces of data
+			// For fake courses (unavailability events), we only need to load a few pieces of data
 			if (row.__metadata.type === 'Microsoft.SharePoint.DataService.UnavailableItem') {
 
 				row.NA = true;
