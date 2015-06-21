@@ -40,6 +40,7 @@ FTSS.ng.controller(
 
 							var send = {
 
+								'cache'       : true,
 								'__metadata'  : scope.data.__metadata || 'Unavailable',
 								'UnitId'      : scope.ftd.Id,
 								'InstructorId': scope.data.InstructorId,
