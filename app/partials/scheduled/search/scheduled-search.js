@@ -15,8 +15,6 @@ FTSS.ng.controller(
 
 			$scope.ftss.searchPlaceholder = 'Type here to search within the available courses.';
 
-			$scope.ftss.hasArchiveOption = true;
-
 			var self = controllerHelper($scope, {
 
 				'sort' : 'Start',
@@ -60,7 +58,7 @@ FTSS.ng.controller(
 					row.Header = row.Course.PDS + ' - ' + row.Course.Number + ' (' + row.Course.MDS + ')';
 
 					// Hide full classes by default
-					row.Archived = (row.openSeats < 1);
+					row.Full = (row.openSeats < 1);
 
 					// The URL for our mailTo link
 					row.mailFTD = row.FTD.Email +

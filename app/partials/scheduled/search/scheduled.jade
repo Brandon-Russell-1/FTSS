@@ -34,7 +34,11 @@ include ../../mixins
                 bs-popover='row.ClassNotes'
                 custom-class="leftBarOverlayHover")
 
-            .btn.btn-success.openSeats(ng-click='requestSeats()') {{::row.openSeats}}
+            .btn.btn-success.openSeats(ng-if='!row.Full', ng-click='requestSeats()')
+                .pull-left {{::row.openSeats}}
+                .pull-right Open<br>Seats
+
+            .btn.btn-warning.openSeats.btn-fake(ng-if='row.Full') Full
 
             .well.well-sm
 
