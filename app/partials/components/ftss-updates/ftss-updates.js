@@ -33,7 +33,7 @@
 								};
 
 							// Iterate over each update set
-							_.each(updates, function (update) {
+							_(updates).sortBy('Timestamp').reverse().each(function (update) {
 
 								// Create the update header/wrapper div
 								html += '<h4 class="border-bottom">Program Updates<span class="pull-right">(' +
@@ -50,7 +50,7 @@
 
 								html += '</div>';
 
-							});
+							}).value();
 
 							// Update our html element
 							el.html(html);
