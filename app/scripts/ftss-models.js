@@ -262,6 +262,21 @@
 					]
 				}
 
+			},
+
+			'updates': {
+
+				'cache' : true,
+				'source': 'Updates',
+				'params': {
+					'$select': [
+						'Date',
+						'Fix',
+					    'Feat',
+					    'Misc'
+					]
+				}
+
 			}
 
 		};

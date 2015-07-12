@@ -25,7 +25,11 @@ mixin panelGroup(ico, title, type)
 
             .well
 
-                div(user-message='home_intro')
+                .lead(user-message='home_intro')
+
+                br
+
+                ftss-updates
 
                 .alert.alert-info(ng-if='roleText==="Visitor"')
 
