@@ -332,6 +332,11 @@ FTSS.ng.service('classProcessor', [
 					'danger' : 'Seat Limit Exceeded'
 				}[row.className];
 
+				row.J4Email = 'mailto:' + FTSS.J4Email +
+				              '?subject=FTSS Class Message for ' +
+				              row.Course.Number + row.TTMS + ' (' +
+				              row.FTD.LCode + ' - ' + row.dateRange + ')';
+
 				// The link to a TTMS start/grad roster
 				row.TTMSLink = [
 					'https://krpt.ttms.us.af.mil/TTMSReportsApp/wait.aspx',

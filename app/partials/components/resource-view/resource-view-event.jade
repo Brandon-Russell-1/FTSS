@@ -25,11 +25,18 @@ td(class='mark {{className}}',  colspan='{{DaysTruncated}}', ng-click='editClass
             p {{notesHTML}}
             p {{j4NotesHTML}}
 
+            br
+
             h4.text-center
 
-                .col-lg-5(edit-students, lookup='{{Id}}', templateURL='simple')
+                .col-lg-4(edit-students, lookup='{{Id}}', templateURL='simple')
 
-                .col-lg-6: a(ng-click='$event.stopPropagation()', href='{{TTMSLink}}', target="ttmsLoader", bs-popover='language.load_ttms', placement='top') Open Start/Grad Roster
+                .col-lg-4: a(ng-click='$event.stopPropagation()', href='{{TTMSLink}}', target='_blank', bs-popover='language.load_ttms', placement='top') TTMS Roster
 
+                .col-lg-4: a(ng-click='$event.stopPropagation()', href='{{J4Email}}') Contact Sheppard
+
+
+            br
+            br
 
             .clearfix
