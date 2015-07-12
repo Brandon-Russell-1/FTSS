@@ -153,7 +153,7 @@ FTSS.ng.controller(
 				// Complete the controller initialization
 				self.initialize(data).then(function (row) {
 
-					row.search = row.Name;
+					if (row) {row.search = row.Name}
 
 				});
 
