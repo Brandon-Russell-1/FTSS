@@ -25,20 +25,20 @@ FTSS.ng.service('controllerHelper', [
 		return function ($scope, opts) {
 
 			// Cleanup our scope watchers
-			$scope.$on("$destroy", function() {
+			$scope.$on("$destroy", function () {
 				(FTSS.searchWatch || Function)();
 				(FTSS.archiveWatch || Function)();
 			});
 
-			var model, process, actions;
+			var model, process, _self;
 
-			actions = {
+			_self = {
 
 				// Enable access to $scope externally
 				'$scope': $scope,
 
 				/**
-				 * Creates a $scope.$watcher to perform actions on change.  This function will call sharePoint.read() and pass
+				 * Creates a $scope.$watcher to perform _self on change.  This function will call sharePoint.read() and pass
 				 * the returned data to a promise, then().
 				 *
 				 * @name controllerHelper#bind
@@ -51,14 +51,14 @@ FTSS.ng.service('controllerHelper', [
 
 					var page = $scope.ftss.viewTitle,
 
-					    last;
+						last;
 
 					// Copy the model to a local variable for reuse without affecting the original model
 					model = FTSS.models(opts.model);
 
 					// Bind archive() & edit() to the scope in case they are needed
-					$scope.archive = actions.archive;
-					$scope.edit = actions.edit(opts.edit);
+					$scope.archive = _self.archive;
+					$scope.edit = _self.edit(opts.edit);
 
 					$scope.showHelp = (localStorage['FTSS_show_help_' + page] !== '');
 
@@ -86,7 +86,7 @@ FTSS.ng.service('controllerHelper', [
 									/**
 									 * Re-request data from the server
 									 */
-									actions.reload = function () {
+									_self.reload = function () {
 
 										loading(true);
 
@@ -95,7 +95,7 @@ FTSS.ng.service('controllerHelper', [
 											// Clone the model so we don't corrupt our filters
 											var modelClone = _.cloneDeep(model),
 
-											    filters = modelClone.params.$filter || [];
+												filters = modelClone.params.$filter || [];
 
 											opts.filter && filters.push(opts.filter);
 
@@ -140,10 +140,10 @@ FTSS.ng.service('controllerHelper', [
 									};
 
 									// Run our reload action now
-									actions.reload();
+									_self.reload();
 
 									// For auto-refreshing pages
-									(opts.refresh > 1) && window.setInterval(actions.reload, opts.refresh * 15000);
+									(opts.refresh > 1) && window.setInterval(_self.reload, opts.refresh * 15000);
 
 								}
 
@@ -163,8 +163,8 @@ FTSS.ng.service('controllerHelper', [
 				 */
 				'initialize': function (data) {
 
-					// Pass the response to actions.data for access externally
-					actions.data = data;
+					// Pass the response to _self.data for access externally
+					_self.data = data;
 
 					// If there was no data found pass the User Empty Message and abort the operation
 					if (_.size(data) < 1) {
@@ -187,11 +187,11 @@ FTSS.ng.service('controllerHelper', [
 							 */
 							'then': function (processCallback) {
 
-								// Add our pre-processor (optional), if undefined it just won't be called by actions.process.
+								// Add our pre-processor (optional), if undefined it just won't be called by _self.process.
 								process = processCallback;
 
 								// Call the internal pre-processor
-								actions.process(data);
+								_self.process(data);
 
 							}
 						};
@@ -206,14 +206,14 @@ FTSS.ng.service('controllerHelper', [
 				 */
 				'process': function (data) {
 
-					// Use data if valid, otherwise actions.data our cached dataset
-					data = data || actions.data;
+					// Use data if valid, otherwise _self.data our cached dataset
+					data = data || _self.data;
 
 					// If there is a defined data processor, then execute it against the data as well
 					process && _.each(data, process);
 
 					// Finally, send our data off to the post-processor
-					actions.postProcess(data);
+					_self.postProcess(data);
 
 				},
 
@@ -256,7 +256,7 @@ FTSS.ng.service('controllerHelper', [
 											     'search': d.search,
 
 											     // Also, send the data to sifter for use later on
-											     'data'  : d
+											     'data': d
 										     };
 
 									     })
@@ -290,25 +290,25 @@ FTSS.ng.service('controllerHelper', [
 									// reference for our searchText
 									var counter = 0,
 
-									    query = _.map(($scope.ftss.searchText || '')
+										query = _.map(($scope.ftss.searchText || '')
 
-										                  // Convert " or " to a regex or
-										                  .replace(/\sor\s/gi, '|')
+											              // Convert " or " to a regex or
+											              .replace(/\sor\s/gi, '|')
 
-										                  // Convert " and " to our split and search
-										                  .replace(/\sand\s/gi, ' ')
+											              // Convert " and " to our split and search
+											              .replace(/\sand\s/gi, ' ')
 
-										                  .replace(/\*/gi, '[\\w-]+')
+											              .replace(/\*/gi, '[\\w-]+')
 
-										                  // Split by spaces
-										                  .split(' '),
+											              // Split by spaces
+											              .split(' '),
 
-									                  function (q) {
+										              function (q) {
 
-										                  // Create independent regex tests for each word/wordgroup
-										                  return new RegExp(q, 'i');
+											              // Create independent regex tests for each word/wordgroup
+											              return new RegExp(q, 'i');
 
-									                  });
+										              });
 
 									// Reset groups, counter & count
 									$scope.groups = false;
@@ -395,7 +395,7 @@ FTSS.ng.service('controllerHelper', [
 				 * Modal Add/Edit Callback
 				 * The main add/edit dialog for then entire app--this one is kinda important.  First, generate a new isolated
 				 * scope then copy the row data to scope.data & launch the angular-strap modal dialog, also bind some close
-				 * & update actions and fire an optional post-processor to do more fancy stuff with the data from the
+				 * & update _self and fire an optional post-processor to do more fancy stuff with the data from the
 				 * parent controller
 				 *
 				 * @name controllerHelper#edit
@@ -409,15 +409,15 @@ FTSS.ng.service('controllerHelper', [
 
 						// Create the angular-strap modal using this model's modal template
 						var modal = $modal({
-							                   'placement'      : opts.modalPlacement || 'top',
-							                   'scope'          : $scope,
-							                   'backdrop'       : 'static',
-							                   'contentTemplate': '/partials/modal-' +
-							                                    (opts.modal || opts.model) +
-							                                    '.html'
-						                   }),
+								'placement'      : opts.modalPlacement || 'top',
+								'scope'          : $scope,
+								'backdrop'       : 'static',
+								'contentTemplate': '/partials/modal-' +
+								                   (opts.modal || opts.model) +
+								                   '.html'
+							}),
 
-						    scope = modal.$scope;
+							scope = modal.$scope;
 
 						// We handle add vs edit within the modal templates for simplicity
 						scope.createData = isNew || false;
@@ -426,7 +426,7 @@ FTSS.ng.service('controllerHelper', [
 						scope.close = modal.destroy;
 
 						// Allow archiving within an edit modal
-						scope.archive = actions.archive;
+						scope.archive = _self.archive;
 
 						// Bind the submit action with a destroy callback
 						if (opts.submit) {
@@ -439,12 +439,12 @@ FTSS.ng.service('controllerHelper', [
 
 						} else {
 
-							scope.submit = actions.update(scope, scope.close, isNew);
+							scope.submit = _self.update(scope, scope.close, isNew);
 
 						}
 
 						// Pass action.update to the scope for our traverse directive
-						scope.update = actions.update;
+						scope.update = _self.update;
 
 						// Copy the row data to our isolated scope
 						scope.data = isNew ? {} : angular.copy(this.row);
@@ -469,7 +469,7 @@ FTSS.ng.service('controllerHelper', [
 					// Allow handling modal archives
 					var close = this.close || false,
 
-					    data = this.row || this.data;
+						data = this.row || this.data;
 
 					// Double check that this model can actually perform this action
 					if (data && data.hasOwnProperty('Archived')) {
@@ -498,11 +498,22 @@ FTSS.ng.service('controllerHelper', [
 								// Update the etag so we can rewrite this data again during the session if we want
 								data.__metadata.etag = resp.headers('etag');
 
-								// Copy the updated back to the original dataset
-								actions.data[data.Key || data.Id] = angular.copy(data);
+								_.first(_self.data, function (row) {
 
-								// Call actions.process() to reprocess the data by our controllers
-								actions.process();
+									if (row.Id === data.Key || data.Id) {
+										row.Archived = true;
+										row.__metadata = data.__metadata;
+
+										return true;
+									}
+
+								});
+
+								// Copy the updated back to the original dataset
+								_self.data[data.Key || data.Id] = angular.copy(data);
+
+								// Call _self.process() to reprocess the data by our controllers
+								_self.process();
 
 							}
 
@@ -526,13 +537,13 @@ FTSS.ng.service('controllerHelper', [
 					data.updated = true;
 
 					// Copy the updated back to the original dataset
-					actions.data[data.Key || data.Id] = angular.copy(data);
+					_self.data[data.Key || data.Id] = angular.copy(data);
 
 					// If there is a callback, then fire it
 					callback && callback(data);
 
-					// Call actions.process() to reprocess the data by our controllers
-					!noProcess && $timeout(actions.process);
+					// Call _self.process() to reprocess the data by our controllers
+					!noProcess && $timeout(_self.process);
 
 				},
 
@@ -554,7 +565,7 @@ FTSS.ng.service('controllerHelper', [
 							utilities.alert.create();
 
 							// Perform final CRUD operations
-							actions._postCRUD(resp.data.d || resp.data, callback, noProcess);
+							_self._postCRUD(resp.data.d || resp.data, callback, noProcess);
 
 						}
 
@@ -590,7 +601,7 @@ FTSS.ng.service('controllerHelper', [
 							data.__metadata.etag = resp.headers('etag');
 
 							// Perform final CRUD operations
-							actions._postCRUD(data, callback, noProcess);
+							_self._postCRUD(data, callback, noProcess);
 
 						} else {
 
@@ -614,14 +625,14 @@ FTSS.ng.service('controllerHelper', [
 
 					var scope = this.row || this.data || this,
 
-					    send = {
-						    'cache'     : true,
-						    '__metadata': scope.__metadata
-					    };
+						send = {
+							'cache'     : true,
+							'__metadata': scope.__metadata
+						};
 
 					send[field] = scope[field];
 
-					actions._update(scope, send, callback, true);
+					_self._update(scope, send, callback, true);
 
 				},
 
@@ -648,7 +659,7 @@ FTSS.ng.service('controllerHelper', [
 							scope.submitted = true;
 
 							// Keep a copy of the original data for comparison
-							old = actions.data[scope.data.Key || scope.data.Id] || {};
+							old = _self.data[scope.data.Key || scope.data.Id] || {};
 
 							// Reference l
 							fields = FTSS.models(opts.model).params.$select;
@@ -687,11 +698,11 @@ FTSS.ng.service('controllerHelper', [
 
 							if (isNew) {
 
-								actions._create(send, complete);
+								_self._create(send, complete);
 
 							} else {
 
-								actions._update(scope, send, complete);
+								_self._update(scope, send, complete);
 
 							}
 
@@ -704,7 +715,7 @@ FTSS.ng.service('controllerHelper', [
 
 			};
 
-			return actions;
+			return _self;
 
 		};
 
