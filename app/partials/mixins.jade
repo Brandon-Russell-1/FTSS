@@ -235,7 +235,7 @@ mixin userInstructions(text, ignore)
 mixin modalHeader(create, update)
     .modal-header.caps
         if create
-            h3(ng-show='createData'): +icon('plus-circle', 'Add&nbsp;' + create)
+            h3(ng-show='createData'): +icon('plus-circle', 'Add ' + create)
 
         if update
             h3(ng-hide='createData'): +icon('edit', 'Update ' + update)
