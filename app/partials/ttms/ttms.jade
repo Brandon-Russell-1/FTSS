@@ -4,6 +4,9 @@ include ../mixins
 
     +userInstructions('ttms', true)
 
+    .alert.alert-success.text-success.lead(ng-if='worksDone')
+        +icon('check-square-o', 'It looks like all classes are built now.')
+
     +grouping()
 
         table.table.table-striped.table-expanded.table-hover

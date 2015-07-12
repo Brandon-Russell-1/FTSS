@@ -48,6 +48,8 @@ FTSS.ng.controller(
 
 			self.bind().then(function (data) {
 
+				$scope.worksDone = _.isEmpty(data);
+
 				self.initialize(data).then(function (row) {
 
 					// Call cacheFiller to add extra cached data
