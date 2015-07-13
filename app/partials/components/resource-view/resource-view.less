@@ -152,7 +152,7 @@
 			letter-spacing: -.05em;
 			font-weight: 100;
 		}
-		
+
 		tr:hover td:first-child {
 			color: #000;
 		}
@@ -283,6 +283,12 @@
 			font-size: 1.85em;
 			line-height: .85em;
 		}
+		.ttms {
+			display: none;
+			top: -12px;
+			left: 0;
+			font-size: .8em;
+		}
 		& > span {
 			margin-left: 50px;
 			margin-top: 10px;
@@ -335,7 +341,7 @@
 			margin-left: -85px;
 			z-index: 50;
 		}
-		.pds {
+		.pds, .ttms {
 			margin-left: 25px;
 		}
 		.details {
@@ -352,12 +358,18 @@
 	}
 
 	.mark.noPhoto {
-		.pds {
+		.pds, .ttms {
 			margin-left: 5px !important;
 		}
 
 		.instructor {
 			margin-left: 4.5em !important;
+		}
+	}
+
+	tr:hover {
+		.ttms {
+			display: block;
 		}
 	}
 }
