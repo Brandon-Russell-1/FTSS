@@ -165,15 +165,17 @@
 
 	}
 	.event {
+		
 		td {
-			border-collapse: separate;
+			border-color: #eaeaea;
+			border-collapse: collapse;
 			position: relative;
 			height: 35px;
 		}
 		.mark {
 			background: @classOpenSeats #fff;
-			border: 1px solid #777;
-			border-left: 3px solid #555;
+			border: 1px solid #777!important;
+			border-left: 3px solid #555!important;
 			padding: 0;
 			z-index: 10;
 			overflow: visible;
@@ -284,7 +286,7 @@
 			line-height: .85em;
 		}
 		.ttms {
-			display: none;
+			opacity: 0;
 			top: -12px;
 			left: 0;
 			font-size: .8em;
@@ -305,7 +307,7 @@
 		.details {
 			position: relative;
 			margin-left: 15px;
-			margin-top: 35px;
+			margin-top: 36px;
 			color: #333 !important;
 			background-color: rgba(255, 255, 255, 0);
 			border-bottom-left-radius: 5px;
@@ -367,11 +369,23 @@
 		}
 	}
 
-	tr:hover {
+	tr.event td {
+		transition: all 200ms ease!important;
+	}
+
+	tr.event:hover {
 		.ttms {
-			display: block;
+			opacity: 1;
+		}
+		td {
+			border-top:2px solid #888!important;
+			border-bottom:2px solid #888!important;
+			background-color: #ddd;
+			transition: all 200ms ease!important;
+			border-color: #ddd;
 		}
 	}
+
 }
 
 #resourceView tr td, #resourceView .mark * {
