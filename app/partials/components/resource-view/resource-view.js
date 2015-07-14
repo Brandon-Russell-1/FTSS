@@ -127,11 +127,8 @@
 										// Trim the PDS if days are less than 2
 										event.pds = event.DaysTruncated > 2 ? event.Course.PDS : '';
 
-										// Identify this class as truncated
-										if (event.Days !== event.DaysTruncated) {
-											event.pds = '<i bs-popover="language.truncated_classes" placement="top">' +
-											            event.pds + '</i>'
-										}
+										event.truncate = event.Days !== event.DaysTruncated ? '<i>Some days of this class are not visible.</i>' : '';
+										if (event.truncate) event.pds = '<i>' + event.pds + '</i>';
 
 										// Only show the bio photo if there is room for it
 										event.bioPhoto = event.DaysTruncated > 3 ? event.Instructor.Photo : '';

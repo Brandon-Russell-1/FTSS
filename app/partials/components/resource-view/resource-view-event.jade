@@ -14,7 +14,7 @@ td(class='mark {{className}}',  colspan='{{DaysTruncated}}', ng-click='editClass
         .container
 
             h4.border-bottom
-                a.btn-link(ng-click='$event.stopPropagation()', href='{{etca}}', target='_blank') {{Course.Number}}{{TTMS}}
+                | {{Course.Number}}{{TTMS}}
                 .pull-right {{dateRange}}
 
             .clearfix
@@ -23,21 +23,19 @@ td(class='mark {{className}}',  colspan='{{DaysTruncated}}', ng-click='editClass
 
             br
 
+            p {{truncate}}
             p {{notesHTML}}
             p {{j4NotesHTML}}
 
             br
-
-            h4.text-center
-
-                .col-lg-4(edit-students, lookup='{{Id}}', templateURL='simple')
-
-                .col-lg-4: a(ng-click='$event.stopPropagation()', href='{{TTMSLink}}', target='_blank', bs-popover='language.load_ttms', placement='top') TTMS Roster
-
-                .col-lg-4: a(ng-click='$event.stopPropagation()', href='{{J4Email}}') Contact Sheppard
-
-
             br
-            br
+
+            .eventButtons
+
+                .sub(edit-students, lookup='{{Id}}', templateURL='simple')
+
+                a.sub(ng-click='$event.stopPropagation()', href='{{TTMSLink}}', target='_blank', bs-popover='language.load_ttms', placement='top') TTMS Roster
+
+                a.sub(ng-click='$event.stopPropagation()', href='{{J4Email}}') Contact Sheppard
 
             .clearfix
