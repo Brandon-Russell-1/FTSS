@@ -1,100 +1,3 @@
-mixin initScripts(production, noFallback)
-
-    script.
-
-        (function () {
-
-            "use strict";
-
-            var log = [],
-
-                noFallback = #{noFallback};
-
-            // setup our timer functions
-            window._TIMER = {
-                'add': function (text) {
-                    log.push(text + ':   ' + Math.floor(window.performance.now()));
-                },
-                'get': function () {
-                    return JSON.stringify(log, null, 2);
-                }
-            };
-
-            // indicate the HTML file load time
-            _TIMER.add('html');
-
-            // helper for EIS
-            document.cookie = 'DodNoticeConsent=1';
-
-            // init globals
-            window.FTSS = {};
-            window.utils = {};
-            window.caches = {};
-            window.PRODUCTION = #{production};
-            window.failover = noFallback;
-
-            // add a class for IE 10
-            if (Function('/*@cc_on return document.documentMode===10@*/')()) {
-                document.documentElement.className += ' ie10';
-            }
-
-
-            if (!noFallback) {
-
-                window.fallback = function (force) {
-
-                    // Let the user do a hard-reload
-                    if (force) {
-                        window.location = window.location.href.replace('app.html', 'failover.html');
-                        return;
-                    }
-
-                    // Fallback to SharePoint
-                    if (!window.angular || !FTSS.ng) {
-                        add('script', '#{linkLib}');
-                        add('script', '#{linkApp}');
-                        add('link', '#{linkCSS}');
-                    }
-
-                    // Dynamically add tags to our page
-                    function add(tag, src) {
-
-                        var el = document.createElement(tag);
-
-                        src = '/sites/ftss/failover/' + src;
-
-                        if (tag === 'script') {
-
-                            el.src = src;
-
-                        } else {
-
-                            el.rel = 'stylesheet';
-                            el.type = 'text/css';
-                            el.href = src;
-
-                        }
-
-                        document.getElementsByTagName('head')[0].appendChild(el);
-
-                    }
-
-                }
-
-                // In case of very slow downloads (not blocked, but throttled), give the user an
-                window.slowLoad = setTimeout(function () {
-
-                    var msg = document.getElementById('setupMessage');
-
-                    msg.className = 'slow';
-                    msg.innerHTML = '<a onclick="fallback(true)">Page loading slow?  Click here to load from an alternate site.</a>';
-
-                }, 15000);
-
-            }
-
-        }());
-
 //- icon mixin to create our SVG icons
 mixin icon(tag, label, viewbox)
 
@@ -249,7 +152,7 @@ mixin modalFooter(submitText, defaultShow)
 
         block
 
-        .btn.btn-success.btn-labeled(ng-click='submit()', ng-hide='modal.$invalid || submitted || !modal.$dirty || #{defaultShow}')
+        .btn.btn-success.btn-labeled(ng-click='submit()', ng-hide='modal.$invalid || submitted || !modal.$dirty ||' + defaultShow)
 
             span.btn-label.white: +icon('check-circle')
 

@@ -1,24 +1,9 @@
-rd \s \q _public
+rm -fR
+
 node_modules\.bin\brunch build -P
 
-cd _public
+pause
 
-mkdir failover
-mkdir aws
+node_modules\.bin\jade app\_app.jade
 
-cd js
-
-echo Building live-libs
-cp vendor.js ..\failover\live-libs.js
-cat vendor.js | gzip -9cv > ..\aws\live-libs.js
-
-echo Building live-apps
-cat partials.js app.js > ..\failover\live-app.js
-gzip -9cv ..\failover\live-app.js > ..\aws\live-app.js
-
-cd ..\css
-
-echo Buildidng live-css
-cp app.css ..\failover\live.css
-gzip -9cv app.css > ..\aws\live.css
-
+mv app\_app.html _public\app.html

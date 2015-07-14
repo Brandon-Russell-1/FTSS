@@ -1,16 +1,16 @@
 div(style='display:none!important')
-    include ../jade_includes/sprites
-    include components/user-messages/user-messages
+    include sprites
+    include ../partials/components/user-messages/user-messages
 
-include ../jade_includes/topbar
-include ../jade_includes/leftbar
+include topbar
+include leftbar
 
 #content.wait
 
     #spinner: +spinner()
 
     #pageActions(ng-cloak)
-        include ../jade_includes/searchbox
+        include searchbox
 
         .clearfix
         hr(style='margin:3px 0 5px')
