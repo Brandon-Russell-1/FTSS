@@ -1,6 +1,6 @@
 
 /*
-line-chart - v1.1.9 - 25 May 2015
+line-chart - v1.1.10 - 03 July 2015
 https://github.com/n3-charts/line-chart
 Copyright (c) 2015 n3-charts
  */
@@ -20,9 +20,10 @@ directive('linechart', [
   'n3utils', '$window', '$timeout', function(n3utils, $window, $timeout) {
     var link;
     link = function(scope, element, attrs, ctrl) {
-      var dispatch, initialHandlers, isUpdatingOptions, promise, updateEvents, window_resize, _u;
+      var dispatch, id, initialHandlers, isUpdatingOptions, promise, updateEvents, window_resize, _u;
       _u = n3utils;
       dispatch = _u.getEventDispatcher();
+      id = _u.uuid();
       element[0].style['font-size'] = 0;
       scope.redraw = function() {
         scope.update();
@@ -44,7 +45,7 @@ directive('linechart', [
         dimensions = _u.getDimensions(options, element, attrs);
         isThumbnail = attrs.mode === 'thumbnail';
         _u.clean(element[0]);
-        svg = _u.bootstrap(element[0], dimensions);
+        svg = _u.bootstrap(element[0], id, dimensions);
         fn = function(key) {
           return (options.series.filter(function(s) {
             return s.axis === key && s.visible !== false;
@@ -59,9 +60,9 @@ directive('linechart', [
         if (dataPerSeries.length) {
           _u.setScalesDomain(axes, scope.data, options.series, svg, options);
         }
-        _u.createContent(svg, handlers);
+        _u.createContent(svg, id, options, handlers);
         if (dataPerSeries.length) {
-          columnWidth = _u.getBestColumnWidth(dimensions, dataPerSeries, options);
+          columnWidth = _u.getBestColumnWidth(axes, dimensions, dataPerSeries, options);
           _u.drawArea(svg, axes, dataPerSeries, options, handlers).drawColumns(svg, axes, dataPerSeries, columnWidth, options, handlers, dispatch).drawLines(svg, axes, dataPerSeries, options, handlers);
           if (options.drawDots) {
             _u.drawDots(svg, axes, dataPerSeries, options, handlers, dispatch);
@@ -114,8 +115,8 @@ directive('linechart', [
       $window.addEventListener('resize', window_resize);
       scope.$watch('data', scope.redraw, true);
       scope.$watch('options', scope.redraw, true);
-      scope.$watch('[click, hover, focus, toggle]', updateEvents);
-      return scope.$watch('[oldclick, oldhover, oldfocus]', updateEvents);
+      scope.$watchCollection('[click, hover, focus, toggle]', updateEvents);
+      scope.$watchCollection('[oldclick, oldhover, oldfocus]', updateEvents);
     };
     return {
       replace: true,
@@ -220,22 +221,25 @@ mod.factory('n3utils', [
         });
         pseudoColumns = {};
         keys = [];
-        data.forEach(function(series) {
-          var i, inAStack, index;
-          inAStack = false;
-          options.stacks.forEach(function(stack, index) {
-            var _ref;
-            if ((series.id != null) && (_ref = series.id, __indexOf.call(stack.series, _ref) >= 0)) {
-              pseudoColumns[series.id] = index;
-              if (__indexOf.call(keys, index) < 0) {
-                keys.push(index);
+        data.forEach(function(series, i) {
+          var inAStack, index, visible, _ref;
+          visible = (_ref = options.series) != null ? _ref[i].visible : void 0;
+          if (visible === void 0 || visible === !false) {
+            inAStack = false;
+            options.stacks.forEach(function(stack, index) {
+              var _ref1;
+              if ((series.id != null) && (_ref1 = series.id, __indexOf.call(stack.series, _ref1) >= 0)) {
+                pseudoColumns[series.id] = index;
+                if (__indexOf.call(keys, index) < 0) {
+                  keys.push(index);
+                }
+                return inAStack = true;
               }
-              return inAStack = true;
+            });
+            if (inAStack === false) {
+              i = pseudoColumns[series.id] = index = keys.length;
+              return keys.push(i);
             }
-          });
-          if (inAStack === false) {
-            i = pseudoColumns[series.id] = index = keys.length;
-            return keys.push(i);
           }
         });
         return {
@@ -243,8 +247,29 @@ mod.factory('n3utils', [
           keys: keys
         };
       },
-      getBestColumnWidth: function(dimensions, seriesData, options) {
-        var avWidth, keys, n, pseudoColumns, seriesCount, _ref;
+      getMinDelta: function(seriesData, key, scale, range) {
+        return d3.min(seriesData.map(function(series) {
+          return series.values.map(function(d) {
+            return scale(d[key]);
+          }).filter(function(e) {
+            if (range) {
+              return e >= range[0] && e <= range[1];
+            } else {
+              return true;
+            }
+          }).reduce(function(prev, cur, i, arr) {
+            var diff;
+            diff = i > 0 ? cur - arr[i - 1] : Number.MAX_VALUE;
+            if (diff < prev) {
+              return diff;
+            } else {
+              return prev;
+            }
+          }, Number.MAX_VALUE);
+        }));
+      },
+      getBestColumnWidth: function(axes, dimensions, seriesData, options) {
+        var colData, delta, innerWidth, keys, nSeries, pseudoColumns, _ref;
         if (!(seriesData && seriesData.length !== 0)) {
           return 10;
         }
@@ -254,10 +279,16 @@ mod.factory('n3utils', [
           return 10;
         }
         _ref = this.getPseudoColumns(seriesData, options), pseudoColumns = _ref.pseudoColumns, keys = _ref.keys;
-        n = seriesData[0].values.length + 2;
-        seriesCount = keys.length;
-        avWidth = dimensions.width - dimensions.left - dimensions.right;
-        return parseInt(Math.max((avWidth - (n - 1) * options.columnsHGap) / (n * seriesCount), 5));
+        innerWidth = dimensions.width - dimensions.left - dimensions.right;
+        colData = seriesData.filter(function(d) {
+          return pseudoColumns.hasOwnProperty(d.id);
+        });
+        delta = this.getMinDelta(colData, 'x', axes.xScale, [0, innerWidth]);
+        if (delta > innerWidth) {
+          delta = 0.25 * innerWidth;
+        }
+        nSeries = keys.length;
+        return parseInt((delta - options.columnsHGap) / nSeries);
       },
       getColumnAxis: function(data, columnWidth, options) {
         var keys, pseudoColumns, x1, _ref;
@@ -702,8 +733,16 @@ mod.factory('n3utils', [
       clean: function(element) {
         return d3.select(element).on('keydown', null).on('keyup', null).select('svg').remove();
       },
-      bootstrap: function(element, dimensions) {
-        var height, svg, width;
+      uuid: function() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r, v;
+          r = Math.random() * 16 | 0;
+          v = c === 'x' ? r : r & 0x3 | 0x8;
+          return v.toString(16);
+        });
+      },
+      bootstrap: function(element, id, dimensions) {
+        var defs, height, svg, width;
         d3.select(element).classed('chart', true);
         width = dimensions.width;
         height = dimensions.height;
@@ -711,11 +750,21 @@ mod.factory('n3utils', [
           width: width,
           height: height
         }).append('g').attr('transform', 'translate(' + dimensions.left + ',' + dimensions.top + ')');
-        svg.append('defs').attr('class', 'patterns');
+        defs = svg.append('defs').attr('class', 'patterns');
+        defs.append('clipPath').attr('class', 'content-clip').attr('id', "content-clip-" + id).append('rect').attr({
+          'x': 0,
+          'y': 0,
+          'width': width - dimensions.left - dimensions.right,
+          'height': height - dimensions.top - dimensions.bottom
+        });
         return svg;
       },
-      createContent: function(svg) {
-        return svg.append('g').attr('class', 'content');
+      createContent: function(svg, id, options) {
+        var content;
+        content = svg.append('g').attr('class', 'content');
+        if (options.hideOverflow) {
+          return content.attr('clip-path', "url(#content-clip-" + id + ")");
+        }
       },
       createGlass: function(svg, dimensions, handlers, axes, data, options, dispatch, columnWidth) {
         var glass, scrubberGroup, that;
@@ -854,11 +903,21 @@ mod.factory('n3utils', [
         return bbox;
       },
       getTextBBox: function(svgTextElement) {
+        var error;
         if (svgTextElement !== null) {
-          return svgTextElement.getBBox();
-        } else {
-          return {};
+          try {
+            return svgTextElement.getBBox();
+          } catch (_error) {
+            error = _error;
+            return {
+              height: 0,
+              width: 0,
+              y: 0,
+              x: 0
+            };
+          }
         }
+        return {};
       },
       getWidestTickWidth: function(svg, axisKey) {
         var bbox, max, ticks, _ref;
@@ -913,7 +972,8 @@ mod.factory('n3utils', [
           drawLegend: true,
           drawDots: true,
           stacks: [],
-          columnsHGap: 5
+          columnsHGap: 5,
+          hideOverflow: false
         };
       },
       sanitizeOptions: function(options, mode) {
@@ -941,6 +1001,7 @@ mod.factory('n3utils', [
         if (!angular.isNumber(options.columnsHGap)) {
           options.columnsHGap = 5;
         }
+        options.hideOverflow = options.hideOverflow || false;
         defaultMargin = mode === 'thumbnail' ? this.getDefaultThumbnailMargins() : this.getDefaultMargins();
         options.series = angular.extend(this.getDefaultOptions().series, options.series);
         options.axes = angular.extend(this.getDefaultOptions().axes, options.axes);
@@ -1103,6 +1164,9 @@ mod.factory('n3utils', [
           };
         }
         options.type || (options.type = 'linear');
+        if (options.ticksRotate != null) {
+          options.ticksRotate = this.getSanitizedNumber(options.ticksRotate);
+        }
         if (options.labelFunction != null) {
           options.ticksFormatter = options.labelFunction;
         }
@@ -1122,6 +1186,9 @@ mod.factory('n3utils', [
           } else {
             options.tooltipFormatter = d3.format(options.tooltipFormat);
           }
+        }
+        if (options.ticksInterval != null) {
+          options.ticksInterval = this.getSanitizedNumber(options.ticksInterval);
         }
         this.sanitizeExtrema(options);
         return options;
@@ -1176,13 +1243,13 @@ mod.factory('n3utils', [
           andAddThemIf: function(conditions) {
             if (!!conditions.all) {
               if (!!conditions.x) {
-                style(svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis));
+                svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis).call(style);
               }
               if (!!conditions.y) {
-                style(svg.append('g').attr('class', 'y axis').call(yAxis));
+                svg.append('g').attr('class', 'y axis').call(yAxis).call(style);
               }
               if (createY2Axis && !!conditions.y2) {
-                style(svg.append('g').attr('class', 'y2 axis').attr('transform', 'translate(' + width + ', 0)').call(y2Axis));
+                svg.append('g').attr('class', 'y2 axis').attr('transform', 'translate(' + width + ', 0)').call(y2Axis).call(style);
               }
             }
             return {
@@ -1208,31 +1275,41 @@ mod.factory('n3utils', [
         if (o == null) {
           return axis;
         }
-        if (angular.isNumber(o.ticks)) {
-          axis.ticks(o.ticks);
-        }
         if (angular.isArray(o.ticks)) {
           axis.tickValues(o.ticks);
+        } else if (angular.isNumber(o.ticks)) {
+          axis.ticks(o.ticks);
+        } else if (angular.isFunction(o.ticks)) {
+          axis.ticks(o.ticks, o.ticksInterval);
         }
         return axis;
       },
       setScalesDomain: function(scales, data, series, svg, options) {
-        var y2Domain, yDomain;
+        var axis, y2Domain, yDomain;
         this.setXScale(scales.xScale, data, series, options.axes);
-        svg.selectAll('.x.axis').call(scales.xAxis);
+        axis = svg.selectAll('.x.axis').call(scales.xAxis);
+        if (options.axes.x.ticksRotate != null) {
+          axis.selectAll('.tick>text').attr('dy', null).attr('transform', 'translate(0,5) rotate(' + options.axes.x.ticksRotate + ' 0,6)').style('text-anchor', options.axes.x.ticksRotate >= 0 ? 'start' : 'end');
+        }
         if ((series.filter(function(s) {
           return s.axis === 'y' && s.visible !== false;
         })).length > 0) {
           yDomain = this.getVerticalDomain(options, data, series, 'y');
           scales.yScale.domain(yDomain).nice();
-          svg.selectAll('.y.axis').call(scales.yAxis);
+          axis = svg.selectAll('.y.axis').call(scales.yAxis);
+          if (options.axes.y.ticksRotate != null) {
+            axis.selectAll('.tick>text').attr('transform', 'rotate(' + options.axes.y.ticksRotate + ' -6,0)').style('text-anchor', 'end');
+          }
         }
         if ((series.filter(function(s) {
           return s.axis === 'y2' && s.visible !== false;
         })).length > 0) {
           y2Domain = this.getVerticalDomain(options, data, series, 'y2');
           scales.y2Scale.domain(y2Domain).nice();
-          return svg.selectAll('.y2.axis').call(scales.y2Axis);
+          axis = svg.selectAll('.y2.axis').call(scales.y2Axis);
+          if (options.axes.y2.ticksRotate != null) {
+            return axis.selectAll('.tick>text').attr('transform', 'rotate(' + options.axes.y2.ticksRotate + ' 6,0)').style('text-anchor', 'start');
+          }
         }
       },
       getVerticalDomain: function(options, data, series, key) {
@@ -1581,7 +1658,7 @@ mod.factory('n3utils', [
         }
       },
       styleTooltip: function(d3TextElement) {
-        return d3TextElement.style({
+        return d3TextElement.attr({
           'font-family': 'monospace',
           'font-size': 10,
           'fill': 'white',

@@ -1,5 +1,5 @@
 ###
-line-chart - v1.1.9 - 25 May 2015
+line-chart - v1.1.10 - 03 July 2015
 https://github.com/n3-charts/line-chart
 Copyright (c) 2015 n3-charts
 ###
@@ -15,6 +15,7 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
   link  = (scope, element, attrs, ctrl) ->
     _u = n3utils
     dispatch = _u.getEventDispatcher()
+    id = _u.uuid()
 
     # Hacky hack so the chart doesn't grow in height when resizing...
     element[0].style['font-size'] = 0
@@ -39,7 +40,7 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
 
       _u.clean(element[0])
 
-      svg = _u.bootstrap(element[0], dimensions)
+      svg = _u.bootstrap(element[0], id, dimensions)
 
       fn = (key) -> (options.series.filter (s) -> s.axis is key and s.visible isnt false).length > 0
 
@@ -55,10 +56,10 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
       if dataPerSeries.length
         _u.setScalesDomain(axes, scope.data, options.series, svg, options)
 
-      _u.createContent(svg, handlers)
+      _u.createContent(svg, id, options, handlers)
 
       if dataPerSeries.length
-        columnWidth = _u.getBestColumnWidth(dimensions, dataPerSeries, options)
+        columnWidth = _u.getBestColumnWidth(axes, dimensions, dataPerSeries, options)
 
         _u
           .drawArea(svg, axes, dataPerSeries, options, handlers)
@@ -77,7 +78,7 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
         _u.addTooltips(svg, dimensions, options.axes)
 
     updateEvents = ->
-      
+
       # Deprecated: this will be removed in 2.x
       if scope.oldclick
         dispatch.on('click', scope.oldclick)
@@ -116,10 +117,12 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
 
     scope.$watch('data', scope.redraw, true)
     scope.$watch('options', scope.redraw , true)
-    scope.$watch('[click, hover, focus, toggle]', updateEvents)
-    
+    scope.$watchCollection('[click, hover, focus, toggle]', updateEvents)
+
     # Deprecated: this will be removed in 2.x
-    scope.$watch('[oldclick, oldhover, oldfocus]', updateEvents)
+    scope.$watchCollection('[oldclick, oldhover, oldfocus]', updateEvents)
+
+    return
 
   return {
     replace: true
@@ -134,6 +137,7 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
     link: link
   }
 ])
+
 # ----
 
 # /tmp/utils.coffee
@@ -225,33 +229,73 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
         pseudoColumns = {}
         keys = []
-        data.forEach (series) ->
-          inAStack = false
-          options.stacks.forEach (stack, index) ->
-            if series.id? and series.id in stack.series
-              pseudoColumns[series.id] = index
-              keys.push(index) unless index in keys
-              inAStack = true
+        data.forEach (series, i) ->
+          visible = options.series?[i].visible
+          if visible is undefined or visible is not false
+            inAStack = false
+            options.stacks.forEach (stack, index) ->
+              if series.id? and series.id in stack.series
+                pseudoColumns[series.id] = index
+                keys.push(index) unless index in keys
+                inAStack = true
 
-          if inAStack is false
-            i = pseudoColumns[series.id] = index = keys.length
-            keys.push(i)
+            if inAStack is false
+              i = pseudoColumns[series.id] = index = keys.length
+              keys.push(i)
 
         return {pseudoColumns, keys}
 
-      getBestColumnWidth: (dimensions, seriesData, options) ->
+      getMinDelta: (seriesData, key, scale, range) ->
+        return d3.min(
+          # Compute the minimum difference along an axis on all series
+          seriesData.map (series) ->
+            # Compute delta
+            return series.values
+              # Look at all sclaed values on the axis
+              .map((d) -> scale(d[key]))
+              # Select only columns in the visible range
+              .filter((e) ->
+                return if range then e >= range[0] && e <= range[1] else true
+              )
+              # Return the smallest difference between 2 values
+              .reduce((prev, cur, i, arr) ->
+                # Get the difference from the current value
+                # with the previous value in the array
+                diff = if i > 0 then cur - arr[i - 1] else Number.MAX_VALUE
+                # Return the new difference if it is smaller
+                # than the previous difference
+                return if diff < prev then diff else prev
+              , Number.MAX_VALUE)
+        )
+
+      getBestColumnWidth: (axes, dimensions, seriesData, options) ->
         return 10 unless seriesData and seriesData.length isnt 0
 
         return 10 if (seriesData.filter (s) -> s.type is 'column').length is 0
 
         {pseudoColumns, keys} = this.getPseudoColumns(seriesData, options)
 
-        # +2 because abscissas will be extended to one more row at each end
-        n = seriesData[0].values.length + 2
-        seriesCount = keys.length
-        avWidth = dimensions.width - dimensions.left - dimensions.right
+        # iner width of the chart area
+        innerWidth = dimensions.width - dimensions.left - dimensions.right
 
-        return parseInt(Math.max((avWidth - (n - 1)*options.columnsHGap) / (n*seriesCount), 5))
+        colData = seriesData
+          # Get column data (= columns that are not stacked)
+          .filter((d) ->
+            return pseudoColumns.hasOwnProperty(d.id)
+          )
+
+        # Get the smallest difference on the x axis in the visible range
+        delta = this.getMinDelta(colData, 'x', axes.xScale, [0, innerWidth])
+        
+        # We get a big value when we cannot compute the difference
+        if delta > innerWidth
+          # Set to some good looking ordinary value
+          delta = 0.25 * innerWidth
+
+        # number of series to display
+        nSeries = keys.length
+
+        return parseInt((delta - options.columnsHGap) / nSeries)
 
       getColumnAxis: (data, columnWidth, options) ->
         {pseudoColumns, keys} = this.getPseudoColumns(data, options)
@@ -264,7 +308,6 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           return 0 unless pseudoColumns[s.id]?
           index = pseudoColumns[s.id]
           return x1(index) - keys.length*columnWidth/2
-
 
       drawColumns: (svg, axes, data, columnWidth, options, handlers, dispatch) ->
         data = data.filter (s) -> s.type is 'column'
@@ -676,7 +719,16 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           .select('svg')
             .remove()
 
-      bootstrap: (element, dimensions) ->
+      uuid: () ->
+        # @src: http://stackoverflow.com/a/2117523
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+          /[xy]/g, (c) ->
+            r = Math.random()*16|0
+            v = if c == 'x' then r else r&0x3|0x8
+            return v.toString(16)
+          )
+
+      bootstrap: (element, id, dimensions) ->
         d3.select(element).classed('chart', true)
 
         width = dimensions.width
@@ -690,13 +742,29 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           .append('g')
             .attr('transform', 'translate(' + dimensions.left + ',' + dimensions.top + ')')
 
-        svg.append('defs')
+        defs = svg.append('defs')
           .attr('class', 'patterns')
+        
+        # Add a clipPath for the content area
+        defs.append('clipPath')
+          .attr('class', 'content-clip')
+          .attr('id', "content-clip-#{id}")
+          .append('rect')
+            .attr({
+              'x': 0
+              'y': 0
+              'width': width - dimensions.left - dimensions.right
+              'height': height - dimensions.top - dimensions.bottom
+            })
 
         return svg
 
-      createContent: (svg) ->
-        svg.append('g').attr('class', 'content')
+      createContent: (svg, id, options) ->
+        content = svg.append('g')
+          .attr('class', 'content')
+        
+        if options.hideOverflow
+          content.attr('clip-path', "url(#content-clip-#{id})")
 
       createGlass: (svg, dimensions, handlers, axes, data, options, dispatch, columnWidth) ->
         that = this
@@ -845,7 +913,18 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
         return bbox
 
       getTextBBox: (svgTextElement) ->
-        return if svgTextElement isnt null then svgTextElement.getBBox() else {}
+        if svgTextElement isnt null
+        
+          try
+            return svgTextElement.getBBox()
+        
+          catch error
+            # NS_ERROR_FAILURE in FF for calling .getBBox()
+            # on an element that is not rendered (e.g. display: none)
+            # https://bugzilla.mozilla.org/show_bug.cgi?id=612118
+            return {height: 0, width: 0, y: 0, x: 0}
+        
+        return {}
 
       getWidestTickWidth: (svg, axisKey) ->
         max = 0
@@ -892,6 +971,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           drawDots: true
           stacks: []
           columnsHGap: 5
+          hideOverflow: false
         }
 
       sanitizeOptions: (options, mode) ->
@@ -916,6 +996,7 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
         options.drawLegend = options.drawLegend isnt false
         options.drawDots = options.drawDots isnt false
         options.columnsHGap = 5 unless angular.isNumber(options.columnsHGap)
+        options.hideOverflow = options.hideOverflow or false
 
         defaultMargin = if mode is 'thumbnail' then this.getDefaultThumbnailMargins() \
           else this.getDefaultMargins()
@@ -1053,6 +1134,9 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
         options.type or= 'linear'
 
+        if options.ticksRotate?
+          options.ticksRotate = this.getSanitizedNumber(options.ticksRotate)
+
         # labelFunction is deprecated and will be remvoed in 2.x
         # please use ticksFormatter instead
         if options.labelFunction?
@@ -1084,6 +1168,9 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
             # Use d3.format as formatter
             options.tooltipFormatter = d3.format(options.tooltipFormat)
         
+        if options.ticksInterval?
+          options.ticksInterval = this.getSanitizedNumber(options.ticksInterval)
+
         this.sanitizeExtrema(options)
 
         return options
@@ -1148,27 +1235,24 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
             if !!conditions.all
 
               if !!conditions.x
-                style(
-                  svg.append('g')
-                    .attr('class', 'x axis')
-                    .attr('transform', 'translate(0,' + height + ')')
-                    .call(xAxis)
-                )
+                svg.append('g')
+                  .attr('class', 'x axis')
+                  .attr('transform', 'translate(0,' + height + ')')
+                  .call(xAxis)
+                  .call(style)
 
               if !!conditions.y
-                style(
-                  svg.append('g')
-                    .attr('class', 'y axis')
-                    .call(yAxis)
-                )
+                svg.append('g')
+                  .attr('class', 'y axis')
+                  .call(yAxis)
+                  .call(style)
 
               if createY2Axis and !!conditions.y2
-                style(
-                  svg.append('g')
-                    .attr('class', 'y2 axis')
-                    .attr('transform', 'translate(' + width + ', 0)')
-                    .call(y2Axis)
-                )
+                svg.append('g')
+                  .attr('class', 'y2 axis')
+                  .attr('transform', 'translate(' + width + ', 0)')
+                  .call(y2Axis)
+                  .call(style)
 
             return {
               xScale: x
@@ -1195,25 +1279,53 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
 
         return axis unless o?
 
-        axis.ticks(o.ticks) if angular.isNumber(o.ticks)
-        axis.tickValues(o.ticks) if angular.isArray(o.ticks)
+        # ticks can be either an array of tick values
+        if angular.isArray(o.ticks)
+          axis.tickValues(o.ticks)
+        
+        # or a number of ticks (approximately)
+        else if angular.isNumber(o.ticks)
+          axis.ticks(o.ticks)
+        
+        # or a range function e.g. d3.time.minute
+        else if angular.isFunction(o.ticks)
+          axis.ticks(o.ticks, o.ticksInterval)
 
         return axis
 
       setScalesDomain: (scales, data, series, svg, options) ->
         this.setXScale(scales.xScale, data, series, options.axes)
 
-        svg.selectAll('.x.axis').call(scales.xAxis)
+        axis = svg.selectAll('.x.axis')
+          .call(scales.xAxis)
+        
+        if options.axes.x.ticksRotate?
+          axis.selectAll('.tick>text')
+            .attr('dy', null)
+            .attr('transform', 'translate(0,5) rotate(' + options.axes.x.ticksRotate + ' 0,6)')
+            .style('text-anchor', if options.axes.x.ticksRotate >= 0 then 'start' else 'end')
 
         if (series.filter (s) -> s.axis is 'y' and s.visible isnt false).length > 0
           yDomain = this.getVerticalDomain(options, data, series, 'y')
           scales.yScale.domain(yDomain).nice()
-          svg.selectAll('.y.axis').call(scales.yAxis)
+          axis = svg.selectAll('.y.axis')
+            .call(scales.yAxis)
+          
+          if options.axes.y.ticksRotate?
+            axis.selectAll('.tick>text')
+              .attr('transform', 'rotate(' + options.axes.y.ticksRotate + ' -6,0)')
+              .style('text-anchor', 'end')
 
         if (series.filter (s) -> s.axis is 'y2' and s.visible isnt false).length > 0
           y2Domain = this.getVerticalDomain(options, data, series, 'y2')
           scales.y2Scale.domain(y2Domain).nice()
-          svg.selectAll('.y2.axis').call(scales.y2Axis)
+          axis = svg.selectAll('.y2.axis')
+            .call(scales.y2Axis)
+          
+          if options.axes.y2.ticksRotate?
+            axis.selectAll('.tick>text')
+              .attr('transform', 'rotate(' + options.axes.y2.ticksRotate + ' 6,0)')
+              .style('text-anchor', 'start')
 
 
       getVerticalDomain: (options, data, series, key) ->
@@ -1555,7 +1667,9 @@ mod.factory('n3utils', ['$window', '$log', '$rootScope', ($window, $log, $rootSc
           }
 
       styleTooltip: (d3TextElement) ->
-        return d3TextElement.style({
+        # This needs to be defined as .attr() otherwise
+        # FF will not render and compute it properly
+        return d3TextElement.attr({
           'font-family': 'monospace'
           'font-size': 10
           'fill': 'white'

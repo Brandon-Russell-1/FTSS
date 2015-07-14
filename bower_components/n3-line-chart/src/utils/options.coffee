@@ -13,6 +13,7 @@
           drawDots: true
           stacks: []
           columnsHGap: 5
+          hideOverflow: false
         }
 
       sanitizeOptions: (options, mode) ->
@@ -37,6 +38,7 @@
         options.drawLegend = options.drawLegend isnt false
         options.drawDots = options.drawDots isnt false
         options.columnsHGap = 5 unless angular.isNumber(options.columnsHGap)
+        options.hideOverflow = options.hideOverflow or false
 
         defaultMargin = if mode is 'thumbnail' then this.getDefaultThumbnailMargins() \
           else this.getDefaultMargins()
@@ -174,6 +176,9 @@
 
         options.type or= 'linear'
 
+        if options.ticksRotate?
+          options.ticksRotate = this.getSanitizedNumber(options.ticksRotate)
+
         # labelFunction is deprecated and will be remvoed in 2.x
         # please use ticksFormatter instead
         if options.labelFunction?
@@ -205,6 +210,9 @@
             # Use d3.format as formatter
             options.tooltipFormatter = d3.format(options.tooltipFormat)
         
+        if options.ticksInterval?
+          options.ticksInterval = this.getSanitizedNumber(options.ticksInterval)
+
         this.sanitizeExtrema(options)
 
         return options

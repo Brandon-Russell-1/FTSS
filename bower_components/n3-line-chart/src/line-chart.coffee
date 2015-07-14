@@ -9,6 +9,7 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
   link  = (scope, element, attrs, ctrl) ->
     _u = n3utils
     dispatch = _u.getEventDispatcher()
+    id = _u.uuid()
 
     # Hacky hack so the chart doesn't grow in height when resizing...
     element[0].style['font-size'] = 0
@@ -33,7 +34,7 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
 
       _u.clean(element[0])
 
-      svg = _u.bootstrap(element[0], dimensions)
+      svg = _u.bootstrap(element[0], id, dimensions)
 
       fn = (key) -> (options.series.filter (s) -> s.axis is key and s.visible isnt false).length > 0
 
@@ -49,10 +50,10 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
       if dataPerSeries.length
         _u.setScalesDomain(axes, scope.data, options.series, svg, options)
 
-      _u.createContent(svg, handlers)
+      _u.createContent(svg, id, options, handlers)
 
       if dataPerSeries.length
-        columnWidth = _u.getBestColumnWidth(dimensions, dataPerSeries, options)
+        columnWidth = _u.getBestColumnWidth(axes, dimensions, dataPerSeries, options)
 
         _u
           .drawArea(svg, axes, dataPerSeries, options, handlers)
@@ -71,7 +72,7 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
         _u.addTooltips(svg, dimensions, options.axes)
 
     updateEvents = ->
-      
+
       # Deprecated: this will be removed in 2.x
       if scope.oldclick
         dispatch.on('click', scope.oldclick)
@@ -110,10 +111,12 @@ directive('linechart', ['n3utils', '$window', '$timeout', (n3utils, $window, $ti
 
     scope.$watch('data', scope.redraw, true)
     scope.$watch('options', scope.redraw , true)
-    scope.$watch('[click, hover, focus, toggle]', updateEvents)
-    
+    scope.$watchCollection('[click, hover, focus, toggle]', updateEvents)
+
     # Deprecated: this will be removed in 2.x
-    scope.$watch('[oldclick, oldhover, oldfocus]', updateEvents)
+    scope.$watchCollection('[oldclick, oldhover, oldfocus]', updateEvents)
+
+    return
 
   return {
     replace: true
