@@ -27,8 +27,5 @@
     "comma-separated-values": "latest",
     "FileSaver": "latest",
     "ng-file-upload": "3.3.4"
-  },
-  "resolutions": {
-    "angular": "~1.3"
   }
 }
