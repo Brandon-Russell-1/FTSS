@@ -1,19 +1,19 @@
 #resourceView
     #legend
 
-        .btn-success(bs-popover='"View classes with open seats"', placement='left', custom-class="leftBarOverlayHover", ng-click='filter("open")')
+        .btn-success(bs-popover='"View classes with open seats"', placement='left', custom-class="leftBarOverlayHover", ng-click='filter("#open")')
 
-        .btn-primary(bs-popover='"View full classes"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("full")')
+        .btn-primary(bs-popover='"View full classes"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("#full")')
 
-        .btn-warning(bs-popover='"View classes currently below student min"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("under")')
+        .btn-warning(bs-popover='"View classes currently below student min"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("#under")')
 
-        .btn-danger(bs-popover='"View classes exceeding student max"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("over")')
+        .btn-danger(bs-popover='"View classes exceeding student max"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("#over")')
 
-        .trainingSession(bs-popover='"View Training Sessions"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("ts")')
+        .trainingSession(bs-popover='"View Training Sessions"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("#ts")')
 
-        .mtt(bs-popover='"View Mobile Training Teams"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("mtt")')
+        .mtt(bs-popover='"View Mobile Training Teams"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("#mtt")')
 
-        .unavailable(bs-popover='"View instructor unavailability"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("na")')
+        .unavailable(bs-popover='"View instructor unavailability"',  placement='left', custom-class="leftBarOverlayHover",  ng-click='filter("#na")')
 
     iframe#ttmsLoader(name='ttmsLoader')
 

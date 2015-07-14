@@ -37,7 +37,7 @@
 						// Enable our smart filters (clickable legend)
 						scope.filter = function (text) {
 
-							scope.ftss.searchText = '#' + text;
+							scope.ftss.searchText = text;
 
 						};
 
@@ -185,6 +185,9 @@
 
 							_(html.instructors).sortBy('name').each(function (instructor, index) {
 
+								// Instructor display name
+								var name = instructor[0].Instructor.Name;
+
 								// For extra large groups,
 								if (index % 10 < 1 &&
 								    (html.instructors.length < 6 || (html.instructors.length - index) > 5)) {
@@ -193,7 +196,7 @@
 
 								html.render += '<tr class="event compile" placement="left" bs-popover="\'' +
 								               instructor.overlay +
-								               '\'" custom-class="leftBarOverlayHover"><td>' + instructor[0].Instructor.Name + '</td>' +
+								               '\'" custom-class="leftBarOverlayHover"><td ng-click="filter(\'' + name + '\')">' + name + '</td>' +
 								               instructor.html +
 								               '</tr>' +
 								               html.spacer;

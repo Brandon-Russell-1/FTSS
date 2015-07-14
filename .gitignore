@@ -30,3 +30,4 @@ coverage/*
 
 app/scripts/helper.js
 app/services/ng-sharepoint.js
+bower_components/fullcalendar/dist/lang
