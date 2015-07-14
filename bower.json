@@ -19,7 +19,7 @@
     "lodash": "latest",
     "microplugin": "latest",
     "sifter": "latest",
-    "angular-strap": "2.1.6",
+    "angular-strap": "latest",
     "angular-ui-calendar": "~0.9.0",
     "fullcalendar": "latest",
     "n3-line-chart": "latest",
