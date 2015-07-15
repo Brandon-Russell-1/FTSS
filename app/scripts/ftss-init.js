@@ -114,7 +114,7 @@
 				angular.extend($modalProvider.defaults, {
 					'container': 'body',
 					'animation': 'am-fade-and-scale',
-					'template' : '/partials/modal-template.html'
+					'templateUrl' : '/partials/modal-template.html'
 				});
 
 				angular.extend($popoverProvider.defaults, {
