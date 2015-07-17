@@ -139,7 +139,9 @@ FTSS.ng.controller(
 					});
 
 					// Create our left hover for units that teach a course or leave a message indicating no one teaches it
-					course.units = course.Units.length ? course.Units.sort().join('<br>') : 'No units are listed in FTSS for this course right now.';
+					course.units = course.Units.length ?
+					               '<h5>Teaching Locations</h5>' + course.Units.sort().join('<br>') :
+					               'No units are listed in FTSS for this course right now.';
 
 				});
 
