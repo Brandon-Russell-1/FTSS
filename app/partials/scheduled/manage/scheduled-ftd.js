@@ -132,7 +132,7 @@ FTSS.ng.controller(
 
 						};
 
-						scope.recordTypes = [
+						scope.data.recordTypes = [
 							'Regular Class',
 							'Mobile Training Team',
 							'Training Session',
@@ -140,7 +140,7 @@ FTSS.ng.controller(
 						];
 
 						// Set the current recordType
-						scope.recordType = scope.recordTypes[
+						scope.data.recordType = scope.data.recordTypes[
 
 							// Regular class for new items
 							isNew ? 0 :
@@ -157,7 +157,7 @@ FTSS.ng.controller(
 							];
 
 						// Our shortcut helpers for building different types of classes
-						scope.selectType = function () {
+						scope.data.selectType = function () {
 
 							// Get our current index for this selection
 							var record = getRecordIndex();
@@ -186,7 +186,7 @@ FTSS.ng.controller(
 						scope.data[records[getRecordIndex()]] = true;
 
 						function getRecordIndex() {
-							return scope.recordTypes.indexOf(scope.recordType);
+							return scope.data.recordTypes.indexOf(scope.data.recordType);
 						}
 
 

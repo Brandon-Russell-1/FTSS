@@ -36,9 +36,9 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
                         li.pull-right
                             select.form-control(
                                 ng-disabled='!isNew',
-                                ng-change='selectType()',
-                                ng-model='recordType',
-                                ng-options='o for o in recordTypes')
+                                ng-change='data.selectType()',
+                                ng-model='data.recordType',
+                                ng-options='o for o in data.recordTypes')
 
                 .row(ng-show='data.mtt')
                     +formGroup('Location')
