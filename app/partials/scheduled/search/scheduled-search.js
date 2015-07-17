@@ -29,6 +29,14 @@ FTSS.ng.controller(
 
 					});
 
+					/**
+					 * Determines if we had no search results or not
+					 * @returns boolean
+					 */
+					$scope.isEmpty = function () {
+						return ($scope.ftss.tagMap.c || $scope.ftss.tagMap.u) && !parseInt($scope.ftss.itemCount.value, 10);
+					};
+
 				}
 
 			});
@@ -38,14 +46,6 @@ FTSS.ng.controller(
 				$scope.autoApprove = security.hasRole(['ftd', 'scheduling']);
 
 				$scope.canEdit = $scope.canRequest = security.hasRole(['utm', 'mts', 'ftd', 'scheduling']);
-
-				/**
-				 * Determines if we had no search results or not
-				 * @returns boolean
-				 */
-				$scope.isEmpty = function () {
-					return ($scope.ftss.tagMap.c || $scope.ftss.tagMap.u) && !parseInt($scope.ftss.itemCount.value, 10);
-				};
 
 				// Reference for course headers:  IMDS: XXXXX    G081: XXXXX
 				$scope.imds_g081 = {};
