@@ -62,7 +62,7 @@ FTSS.ng.service('calendarSupport', [
 					scope.data.Days = end.diff(start, 'days');
 
 					// Let the view know of our changes
-					scope.modal.$setDirty();
+					scope.$$childTail.modal.$setDirty();
 
 				};
 
