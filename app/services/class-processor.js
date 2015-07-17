@@ -315,6 +315,9 @@ FTSS.ng.service('classProcessor', [
 
 					'warning';
 
+				// The URL for our mailTo link
+				row.mailFTD = _.template('{{FTD.Email}}?subject=FTSS Class Inquiry for {{Course.Number}}{{TTMS}} ({{Course.PDS}} - {{dateRange}})')(row);
+
 				// Setup our smart filters
 				row.search = {
 					'success'        : 'open',

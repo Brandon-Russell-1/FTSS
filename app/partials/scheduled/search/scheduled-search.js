@@ -57,9 +57,6 @@ FTSS.ng.controller(
 					// Simple left overlay for courses
 					row.OverlayHover = _.template('Min: {{Course.Min}} / Max: {{Course.Max}}<br>{{ClassNotes}}')(row);
 
-					// The URL for our mailTo link
-					row.mailFTD = _.template('{{FTD.Email}}?subject=FTSS Class Inquiry for {{Course.PDS}} Class #{{TTMS}}')(row);
-
 					row.locationName = row.MTT || row.FTD.LongName;
 					row.locationCoords = (geodata.index[row.MTT] || row.FTD.Location).toString();
 
