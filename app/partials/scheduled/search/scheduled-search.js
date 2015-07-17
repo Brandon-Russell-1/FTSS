@@ -54,6 +54,9 @@ FTSS.ng.controller(
 					// Hide full classes by default
 					row.Full = (row.openSeats < 1);
 
+					// Simple left overlay for courses 
+					row.OverlayHover = _.template('Min: {{Course.Min}} / Max: {{Course.Max}}<br>{{ClassNotes}}')(row);
+
 					// The URL for our mailTo link
 					row.mailFTD = _.template('{{FTD.Email}}?subject=FTSS Class Inquiry for {{Course.PDS}} Class #{{TTMS}}')(row);
 

@@ -31,7 +31,7 @@ include ../../mixins
         .row(ng-if='!ftss.showAlternateView',
                 ng-repeat='row in group track by row.Id',
                 placement='left',
-                bs-popover='row.ClassNotes'
+                bs-popover='row.OverlayHover'
                 custom-class="leftBarOverlayHover")
 
             .btn.btn-success.openSeats(ng-if='!row.Full', ng-click='requestSeats()')
