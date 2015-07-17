@@ -21,13 +21,7 @@ FTSS.ng.controller(
 				'group': 'Header',
 				'model': 'scheduledSearch',
 
-				'finalProcess': function (groups) {
-
-					_.each(groups, function (group) {
-
-						group.instructors = _.groupBy(group, 'InstructorId');
-
-					});
+				'finalProcess': function () {
 
 					/**
 					 * Determines if we had no search results or not
@@ -61,23 +55,10 @@ FTSS.ng.controller(
 					row.Full = (row.openSeats < 1);
 
 					// The URL for our mailTo link
-					row.mailFTD = row.FTD.Email +
-					              '?subject=FTSS Class Inquiry for ' +
-					              row.Course.PDS +
-					              ' Class #' +
-					              row.TTMS;
+					row.mailFTD = _.template('{{FTD.Email}}?subject=FTSS Class Inquiry for {{Course.PDS}} Class #{{TTMS}}')(row);
 
-					if (row.MTT) {
-
-						row.locationName = row.MTT;
-						row.locationCoords = geodata.index[row.MTT].toString()
-
-					} else {
-
-						row.locationName = row.FTD.LongName;
-						row.locationCoords = row.FTD.Location;
-
-					}
+					row.locationName = row.MTT || row.FTD.LongName;
+					row.locationCoords = (geodata.index[row.MTT] || row.FTD.Location).toString();
 
 					// This is the hover image for each FTD
 					row.map = row.locationCoords ?
