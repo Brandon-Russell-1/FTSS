@@ -1,11 +1,12 @@
 include ../../mixins
+include ../../mixins
 
 td(class='mark {{className}}',  colspan='{{DaysTruncated}}')
 
     .circle(bio-photo='"{{bioPhoto}}"')
 
     span.pds {{pds}}&nbsp;
-    span.instructor {{name}}
+    span.instructor {{name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{MTT}}</b>
     span.location {{Location}}
 
     .details
@@ -13,7 +14,7 @@ td(class='mark {{className}}',  colspan='{{DaysTruncated}}')
         .container
 
             h4.border-bottom
-                a.btn-link(ng-click='$event.stopPropagation()', href='{{etca}}', target='_blank') {{Course.Number}}{{TTMS}}
+                | {{Course.Number}}{{TTMS}}
                 .pull-right {{dateRange}}
 
             .clearfix
@@ -22,13 +23,18 @@ td(class='mark {{className}}',  colspan='{{DaysTruncated}}')
 
             br
 
+            p {{truncate}}
             p {{notesHTML}}
 
-            h4.text-center
+            br
+            br
 
-                .col-lg-5: div(edit-students, lookup='{{Id}}')
+            .eventButtons
 
-                .col-lg-6: div(request-seats, lookup='{{Id}}')
+                .sub(edit-students, lookup='{{Id}}', templateURL='simple')
 
+                .sub(request-seats, lookup='{{Id}}', templateURL='simple')
+
+                a.sub(ng-click='$event.stopPropagation()', href='mailto:{{mailFTD}}') Contact FTD
 
             .clearfix

@@ -20,9 +20,11 @@
 			function ($timeout, SharePoint, classProcessor, utilities, notifier) {
 
 				return {
-					'templateUrl': '/partials/request-seats-button.html',
 					'replace'    : true,
 					'scope'      : true,
+					'templateUrl': function (elem, attrs) {
+						return '/partials/request-seats-' + (attrs.templateurl || 'button') + '.html';
+					},
 					'link'       : function ($scope, el) {
 
 						var modal,
