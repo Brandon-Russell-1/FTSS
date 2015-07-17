@@ -42,8 +42,6 @@ FTSS.ng.controller(
 
 						row.Course = row.Class.Course.PDS + ' - ' + row.Class.Course.Number;
 
-						row.Priority = row.Class.Course.Priority;
-
 					});
 
 				});

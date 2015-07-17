@@ -1,33 +1,40 @@
 include ../mixins
 
-- var columns = {'Dates':18, Unit:15, Open:5, Seats:5, Comments: 40}
-
 .wrapped.noAdd
 
     +userInstructions('my_unit', true)
 
     +grouping()
 
-        +tableBody(columns)(placement='left', bs-popover='row.studentList', custom-class="leftBarOverlayHover")
+        table.table.table-striped.table-expanded.table-hover
 
-            td
-                .double.approved(bs-popover='"Request approved"'): +icon('check')
-                .double.denied(bs-popover='"Request denied"'): +icon('times')
-                .double.canceled(bs-popover='"Request canceled"'): +icon('times')
-                .double.pending(bs-popover='"Request pending"'): +icon('wait')
+            thead
+                th.w5
+                th.w25 Course
+                th.w30 Students
+                th.w30 Comments
+                th.w5#action
 
-            td {{::row.Class.dateRange}}
+            tbody
+                tr.am-fade-and-slide-top(ng-repeat='row in group track by row.Id', class='{{::row.style}}')
 
-            td {{::row.Unit.LongName}}
+                    td
+                        .double.approved(bs-popover='"Request approved"'): +icon('check')
+                        .double.denied(bs-popover='"Request denied"'): +icon('times')
+                        .double.canceled(bs-popover='"Request canceled"'): +icon('times')
+                        .double.pending(bs-popover='"Request pending"'): +icon('wait')
 
-            td.double {{::row.Class.openSeats}}
+                    td
+                        h4 {{::row.Unit.LongName}}
+                        h4 {{::row.Class.Course.Number}}{{::row.Class.TTMS}}
+                        h5 {{::row.Class.dateRange}}
 
-            td.double {{::row.count}}
+                    td.uppercase(ng-bind-html='::row.StudentList')
 
-            td(style='overflow:visible')
+                    td(style='overflow:visible')
 
-                p(ng-if='row.Notes') <b>{{::host.LongName}}:</b> {{::row.Notes}}
+                        p(ng-if='row.Notes') <b>{{::host.LongName}}:</b> {{::row.Notes}}
 
-                p(ng-if='row.Response') <b>{{::row.Unit.LongName}}:</b> {{::row.Response}}
+                        p(ng-if='row.Response') <b>{{::row.Unit.LongName}}:</b> {{::row.Response}}
 
-            td.text-right.overrideLabel(edit-students)
+                    td.text-right.overrideLabel(edit-students)

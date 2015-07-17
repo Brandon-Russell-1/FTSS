@@ -1,44 +1,52 @@
 include ../mixins
 
-- var columns = {'Dates':18, Unit:15, Open:10, Seats:10, Comments: 40}
-
 .wrapped.noAdd
 
     +userInstructions('requests', true)
 
     +grouping()
 
-        +tableBody(columns)(placement='left', bs-popover='row.studentList', custom-class="leftBarOverlayHover")
+        table.table.table-striped.table-expanded.table-hover
 
+            thead
+                th.w5
+                th.w25 Date
+                th.w15 Unit
+                th.w10 Open
+                th.w10 Requested
+                th.w40 Students
+                th.w10#action
 
-            td
-                .double.approved(bs-popover='"Request approved"'): +icon('check')
-                .double.denied(bs-popover='"Request denied"'): +icon('times')
-                .double.canceled(bs-popover='"Class canceled"'): +icon('exclamation-circle')
+            tbody
+                tr.am-fade-and-slide-top(ng-repeat='row in group track by row.Id', placement='left', bs-popover='row.Details', custom-class="leftBarOverlayHover")
 
-            td {{::row.Class.dateRange}}
+                    td
 
-            td {{::row.Class.HostUnit.Unit}}
+                    td
+                        h4 {{::row.Class.Course.Number}}{{::row.Class.TTMS}}
+                        h5 {{::row.Class.dateRange}}
 
-            td.double {{::row.Class.openSeats}}
+                    td: h4 {{::row.Class.HostUnit.Unit}}
 
-            td.double {{::row.count}}
+                    td.double {{::row.Class.openSeats}}
 
-            td.italics {{::row.Notes}}
+                    td.double {{::row.count}}
 
-            td
-                #stackedVertical.pull-right
+                    td(ng-bind-html='::row.StudentList')
 
-                    .overrideLabel(edit-students)
+                    td
+                        #stackedVertical.pull-right
 
-                    .btn.btn-sm.btn-success.btn-muted.no-archive(
-                        bs-popover,
-                        trigger='click',
-                        placement='left',
-                        templateUrl='/partials/popover-approve-request.html'): +icon('check')
+                            .overrideLabel(edit-students)
 
-                    .btn.btn-sm.btn-danger.btn-muted.no-archive(
-                        bs-popover,
-                        trigger='click',
-                        placement='left',
-                        templateUrl='/partials/popover-deny-request.html'): +icon('times')
+                            .btn.btn-sm.btn-success.btn-muted.no-archive(
+                                bs-popover,
+                                trigger='click',
+                                placement='left',
+                                templateUrl='/partials/popover-approve-request.html'): +icon('check')
+
+                            .btn.btn-sm.btn-danger.btn-muted.no-archive(
+                                bs-popover,
+                                trigger='click',
+                                placement='left',
+                                templateUrl='/partials/popover-deny-request.html'): +icon('times')

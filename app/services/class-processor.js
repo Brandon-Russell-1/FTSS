@@ -253,9 +253,9 @@ FTSS.ng.service('classProcessor', [
 
 			// Generate the left overlay if the Class data is present
 			if (request.Class) {
-				request.studentList = '<h5>Class #' + (request.Class.TTMS || ' Pending') + '</h5>' +
-				                      '<em>' + _.keys(request.Students_JSON).join('</em><em>') + '</em>' +
-				                      '<br><f>Requested: ' + request.date + '<br>By: ' + request.CreatedBy.Name + '</f>';
+
+				request.StudentList = '<li>' +  _.keys(request.Students_JSON).join('</li><li>') + '</li>';
+
 			}
 
 

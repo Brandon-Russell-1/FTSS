@@ -101,6 +101,8 @@ FTSS.ng.controller(
 
 					classProcessor.singleRequestProcess(row);
 
+					row.Details = _.template('{{CreatedBy.Name}}<br>requested on {{date}}<br><br>{{Notes}}')(row);
+
 				});
 
 			});
