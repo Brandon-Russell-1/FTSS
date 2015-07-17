@@ -161,6 +161,21 @@
 			transition: none;
 		}
 
+		td.past:not(.mark) {
+			background-color: #eee;
+			border-right: #eee ;
+			border-left: #eee;
+		}
+
+		.header td.past:not(.weekend) {
+			color: #aaa !important;
+		}
+
+		td.past:last-of-type {
+			background-color: lime!important;
+			border-right: solid 5px #333 !important;
+		}
+
 	}
 	.event {
 
@@ -429,7 +444,7 @@
 			border-top: 2px solid #888 !important;
 			border-bottom: 2px solid #888 !important;
 			background-color: #ddd;
-			transition:none;
+			transition: none;
 			border-color: #ddd;
 		}
 	}

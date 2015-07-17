@@ -241,7 +241,9 @@
 							function buildHeaders() {
 
 								// Initialize our variables
-								var minClone = min.clone();
+								var minClone = min.clone(),
+
+									today = moment().startOf('day');
 
 								html.months = {};
 								html.days = [];
@@ -260,6 +262,9 @@
 										className = dateTools.isWeekend(minClone) ? 'weekend' :
 
 										            dateTools.isDownDay(minClone) ? 'downDay' : '';
+
+									// Mark our past days
+									className += minClone < today ? ' past' : '';
 
 									// Create the month if it doesn't exist
 									html.months[month] = html.months[month] || {
