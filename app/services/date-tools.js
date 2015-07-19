@@ -59,6 +59,13 @@ FTSS.ng.service('dateTools', [
 		});
 
 		/**
+		 * Reference to our today pseudo-value
+		 *
+		 * @name dataTools#today
+		 */
+		this.today = moment().diff(moment('2000-01-01'), 'days');
+
+		/**
 		 * Convert a _y2k day offset to the actual day
 		 *
 		 * @name dateTools#startDayFinder
