@@ -393,7 +393,7 @@ FTSS.ng.service('controllerHelper', [
 
 				/**
 				 * Modal Add/Edit Callback
-				 * The main add/edit dialog for then entire app--this one is kinda important.  First, generate a new isolated
+				 * The main add/edit dialog for the entire app--this one is kinda important.  First, generate a new isolated
 				 * scope then copy the row data to scope.data & launch the angular-strap modal dialog, also bind some close
 				 * & update _self and fire an optional post-processor to do more fancy stuff with the data from the
 				 * parent controller
@@ -412,9 +412,7 @@ FTSS.ng.service('controllerHelper', [
 								'placement'      : opts.modalPlacement || 'top',
 								'scope'          : $scope,
 								'backdrop'       : 'static',
-								'contentTemplate': '/partials/modal-' +
-								                   (opts.modal || opts.model) +
-								                   '.html'
+								'contentTemplate': '/partials/modal-' + (opts.modal || opts.model) + '.html'
 							}),
 
 							scope = modal.$scope;
