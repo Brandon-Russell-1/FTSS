@@ -135,7 +135,8 @@ FTSS.ng.service('calendarSupport', [
 							'right' : 'today prev,next'
 						},
 
-						'defaultDate': scope.data.startMoment,
+						// Default to the start of the event or try to get the last created event's start date
+						'defaultDate': scope.data.startMoment || moment(localStorage.FTSS_FC_Last_Date || moment()),
 
 						'buttonText': {
 							today: 'Go to Today'
@@ -180,6 +181,9 @@ FTSS.ng.service('calendarSupport', [
 
 								// Add the updated event back to the calendar
 								scope.eventsInstructor[2] = getDates();
+
+								// Remember the start of the last event created
+								localStorage.FTSS_FC_Last_Date = start.toISOString();
 
 							}
 
