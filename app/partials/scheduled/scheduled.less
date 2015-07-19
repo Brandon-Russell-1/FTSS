@@ -7,10 +7,8 @@
 }
 
 #modalScheduledOpenSeats {
-	float: right;
 	text-align: right;
 	font-style: italic;
-	line-height: 2.5em;
 }
 
 #scheduled-ftd {
@@ -32,10 +30,6 @@
 		margin-top: 0;
 	}
 
-	#instructorPhoto {
-		margin-top: 4.5em;
-	}
-
 	#courseSelector {
 
 		.item right {
@@ -54,6 +48,31 @@
 		left: 1em;
 	}
 
+	.modal-header {
+		margin-left: 135px;
+
+		#instructorPhoto {
+			position: absolute;
+			left: -10px;
+			top: -10px;
+			border-radius: 6px 6px 15% 6px;
+			height: 145px;
+			width: 150px;
+			z-index: 99999;
+		}
+
+	}
+
+	.modal-body {
+		margin-top: 15px;
+
+		#typeSelector {
+			width: 250px;
+			margin-left: 125px;
+			margin-bottom: 1.25em;
+			text-align: right;
+		}
+
 		#toggleWeekends {
 			font-weight: 400 !important;
 			color: #333 !important;
@@ -68,13 +87,59 @@
 		#toggleWeekends.active {
 			background-color: #eee;
 		}
+
+		.left-column, .middle-column, .right-column {
+			float: left;
+			opacity: .7;
+			transition: opacity 100ms linear;
+			padding-bottom: 25px;
+			position: relative;
+		}
+
+		.left-column:hover,
+		.middle-column:hover,
+		.right-column:hover {
+			opacity: 1 !important;
+		}
+
+		.left-column {
+			width: 400px;
+			margin-left: 15px;
+
+			.left-row {
+				width: 375px;
+				margin-bottom: 1em;
+			}
+
+		}
+
+		.middle-column {
+			margin-right: 20px;
+		}
+
+		.middle-column, .right-column {
+			width: ~'calc(100% - 950px)';
+			border-left: 10px solid #ccc;
+			padding-left: 20px;
+		}
+
+		.middle-column:hover, .right-column:hover {
+			border-left: 10px solid #444;
+		}
+
+		.right-column {
+			width: 500px;
+		}
+
+	}
+
 }
 
 #scheduled {
-	
+
 	.wrapped:not(.hasArchived) .archiveOnly {
 		display: none;
-	} 
+	}
 
 	.popover.map {
 		padding: 0;
@@ -141,7 +206,7 @@
 
 			.pull-left {
 				margin-top: .35em;
-				
+
 				.form-control {
 					margin-left: 1em;
 				}
@@ -169,7 +234,7 @@
 		.hideDefault {
 			opacity: 0;
 		}
-		
+
 		.lightCourseNumber {
 			font-size: 1.5em;
 			font-weight: 100;

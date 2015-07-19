@@ -3,10 +3,12 @@ include ../../mixins
 form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenButton:isNew}')
 
     .modal-header.caps
-        h3(ng-show='createData'): +icon('plus-circle', 'Create Class / Unavailability')
 
-        h3(ng-hide='createData')
-            +icon('edit' ,'Update')
+        #instructorPhoto.circle(bio-photo='bioPhoto')
+
+        h3(ng-show='createData') Create Class or Event
+
+        h3(ng-hide='createData') Update Class or Event
 
             a#courseLink(
                 ng-if='data.Course.Number',
@@ -23,160 +25,113 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
 
     .modal-body
 
-        .col-lg-6
+        .left-column
 
-            #instructorPhoto.col-lg-4: div(bio-photo='bioPhoto', style='width:150px;height:185px')
+            .left-row#typeSelector(ng-if='isNew')
+                select.form-control(
+                    ng-change='data.selectType()',
+                    ng-model='data.recordType',
+                    ng-options='o for o in data.recordTypes')
 
-            .col-lg-8
+            h4.left-row#typeSelector(ng-if='!isNew') {{data.recordType}}
 
-                .row
-                    ul.nav.nav-tabs#shortcuts
+            .left-row(ng-show='data.mtt')
+                 .input-group
+                    .input-group-addon.w15:  +icon('location')
+                    .input-group-selectize(trigger='focus', bs-popover='language.scheduled_edit_mtt', placement='right')
+                        select(selectize='geodata', bind='data.MTT')
 
-                        li Type
-                        li.pull-right
-                            select.form-control(
-                                ng-disabled='!isNew',
-                                ng-change='data.selectType()',
-                                ng-model='data.recordType',
-                                ng-options='o for o in data.recordTypes')
+            .left-row(ng-if='data.ts')
+                .input-group
+                    .input-group-addon.w15:  +icon('books')
+                        input.form-control(ng-model='data.TS',trigger='focus', bs-popover='language.scheduled_edit_ts', placement='right')
 
-                .row(ng-show='data.mtt')
-                    +formGroup('Location')
-                        .input-group
-                            .input-group-addon.w15:  +icon('location')
-                            .input-group-selectize(trigger='focus', bs-popover='language.scheduled_edit_mtt', placement='right')
-                                select(selectize='geodata', bind='data.MTT')
+            #courseSelector.left-row(ng-show='data.rc||data.mtt')
+                .input-group
+                    .input-group-addon.w15:  +icon('books')
+                    .input-group-selectize(trigger='focus', bs-popover='language.scheduled_edit_course', placement='right')
+                        select(ng-disabled='!isNew',
+                                selectize='coursesDropdown',
+                                bind='data.CourseId',
+                                remember='course')
 
-                .row(ng-if='data.ts')
-                    +formGroup('TS Course')
-                        .input-group
-                            .input-group-addon.w15:  +icon('books')
-                            input.form-control(ng-model='data.TS',trigger='focus', bs-popover='language.scheduled_edit_ts', placement='right')
+            .left-row
+                .input-group
+                    .input-group-addon.w15: +icon('instructor')
 
-                #courseSelector.row(ng-show='data.rc||data.mtt')
-                    +formGroup('Course')
-                        .input-group
-                            .input-group-addon.w15:  +icon('books')
-                            .input-group-selectize(trigger='focus', bs-popover='language.scheduled_edit_course', placement='right')
-                                select(ng-disabled='!isNew',
-                                        selectize='coursesDropdown',
-                                        bind='data.CourseId',
-                                        remember='course')
+                    .input-group-selectize(trigger='focus', bs-popover='language.scheduled_edit_instructor', placement='right')
 
-                .row
-                    +formGroup('Instructor')
+                        select(selectize='instructorDropdown',
+                                bind='data.InstructorId',
+                                remember='instructor')
 
-                        .input-group
-                            .input-group-addon.w15: +icon('instructor')
+            .left-row(ng-if='!data.na')
+                .input-group
+                    .input-group-addon.w15: +icon('building-o')
 
-                            .input-group-selectize(trigger='focus', bs-popover='language.scheduled_edit_instructor', placement='right')
+                    input.form-control(type='text',
+                                        ng-model='data.Location',
+                                        trigger='focus', bs-popover='language.scheduled_edit_location',
+                                        placement='right')
 
-                                select(selectize='instructorDropdown',
-                                        bind='data.InstructorId',
-                                        remember='instructor')
+            .left-row(ng-if='data.na')
+                .input-group
+                    textarea.form-control(type='text',
+                                            ng-model='data.Notes',
+                                            trigger='focus', bs-popover='language.scheduled_edit_na_notes',
+                                            placement='right')
 
-                .row(ng-if='!data.na')
-                    +formGroup('Room')
+            .left-row(ng-if='!data.na')
+                .input-group.pull-left.w40
+                    .form-control(style='background: #fafafa;cursor: not-allowed;') {{data.Course.Days}}
+                    .input-group-addon Academic Days
 
-                        .input-group
-                            .input-group-addon.w15: +icon('building-o')
+                .input-group.pull-right.w40
+                    input.form-control(ng-model='data.Hours',
+                                        type='number',
+                                        min='0',
+                                        trigger='focus', bs-popover='language.scheduled_edit_hours_deviation',
+                                        placeholder='{{data.Course.Hours}}',
+                                        placement='top')
+                    .input-group-addon Hours
 
-                            input.form-control(type='text',
-                                                ng-model='data.Location',
-                                                trigger='focus', bs-popover='language.scheduled_edit_location',
+                .w20 &nbsp;
+
+            #modalScheduledOpenSeats.left-row(ng-show='data.CourseId')
+                strong {{getOpenSeats()}}&nbsp;
+                span ({{data.Course.Min}} Min / {{data.Course.Max}} Max)
+
+            .left-row.hideSetUnavailable
+                .input-group
+                    textarea.form-control(type='text',
+                                            ng-model='data.ClassNotes',
+                                            style='height:50px',
+                                            trigger='focus', bs-popover='language.scheduled_edit_notes',
                                                 placement='right')
 
-                .row(ng-if='data.na')
-                    +formGroup('Details')
-                        .input-group
-                            textarea.form-control(type='text',
-                                                    ng-model='data.Notes',
-                                                    trigger='focus', bs-popover='language.scheduled_edit_na_notes',
-                                                    placement='right')
-
-                .row(ng-if='!data.na')
-                    +formGroup('Length')
-
-                        .input-group.pull-left.w40
-                            .form-control(style='background: #fafafa;cursor: not-allowed;') {{data.Course.Days}}
-                            .input-group-addon Academic Days
-
-                        .input-group.pull-right.w40
-                            input.form-control(ng-model='data.Hours',
-                                                type='number',
-                                                min='0',
-                                                trigger='focus', bs-popover='language.scheduled_edit_hours_deviation',
-                                                placeholder='{{data.Course.Hours}}',
-                                                placement='top')
-                            .input-group-addon Hours
-
-
-                .row.hideSetUnavailable
-                    +formGroup('Reserved')
-
-                        .input-group.pull-left.w40
-
-                            input.form-control(ng-model='data.Host',
-                                                type='number',
-                                                min='0',
-                                                trigger='focus',
-                                                bs-popover='language.scheduled_edit_reserved',
-                                                placement='top')
-                            .input-group-addon Host
-
-                        .input-group.pull-right.w40
-
-                            input.form-control(ng-model='data.Other',
-                                                type='number',
-                                                min='0',
-                                                trigger='focus',
-                                                bs-popover='language.scheduled_edit_reserved',
-                                                placement='top')
-                            .input-group-addon Non-Host
-
-                #modalScheduledOpenSeats(ng-show='data.CourseId')
-                    strong {{getOpenSeats()}}&nbsp;
-                    span ({{data.Course.Min}} Min / {{data.Course.Max}} Max)
-
-            .clearfix
-
-            hr(style='margin-top:5px')
-
-            .hideSetUnavailable
-                +formGroup('Notes')
-                    .input-group
-                        textarea.form-control(type='text',
-                                                ng-model='data.ClassNotes',
-                                                style='height:150px',
-                                                trigger='focus', bs-popover='language.scheduled_edit_notes',
-                                                placement='right')
-
-            .hideSetUnavailable
+            .left-row.hideSetUnavailable
 
                 div(ng-if='data.J4Notes')
-                    +formGroup('J4 Notes')
-                        #j4notes.input-group.italics {{data.J4Notes}}
+                    #j4notes.input-group.italics {{data.J4Notes}}
 
 
-        #rightPanel.col-lg-6(bs-tabs)
-
-            div(ng-class='{addEvent:data.CourseId||data.na||data.TS}', bs-pane, title='Instructor Schedule')
-
-                br
+        .middle-column(ng-class='{addEvent:data.CourseId||data.na||data.TS}')
 
                 #instructorCalendar(ui-calendar, ng-model='eventsInstructor')
 
-                .text-info.info.italics.pull-right
+                .text-info.info.italics.text-center
                     +icon('info-circle', 'Click on a day to choose the start date, drag or resize the course to update.')
 
-            div.hideSetUnavailable(bs-pane, title='Registered Students ({{data.Approved || 0}})')
                 #toggleWeekends.btn.btn-white.btn-sm.text-center(ng-model='$parent.showWeekends', bs-checkbox) Weekends
 
-                br
 
-                div(edit-students, templateURL='embed')
+        .right-column.hideSetUnavailable
+            h4 Registered Students ({{data.Approved || 0}})
+
+            div(edit-students, templateURL='embed')
 
         .clearfix
+
 
     +modalFooter('Submit', '!data.Start || !data.Days')
 
