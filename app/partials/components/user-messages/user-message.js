@@ -9,24 +9,39 @@
 
 	FTSS.ng.directive(
 		'userMessage',
-
 		[
 
 			'$rootScope',
-			function ($rootScope) {
+			'appAssets',
+			function ($rootScope, appAssets) {
 
-				var _cache = $rootScope.language = {};
+				// Collection of items to update once the async data is loaded
+				var defer = [];
 
-				$('#language *').each(function () {
+				$rootScope.language = false;
 
-					_cache[this.id] = this.outerHTML;
+				// Load the data from SharePoint
+				appAssets.process(function (data) {
+
+					$rootScope.language = data.language;
+
+					while (defer.length) {
+						setTimeout(defer.shift(), 25);
+					}
 
 				});
 
 				return {
 					'link': function ($scope, $el, $attrs) {
 
-						$el[0].innerHTML = _cache[$attrs.userMessage] || '';
+						// Either update it now, or wait for the async callback
+						$rootScope.language ? resolve() : defer.push(resolve);
+
+						function resolve() {
+
+							$el[0].innerHTML = $rootScope.language[$attrs.userMessage] || '';
+
+						}
 
 					}
 				};

@@ -2,81 +2,61 @@
 
 FTSS.ng.service('dateTools', [
 
-	function () {
+	'appAssets',
+
+	function (appAssets) {
 
 		var _y2k = moment('2000-01-01', 'YYYY-MM-DD'),
-
-		    _familyDay = 'AETC Family Day',
 
 			/**
 			 * @name dateTools
 			 */
-		    _self = this,
+			_self = this,
 
-		    /**
-		     *  Holiday and down day list
-		     *
-		     *  This is our static list of federal holidays and AETC down days.
-		     *  We'll try to keep this list updated by calendar year.
-		     *
-		     *  Family days were pulled from the AETC MFR dated 11-5-2013,
-		     *  AETC Family Days for Calendar Years 2015 - 2016.
-		     *
-		     *  Federal holidays are from opm.gov.
-		     *
-		     */
-		    _downDays = {
+			/**
+			 *  Holiday and down day list
+			 *
+			 *  This is our static list of federal holidays and AETC down days.
+			 *  We'll try to keep this list updated by calendar year.
+			 *
+			 *  Family days were pulled from the AETC MFR dated 11-5-2013,
+			 *  AETC Family Days for Calendar Years 2015 - 2016.
+			 *
+			 *  Federal holidays are from opm.gov.
+			 *
+			 */
+			_downDays = {};
 
-			    // Federal holidays
-			    '2015-01-01': 'New Year\'s Day',
-			    '2015-01-19': 'MLK Day',
-			    '2015-02-16': 'President\'s Day',
-			    '2015-05-25': 'Memorial Day',
-			    '2015-07-03': 'Independence Day',
-			    '2015-09-07': 'Labor Day',
-			    '2015-10-12': 'Columbus Day',
-			    '2015-11-11': 'Veterans Day',
-			    '2015-11-26': 'Thanksgiving Day',
-			    '2015-12-25': 'Christmas Day',
+		// Load the data from SharePoint
+		appAssets.process(function (data) {
 
-			    // AETC down days
-			    '2015-01-02': _familyDay,
-			    '2015-05-22': _familyDay,
-			    '2015-07-02': _familyDay,
-			    '2015-09-04': _familyDay,
-			    '2015-11-27': _familyDay,
-			    '2015-12-24': _familyDay,
-			    '2015-12-31': _familyDay,
-			    '2016-05-27': _familyDay,
-			    '2016-07-05': _familyDay,
-			    '2016-09-02': _familyDay,
-			    '2016-11-25': _familyDay,
-			    '2016-12-27': _familyDay
-		    };
+			_downDays = data.downDays;
 
-		/**
-		 * Calendar-friendly list of holidays and AETC down days
-		 *
-		 * @name dateTools#downDays
-		 * @type {Array}
-		 */
-		this.downDays = _.map(_downDays, function (label, date) {
+			/**
+			 * Calendar-friendly list of holidays and AETC down days
+			 *
+			 * @name dateTools#downDays
+			 * @type {Array}
+			 */
+			_self.downDays = _.map(_downDays, function (label, date) {
 
-			return {
-				'title'    : label,
-				'start'    : date,
-				'className': 'downDay'
-			};
+				return {
+					'title'    : label,
+					'start'    : date,
+					'className': 'downDay'
+				};
+
+			});
+
+			/**
+			 * Simple array of down days in the format YYYY-MM-DD
+			 *
+			 * @name dateTools#downDaysSimple
+			 * @type {Array}
+			 */
+			_self.downDaysSimple = _.keys(_downDays);
 
 		});
-
-		/**
-		 * Simple array of down days in the format YYYY-MM-DD
-		 *
-		 * @name dateTools#downDaysSimple
-		 * @type {Array}
-		 */
-		this.downDaysSimple = _.keys(_downDays);
 
 		/**
 		 * Convert a _y2k day offset to the actual day

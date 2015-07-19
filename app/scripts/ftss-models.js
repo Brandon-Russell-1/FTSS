@@ -272,8 +272,8 @@
 					'$select': [
 						'Date',
 						'Fix',
-					    'Feat',
-					    'Misc'
+						'Feat',
+						'Misc'
 					]
 				}
 
