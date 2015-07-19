@@ -170,6 +170,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
                     +icon('info-circle', 'Click on a day to choose the start date, drag or resize the course to update.')
 
             div.hideSetUnavailable(bs-pane, title='Registered Students ({{data.Approved || 0}})')
+                #toggleWeekends.btn.btn-white.btn-sm.text-center(ng-model='$parent.showWeekends', bs-checkbox) Weekends
 
                 br
 

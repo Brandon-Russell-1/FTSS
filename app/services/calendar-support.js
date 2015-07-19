@@ -33,11 +33,13 @@ FTSS.ng.service('calendarSupport', [
 
 				},
 
+			// Wait for modal init
+				setupInit = false,
+
 			// Perform our date updates
 				update = function (event) {
 
 					/**
-					 * Full calendar sucks....we seriously need to get rid of it eventually.
 					 *
 					 * This is the best hack we can do for now as FC is not respecting local-only
 					 * (ambiguous date ranges) as it should.  Basically we let moment fix it for us
@@ -120,16 +122,24 @@ FTSS.ng.service('calendarSupport', [
 
 			});
 
+			// Enable toggling of weekend visibility
+			scope.$watch('showWeekends', function () {
 
-			// Wait until the modal is visible
-			scope.$on('modal.show', function () {
+				// Wait until the modal is ready
+				if (typeof scope.showWeekends !== 'boolean') return;
+
+				// Remember this setting
+				localStorage.FTSS_FC_ShowWeekends = scope.showWeekends;
 
 				// Init our calendar
 				FTSS.initInstructorCalendar(
 					{
 
+						'weekends': scope.showWeekends,
+
 						'allDayDefault': true,
-						'header'       : {
+
+						'header': {
 							'left'  : 'title',
 							'center': '',
 							'right' : 'today prev,next'
@@ -189,6 +199,15 @@ FTSS.ng.service('calendarSupport', [
 
 						}
 					});
+
+			});
+
+
+			// Wait until the modal is visible
+			scope.$on('modal.show', function () {
+
+				setupInit = true;
+				scope.showWeekends = localStorage.FTSS_FC_ShowWeekends === 'true';
 
 			});
 
