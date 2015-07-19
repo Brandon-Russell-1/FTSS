@@ -31,7 +31,7 @@ FTSS.ng.controller(
 				// Load the controller
 				var self = controllerHelper($scope, {
 
-						'group': 'Instructor.Name',
+						'group': 'Instructor.Id',
 
 						'modal': 'instructor-stats',
 
@@ -121,7 +121,7 @@ FTSS.ng.controller(
 					$scope.flatList = [];
 					$scope.instructors = {};
 
-					_.each(finalData, function (courses, instructorName) {
+					_.each(finalData, function (courses, instructorId) {
 
 						var chart = buildMonths(),
 
@@ -165,7 +165,7 @@ FTSS.ng.controller(
 
 						});
 
-						$scope.instructors[instructorName] = _.extend(
+						$scope.instructors[instructorId] = _.extend(
 							courses[0].Instructor,
 
 							{
@@ -182,18 +182,14 @@ FTSS.ng.controller(
 
 								'chart': _(chart).sortBy('sort').map(function (item) {
 
-									// We use 175 as the theoratical teaching hours in a month
-									var pct = item.hours ? Math.round((item.hours / 175) * 100) : 0;
+									item.hours = item.hours || '';
 
-									return '<b><i>' +
-									       (item.hours || '') +
-									       '</i><em style="height:' +
-									       pct +
-									       '%">&nbsp;</em>' +
+									// We use 175 as the theoretical teaching hours in a month
+									item.pct = item.hours ? Math.round((item.hours / 175) * 100) : 0;
 
-									       '<i>' +
-									       item.text +
-									       '</i></b>';
+									return _.template('<b><i>{{hours}}</i>' +
+									                  '<em style="height:{{pct}}%">&nbsp;</em>' +
+									                  '<i>{{text}}</i></b>')(item);
 
 								}).join(''),
 
@@ -205,6 +201,7 @@ FTSS.ng.controller(
 
 					});
 
+					$scope.instructors = _.sortBy($scope.instructors, 'Name');
 
 					$scope.ftdStats = ftdStats;
 

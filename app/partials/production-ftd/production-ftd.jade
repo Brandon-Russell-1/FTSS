@@ -12,7 +12,6 @@ include ../mixins
 
                     tr.am-fade-and-slide-left.traverse(ng-repeat='row in instructors track by row.Id',
                                         ng-click='stats()',
-                                        traverse='{{row.Id}}',
                                         bs-popover='row.historyList',
                                         custom-class='leftBarOverlayHover')
 
