@@ -234,25 +234,23 @@ mixin loadStudents()
                 .pull-right {{::request.Host.Unit}}
 
             dl.dl-horizontal
-                div(ng-if='!canEditSeats')
-                    dt Student(s)
-                    dd(ng-repeat='(student, email) in ::request.Students_JSON') {{student}}
+                ul(ng-if='!canEditSeats')
+                    li(ng-repeat='(student, email) in ::request.Students_JSON') {{student}}
 
                 div(ng-if='canEditSeats')
-                    dt Student(s)
-                    dd: select.wide(selectize='people', max="99")
+                    select.wide(selectize='people', max="99")
 
                 br
 
                 div(ng-if='request.Notes')
-                    dt {{::request.Host.Unit}}
-                    dd.italics {{::request.Notes}}
+                    .bold {{::request.Host.Unit}}
+                    .italics {{::request.Notes}}
 
                 br
 
                 div(ng-if='request.Response || canEditSeats')
-                    dt FTD Notes
-                    dd: textarea.wideText.full.form-control(ng-model='request.Response')
+                    .bold FTD Notes
+                    textarea.wideText.full.form-control(ng-model='request.Response')
 
             .pull-right.btn.btn-success.btn-labeled(ng-click='submit()', ng-hide='!modal.$dirty')
 
