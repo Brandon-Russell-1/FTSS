@@ -10,7 +10,8 @@ FTSS.ng.controller(
 		'classProcessor',
 		'controllerHelper',
 		'utilities',
-		function ($scope, SharePoint, notifier, classProcessor, controllerHelper, utilities) {
+		'dateTools',
+		function ($scope, SharePoint, notifier, classProcessor, controllerHelper, utilities, dateTools) {
 
 			var self = controllerHelper($scope, {
 
@@ -19,6 +20,7 @@ FTSS.ng.controller(
 				'model': 'requests',
 
 				'filter': [
+					'Class/Start ge ' + dateTools.today,
 					'UnitId eq ' + $scope.ftd.Id,
 					"Status eq 'Pending'"
 				].join(' and ')
