@@ -6,7 +6,7 @@ window.addEventListener('dragover', function (e) { e.preventDefault() }, false);
 
 window.addEventListener('drop', function (e) { e.preventDefault() }, false);
 
-document.addEventListener('past', function (e) {
+document.addEventListener('paste', function (e) {
 	if (FTSS.pasteAction) {
 
 		e.stopImmediatePropagation();
