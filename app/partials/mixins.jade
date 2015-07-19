@@ -78,7 +78,7 @@ mixin tableBody(columns)
             tr.middle.am-fade-and-slide-top.traverse(attributes, ng-repeat='row in group track by row.Id',
             ng-class='{priority:row.Priority, archived:row.Archived, updated:row.updated}',
             class='{{row.style}}',
-            ng-dblclick='edit(false)',
+            ng-click='edit(false)',
             traverse='{{row.Id}}')
                 block
 
