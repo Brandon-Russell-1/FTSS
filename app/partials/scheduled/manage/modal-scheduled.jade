@@ -110,12 +110,12 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
 
         .middle-column(ng-class='{addEvent:data.CourseId||data.na||data.TS}')
 
-                #instructorCalendar(ui-calendar, ng-model='eventsInstructor')
+            #instructorCalendar(ui-calendar, ng-model='eventsInstructor')
 
-                .text-info.info.italics.text-center
-                    +icon('info-circle', 'Click on a day to choose the start date, drag or resize the course to update.')
+            .text-info.info.italics.text-center
+                +icon('info-circle', 'Click on a day to choose the start date, drag or resize the course to update.')
 
-                #toggleWeekends.btn.btn-white.btn-sm.text-center(ng-model='$parent.showWeekends', bs-checkbox) Weekends
+            #toggleWeekends.btn.btn-white.btn-sm.text-center(ng-model='$parent.showWeekends', bs-checkbox) Weekends
 
 
         .right-column.hideSetUnavailable
