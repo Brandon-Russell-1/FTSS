@@ -1,0 +1,52 @@
+#manage-reservations {
+
+	tr:not(:hover) {
+
+		.selectize-input, input {
+			border-color: transparent !important;
+		}
+
+		.selectize-input:after {
+			display: none;
+		}
+		
+		.remove {
+			visibility: hidden;
+		}
+
+	}
+
+	.item i, .item right {
+		display: none;
+	}
+
+	.host {
+		width: ~'calc(100% - 135px)';
+	}
+
+	.quotaType {
+		width: 75px;
+
+		.selectize-control {
+			height: 34px !important;
+			width: 75px !important;
+			.selectize-dropdown {
+				width: 250px !important;
+			}
+
+		}
+	}
+
+	.qty {
+		width: 75px;
+	}
+
+	.remove {
+		width: 35px;
+	}
+
+	.row {
+		margin: 0;
+	}
+
+}

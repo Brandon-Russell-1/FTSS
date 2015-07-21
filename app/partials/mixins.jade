@@ -227,30 +227,30 @@ mixin loadStudents()
 
     div(ng-if='!loadingStudents')
 
-        .well.well-sm(ng-repeat='request in students', class='{{request.style}}', ng-form='modal')
+        .request.well.well-sm(ng-repeat='request in students', class='{{request.style}}', ng-form='modal')
 
             .bold.border-bottom
                 | {{request.Status}} ({{request.peopleCount||request.count}})
                 .pull-right {{::request.Host.Unit}}
 
-            dl.dl-horizontal
-                ul(ng-if='!canEditSeats')
-                    li(ng-repeat='(student, email) in ::request.Students_JSON') {{student}}
 
-                div(ng-if='canEditSeats')
-                    select.wide(selectize='people', max="99")
+            ul(ng-if='!canEditSeats')
+                li(ng-repeat='(student, email) in ::request.Students_JSON') {{student}}
 
-                br
+            div(ng-if='canEditSeats')
+                select.wide(selectize='people', max="99")
 
-                div(ng-if='request.Notes')
-                    .bold {{::request.Host.Unit}}
-                    .italics {{::request.Notes}}
+            br
 
-                br
+            div(ng-if='request.Notes')
+                .bold {{::request.Host.Unit}}
+                .italics {{::request.Notes}}
 
-                div(ng-if='request.Response || canEditSeats')
-                    .bold FTD Notes
-                    textarea.wideText.full.form-control(ng-model='request.Response')
+            br
+
+            div(ng-if='request.Response || canEditSeats')
+                .bold FTD Notes
+                textarea.wideText.full.form-control(ng-model='request.Response')
 
             .pull-right.btn.btn-success.btn-labeled(ng-click='submit()', ng-hide='!modal.$dirty')
 

@@ -1,0 +1,26 @@
+include ../../mixins
+
+#manage-reservations
+
+    table.table.table-condensed(ng-if='data.reservations.length')
+
+        thead
+            tr
+                th Unit
+                th Type
+                th Seats
+                th
+
+        tbody
+            tr(ng-repeat='reservation in data.reservations')
+                td.host: select(selectize='Hosts', bind='reservation.HostId', remember='host', required)
+                td.quotaType: select(selectize='quotaTypes', bind='reservation.Quota', remember='quota', required)
+                td.qty: input.form-control(ng-model='reservation.Qty', ng-change='updateTotals()', type='number', min=1, required)
+                td.remove: .btn.btn-sm.btn-danger.white(ng-click='removeReservation($index)'): +icon('times')
+
+
+    .row
+        .btn.btn-info.btn-labeled.white.pull-right(ng-click='addReservation()', ng-if='allHaveValues')
+            span.btn-label: +icon('plus-circle')
+            span Add Reservation
+
