@@ -7,14 +7,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
         #instructorPhoto.circle(bio-photo='bioPhoto')
 
         h3(ng-show='createData') Create Class or Event
-
         h3(ng-hide='createData') Update Class or Event
-
-            a#courseLink(
-                ng-if='data.Course.Number',
-                href='https://www.my.af.mil/etcacourses/showcourse.asp?as_course_id={{data.Course.Number}}',
-                bs-popover='"Click to view this course in ETCA"',
-                target='_blank') &nbsp;{{data.Course.Number}}
 
         input.pull-right.form-control.hideSetUnavailable#ttms(
             type='text',
