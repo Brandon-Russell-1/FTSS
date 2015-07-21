@@ -12,6 +12,10 @@
 }
 
 #scheduled-ftd {
+
+	.item:hover {
+
+	}
 	.item {
 		em {
 			font-style: normal;
@@ -83,6 +87,12 @@
 			top: 0px;
 		}
 
+		#toggleWeekends.active:before {
+			font-size: 1.5em;
+			line-height: .75em;
+			content: '\2713\00a0';
+		}
+
 		#toggleWeekends:hover,
 		#toggleWeekends.active {
 			background-color: #eee;
@@ -90,10 +100,9 @@
 
 		.left-column, .middle-column, .right-column {
 			float: left;
-			opacity: .7;
-			transition: opacity 100ms linear;
 			padding-bottom: 25px;
 			position: relative;
+			min-height: 450px;
 		}
 
 		.left-column:hover,
@@ -114,17 +123,12 @@
 		}
 
 		.middle-column {
-			margin-right: 20px;
+			margin: 0 45px 0 20px;
+			min-width: 400px;
 		}
 
 		.middle-column, .right-column {
-			width: ~'calc(100% - 950px)';
-			border-left: 10px solid #ccc;
-			padding-left: 20px;
-		}
-
-		.middle-column:hover, .right-column:hover {
-			border-left: 10px solid #444;
+			width: ~'calc(100% - 1000px)';
 		}
 
 		.right-column {
