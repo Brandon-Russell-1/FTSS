@@ -55,7 +55,7 @@
 									scope.loadingStudents = false;
 
 									// Process all the students rows
-									scope.students = classProcessor.requestProcessor(requests);
+									scope.$parent.students = classProcessor.requestProcessor(requests);
 
 								});
 
