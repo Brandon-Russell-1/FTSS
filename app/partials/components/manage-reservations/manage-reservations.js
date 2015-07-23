@@ -11,13 +11,13 @@
 		'manageReservations',
 
 		[
-			'$timeout',
+			'appAssets',
 			'SharePoint',
 			'classProcessor',
 			'utilities',
 			'notifier',
 
-			function ($timeout, SharePoint, classProcessor, utilities, notifier) {
+			function (appAssets, SharePoint, classProcessor, utilities, notifier) {
 
 				return {
 					'replace'    : true,
@@ -31,26 +31,25 @@
 						// The collection of reservations
 						$scope.data.Reservations_JSON = $scope.data.Reservations_JSON || [];
 
-						// Collection of quota types
-						$scope.quotaTypes = [
+						// Load the data from SharePoint
+						appAssets.process(function (data) {
 
-							{'Id': 'AN', 'label': '<b>AN</b><i> - Enlisted Guard/Reserve</i>'},
-							{'Id': 'AP', 'label': '<b>AP</b><i> - Enlisted AD, Unit Funded</i>'},
-							{'Id': 'AT', 'label': '<b>AT</b><i> - Enlisted AD, AETC Funded</i>'},
-							{'Id': 'CN', 'label': '<b>CN</b><i> - Civilian, Unit Funded</i>'},
-							{'Id': 'CP', 'label': '<b>CP</b><i> - Civilian, Unit Funded</i>'},
-							{'Id': 'CT', 'label': '<b>CT</b><i> - Civilian, AETC Funded</i>'}
+							// Collection of TRQI types
+							$scope.trqiTypes = angular.copy(data.trqiTypes);
 
-						];
+							// Collection of quota types
+							$scope.quotaTypes = angular.copy(data.quotaTypes);
+
+						});
 
 						$scope.addReservation = function () {
+
+							$scope.allHaveValues = false;
 
 							$scope.data.Reservations_JSON.push({
 								'HostId': null,
 								'Qty'   : null
 							});
-
-							$scope.allHaveValues = false;
 
 						};
 
