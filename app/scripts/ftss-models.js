@@ -19,10 +19,10 @@
 
 			'assets': {
 
-				'cache' : true,
+				'cache'   : true,
 				'debounce': 3600,
-				'source': 'AppAssets',
-				'params': {
+				'source'  : 'AppAssets',
+				'params'  : {
 					'$select': [
 						'DataType',
 						'Data_JSON'
@@ -165,10 +165,10 @@
 						'MTT',
 						'TS',
 						'Location',
-					    'Reservations_JSON'
+						'Reservations_JSON',
+					    'Students_JSON'
 					]
-				},
-				'version': 1
+				}
 
 			},
 
