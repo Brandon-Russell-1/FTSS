@@ -13,9 +13,6 @@
 
 #scheduled-ftd {
 
-	.item:hover {
-
-	}
 	.item {
 		em {
 			font-style: normal;
@@ -103,12 +100,19 @@
 			padding-bottom: 25px;
 			position: relative;
 			min-height: 450px;
+
+			.selectize-input:after {
+				display: none;
+			}
 		}
 
-		.left-column:hover,
-		.middle-column:hover,
-		.right-column:hover {
-			opacity: 1 !important;
+		.left-column:not(:hover) {
+			.input-group-addon, .selectize-input, .form-control {
+				border-color: transparent !important;
+				background: none !important;
+				box-shadow: none !important;
+				transition: none !important;
+			}
 		}
 
 		.left-column {
