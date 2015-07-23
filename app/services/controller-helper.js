@@ -651,7 +651,7 @@ FTSS.ng.service('controllerHelper', [
 
 						opts.beforeSubmit && opts.beforeSubmit(scope, isNew);
 
-						if (scope.modal.$dirty) {
+						if ((scope.modal || scope.$$childTail.modal).$dirty) {
 
 							// Used by modal.footer.html to disable the submit button
 							scope.submitted = true;
