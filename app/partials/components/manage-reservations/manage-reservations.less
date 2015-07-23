@@ -9,8 +9,8 @@
 		.selectize-input:after {
 			display: none;
 		}
-		
-		.remove {
+
+		.remove .btn {
 			visibility: hidden;
 		}
 
@@ -21,19 +21,34 @@
 	}
 
 	.host {
-		width: ~'calc(100% - 135px)';
+		.selectize-control {
+			width: 250px !important;
+		}
+	}
+	
+	.trqi {
+		width: 75px;
+		.selectize-control {
+			height: 34px !important;
+			width: 70px !important;
+		}
 	}
 
 	.quotaType {
-		width: 75px;
+		width: 50px;
 
 		.selectize-control {
 			height: 34px !important;
-			width: 75px !important;
-			.selectize-dropdown {
-				width: 250px !important;
-			}
+			width: 48px !important;
+		}
+	}
 
+	.quotaType, .trqi {
+		.selectize-input:after {
+			display: none;
+		}
+		.selectize-dropdown {
+			width: 250px !important;;
 		}
 	}
 
@@ -42,7 +57,10 @@
 	}
 
 	.remove {
-		width: 35px;
+		width: 0px !important;
+	}
+	.remove .btn {
+		position: absolute;
 	}
 
 	.row {
