@@ -22,30 +22,23 @@ FTSS.ng.service('appAssets', [
 			workSet.push(work)
 		};
 
-		SharePoint.read({
+		SharePoint
 
-			'cache' : true,
-			'source': 'AppAssets',
-			'params': {
-				'$select': [
-					'DataType',
-					'Data_JSON'
-				]
-			}
+			.read(FTSS.models('assets'))
 
-		}).then(function (data) {
+			.then(function (data) {
 
-			_self.assets = {};
+				      _self.assets = {};
 
-			_.each(data, function (row) {
-				_self.assets[row.DataType] = row.Data_JSON;
-			});
+				      _.each(data, function (row) {
+					      _self.assets[row.DataType] = row.Data_JSON;
+				      });
 
-			_.each(workSet, function (work) {
-				work(_self.assets);
-			});
+				      _.each(workSet, function (work) {
+					      work(_self.assets);
+				      });
 
-		});
+			      });
 
 	}
 

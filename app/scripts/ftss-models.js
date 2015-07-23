@@ -17,6 +17,20 @@
 	// Our internal collection of models--these are immutable! :-)
 		_models = {
 
+			'assets': {
+
+				'cache' : true,
+				'debounce': 3600,
+				'source': 'AppAssets',
+				'params': {
+					'$select': [
+						'DataType',
+						'Data_JSON'
+					]
+				}
+
+			},
+
 			'users': {
 
 				'source': 'UserInformationList',
