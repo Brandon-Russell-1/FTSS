@@ -2,7 +2,7 @@ include ../../mixins
 
 #manage-reservations
 
-    table.table.table-condensed(ng-if='data.reservations.length')
+    table.table.table-condensed(ng-if='data.Reservations_JSON.length')
 
         thead
             tr
@@ -12,7 +12,7 @@ include ../../mixins
                 th
 
         tbody
-            tr(ng-repeat='reservation in data.reservations')
+            tr(ng-repeat='reservation in data.Reservations_JSON')
                 td.host: select(selectize='Hosts', bind='reservation.HostId', remember='host', required)
                 td.quotaType: select(selectize='quotaTypes', bind='reservation.Quota', remember='quota', required)
                 td.qty: input.form-control(ng-model='reservation.Qty', ng-change='updateTotals()', type='number', min=1, required)

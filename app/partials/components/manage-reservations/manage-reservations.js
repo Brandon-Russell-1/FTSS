@@ -29,7 +29,7 @@
 						$scope.allHaveValues = true;
 
 						// The collection of reservations
-						$scope.data.reservations = $scope.data.reservations || [];
+						$scope.data.Reservations_JSON = $scope.data.Reservations_JSON || [];
 
 						// Collection of quota types
 						$scope.quotaTypes = [
@@ -45,7 +45,7 @@
 
 						$scope.addReservation = function () {
 
-							$scope.data.reservations.push({
+							$scope.data.Reservations_JSON.push({
 								'HostId': null,
 								'Qty'   : null
 							});
@@ -56,16 +56,16 @@
 
 						$scope.removeReservation = function (index) {
 
-							$scope.data.reservations.splice(index, 1);
+							$scope.data.Reservations_JSON.splice(index, 1);
 							$scope.updateTotals();
 
 						};
 
 						$scope.updateTotals = function () {
 
-							$scope.allHaveValues = _.all($scope.data.reservations, 'Qty');
+							$scope.allHaveValues = _.all($scope.data.Reservations_JSON, 'Qty');
 
-							$scope.data.Approved = _.sum($scope.data.reservations, 'Qty') + _.sum($scope.students, 'count');
+							$scope.data.Approved = _.sum($scope.data.Reservations_JSON, 'Qty') + _.sum($scope.students, 'count');
 
 						};
 

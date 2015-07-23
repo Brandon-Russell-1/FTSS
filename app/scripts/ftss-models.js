@@ -150,7 +150,8 @@
 						'TTMS',
 						'MTT',
 						'TS',
-						'Location'
+						'Location',
+					    'Reservations_JSON'
 					]
 				},
 				'version': 1
