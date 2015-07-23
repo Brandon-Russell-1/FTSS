@@ -21,8 +21,8 @@ include ../../mixins
                 td.remove: .btn.btn-sm.btn-danger.white(ng-click='removeReservation($index)'): +icon('times')
 
 
-    .row
-        .btn.btn-info.btn-labeled.white.pull-right(ng-click='addReservation()', ng-if='allHaveValues')
+    .row(ng-if='allHaveValues')
+        .btn.btn-info.btn-labeled.white.pull-right(ng-click='addReservation()')
             span.btn-label: +icon('plus-circle')
             span Add Reservation
 
