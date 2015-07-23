@@ -1,3 +1,6 @@
+/**
+ * @name appAssets
+ */
 FTSS.ng.service('appAssets', [
 
 	'SharePoint',
@@ -19,7 +22,10 @@ FTSS.ng.service('appAssets', [
 		 * @param work function the action to perform
 		 */
 		this.process = function (work) {
-			workSet.push(work)
+
+			// Only add to the workSet if the assets aren't loaded yet
+			_self.assets ? work(_self.assets) : workSet.push(work);
+
 		};
 
 		SharePoint
