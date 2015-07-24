@@ -101,6 +101,9 @@
 			position: relative;
 			min-height: 450px;
 
+			.selectize-input input {
+				width: 1%;
+			}
 			.selectize-input:after {
 				display: none;
 			}
@@ -137,8 +140,26 @@
 
 		.right-column {
 			width: 500px;
+			* {
+				transition: 100ms ease;
+			}
 		}
 
+		.right-column:not(:hover) {
+
+			* {
+				transition: 100ms ease;
+			}
+
+			.btn {
+				opacity: 0;
+			}
+
+			.well {
+				background-color: transparent;
+				border-color: transparent;
+			}
+		}
 	}
 
 }
