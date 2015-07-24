@@ -254,7 +254,7 @@ FTSS.ng.service('classProcessor', [
 			// Generate the left overlay if the Class data is present
 			if (request.Class) {
 
-				request.StudentList = '<li>' +  _.keys(request.Students_JSON).join('</li><li>') + '</li>';
+				request.StudentList = '<li>' + _.keys(request.Students_JSON).join('</li><li>') + '</li>';
 
 			}
 
@@ -316,7 +316,8 @@ FTSS.ng.service('classProcessor', [
 					'warning';
 
 				// The URL for our mailTo link
-				row.mailFTD = _.template('{{FTD.Email}}?subject=FTSS Class Inquiry for {{Course.Number}}{{TTMS}} ({{Course.PDS}} - {{dateRange}})')(row);
+				row.mailFTD =
+					_.template('{{FTD.Email}}?subject=FTSS Class Inquiry for {{Course.Number}}{{TTMS}} ({{Course.PDS}} - {{dateRange}})')(row);
 
 				// Setup our smart filters
 				row.search = {
@@ -366,6 +367,16 @@ FTSS.ng.service('classProcessor', [
 
 				// Hide the J4 notes if they have the leading #
 				row.J4Notes = (row.J4Notes && row.J4Notes[0] === '#') ? '' : row.J4Notes;
+
+				_.each(row.Students_JSON, function (students) {
+
+					var host = caches.Hosts[students.HostId] || {};
+
+					students.HostName = host.Unit || 'Unit Not Specified';
+					students.HostEmail = host.Email;
+					students.Count = _.size(students.Students);
+
+				});
 
 			}
 
