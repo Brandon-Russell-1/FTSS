@@ -12,12 +12,8 @@
 
 		[
 			'appAssets',
-			'SharePoint',
-			'classProcessor',
-			'utilities',
-			'notifier',
 
-			function (appAssets, SharePoint, classProcessor, utilities, notifier) {
+			function (appAssets) {
 
 				return {
 					'replace'    : true,
