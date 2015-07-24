@@ -11,10 +11,13 @@
 	height: 100%;
 	width: 15px !important;
 	background: #3c763d;
+	transition: width ease 300ms;
 }
 
-.fc-resizer:hover {
-	background: #428bca;
+.fc-resizer:hover, .fc-helper-skeleton .fc-resizer {
+	width: 35px !important;
+	transition: width ease 300ms;
+	background: #081108;
 }
 
 .fc-scroller {
@@ -28,17 +31,19 @@
 
 .fc-event {
 	color: #000;
+	text-align: center;
 }
 
 .fc-event.downDay {
 	color: #292f32;
 	background-color: #e9f1f5;
 	border-color: #a3cdd9;
+	font-style: italic;
 }
 
 .fc-event.primary {
 	color: #428bca;
-	background-color: #428bca;
+	background-color:;
 	border-color: #428bca;
 }
 
@@ -50,8 +55,10 @@
 
 .fc-event.success {
 	background-color: #dff0d8;
-	color: #3c763d;
+	color: #235223;
 	border-color: #4cae4c;
+	line-height: 2em;
+	cursor: move !important;
 }
 
 .fc-event.warning {
@@ -163,7 +170,7 @@
 
 		td.past:not(.mark) {
 			background-color: #eee;
-			border-right: #eee ;
+			border-right: #eee;
 			border-left: #eee;
 		}
 
@@ -172,7 +179,7 @@
 		}
 
 		td.past:last-of-type {
-			background-color: lime!important;
+			background-color: lime !important;
 			border-right: solid 5px #333 !important;
 		}
 
