@@ -96,9 +96,9 @@
 								}
 
 								// Make sure we add the value to the list if it's new
-								if (opts.create && val && options[opts.select]) {
+								if (opts.create && val && caches[opts.select]) {
 
-									options[opts.select].push({'label': val, 'Id': val});
+									caches[opts.select].push({'label': val, 'Id': val});
 
 								}
 
@@ -224,27 +224,18 @@
 
 							});
 
-							// Add the dataset to the caches object for global access
-							caches[groupName] = data;
-
 							// create the searchBox value of type:Id for eventual filter mapping
 							var _idPrefix = groupName.toLowerCase().charAt(0).replace('m', 'c') + ':';
 
-							options[groupName] = _.map(data, function (v) {
+							caches[groupName] = data;
+
+							_.each(data, function (v) {
 
 								processRow(v);
 
-								// Needed for manage-ftd selectize boxes (caches vs options) lists
 								v.search = v.text;
-
-								return {
-									'Id'      : v.Id,
-									'id'      : _idPrefix + v.Id,
-									'optgroup': groupName,
-									'label'   : v.label,
-									'data'    : v,
-									'search'  : v.text
-								};
+								v.id = _idPrefix + v.Id;
+								v.optgroup = groupName;
 
 							});
 
@@ -252,8 +243,7 @@
 							_self.addOptionGroup(groupName, {
 								'label': {
 									         'Units'           : 'FTD',
-									         'MasterCourseList': 'Course<right>MDS</right>',
-									         'Hosts'           : 'Host Unit'
+									         'MasterCourseList': 'Course<right>MDS</right>'
 								         }[groupName] || groupName,
 								'value': groupName
 							});
@@ -273,23 +263,22 @@
 
 								});
 
-								_.each(options.Hosts, function (host) {
+								_.each(caches.Hosts, function (host) {
 
-									var ftd = caches.Units[host.data.FTD] || {};
+									var ftd = caches.Units[host.FTD] || {};
 
 									host.label = '<b>' +
-									             host.data.Unit +
+									             host.Unit +
 									             '</b><right>' +
 									             (ftd.Det || 'No FTD') +
 									             '</right>';
 
 								});
 
-								FTSS.tagBoxOpts = []
+								FTSS.tagBoxOpts = [];
 
-									.concat(options.MasterCourseList,
-								            options.Units,
-								            options.Hosts);
+								_.each(caches.MasterCourseList, addTagBoxOpts);
+								_.each(caches.Units, addTagBoxOpts);
 
 								// Add the options to our searchBox
 								_self.addOption(FTSS.tagBoxOpts);
@@ -311,6 +300,10 @@
 					SharePoint.read(FTSS.models('hosts')).then(loadHosts);
 
 					SharePoint.read(FTSS.models('instructors')).then(loadInstructors);
+
+					function addTagBoxOpts(row) {
+						FTSS.tagBoxOpts.push(row);
+					}
 
 					function loadCourses(response) {
 
@@ -570,7 +563,6 @@
 					sharepointFilters = _sharepointFiltes_;
 					utilities = _utilities_;
 					courseNumberParser = _courseNumberParser_;
-					options.geodata = geodata.map;
 
 					timeout(function () {
 
