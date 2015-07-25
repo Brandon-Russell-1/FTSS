@@ -120,7 +120,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
             h4
                 strong Allocated ({{data.Approved || 0}})
                 .pull-right(ng-show='data.CourseId')
-                    strong {{getOpenSeats()}}&nbsp;
+                    strong {{data.OpenSeats}}&nbsp;
                     span ({{data.Course.Min}} Min / {{data.Course.Max}} Max)
 
             br

@@ -387,49 +387,6 @@ FTSS.ng.service('classProcessor', [
 
 		};
 
-		/**
-		 * @name classProcessor#getOpenSeats
-		 * @param data
-		 * @param countOnly
-		 * @returns {*}
-		 */
-		this.getOpenSeats = function (data, countOnly) {
-
-			// Only attempt this if a CourseID exists
-			if (data.CourseId > 0) {
-
-				// Update the course for this model
-				data.Course = caches.MasterCourseList[data.CourseId];
-
-				var open = data.Course.Max -
-				           (data.Host || 0) -
-				           (data.Other || 0) -
-				           (data.Approved || 0);
-
-				return countOnly ? open :
-
-				       open < 0 ? 'Overbooked by ' + Math.abs(open) :
-
-				       open > 0 ? open + ' Open Seats' :
-
-				       'Class Full';
-
-			} else {
-
-				data.Course = {
-					'Days': 'n/a',
-					'Max' : 0,
-					'Min' : 0
-				};
-
-				data.Hours = null;
-
-				return '';
-
-			}
-
-		};
-
 	}
 
 ]);

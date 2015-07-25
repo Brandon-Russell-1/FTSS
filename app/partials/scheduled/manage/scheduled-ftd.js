@@ -121,17 +121,6 @@ FTSS.ng.controller(
 						// For consistency in our bioPhoto directive
 						scope.bioPhoto = (scope.data.Instructor || {}).Photo;
 
-						/**
-						 * Get Open Seats, performs live counting of remaining seat openings in modals
-						 *
-						 * @returns
-						 */
-						scope.getOpenSeats = function (countOnly) {
-
-							return classProcessor.getOpenSeats(scope.data, countOnly);
-
-						};
-
 						scope.data.recordTypes = [
 							'Regular Class',
 							'Mobile Training Team',
