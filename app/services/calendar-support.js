@@ -49,7 +49,7 @@ FTSS.ng.service('calendarSupport', [
 					 */
 					var format = 'YYYY-MM-DD',
 						start = moment(event.start.format(format), format),
-						end = moment(event.end.format(format), format);
+						end = moment((event.end || event.start).format(format), format);
 
 					// Get the start date
 					scope.data.startMoment = start;
