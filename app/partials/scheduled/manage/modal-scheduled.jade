@@ -7,9 +7,9 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
         #instructorPhoto.circle(bio-photo='bioPhoto')
 
         h3(ng-show='createData') Create Class or Event
-            .dates {{data.dateRange}}
+            .dates {{data.dateRange}}&nbsp;
         h3(ng-hide='createData') Update Class or Event
-            .dates {{data.dateRange}}
+            .dates {{data.dateRange}}&nbsp;
 
         input.pull-right.form-control.hideSetUnavailable#ttms(
             type='text',
@@ -32,8 +32,9 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
 
             .left-row.alert.alert-warning
                 .pageMessage.
-                    Click a day on the calendar to choose the start date, drag or resize to change the dates. Verify that the dates at the
-                    top of this window match (that's what everyone else sees). Don't forget to specify seat reservations on the far-right.
+                    Click a day on the calendar to choose the start date, drag or resize to change the dates. If you enter any value in
+                    the Class # field (top-right), J4 will not build the class until you clear the field. Don't forget to specify
+                    seat reservations on the far-right.
 
             .left-row(ng-show='data.mtt')
                  .input-group
