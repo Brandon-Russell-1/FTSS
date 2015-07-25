@@ -244,10 +244,18 @@ FTSS.ng.service('controllerHelper', [
 									// Wrap our dataset in an array with a search property (just a flattened version of the data)
 									.map(function (d) {
 
-										     // Use our search prop if it already exists
-										     d.search = (d.search ||
-										                 JSON.stringify(d).replace(/([,{]"\w+":)|([{}"])/gi, ' '))
-											     .toLowerCase();
+										     try {
+											     // Use our search prop if it already exists
+											     d.search = (d.search ||
+											                 JSON.stringify(d).replace(/([,{]"\w+":)|([{}"])/gi, ' '))
+												     .toLowerCase();
+
+										     } catch (e) {
+
+											     // Prevent JSON circular
+											     d.search = '';
+
+										     }
 
 										     return {
 											     /* We're using JSON stringify to fast deep-read our data & then stripping out the JSON junk
