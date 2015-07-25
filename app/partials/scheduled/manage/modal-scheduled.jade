@@ -7,7 +7,9 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
         #instructorPhoto.circle(bio-photo='bioPhoto')
 
         h3(ng-show='createData') Create Class or Event
+            .dates {{data.dateRange}}
         h3(ng-hide='createData') Update Class or Event
+            .dates {{data.dateRange}}
 
         input.pull-right.form-control.hideSetUnavailable#ttms(
             type='text',
@@ -27,6 +29,11 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
                     ng-options='o for o in data.recordTypes')
 
             h4.left-row#typeSelector(ng-if='!isNew') {{data.recordType}}
+
+            .left-row.alert.alert-warning
+                .pageMessage.
+                    Click a day on the calendar to choose the start date, drag or resize to change the dates. Verify that the dates at the
+                    top of this window match (that's what everyone else sees). Don't forget to specify seat reservations on the far-right.
 
             .left-row(ng-show='data.mtt')
                  .input-group
@@ -103,9 +110,7 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
 
             #instructorCalendar(ui-calendar, ng-model='eventsInstructor')
 
-            .text-info.info.italics.text-center
-                +icon('info-circle', 'Click on a day to choose the start date, drag or resize the course to update.')
-                .wideText This class is {{data.Course.Days}} academic days
+            .text-info.italics.text-center.wideText(ng-if='data.Course.Days ') This class is {{data.Course.Days}} academic days
 
             #toggleWeekends.btn.btn-white.btn-sm.text-center(ng-model='$parent.showWeekends', bs-checkbox) Weekends
 

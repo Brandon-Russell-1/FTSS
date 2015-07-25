@@ -284,6 +284,7 @@ FTSS.ng.service('classProcessor', [
 				// Try to load the instructor's data
 				row.Instructor = caches.Instructors[row.InstructorId] || {};
 
+				// Store the human-friendly date-range
 				dateTools.dateRange(row);
 
 				// Setup the search params

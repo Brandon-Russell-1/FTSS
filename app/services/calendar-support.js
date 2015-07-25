@@ -66,6 +66,9 @@ FTSS.ng.service('calendarSupport', [
 					// Let the view know of our changes
 					scope.$$childTail.modal.$setDirty();
 
+					// Update the display date range
+					dateTools.dateRange(scope.data);
+
 				};
 
 			// Setup our empty calendar for FullCalendar
@@ -194,6 +197,7 @@ FTSS.ng.service('calendarSupport', [
 
 								// Remember the start of the last event created
 								localStorage.FTSS_FC_Last_Date = start.toISOString();
+
 
 							}
 
