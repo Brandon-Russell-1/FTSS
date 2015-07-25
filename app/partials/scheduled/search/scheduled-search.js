@@ -19,19 +19,7 @@ FTSS.ng.controller(
 
 				'sort' : 'Start',
 				'group': 'Header',
-				'model': 'scheduledSearch',
-
-				'finalProcess': function () {
-
-					/**
-					 * Determines if we had no search results or not
-					 * @returns boolean
-					 */
-					$scope.isEmpty = function () {
-						return ($scope.ftss.tagMap.c || $scope.ftss.tagMap.u) && !parseInt($scope.ftss.itemCount.value, 10);
-					};
-
-				}
+				'model': 'scheduledSearch'
 
 			});
 
@@ -43,6 +31,14 @@ FTSS.ng.controller(
 
 				// Reference for course headers:  IMDS: XXXXX    G081: XXXXX
 				$scope.imds_g081 = {};
+
+				/**
+				 * Determines if we had no search results or not
+				 * @returns boolean
+				 */
+				$scope.isEmpty = function () {
+					return ($scope.ftss.tagMap.c || $scope.ftss.tagMap.u) && !parseInt($scope.ftss.itemCount.value, 10);
+				};
 
 				self.initialize(data).then(function (row) {
 
