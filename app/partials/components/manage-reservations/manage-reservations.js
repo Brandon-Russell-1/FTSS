@@ -27,6 +27,10 @@
 						// The collection of reservations
 						$scope.data.Reservations_JSON = $scope.data.Reservations_JSON || [];
 
+						$scope.hostList = angular.copy(caches.Hosts);
+
+						$scope.hostList[0] = {'Id': 0, 'label': ' General Reservation'};
+
 						// Load the data from SharePoint
 						appAssets.process(function (data) {
 

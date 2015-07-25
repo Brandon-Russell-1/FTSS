@@ -14,7 +14,7 @@ include ../../mixins
 
         tbody
             tr(ng-repeat='reservation in data.Reservations_JSON')
-                td.host: select(selectize='Hosts', bind='reservation.HostId', remember='host', required)
+                td.host: select(selectize='hostList', bind='reservation.HostId', remember='host', required)
                 td.trqi: select(selectize='trqiTypes', bind='reservation.TRQI', remember='trqi', required)
                 td.quotaType: select(selectize='quotaTypes', bind='reservation.Quota', remember='quota', required)
                 td.qty: input.form-control(ng-model='reservation.Qty', ng-change='updateTotals()', type='number', min=1, required)
