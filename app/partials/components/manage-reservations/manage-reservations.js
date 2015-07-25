@@ -99,7 +99,7 @@
 
 						$scope.isNew && $scope.addReservation();
 
-						$scope.updateTotals();
+						$scope.$watch('data.CourseId', $scope.updateTotals);
 
 					}
 
