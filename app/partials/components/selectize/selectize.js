@@ -9,7 +9,7 @@
 
 	"use strict";
 
-	var builder, custom, options = {}, timeout, SharePoint, sharepointFilters, utilities, courseNumberParser;
+	var builder, custom, timeout, SharePoint, sharepointFilters, utilities, courseNumberParser;
 
 	builder = function (scope, opts) {
 
@@ -20,12 +20,11 @@
 
 		collection = _.map(!opts.watch &&
 		                   scope.$parent[opts.select] ||
-		                   options[opts.select] ||
 		                   caches[opts.select], function (row) {
 
 			return {
 				'sort'  : row[opts.sort],
-				'label' : row.label,
+				'label' : opts.label ? row[opts.label] : row.label,
 				'search': row.search,
 				'Id'    : row.Id
 			};
@@ -563,6 +562,7 @@
 					sharepointFilters = _sharepointFiltes_;
 					utilities = _utilities_;
 					courseNumberParser = _courseNumberParser_;
+					caches.geodata = geodata.map;
 
 					timeout(function () {
 
