@@ -456,32 +456,30 @@
 				'searchField' : 'DISPLAYNAME',
 				'persist'     : false,
 				'create'      : true,
-				'maxItems'    : parseInt(attrs.max) || 1,
+				'maxItems'    : $scope.$eval(attrs.max) || 2,
 				'plugins'     : [
 					'remove_button'
 				],
 				'onInitialize': function () {
 
-					var _self = this;
+					var _self = this,
 
-					$scope.$watch('request.Students_JSON', function (list) {
+						list = utilities.deepRead($scope, attrs.students || 'request.Students_JSON');
 
-						if (list) {
+					if (list) {
 
-							_self.addOption(_.map(list, function (email, student) {
+						_self.addOption(_.map(list, function (email, student) {
 
-								return {
-									'DISPLAYNAME': student,
-									'EMAIL'      : email || student
-								};
+							return {
+								'DISPLAYNAME': student,
+								'EMAIL'      : email || student
+							};
 
-							}));
+						}));
 
-							_self.setValue(_.keys(list));
+						_self.setValue(_.keys(list));
 
-						}
-
-					});
+					}
 
 				},
 				'onChange'    : function (selection) {
@@ -490,15 +488,13 @@
 
 						multi = (this.settings.maxItems > 1),
 
-					// @todo need to work this out for backlog.js--needs scope.row
-					//	parent = $scope.request || $scope.row || $scope.data || $scope;
-						parent = attrs.parent ? $scope[attrs.parent] : $scope.request || $scope.data || $scope;
+						parent = $scope.reservation || $scope.data || $scope;
 
 					timeout(function () {
 
 						if (multi) {
 
-							parent.People = {};
+							parent.Students = {};
 
 							_.each(selection, function (person) {
 
@@ -506,19 +502,21 @@
 
 								opt.EMAIL = opt.EMAIL === opt.DISPLAYNAME ? '' : opt.EMAIL;
 
-								parent.People[opt.DISPLAYNAME || person] = opt.EMAIL || '';
+								parent.Students[opt.DISPLAYNAME || person] = opt.EMAIL || '';
 
 							});
 
-							parent.peopleCount = _.size(parent.People);
+							parent.Count = _.size(parent.Students);
 
 						} else {
 
-							parent.Person = options[selection];
+							parent.Students = options[selection];
 
 						}
 
 						(!$scope.request || once) && ($scope.modal.$setDirty || Function)();
+
+						($scope.updateTotals || Function)();
 
 						once = true;
 
@@ -564,91 +562,101 @@
 					courseNumberParser = _courseNumberParser_;
 					caches.geodata = geodata.map;
 
-					timeout(function () {
+					var opts, selectize;
 
-						var opts, selectize;
+					attrs.max && scope.$watch(attrs.max, watchMax);
 
-						if (scope.ABORT) {
-							// Do not continue loading anything is ABORT is set
-							return false;
-						}
+					if (scope.ABORT) {
+						// Do not continue loading anything is ABORT is set
+						return false;
+					}
 
-						if (attrs.bind) {
+					if (attrs.bind) {
 
-							opts = builder(scope, {
-								'sort'     : attrs.sort,
-								'sortField': attrs.sort && 'sort',
-								'label'    : attrs.label,
-								'inline'   : attrs.hasOwnProperty('inline'),
-								'remember' : attrs.remember,
-								'watch'    : attrs.watch,
-								'select'   : attrs.selectize,
-								'field'    : attrs.bind,
-								'create'   : attrs.hasOwnProperty('create'),
-								'maxItems' : parseInt(attrs.max) || (attrs.hasOwnProperty('multiple') ? 999 : 1)
-							});
+						opts = builder(scope, {
+							'sort'     : attrs.sort,
+							'sortField': attrs.sort && 'sort',
+							'label'    : attrs.label,
+							'inline'   : attrs.hasOwnProperty('inline'),
+							'remember' : attrs.remember,
+							'watch'    : attrs.watch,
+							'select'   : attrs.selectize,
+							'field'    : attrs.bind,
+							'create'   : attrs.hasOwnProperty('create'),
+							'maxItems' : scope.$eval(attrs.max) || (attrs.hasOwnProperty('multiple') ? 999 : 1)
+						});
 
-						} else {
+					} else {
 
-							opts = custom[attrs.selectize](scope, attrs);
+						opts = custom[attrs.selectize](scope, attrs);
 
-						}
+					}
 
-						// Lets us bind subordinate dropdowns
-						if (attrs.watch) {
+					// Lets us bind subordinate dropdowns
+					if (attrs.watch) {
 
-							var watchList = attrs.watchlist.split('.'),
+						var watchList = attrs.watchlist.split('.'),
 
-								/**
-								 * Our watch function that updates and enables/disables this dropdown
-								 *
-								 * @param find
-								 */
-								refresh = function (find) {
+							/**
+							 * Our watch function that updates and enables/disables this dropdown
+							 *
+							 * @param find
+							 */
+							refresh = function (find) {
 
-									var select = element[0].selectize;
+								var select = element[0].selectize;
 
-									// First, disable and clear the dropdown
-									select.disable();
-									select.clearOptions();
+								// First, disable and clear the dropdown
+								select.disable();
+								select.clearOptions();
 
-									// Attempt to load the list of options
-									find = find && caches[watchList[0]][find][watchList[1]];
+								// Attempt to load the list of options
+								find = find && caches[watchList[0]][find][watchList[1]];
 
-									// If options exist, add them, refresh and enable the list
-									if (find) {
+								// If options exist, add them, refresh and enable the list
+								if (find) {
 
-										select.addOption(find);
-										select.refreshOptions(false);
-										select.setValue(scope.data[opts.field]);
-										select.enable();
+									select.addOption(find);
+									select.refreshOptions(false);
+									select.setValue(scope.data[opts.field]);
+									select.enable();
 
-									}
-
-								};
-
-							// Our watch binding
-							scope.$watch(attrs.watch, refresh);
-
-						}
-
-						// Strange bug we need to look into later on, just try/catch for now...
-						try {
-							selectize
-								= FTSS.selectizeInstances[opts.field || attrs.selectize]
-								= $(element).selectize(opts)[0].selectize;
-						} catch (e) {
-							utilities.errorHandler(e);
-						}
-
-						selectize && scope.modal && scope.modal
-
-							.$addControl({
-								'$setPristine': function () {
-									selectize.$control.removeClass('ng-dirty');
 								}
-							});
+
+							};
+
+						// Our watch binding
+						scope.$watch(attrs.watch, refresh);
+
+					}
+
+					// Strange bug we need to look into later on, just try/catch for now...
+					try {
+						selectize
+							= FTSS.selectizeInstances[opts.field || attrs.selectize]
+							= $(element).selectize(opts)[0].selectize;
+					} catch (e) {
+						utilities.errorHandler(e);
+					}
+
+					selectize && scope.modal && scope.modal.$addControl({
+						'$setPristine': function () {
+							selectize.$control.removeClass('ng-dirty');
+						}
 					});
+
+
+					/**
+					 * Keep the maxItems value updated
+					 * @param max
+					 */
+					function watchMax(max) {
+						if (max && selectize) {
+							selectize.settings.maxItems = max;
+						}
+					}
+
+
 				}
 			};
 		}
