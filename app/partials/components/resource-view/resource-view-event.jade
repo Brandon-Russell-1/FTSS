@@ -21,18 +21,18 @@ td(class='mark {{className}}',  colspan='{{DaysTruncated}}', ng-click='editClass
 
             i.wideText {{Course.Title}}
 
+            p {{truncate}}
+
             br
 
-            p {{truncate}}
             p {{notesHTML}}
             p {{j4NotesHTML}}
 
             br
-            br
 
             .eventButtons
 
-                .sub(edit-students, lookup='{{Id}}', templateURL='simple')
+                a.sub(ng-click='$event.stopPropagation(); editStudents({{Id}})', ng-if='{{Approved}}') View Seats ({{Approved}})
 
                 a.sub(ng-click='$event.stopPropagation()', href='{{TTMSLink}}', target='_blank', bs-popover='language.load_ttms', placement='bottom') TTMS Roster
 

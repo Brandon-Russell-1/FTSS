@@ -16,8 +16,9 @@
 			'$compile',
 			'dateTools',
 			'loading',
+			'utilities',
 
-			function ($timeout, $templateCache, $compile, dateTools, loading) {
+			function ($timeout, $templateCache, $compile, dateTools, loading, utilities) {
 
 				return {
 					'restrict'   : 'E',
@@ -212,12 +213,21 @@
 								if (scope.$parent.canEdit) {
 
 									// Find the class data by id
-									var row = scope.getRow(id);
+									var row = events[Number(id)];
 
 									// complete binding to the edit action with our data
 									row && scope.edit.call({'row': row}, false);
 
 								}
+
+							};
+
+							scope.editStudents = function (id) {
+
+								var $scope = scope.$new();
+								$scope.data = events[Number(id)];
+								$scope.modalPlacement = 'top';
+								utilities.modal('manage-reservations-modal', $scope);
 
 							};
 
