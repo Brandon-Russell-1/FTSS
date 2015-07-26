@@ -148,20 +148,20 @@ FTSS.ng.controller(
 							stats.hours += hours;
 
 							// Tally all students taught
-							stats.students += course.allocatedSeats;
+							stats.students += course.Approved;
 
 							chart[monthIndex].hours += hours;
 							ftdStats.graph[monthIndex].hours += hours;
 							ftdStats.graph[monthIndex].classes++;
-							ftdStats.graph[monthIndex].students += course.allocatedSeats;
-							ftdStats.graph[monthIndex].impact += (course.allocatedSeats * hours / 8);
+							ftdStats.graph[monthIndex].students += course.Approved;
+							ftdStats.graph[monthIndex].impact += (course.Approved * hours / 8);
 							ftdStats.graph[monthIndex].available += course.Course.Max;
 
 							stats.annualHours += hours;
 
 							ftdStats.classes++;
 							ftdStats.hours += hours;
-							ftdStats.students += course.allocatedSeats;
+							ftdStats.students += course.Approved;
 
 						});
 
