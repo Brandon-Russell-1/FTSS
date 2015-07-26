@@ -1,7 +1,7 @@
 /**
  * This is a helper to migrate approvals back to the scheduled list, part of the reservation system
  *
- * The requests lists will still hold pending/denied requests, but approvals will be moved to the scheduled list to allow privilege seperation
+ * The requests lists will still hold pending/denied requests, but approvals will be moved to the scheduled list to allow privilege separation
  */
 
 
@@ -32,7 +32,7 @@ FTSS.SharePoint.read({
 
 });
 
-var batchSend = _.toArray(send)
+var batchSend = _.toArray(send);
 
 
 FTSS.SharePoint.batch(batchSend.slice(0, 99));
