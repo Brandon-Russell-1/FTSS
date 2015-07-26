@@ -28,14 +28,13 @@ include ../../mixins
 
         .clearfix
 
-        .row(ng-if='!ftss.showAlternateView',
-                ng-repeat='row in group track by row.Id',
+        .row(ng-repeat='row in group track by row.Id',
                 placement='left',
                 bs-popover='row.OverlayHover'
                 custom-class="leftBarOverlayHover")
 
             .btn.btn-success.openSeats(ng-if='!row.Full', ng-click='requestSeats()')
-                .pull-left {{::row.openSeats}}
+                .pull-left {{::row.OpenSeatsInt}}
                 .pull-right Open<br>Seats
 
             .btn.btn-warning.openSeats.btn-fake(ng-if='row.Full') Full

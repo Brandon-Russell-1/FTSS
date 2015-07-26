@@ -48,7 +48,7 @@ FTSS.ng.controller(
 					row.Header = row.Course.PDS + ' - ' + row.Course.Number + ' (' + row.Course.MDS + ')';
 
 					// Hide full classes by default
-					row.Full = (row.openSeats < 1);
+					row.Full = (row.OpenSeatsInt < 1);
 
 					// Simple left overlay for courses
 					row.OverlayHover = _.template('Min: {{Course.Min}} / Max: {{Course.Max}}<br>{{ClassNotes}}')(row);

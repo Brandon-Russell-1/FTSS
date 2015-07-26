@@ -156,9 +156,6 @@
 						'Days',
 						'Hours',
 						'InstructorId',
-						'Host',
-						'Other',
-						'Approved',
 						'ClassNotes',
 						'J4Notes',
 						'TTMS',
@@ -185,12 +182,11 @@
 						'Start',
 						'Days',
 						'InstructorId',
-						'Host',
-						'Other',
-						'Approved',
 						'ClassNotes',
 						'TTMS',
-						'TS'
+						'TS',
+						'Reservations_JSON',
+						'Students_JSON'
 					]
 				}
 

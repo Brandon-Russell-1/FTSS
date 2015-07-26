@@ -6,21 +6,9 @@ form(name='modal')
 
     .modal-body
 
-        h4.italics This class has {{::data.allocatedSeats}} reserved seats.
+        h4.italics This class has {{::data.Approved}} reserved seats.
 
         br
-
-        table.table.table-split
-
-            tbody
-
-                tr(bs-popover='language.scheduled_seats_host', placement='right')
-                    td Reserved Host Seats
-                    td.text-center {{::data.Host}}
-
-                tr(bs-popover='language.scheduled_seats_non_host', placement='right')
-                    td Other Reserved Seats
-                    td.text-center {{::data.Other}}
 
         +loadStudents()
 
