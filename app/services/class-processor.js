@@ -5,12 +5,13 @@ FTSS.ng.service('classProcessor', [
 	'utilities',
 	'dateTools',
 	'SharePoint',
+	'classReservations',
 	'$q',
 
 	/**
 	 * @name classProcessor
 	 */
-		function (utilities, dateTools, SharePoint, $q) {
+		function (utilities, dateTools, SharePoint, classReservations, $q) {
 
 		var _self = this;
 
@@ -123,9 +124,7 @@ FTSS.ng.service('classProcessor', [
 								'Instructor'       : row.name || '',
 								'Hours'            : row.Hours || row.Course.Hours || '',
 								'Dates'            : row.dateRange,
-								'Host'             : row.Host || 0,
-								'Other'            : row.Other || 0,
-								'Total Seats'      : row.allocatedSeats || 0,
+								'Total Seats'      : row.Approved || 0,
 								'Min'              : row.Course.Min || '',
 								'Max'              : row.Course.Max || '',
 								'Room'             : row.Location || '',
@@ -195,11 +194,7 @@ FTSS.ng.service('classProcessor', [
 				return;
 			}
 
-			// Backwards-compatibility for classes built before this field was added
-			row.Approved = row.Approved || 0;
 
-			row.allocatedSeats = row.Approved + row.Host + row.Other;
-			row.openSeats = row.Course.Max ? row.Course.Max - row.allocatedSeats : '';
 
 		};
 
@@ -301,6 +296,8 @@ FTSS.ng.service('classProcessor', [
 				// Run through the cacheFiller
 				_self.cacheFiller(row);
 
+				classReservations.updateTotals(row)();
+
 				// Determine classes (color codes) based on openSeats
 				row.className =
 
@@ -308,27 +305,17 @@ FTSS.ng.service('classProcessor', [
 
 					row.TS ? 'trainingSession' :
 
-					(row.allocatedSeats < row.Course.Min) ? 'short' :
+					(row.Approved < row.Course.Min) ? 'short' :
 
-					row.openSeats > 0 ? 'success' :
+					row.OpenSeatsInt > 0 ? 'success' :
 
-					row.openSeats < 0 ? 'danger' :
+					row.OpenSeatsInt < 0 ? 'danger' :
 
 					'warning';
 
 				// The URL for our mailTo link
 				row.mailFTD =
 					_.template('{{FTD.Email}}?subject=FTSS Class Inquiry for {{Course.Number}}{{TTMS}} ({{Course.PDS}} - {{dateRange}})')(row);
-
-				// Setup our smart filters
-				row.search = {
-					'success'        : 'open',
-					'warning'        : 'full',
-					'danger'         : 'over',
-					'short'          : 'under',
-					'mtt'            : 'mtt',
-					'trainingSession': 'ts'
-				}[row.className];
 
 				// Map the status to our colors codes
 				row.availability = {
@@ -353,6 +340,16 @@ FTSS.ng.service('classProcessor', [
 					row.startMoment.format('DD/MMM/YYYY').toUpperCase()
 				].join('');
 
+				// Setup our smart filters
+				row.search = {
+					'success'        : 'open',
+					'warning'        : 'full',
+					'danger'         : 'over',
+					'short'          : 'under',
+					'mtt'            : 'mtt',
+					'trainingSession': 'ts'
+				}[row.className];
+
 				// Setup our search fields for this view
 				row.search = [
 					'#' + row.search,
@@ -368,16 +365,6 @@ FTSS.ng.service('classProcessor', [
 
 				// Hide the J4 notes if they have the leading #
 				row.J4Notes = (row.J4Notes && row.J4Notes[0] === '#') ? '' : row.J4Notes;
-
-				_.each(row.Students_JSON, function (students) {
-
-					var host = caches.Hosts[students.HostId] || {};
-
-					students.HostName = host.Unit || 'Unit Not Specified';
-					students.HostEmail = host.Email;
-					students.Count = _.size(students.Students);
-
-				});
 
 			}
 
