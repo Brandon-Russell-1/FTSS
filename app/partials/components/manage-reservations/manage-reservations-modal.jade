@@ -1,0 +1,18 @@
+include ../../mixins
+
+.floating-instructions.alert.alert-warning
+    .pageMessage.
+        Seat reservations in FTSS are comprised of two sides: quota reservations and student allocations.  When a class is
+        first built from a 898, quotas are identified by unit, TRQI and quota type for building in TPS/OTA/TTMS by J4
+        Scheduling. Once the class is built in FTSS, a UTM can fill the quota reservations with names. The FTD should load
+        the students into OTA and approve the students in FTSS, this will convert the quota reservations into student allocations.
+
+form(name='modal')
+
+    .modal-header.caps: h3: +icon('student_hand', 'View/Manage Seat Reservations')
+
+    .modal-body
+
+        manage-reservations
+
+    +modalFooter()

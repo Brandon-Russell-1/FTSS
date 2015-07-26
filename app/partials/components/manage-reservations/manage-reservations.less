@@ -1,9 +1,10 @@
 #manage-reservations {
 
-	tr:not(:hover) {
+	.panel:not(:hover) {
 
 		.selectize-input, input {
 			border-color: transparent !important;
+			background-color: transparent !important;
 		}
 
 		.selectize-input:after {
@@ -16,16 +17,21 @@
 
 	}
 
+	.selectize-input:after {
+		display: none;
+	}
+
 	.item i, .item right {
 		display: none;
 	}
 
 	.host {
+		width: ~'calc(100% - 260px)' !important;
 		.selectize-control {
-			width: 250px !important;
+			width: 95%;
 		}
 	}
-	
+
 	.trqi {
 		width: 75px;
 		.selectize-control {
@@ -44,9 +50,6 @@
 	}
 
 	.quotaType, .trqi {
-		.selectize-input:after {
-			display: none;
-		}
 		.selectize-dropdown {
 			width: 250px !important;;
 		}
@@ -56,15 +59,25 @@
 		width: 75px;
 	}
 
-	.remove {
-		width: 0px !important;
+	.panel-heading {
+		height: 55px;
+
+		& > div {
+			float: left;
+			margin-right: 7px;
+		}
 	}
+
 	.remove .btn {
 		position: absolute;
 	}
 
 	.row {
 		margin: 0;
+	}
+
+	.request {
+		position: relative;
 	}
 
 }

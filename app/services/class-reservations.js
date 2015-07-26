@@ -21,16 +21,18 @@ FTSS.ng.service('classReservations', [
 
 					var host = caches.Hosts[students.HostId] || {};
 
-					students.HostName = host.Unit || 'Unit Not Specified';
+					students.HostName = host.Unit || 'General Reservation';
 					students.HostEmail = host.Email;
-					students.Count = _.size(students.Students);
+
+					students.Used = _.size(students.Students);
+					students.Qty = students.Qty || students.Used;
+					students.Diff = students.Qty - students.Used;
 
 				});
 
-				scope.allHaveValues = _.all(scope.Reservations_JSON, 'Qty');
+				scope.allHaveValues = _.all(scope.Students_JSON, 'Qty');
 
-				scope.Approved = _.sum(scope.Reservations_JSON, 'Qty') +
-				                 _.sum(scope.Students_JSON, 'Count');
+				scope.Approved = _.sum(scope.Students_JSON, 'Qty');
 
 				// Only attempt this if a CourseID exists
 				if (scope.CourseId > 0) {

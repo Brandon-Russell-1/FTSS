@@ -2,27 +2,59 @@ include ../../mixins
 
 #manage-reservations
 
-    table.table.table-condensed(ng-if='data.Reservations_JSON.length')
+    h4
+        strong Allocated ({{data.Approved || 0}})
+        .pull-right(ng-show='data.CourseId')
+            strong {{data.OpenSeats}}&nbsp;
+            span ({{data.Course.Min}} Min / {{data.Course.Max}} Max)
 
-        thead
-            tr
-                th Unit
-                th TRQI
-                th Type
-                th Seats
-                th
+    br
 
-        tbody
-            tr(ng-repeat='reservation in data.Reservations_JSON')
-                td.host: select(selectize='hostList', bind='reservation.HostId', remember='host', required)
-                td.trqi: select(selectize='trqiTypes', bind='reservation.TRQI', remember='trqi', required)
-                td.quotaType: select(selectize='quotaTypes', bind='reservation.Quota', remember='quota', required)
-                td.qty: input.form-control(ng-model='reservation.Qty', ng-change='updateTotals()', type='number', min=1, required)
-                td.remove: .btn.btn-sm.btn-danger.white(ng-click='removeReservation($index)'): +icon('times')
+    .request.panel.panel-default(ng-repeat='reservation in data.Students_JSON')
 
+        .panel-heading
+            .host: select(selectize='hostList', bind='reservation.HostId', remember='host', required, placeholder='Unit')
+            .trqi: select(selectize='trqiTypes', bind='reservation.TRQI', remember='trqi', required, placeholder='TRQI')
+            .quotaType: select(selectize='quotaTypes', bind='reservation.Quota', remember='quota', required, placeholder='TYPE')
+            .qty: input.form-control(ng-model='reservation.Qty', ng-change='updateTotals()', type='number', min='{{reservation.Used}}', required, placeholder='Qty')
+            .remove: .btn.btn-sm.btn-danger.white(ng-click='removeReservation($index)'): +icon('times')
+
+        .panel-body
+
+            .row(ng-if='canEdit'): select.wide(selectize='people', max='reservation.Qty', students='reservation.Students', placeholder='Add students: Last, First')
+
+            .row.text-info.pull-right(ng-if='reservation.Used && reservation.Diff > 0')
+                +icon('info-circle', 'There are {{reservation.Diff}} unused seat(s).')
+
+
+            br
+
+            div(ng-if='reservation.Host')
+                .bold.small {{reservation.HostId}}
+                .italics {{reservation.Host}}
+
+            br
+
+            div(ng-if='reservation.FTD')
+                .bold.small FTD Notes
+                .wideText {{reservation.FTD}}
+
+            div(ng-if='reservation.HostEmail')
+                a(href='mailto:{{reservation.HostEmail}}?subject={{data.Course.Number}}{{data.TTMS}}'): +icon('envelope')
+            .clearfix
 
     .row(ng-if='data.allHaveValues')
-        .btn.btn-info.btn-labeled.white.pull-right(ng-click='addReservation()')
+        .btn.btn-info.btn-labeled.white.pull-right(ng-click='addReservation(true)')
             span.btn-label: +icon('plus-circle')
-            span Add Reservation
+            span Add Students
 
+
+
+
+    // Read-only reservation view
+    div(ng-if='readonly')
+
+        .row(ng-repeat='reservation in ::data.Reservations_JSON')
+
+            .col-lg-8 {{reservation.HostName}} ({{reservation.TRQI}})
+            .col-lg-4 {{reservation.Qty}} - {{reservation.Quota}}
