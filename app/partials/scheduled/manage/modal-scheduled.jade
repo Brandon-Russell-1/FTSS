@@ -15,7 +15,8 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
             type='text',
             ng-model='data.TTMS',
             placeholder='Class #',
-            trigger='focus', bs-popover='language.scheduled_edit_ttms',
+            trigger='focus',
+            bs-popover='language.scheduled_edit_ttms',
             placement='left')
 
     .modal-body
@@ -131,7 +132,6 @@ form.form-horizontal(name='modal', ng-class='{setUnavailable:data.NA,uglyGreenBu
             br
 
             +approvedStudents()
-            //div(edit-students, templateURL='embed')
 
         .clearfix
 
