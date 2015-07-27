@@ -5,6 +5,7 @@
 		.selectize-input, input {
 			border-color: transparent !important;
 			background-color: transparent !important;
+			box-shadow: none !important;
 		}
 
 		.selectize-input:after {
@@ -27,9 +28,17 @@
 
 	.host {
 		width: ~'calc(100% - 260px)' !important;
+		.selectize-input .item {
+			padding-left: 15px;
+		}
 		.selectize-control {
 			width: 95%;
 		}
+
+		.selectize-dropdown {
+			width: 350px !important;;
+		}
+
 	}
 
 	.trqi {
@@ -49,18 +58,16 @@
 		}
 	}
 
-	.quotaType, .trqi {
-		.selectize-dropdown {
-			width: 250px !important;;
-		}
-	}
-
 	.qty {
 		width: 75px;
 	}
 
 	.panel-heading {
 		height: 55px;
+
+		.selectize-dropdown {
+			width: 250px !important;;
+		}
 
 		& > div {
 			float: left;
@@ -78,6 +85,13 @@
 
 	.request {
 		position: relative;
+	}
+
+	.mailHost {
+		position: absolute;
+		z-index: 99;
+		left: 15px;
+		top: 14px;
 	}
 
 }

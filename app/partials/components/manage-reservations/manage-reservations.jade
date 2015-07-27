@@ -12,6 +12,9 @@ include ../../mixins
 
     .request.panel.panel-default(ng-repeat='reservation in data.Students_JSON')
 
+        .mailHost(ng-if='reservation.HostEmail')
+            a(href='mailto:{{reservation.HostEmail}}?subject={{data.Course.Number}}{{data.TTMS}}'): +icon('envelope')
+
         .panel-heading
             .host: select(selectize='hostList', bind='reservation.HostId', remember='host', required, placeholder='Unit')
             .trqi: select(selectize='trqiTypes', bind='reservation.TRQI', remember='trqi', required, placeholder='TRQI')
@@ -24,7 +27,7 @@ include ../../mixins
             .row(ng-if='canEdit'): select.wide(selectize='people', max='reservation.Qty', students='reservation.Students', placeholder='Add students: Last, First')
 
             .row.text-info.pull-right(ng-if='reservation.Used && reservation.Diff > 0')
-                +icon('info-circle', 'There are {{reservation.Diff}} unused seat(s).')
+                +icon('info-circle', '{{reservation.Diff}} unused seat(s)')
 
 
             br
@@ -39,8 +42,6 @@ include ../../mixins
                 .bold.small FTD Notes
                 .wideText {{reservation.FTD}}
 
-            div(ng-if='reservation.HostEmail')
-                a(href='mailto:{{reservation.HostEmail}}?subject={{data.Course.Number}}{{data.TTMS}}'): +icon('envelope')
             .clearfix
 
     .row(ng-if='data.allHaveValues')
