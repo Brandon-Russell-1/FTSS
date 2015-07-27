@@ -17,7 +17,7 @@ FTSS.ng.service('classReservations', [
 
 			return function () {
 
-				_.each(scope.Students_JSON, function (students) {
+				_.each(scope.Reservations_JSON, function (students) {
 
 					var host = caches.Hosts[students.HostId] || {};
 
@@ -30,9 +30,9 @@ FTSS.ng.service('classReservations', [
 
 				});
 
-				scope.allHaveValues = _.all(scope.Students_JSON, 'Qty');
+				scope.allHaveValues = _.all(scope.Reservations_JSON, 'Qty');
 
-				scope.Approved = _.sum(scope.Students_JSON, 'Qty');
+				scope.Approved = _.sum(scope.Reservations_JSON, 'Qty');
 
 				// Only attempt this if a CourseID exists
 				if (scope.CourseId > 0) {

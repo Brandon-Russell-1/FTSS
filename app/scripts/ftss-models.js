@@ -146,9 +146,9 @@
 
 			'scheduled': {
 
-				'cache'  : true,
-				'source' : 'Scheduled',
-				'params' : {
+				'cache' : true,
+				'source': 'Scheduled',
+				'params': {
 					'$select': [
 						'UnitId',
 						'CourseId',
@@ -162,8 +162,7 @@
 						'MTT',
 						'TS',
 						'Location',
-						'Reservations_JSON',
-					    'Students_JSON'
+						'Reservations_JSON'
 					]
 				}
 
@@ -185,8 +184,7 @@
 						'ClassNotes',
 						'TTMS',
 						'TS',
-						'Reservations_JSON',
-						'Students_JSON'
+						'Reservations_JSON'
 					]
 				}
 

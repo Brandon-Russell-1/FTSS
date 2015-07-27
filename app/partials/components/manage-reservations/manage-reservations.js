@@ -31,13 +31,13 @@
 						$scope.data.allHaveValues = true;
 
 						// The collection of reservations
-						$scope.data.Students_JSON = $scope.data.Students_JSON || [];
+						$scope.data.Reservations_JSON = $scope.data.Reservations_JSON || [];
 
 						// Copy the host list to inject a new host
 						$scope.hostList = angular.copy(caches.Hosts);
 
 						// Inject a general host for migration/flexibility
-						$scope.hostList[0] = {'Id': 0, 'label': ' General Reservation'};
+						$scope.hostList[1] = {'Id': 1, 'label': ' General Reservation'};
 
 						// Load the data from SharePoint
 						appAssets.process(function (data) {
@@ -58,7 +58,7 @@
 
 							$scope.data.allHaveValues = false;
 
-							$scope.data.Students_JSON.push({
+							$scope.data.Reservations_JSON.push({
 								'Students': {}
 							});
 
@@ -70,7 +70,7 @@
 						 */
 						$scope.removeReservation = function (index) {
 
-							$scope.data.Students_JSON.splice(index, 1);
+							$scope.data.Reservations_JSON.splice(index, 1);
 							$scope.updateTotals();
 
 						};
@@ -84,7 +84,7 @@
 						// Watch for course changes to update the seat counts
 						$scope.$watch('data.CourseId', $scope.updateTotals);
 
-						$scope.$watch('data.Students_JSON', $scope.updateTotals);
+						$scope.$watch('data.Reservations_JSON', $scope.updateTotals);
 
 					}
 
