@@ -11,6 +11,8 @@
 
 	var builder, custom, timeout, SharePoint, sharepointFilters, utilities, courseNumberParser;
 
+	FTSS.selectizeInstances = {};
+
 	builder = function (scope, opts) {
 
 		var loaded, modal, collection;
