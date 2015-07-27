@@ -2,10 +2,15 @@
 
 	.panel:not(:hover) {
 
-		.selectize-input, input {
+		.selectize-input, .selectize-input *, input, textarea {
 			border-color: transparent !important;
 			background-color: transparent !important;
 			box-shadow: none !important;
+			color: #333 !important;
+		}
+
+		.selectize-input.ng-dirty .item, input.ng-dirty, textarea.ng-dirty {
+			font-style: italic;
 		}
 
 		.selectize-input:after {

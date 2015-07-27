@@ -29,18 +29,13 @@ include ../../mixins
             .row.text-info.pull-right(ng-if='reservation.Used && reservation.Diff > 0')
                 +icon('info-circle', '{{reservation.Diff}} unused seat(s)')
 
-
             br
 
             div(ng-if='reservation.Host')
                 .bold.small {{reservation.HostId}}
                 .italics {{reservation.Host}}
 
-            br
-
-            div(ng-if='reservation.FTD')
-                .bold.small FTD Notes
-                .wideText {{reservation.FTD}}
+            textarea.form-control(ng-model='reservation.FTD', placeholder='FTD Notes')
 
             .clearfix
 
