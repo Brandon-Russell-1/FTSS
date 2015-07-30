@@ -1,5 +1,9 @@
 #manage-reservations {
 
+	.selectize-input.ng-dirty, input.ng-dirty, textarea.ng-dirty {
+		background-color: #dff0d8 !important;
+	}
+
 	.panel:not(:hover) {
 
 		.selectize-input, .selectize-input *, input, textarea {
@@ -21,6 +25,11 @@
 			visibility: hidden;
 		}
 
+		textarea.form-control:-ms-input-placeholder,
+		textarea.form-control::-webkit-input-placeholder {
+			color: transparent !important;
+		}
+
 	}
 
 	.selectize-input:after {
@@ -32,7 +41,7 @@
 	}
 
 	.host {
-		width: ~'calc(100% - 260px)' !important;
+		width: ~'calc(100% - 240px)' !important;
 		.selectize-input .item {
 			padding-left: 15px;
 		}
@@ -64,14 +73,28 @@
 	}
 
 	.qty {
-		width: 75px;
+		width: 50px;
+		.selectize-input {
+			text-align: center;
+		}
 	}
 
 	.panel-heading {
 		height: 55px;
 
+		.selectize-input, input {
+			border: none !important;
+			box-shadow: inset 0px -8px 5px -6px rgba(85, 85, 85, 0.91);
+			border-radius: 0;
+			background-color: transparent;
+		}
+
 		.selectize-dropdown {
 			width: 250px !important;;
+		}
+
+		.qty .selectize-dropdown {
+			width: 100px !important;;
 		}
 
 		& > div {
