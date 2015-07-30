@@ -51,6 +51,25 @@
 						});
 
 						/**
+						 * watch our classmax to build a seat count picker
+						 */
+						$scope.$watch('data.Course.Max', function(classMax) {
+
+							classMax && classMax++;
+
+							// Collection for the QTY dropdown
+							$scope.quantities = _(1).range(classMax || 12).map(function (seatCount) {
+
+								return {
+									'Id'   : seatCount,
+									'label': '<b>' + seatCount + '</b><i> seat' + (seatCount > 1 ? 's' : '') + '</i>'
+								};
+
+							}).value();
+
+						});
+
+						/**
 						 * Add a new reservation to the list
 						 *
 						 */
@@ -84,7 +103,7 @@
 						// Watch for course changes to update the seat counts
 						$scope.$watch('data.CourseId', $scope.updateTotals);
 
-						$scope.$watch('data.Reservations_JSON', $scope.updateTotals);
+						$scope.$watch('data.Reservations_JSON', $scope.updateTotals, true);
 
 					}
 
