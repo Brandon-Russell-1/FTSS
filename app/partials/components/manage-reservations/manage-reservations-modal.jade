@@ -2,10 +2,15 @@ include ../../mixins
 
 .floating-instructions.alert.alert-warning
     .pageMessage.
-        Seat reservations in FTSS are comprised of two sides: quota reservations and student allocations.  When a class is
-        first built from a 898, quotas are identified by unit, TRQI and quota type for building in TPS/OTA/TTMS by J4
-        Scheduling. Once the class is built in FTSS, a UTM can fill the quota reservations with names. The FTD should load
-        the students into OTA and approve the students in FTSS, this will convert the quota reservations into student allocations.
+        Seat reservations in FTSS are assigned to a unit, TRQI and quota type. J4 Scheduling uses this data to specify the
+        correct allocations in TPS, which flows to OTA/TTMS.  These reservations are then filled with student
+        names either through requests from a UTM or on this screen by a FTD scheduler. FTD schedulers are responsible for
+        loading AJ40 students into OTA and the Guard Bureau is notified for CC10 students.
+
+    br
+
+    .italics For open seat calculations, only the quantity of seats is used, not how many students currently fill a reservation.
+
 
 form(name='modal')
 
