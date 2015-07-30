@@ -597,38 +597,30 @@
 					// Lets us bind subordinate dropdowns
 					if (attrs.watch) {
 
-						var watchList = attrs.watchlist.split('.'),
+						// Our watch binding
+						scope.$watch(attrs.watch, function (find) {
 
-							/**
-							 * Our watch function that updates and enables/disables this dropdown
-							 *
-							 * @param find
-							 */
-							refresh = function (find) {
+							var select = element[0].selectize;
 
-								var select = element[0].selectize;
+							if (select) {
 
 								// First, disable and clear the dropdown
 								select.disable();
 								select.clearOptions();
-
-								// Attempt to load the list of options
-								find = find && caches[watchList[0]][find][watchList[1]];
 
 								// If options exist, add them, refresh and enable the list
 								if (find) {
 
 									select.addOption(find);
 									select.refreshOptions(false);
-									select.setValue(scope.data[opts.field]);
+									select.setValue(scope.$eval(opts.field));
 									select.enable();
 
 								}
 
-							};
+							}
 
-						// Our watch binding
-						scope.$watch(attrs.watch, refresh);
+						});
 
 					}
 
