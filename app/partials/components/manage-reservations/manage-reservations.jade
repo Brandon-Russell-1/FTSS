@@ -12,7 +12,7 @@ include ../../mixins
 
     .panel.panel-default(ng-repeat='reservation in data.Reservations_JSON')
 
-        .mailHost(ng-if='reservation.HostEmail')
+        .mailHost(ng-if='reservation.HostEmail', bs-popover='"Send this unit an email about this class"', placement='left')
             a(href='mailto:{{reservation.HostEmail}}?subject={{data.Course.Number}}{{data.TTMS}}'): +icon('envelope')
 
         .panel-heading
@@ -42,7 +42,7 @@ include ../../mixins
     .row(ng-if='data.allHaveValues')
         .btn.btn-info.btn-labeled.white.pull-right(ng-click='addReservation(true)')
             span.btn-label: +icon('plus-circle')
-            span Add Students
+            span Create Reservation
 
 
 
