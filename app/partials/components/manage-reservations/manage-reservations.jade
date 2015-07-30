@@ -17,9 +17,9 @@ include ../../mixins
 
         .panel-heading
             .host: select(selectize='hostList', bind='reservation.HostId', remember='host', required, placeholder='Unit')
-            .trqi: select(selectize='trqiTypes', bind='reservation.TRQI', remember='trqi', required, placeholder='TRQI')
-            .quotaType: select(selectize='quotaTypes', bind='reservation.Quota', remember='quota', required, placeholder='TYPE')
-            .qty: input.form-control(ng-model='reservation.Qty', ng-change='updateTotals()', type='number', min='{{reservation.Used}}', required, placeholder='Qty')
+            .trqi: select(selectize='trqiTypes', bind='reservation.TRQI', remember='trqi', required, placeholder='TRQI', create)
+            .quotaType: select(selectize='quotaTypes', bind='reservation.Quota', remember='quota', required, placeholder='TYPE', create)
+            .qty: select(selectize='quantities', watch='quantities', bind='reservation.Qty', required, placeholder='Qty', create, sort='Id', ng-if='quantities.length')
             .remove: .btn.btn-sm.btn-danger.white(ng-click='removeReservation($index)'): +icon('times')
 
         .panel-body
